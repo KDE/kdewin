@@ -17,21 +17,41 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_CTYPE_H
-#define KDEWIN_CTYPE_H
+/*
+ * Definitions for common types, variables, and functions.
+ */
+
+#include <kdecore/kdelibs_export.h>
 
 #ifdef _MSC_VER
-# include <msvc/ctype.h>
+# include <msvc/stdlib.h>
 #elif defined(__BORLANDC__)
-# include <bcc/ctype.h>
+# include <bcc/stdlib.h>
 #endif
+
+#define __need_size_t
+#define __need_wchar_t
+#include <stddef.h>
+
+#ifndef _STDLIB_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
+#define _STDLIB_H_
+
+#ifndef NULL
+#define NULL 0
+#endif
+
+#define EXIT_FAILURE 1
+#define EXIT_SUCCESS 0
+
+/* from fakes.c */
+KDECORE_EXPORT int setenv(const char *__string, const char *__value, int __overwrite);
+KDECORE_EXPORT void unsetenv(const char *__string);
 
 #ifdef __cplusplus
-inline int KDE_isspace(int c) { return ((unsigned)(c + 1) <= 256) && isspace(c); }
-#else
-#define KDE_isspace(__c) (((unsigned)(__c + 1) <= 256) && isspace(__c))
+}
 #endif
 
-#define isspace KDE_isspace
-
-#endif /* KDEWIN_CTYPE_H */
+#endif /* _STDLIB_H_ */

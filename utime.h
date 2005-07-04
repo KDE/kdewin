@@ -17,21 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_CTYPE_H
-#define KDEWIN_CTYPE_H
+/* jump to sys/ in your compiler's library */
 
-#ifdef _MSC_VER
-# include <msvc/ctype.h>
-#elif defined(__BORLANDC__)
-# include <bcc/ctype.h>
-#endif
-
-#ifdef __cplusplus
-inline int KDE_isspace(int c) { return ((unsigned)(c + 1) <= 256) && isspace(c); }
-#else
-#define KDE_isspace(__c) (((unsigned)(__c + 1) <= 256) && isspace(__c))
-#endif
-
-#define isspace KDE_isspace
-
-#endif /* KDEWIN_CTYPE_H */
+#include <sys/utime.h>

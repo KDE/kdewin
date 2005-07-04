@@ -17,21 +17,37 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_CTYPE_H
-#define KDEWIN_CTYPE_H
+#ifndef KDEWIN_STRING_H
+#define KDEWIN_STRING_H
 
-#ifdef _MSC_VER
-# include <msvc/ctype.h>
-#elif defined(__BORLANDC__)
-# include <bcc/ctype.h>
-#endif
+#include <kdecore/kdelibs_export.h>
+
+#define strncasecmp strnicmp
+#define strcasecmp stricmp
+
+#include <sys/types.h>
 
 #ifdef __cplusplus
-inline int KDE_isspace(int c) { return ((unsigned)(c + 1) <= 256) && isspace(c); }
-#else
-#define KDE_isspace(__c) (((unsigned)(__c + 1) <= 256) && isspace(__c))
+extern "C" {
 #endif
 
-#define isspace KDE_isspace
+/* implemented in fakes.c */
+KDECORE_EXPORT unsigned long strlcpy(char *dst, const char *src, unsigned long siz);
 
-#endif /* KDEWIN_CTYPE_H */
+/* implemented in fakes.c */
+KDECORE_EXPORT unsigned long strlcat(char *dst, const char *src, unsigned long siz);
+
+KDEWIN32_EXPORT char* strndup(const char *src, size_t n);
+
+#ifdef __cplusplus
+}
+#endif
+
+/* regular string.h */
+#ifdef _MSC_VER
+# include <msvc/string.h>
+#elif defined(__BORLANDC__)
+# include <bcc/string.h>
+#endif
+
+#endif /* KDEWIN_STRING_H */

@@ -1,6 +1,6 @@
 /*
    This file is part of the KDE libraries
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,21 +17,38 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_CTYPE_H
-#define KDEWIN_CTYPE_H
+/* config.h: definitions hardcoded for win32 target */
 
-#ifdef _MSC_VER
-# include <msvc/ctype.h>
-#elif defined(__BORLANDC__)
-# include <bcc/ctype.h>
+#ifndef _KDE_WIN_CONFIG_H_
+#define _KDE_WIN_CONFIG_H_
+
+#include <kdelibs_export.h>
+
+#ifndef HAVE_LIMITS_H
+#define HAVE_LIMITS_H 1
 #endif
+
+#ifndef HAVE_SYS_STAT_H
+#define HAVE_SYS_STAT_H 1
+#endif
+
+#ifndef HAVE_SYS_TIME_H
+#define HAVE_SYS_TIME_H 1
+#endif
+
+/*#define KDEDIR "F:\\KDE"  TODO */
+
+#define KDELIBSUFF ""
 
 #ifdef __cplusplus
-inline int KDE_isspace(int c) { return ((unsigned)(c + 1) <= 256) && isspace(c); }
-#else
-#define KDE_isspace(__c) (((unsigned)(__c + 1) <= 256) && isspace(__c))
+extern "C" {
 #endif
 
-#define isspace KDE_isspace
+KDECORE_EXPORT int mkstemps (char* _template, int suffix_len);
+KDECORE_EXPORT char* mkdtemp (char* _template);
 
-#endif /* KDEWIN_CTYPE_H */
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _KDE_WIN_CONFIG_H_ */
