@@ -42,11 +42,25 @@ extern "C" {
 
 #define __dirfd(dir) (dir)->dd_fd
 
+enum
+  {
+    DT_UNKNOWN = 0,
+    DT_FIFO = 1,
+    DT_CHR = 2,
+    DT_DIR = 4,
+    DT_BLK = 6,
+    DT_REG = 8,
+    DT_LNK = 10,
+    DT_SOCK = 12,
+    DT_WHT = 14
+  };
+
 /* struct dirent - same as Unix */
 struct dirent {
     long d_ino;                    /* inode (always 1 in WIN32) */
     off_t d_off;                /* offset to this dirent */
     unsigned short d_reclen;    /* length of d_name */
+    unsigned char d_type;
     char d_name[_MAX_FNAME+1];    /* filename (null terminated) */
 };
 
