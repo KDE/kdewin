@@ -123,7 +123,7 @@ KDEWIN32_EXPORT struct dirent * readdir(DIR *dp)
     dp->offset++;
 
     strncpy(dp->dent.d_name, dp->fileinfo.name, _MAX_FNAME);
-#ifdef HAVE_DIRENT_D_TYPE
+#ifdef KDEWIN32_HAVE_DIRENT_D_TYPE
     dp->dent.d_type = DT_UNKNOWN;
 #endif    
     dp->dent.d_ino = 1;
