@@ -60,7 +60,7 @@ set(win_LIB_SRCS
    src/mmap.c
    src/net.c
    src/pwd.c
-   src/readdir.c
+   src/dirent.c
    src/realpath.c
    src/resource.c
    src/signal.c
