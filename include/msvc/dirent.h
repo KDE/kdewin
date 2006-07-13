@@ -42,6 +42,7 @@ extern "C" {
 
 #define __dirfd(dir) (dir)->dd_fd
 
+#define HAVE_DIRENT_D_TYPE
 enum
   {
     DT_UNKNOWN = 0,
