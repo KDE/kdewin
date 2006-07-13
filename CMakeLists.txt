@@ -9,7 +9,9 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/modules")
 
 find_package(Qt4 REQUIRED)
 
-add_subdirectory( examples)
+if(NOT MSVC)
+   add_subdirectory( examples)
+endif(NOT MSVC)
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${QT_INCLUDES} )
 
