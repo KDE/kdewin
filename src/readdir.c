@@ -117,6 +117,8 @@ KDEWIN32_EXPORT struct dirent * readdir(DIR *dp)
     if (dp->offset != 0) {
         if (_findnext(dp->handle, &(dp->fileinfo)) < 0) {
             dp->finished = 1;
+            /* posix does not set errno in this case */
+            errno = 0;
             return NULL;
         }
     }
