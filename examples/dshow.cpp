@@ -33,7 +33,7 @@ int main(void)
     hr = pGraph->QueryInterface(IID_IMediaEvent, (void **)&pEvent);
 
     // Build the graph. IMPORTANT: Change this string to a file on your system.
-    hr = pGraph->RenderFile(L"Brodmann_brain_movie.avi", NULL);
+    hr = pGraph->RenderFile(L"c:\\Windows\\clock.avi", NULL);
     if (SUCCEEDED(hr))
     {
         // Run the graph.
