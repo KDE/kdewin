@@ -78,6 +78,8 @@
  * The DIR typedef is not compatible with Unix.
  **********************************************************************/
 
+#ifndef __MINGW32__
+
 KDEWIN32_EXPORT DIR * opendir(const char *dir)
 {
     DIR *dp;
@@ -135,13 +137,6 @@ KDEWIN32_EXPORT struct dirent * readdir(DIR *dp)
     return &(dp->dent);
 }
 
-KDEWIN32_EXPORT struct dirent* readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
-{
-	//todo: remove this when readdir_r.c will be ported
-	result = 0;
-	return 0;
-}
-
 KDEWIN32_EXPORT int closedir(DIR *dp)
 {
     if (!dp) return 0;
@@ -152,3 +147,12 @@ KDEWIN32_EXPORT int closedir(DIR *dp)
     return 0;
 }
 
+#endif // #ifndef __MINGW32__
+
+
+KDEWIN32_EXPORT struct dirent* readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
+{
+	//todo: remove this when readdir_r.c will be ported
+	result = 0;
+	return 0;
+}
