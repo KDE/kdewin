@@ -28,12 +28,19 @@
 #include <../include/math.h>
 
 #include <../include/float.h>
+
+#include <errno.h>
+#include <limits.h>
+
 #define isnan _isnan
 
 // some functions which aren't available with msvc
 // float rintf( float x )
 // double rint( double x )
 // long double rintl( long double x )
+// long lround ( double x )
+// long lroundf ( float x )
+// long lroundl ( long double x )
 // float nearbyintf(float x)
 // double nearbyint(double x)
 // long double nearbyintl(long double x)
@@ -61,6 +68,51 @@ __inline long double rintl( long double x )
         fld x
         frndint
     }
+}
+
+__inline long lround ( double x )
+{
+  /* Add +/- 0.5 then then round towards zero.  */
+  double tmp = floor ( x );
+  if (isnan (tmp) 
+      || tmp > (double)LONG_MAX
+      || tmp < (double)LONG_MIN)
+    { 
+      errno = ERANGE;
+      /* Undefined behaviour, so we could return anything.  */
+      /* return tmp > 0.0 ? LONG_MAX : LONG_MIN;  */
+    }
+  return (long)tmp;   
+}
+
+__inline long lroundf ( float x )
+{
+  /* Add +/- 0.5, then round towards zero.  */
+  float tmp = floorf ( x );
+  if (isnan (tmp) 
+      || tmp > (float)LONG_MAX
+      || tmp < (float)LONG_MIN)
+    { 
+      errno = ERANGE;
+      /* Undefined behaviour, so we could return anything.  */
+      /* return tmp > 0.0F ? LONG_MAX : LONG_MIN;  */
+    }
+  return (long)tmp;
+}
+
+__inline long lroundl ( long double x )
+{
+  /* Add +/- 0.5, then round towards zero.  */
+  long double tmp = floorl ( x );
+  if (isnan (tmp) 
+      || tmp > (long double)LONG_MAX
+      || tmp < (long double)LONG_MIN)
+    { 
+      errno = ERANGE;
+      /* Undefined behaviour, so we could return anything.  */
+      /* return tmp > 0.0L ? LONG_MAX : LONG_MIN;  */
+    }
+  return (long)tmp;
 }
 
 // this is a little bit more complicated - don't raise an exception
@@ -135,9 +187,9 @@ __inline long double nearbyintl(long double x)
 }
 
 // convenience function to avoid useless casts from int to whatever
-static __inline long double log(int x)
+__inline long double log(int x)
 {
-	return logl((double)x);	
+	return logl((long double)x);	
 }
 
 #endif /* KDEWIN_MATH_H */
