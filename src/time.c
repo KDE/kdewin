@@ -39,7 +39,7 @@ KDEWIN32_EXPORT int gettimeofday(struct timeval *__p, void *__t)
 	} now;
 	
 	GetSystemTimeAsFileTime (&now.ft);
-	__p->tv_usec = (long) ((now.ns100 / 10LL) % (KDE_USEC_IN_SEC * 10));
+	__p->tv_usec = (long) ((now.ns100 / 10LL) % KDE_USEC_IN_SEC);
 	__p->tv_sec  = (long)(((now.ns100 / 10LL ) / KDE_USEC_IN_SEC) - KDE_SECONDS_SINCE_1601);
 	
 	return (0); 
