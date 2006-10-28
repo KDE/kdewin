@@ -1,4 +1,5 @@
 project(kdewin32)
+set (VERSION 0.1)
 
 if (NOT WIN32)
    message(FATAL_ERROR "This directory can only be built under Windows")
@@ -12,6 +13,8 @@ find_package(Qt4 REQUIRED)
 if(NOT MSVC)
    add_subdirectory( examples)
 endif(NOT MSVC)
+
+add_subdirectory( tests)
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${QT_INCLUDES} )
 
