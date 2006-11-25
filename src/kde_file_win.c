@@ -37,7 +37,10 @@ KDEWIN32_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf)
 		strncpy(fixed_file_name, file_name, 2);
 		fixed_file_name[2]='\\';
 		fixed_file_name[3]=0;
-		return stat(fixed_file_name, buf);
+		result =  stat(fixed_file_name, buf);
+    buf->st_uid = -2;
+    buf->st_gid = -2;
+		return result;
 	}
 	if (len>1 && (file_name[len-1]=='\\' || file_name[len-1]=='/')) {
 		/* 2) */
@@ -45,10 +48,16 @@ KDEWIN32_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf)
 		fixed_file_name2[len-1]=0;
 		result = stat(fixed_file_name2, buf);
 		free(fixed_file_name2);
+    buf->st_uid = -2;
+    buf->st_gid = -2;
 		return result;
 	}
 //TODO: is stat("/") ok?
-	return stat(file_name, buf);
+	result = stat(file_name, buf);
+    // be in sync with Qt4
+  buf->st_uid = -2;
+  buf->st_gid = -2;
+  return result;
 }
 
 KDEWIN32_EXPORT int kdewin32_lstat(const char *file_name, struct stat *buf)
