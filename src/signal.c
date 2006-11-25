@@ -23,19 +23,19 @@
 #include <sys/types.h>
 #include <errno.h>
 
-int kill(pid_t pid, int sig)
+KDEWIN32_EXPORT int kill(pid_t pid, int sig)
 {
   HANDLE h = OpenProcess(PROCESS_TERMINATE,FALSE,(DWORD)pid);
   if( h ) {
     TerminateProcess(h, sig);
     CloseHandle(h);
-        return 0;
-    }
-    errno = ESRCH;
+    return 0;
+  }
+  errno = ESRCH;
   return -1;
 }
 
-pid_t waitpid(pid_t p, int *a, int b)
+KDEWIN32_EXPORT pid_t waitpid(pid_t p, int *a, int b)
 {
   HANDLE h = OpenProcess(PROCESS_TERMINATE, FALSE, (DWORD)p);
   if( h ) {
@@ -43,9 +43,9 @@ pid_t waitpid(pid_t p, int *a, int b)
     WaitForSingleObject(h,INFINITE);
     GetExitCodeProcess(h,&dw);
     CloseHandle(h);
-        return 0;
+    return 0;
   }
-    errno = ECHILD;
+  errno = ECHILD;
   return -1;
 }
 
