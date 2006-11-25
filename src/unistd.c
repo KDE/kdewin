@@ -97,25 +97,25 @@ KDEWIN32_EXPORT int fchmod(int __fd, mode_t __mode)
 /* Get the real user ID of the calling process.  */
 KDEWIN32_EXPORT uid_t getuid()
 {
-  return 1; /* NOT A ROOT! */
+  return -2;    // keep in sync with Qt!
 }
 
 /* Get the effective user ID of the calling process.  */
 KDEWIN32_EXPORT uid_t geteuid (void)
 {
-  return 1; /* NOT A ROOT! */
+  return -2;    // keep in sync with Qt!
 }
 
 /* Get the real group ID of the calling process.  */
 KDEWIN32_EXPORT gid_t getgid (void)
 {
-  return 1; /* NOT A ROOT GR! */
+  return -2;    // keep in sync with Qt!
 }
 
 /* Get the effective group ID of the calling process.  */
 KDEWIN32_EXPORT gid_t getegid (void)
 {
-  return 1; /* NOT A ROOT GR! */
+  return -2;    // keep in sync with Qt!
 }
 
 KDEWIN32_EXPORT int pipe(int *fd)
