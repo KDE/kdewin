@@ -25,9 +25,15 @@
 
 KDEWIN32_EXPORT int kill(pid_t pid, int sig)
 {
-  HANDLE h = OpenProcess(PROCESS_TERMINATE,FALSE,(DWORD)pid);
+  if( sig != 0 && sig != EINVAL || pid == 0 ) {
+    errno = EINVAL;
+    return -1;
+  }
+  HANDLE h = OpenProcess(PROCESS_TERMINATE, FALSE, (DWORD)pid);
   if( h ) {
-    TerminateProcess(h, sig);
+    if( sig == SIGKILL ) {
+      TerminateProcess(h, sig);
+    }
     CloseHandle(h);
     return 0;
   }
