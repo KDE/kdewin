@@ -22,6 +22,7 @@
 
 #include <sys/types.h>
 #include <errno.h>
+#include <signal.h>
 
 KDEWIN32_EXPORT int kill(pid_t pid, int sig)
 {
