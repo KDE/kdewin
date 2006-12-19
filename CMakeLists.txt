@@ -53,6 +53,7 @@ add_definitions(-DUNICODE -DWIN32_LEAN_AND_MEAN )
 
 set(win_LIB_SRCS
    src/bootstrap.cpp
+   src/dirent.c
    src/errno.c
    src/fcntl.c
    src/fsync.c
@@ -61,14 +62,15 @@ set(win_LIB_SRCS
    src/inet.c
    src/kde_file_win.c
    src/mmap.c
+   src/nl_langinfo.c
    src/net.c
    src/pwd.c
-   src/dirent.c
    src/realpath.c
    src/resource.c
    src/signal.c
    src/stdlib.c
    src/string.c
+   src/strptime.c
    src/syslog.c
    src/time.c
    src/uname.c
