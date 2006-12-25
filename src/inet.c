@@ -129,7 +129,9 @@ int inet_aton(const char *src, struct in_addr *addr)
 	if ( ret == INADDR_NONE ) {
 		if( strcmp( "255.255.255.255", src ) )
 		    return 0;
+		addr->s_addr = ret;
 		return 1;
-	}
+	}	
+	addr->s_addr = ret;
 	return 1;
 }
