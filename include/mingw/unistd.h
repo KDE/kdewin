@@ -80,7 +80,7 @@ KDEWIN32_EXPORT gid_t getgid (void);
 /* Get the effective group ID of the calling process.  */
 KDEWIN32_EXPORT gid_t getegid (void);
 
-KDEWIN32_EXPORT int getgroups(int size, gid_t list[]);
+KDEWIN32_EXPORT int getgroups(int size, gid_t _list[]);
 
 /* On win32 we do not have fs-links, so simply 0 (success) is returned
    when __path is accessible. It is then just copied to __buf.
