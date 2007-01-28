@@ -56,6 +56,10 @@ extern "C" {
 #define	S_ISSOCK(m)	(((m)&_IFMT) == _IFSOCK)
 #endif 
 
+#ifndef STDIN_FILENO
+#define STDIN_FILENO 0
+#endif
+
 #ifndef STDOUT_FILENO
 #define STDOUT_FILENO 1
 #endif

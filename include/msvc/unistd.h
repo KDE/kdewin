@@ -49,6 +49,10 @@ extern "C" {
 #define	W_OK	2
 #define	X_OK	1 
 
+#ifndef STDIN_FILENO
+#define STDIN_FILENO 0
+#endif
+
 #ifndef STDOUT_FILENO
 #define STDOUT_FILENO 1
 #endif
