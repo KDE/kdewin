@@ -28,7 +28,7 @@
 // from kdecore/fakes.c
 KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
 {
-    int i;
+    int i, iRet;
     char * a;
 
     if (!overwrite && getenv(name)) return 0;
@@ -41,7 +41,9 @@ KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
     strcat(a, "=");
     strcat(a, value);
 
-    return putenv(a);
+    iRet = putenv(a);
+    free(a);
+    return iRet;
 }
 
 
