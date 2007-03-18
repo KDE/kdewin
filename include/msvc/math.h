@@ -38,9 +38,15 @@
 // float rintf( float x )
 // double rint( double x )
 // long double rintl( long double x )
-// long lround ( double x )
+
 // long lroundf ( float x )
+// long lround ( double x )
 // long lroundl ( long double x )
+
+// float roundf ( float x )
+// double round ( double x )
+// long double roundl ( long double x )
+
 // float nearbyintf(float x)
 // double nearbyint(double x)
 // long double nearbyintl(long double x)
@@ -70,32 +76,32 @@ __inline long double rintl( long double x )
     }
 }
 
-__inline long lround ( double x )
-{
-  /* Add +/- 0.5 then then round towards zero.  */
-  double tmp = floor ( x );
-  if (isnan (tmp) 
-      || tmp > (double)LONG_MAX
-      || tmp < (double)LONG_MIN)
-    { 
-      errno = ERANGE;
-      /* Undefined behaviour, so we could return anything.  */
-      /* return tmp > 0.0 ? LONG_MAX : LONG_MIN;  */
-    }
-  return (long)tmp;   
-}
-
 __inline long lroundf ( float x )
 {
   /* Add +/- 0.5, then round towards zero.  */
   float tmp = floorf ( x );
-  if (isnan (tmp) 
+  if (isnan (tmp)
       || tmp > (float)LONG_MAX
       || tmp < (float)LONG_MIN)
-    { 
+    {
       errno = ERANGE;
       /* Undefined behaviour, so we could return anything.  */
       /* return tmp > 0.0F ? LONG_MAX : LONG_MIN;  */
+    }
+  return (long)tmp;
+}
+
+__inline long lround ( double x )
+{
+  /* Add +/- 0.5 then then round towards zero.  */
+  double tmp = floor ( x );
+  if (isnan (tmp)
+      || tmp > (double)LONG_MAX
+      || tmp < (double)LONG_MIN)
+    {
+      errno = ERANGE;
+      /* Undefined behaviour, so we could return anything.  */
+      /* return tmp > 0.0 ? LONG_MAX : LONG_MIN;  */
     }
   return (long)tmp;
 }
@@ -104,15 +110,30 @@ __inline long lroundl ( long double x )
 {
   /* Add +/- 0.5, then round towards zero.  */
   long double tmp = floorl ( x );
-  if (isnan (tmp) 
+  if (isnan (tmp)
       || tmp > (long double)LONG_MAX
       || tmp < (long double)LONG_MIN)
-    { 
+    {
       errno = ERANGE;
       /* Undefined behaviour, so we could return anything.  */
       /* return tmp > 0.0L ? LONG_MAX : LONG_MIN;  */
     }
   return (long)tmp;
+}
+
+__inline float roundf ( float x )
+{
+  return (float)lroundf( x );
+}
+
+__inline double round ( double x )
+{
+  return (double)lround( x );
+}
+
+__inline long double roundl ( long double x )
+{
+  return (long double)lroundl( x );
 }
 
 // this is a little bit more complicated - don't raise an exception
