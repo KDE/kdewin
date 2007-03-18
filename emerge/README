@@ -1,0 +1,94 @@
+this is the readme for the emerge scripts to build kde on windows.
+
+first you should create some directory where your kde installation
+should live. for me it is e:\mingwroot. under that directory
+you should have the dir "emerge", where this README lives in.
+you can either get it from svn.kde.org/home/trunk/kdesupport/kdewin32/emerge,
+or from <FIXME>.
+
+these scripts are python-based. so you should install python 2.5 on
+your computer.
+
+the scripts do download everything else that is needed to build kde
+from the internet. so you need a working internet connection.
+
+the scripts work similar to how the gentoo portage package management
+system works.
+
+the directory layout under %KDEROOT% is as follows:
+
+cmake -> contains cmake build system
+dbus -> contains dbus
+distfiles -> contains the downloaded files, and in svn-src the svn
+    checkout of kdelibs etc.
+emerge -> these scripts
+etc -> some config data
+kde -> this is where kde itself is installed
+mingw -> mingw gcc/g++ compiler etc.
+perl
+subversion    
+tmp -> here the work dirs where the programs are unpacked/compiled
+    are created.
+win32libs
+
+
+the basic idea behind this directory layout is, that different programs
+should be in their own subdirs, instead of all binaries into a bin dir
+or something. so deleting or updating of programs is easier, you can
+simply remove their directory, and it is gone...
+
+
+to build programs, you first have to setup the environment variables.
+you should create a directory etc under %KDEROOT%, and there create a file
+kdesettings.bat. it should contain the following:
+
+set KDEROOT=e:\mingwroot
+set KDECOMPILER=mingw
+
+
+this file is then sourced from the emerge\kdeenv.bat script. KDEROOT
+should be the path to the parent dir of the etc dir. KDECOMPILER can be
+mingw or msvc2005. you can only set the compiler for all packages.
+trying to build qt with msvc and kdelibs with mingw will certainly mess
+up things. to be able to do both mingw and msvc builds you should create
+two different KDEROOTs, e.g. e:\vcroot and e:\mingwroot.
+
+to load the env variables, you should open a terminal window (cmd.exe)
+and then cd to KDEROOT and execute emerge\kdeenv.bat
+
+e:
+cd mingwroot
+emerge\kdeenv.bat
+
+now the environment is set.
+
+now you can do
+
+emerge base
+
+and it should try to download wget, cmake, perl, mingw, etc. from the
+internet and install it.
+
+
+
+the emerge command syntax is as follows:
+
+emerge <options> <packagename>
+
+options can be:
+-p      -> to only pretend to do something: this shows what emerge would do.
+--fetch -> to only fetch the needed files
+--unpack -> to unpack the downloaded files to tmp/packagename/work
+--compile -> to compile the package
+--install -> to install the package into tmp/packagename/image
+             (if that is possible, not yet for nmake install)
+--qmerge -> to copy the files from tmp/packagename/image to KDEROOT
+
+to see which packages can be installed, look into KDEROOT/emerge/portage
+and look at the files below that directory.
+
+
+
+
+
+

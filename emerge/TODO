@@ -1,0 +1,18 @@
+this is a list of things that could be done to improve emerge:
+
+- implement "emerge --digest package":
+this would create a digest file for the files needed for this package.
+the advantage would be that it would not be necessary to have internet
+connection to build a package any more. right now every time a package 
+is built emerge tries to fetch the package, because it does not know,
+if the downloaded files are complete. with a digest file it would be possible
+to check if the files are already complete without an internet connection.
+for ideas and code how to do so, look at the gentoo portage system.
+
+
+
+- check if libeay32.dll from openssl is needed. it collides with
+libeay32.dll from wget
+
+
+
