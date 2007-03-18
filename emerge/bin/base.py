@@ -135,7 +135,7 @@ class baseclass:
 		self.imagedir    = os.path.join( ROOTDIR, "tmp", self.PV, "image" )
 
 		self.filesdir = os.path.join( ROOTDIR, "emerge", \
-		    "portage", "kde", "kdelibs", "files" )
+		    "portage", self.category, self.package, "files" )
 
 	def svnFetch( self, repo ):
 		print "base svnFetch called"
