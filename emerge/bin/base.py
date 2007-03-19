@@ -69,6 +69,7 @@ class baseclass:
 			if ( ok ):	ok = self.qmerge()
 			if ( ok ):
 				print "merge success"
+		elif command == "digest":   ok = self.digest()
 		else:
 			print "command %s not understood" % command
 			ok = False
@@ -103,6 +104,14 @@ class baseclass:
 		return True
 
 
+	def digest( self ):
+		print "base digest called"
+		print "packagedir: %s" % self.packagedir
+		print "files: %s" % self.filenames
+		print "downloaddir: %s" % self.downloaddir
+		utils.digestFiles( self.downloaddir, self.filenames, self.packagedir )
+		return True
+
 	def setDirectories( self ):
 		print "setdirectories called"
 		#print "basename:", sys.argv[ 0 ]
@@ -125,6 +134,7 @@ class baseclass:
 		#print "setdir category: %s, package: %s, version: %s" %\
 		#	  ( self.category, self.package, self.version )
 
+  
 		
 		self.cmakeInstallPrefix = ROOTDIR.replace( "\\", "/" )
 		print "cmakeInstallPrefix:", self.cmakeInstallPrefix
@@ -134,8 +144,9 @@ class baseclass:
 		self.workdir     = os.path.join( ROOTDIR, "tmp", self.PV, "work" )
 		self.imagedir    = os.path.join( ROOTDIR, "tmp", self.PV, "image" )
 
-		self.filesdir = os.path.join( ROOTDIR, "emerge", \
-		    "portage", self.category, self.package, "files" )
+		self.packagedir = os.path.join( ROOTDIR, "emerge", \
+		    "portage", self.category, self.package )
+		self.filesdir = os.path.join( self.packagedir, "files" )
 
 	def svnFetch( self, repo ):
 		print "base svnFetch called"

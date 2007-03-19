@@ -41,6 +41,8 @@ for i in sys.argv:
         buildaction = "install"
     elif ( i == "--qmerge" ):
         buildaction = "qmerge"
+    elif ( i == "--digest" ):
+        buildaction = "digest"
     else:
         packagename = i
 
@@ -74,6 +76,8 @@ def handlePackage( category, package, version, buildaction ):
          success = doExec( category, package, version, "install" )       
     if ( ( buildaction == "qmerge" or buildaction == "all" ) and success ):
          success = doExec( category, package, version, "qmerge" )       
+    if ( ( buildaction == "digest" ) and success ):
+         success = doExec( category, package, version, "digest" )       
 
     return success
     
@@ -86,7 +90,11 @@ print "deplist:", deplist
 deplist.reverse()
 success = True
 
-for package in deplist:
+if ( buildaction == "digest" ):
+    package = deplist[0]
+    ok = handlePackage( package[0], package[1], package[2], buildaction )
+else:
+  for package in deplist:
     file = os.path.join( KDEROOT, "emerge", "portage", package[0], package[1], "%s-%s.py" % ( package[1], package[2] ) )
     if ( doPretend ):
         if ( utils.isInstalled( package[0], package[1], package[2] ) ):
@@ -100,7 +108,7 @@ for package in deplist:
                 print "fatal error: package %s/%s-%s %s failed" % \
                     (package[0], package[1], package[2], buildaction)
         else:
-            print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
+	    print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
 
 
 #os.system( "cmake.py fetch" )

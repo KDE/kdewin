@@ -196,6 +196,35 @@ def svnFetch( repo, destdir ):
     else:
         return False
 
+### digest functions
+
+def digestFiles( downloaddir, filenames, packagedir ):
+    for filename in filenames:
+        print "digestinging this file:", filename
+        if ( not digestFile( downloaddir, filename, packagedir ) ):
+            return False
+
+    return True        
+
+
+def digestFile( downloaddir, filename, packagedir ):
+    #( shortname, ext ) = os.path.splitext( filename )
+    #if ( ext == ".zip" ):
+    #    return unZip( os.path.join( downloaddir, filename ), workdir )
+    #elif ( ext == ".gz" or ext == ".bz2" ):
+    #    ( myshortname, myext ) = os.path.splitext( shortname )
+    #    if ( myext == ".tar" ):
+    #        return unTar( os.path.join( downloaddir, filename ), workdir )
+    #    else:
+    #        print "error:", myext
+    #        return False
+    #else:
+    #    print "dont know how to unpack this file:", filename
+    #    return False
+    return True
+
+
+
 ### package dependencies functions
     
 def isInstalled( category, package, version ):
