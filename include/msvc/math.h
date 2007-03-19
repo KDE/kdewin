@@ -207,10 +207,12 @@ __inline long double nearbyintl(long double x)
     }
 }
 
+#ifdef __cplusplus
 // convenience function to avoid useless casts from int to whatever
 __inline long double log(int x)
 {
-	return logl((long double)x);	
+    return logl((long double)x);	
 }
+#endif
 
 #endif /* KDEWIN_MATH_H */
