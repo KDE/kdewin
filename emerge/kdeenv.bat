@@ -1,19 +1,20 @@
 ::rem   this file sets some environment variables that are needed
 ::rem   for finding programs and libraries etc.
-::rem   by Holger Schroeder <holger-kde@holgis.net>
+::rem   by Holger Schroeder <schroder@kde.org>
 
-::rem FIXME this should be known from the path to this file,
-::rem then take the parent directory
-::rem set KDEROOT=e:\secondroot
-::rem set KDEROOT=e:\foo\thirdroot
-::rem set KDEROOT=e:\vcroot
-
-
-:rem argh, how do i set a path relative to _this_file_ ?
-:rem instead of the actual directory of cmd.exe ?
-call etc\kdesettings.bat
-:rem there you should set KDEROOT and KDECOMPILER
+:rem in ..\etc\kdesettings.bat you should set the following env vars:
+:rem KDEROOT, KDECOMPILER and PYTHONPATH
 :rem msvc2005 and mingw are supported right now
+:rem they must be in a file outside of this svn checkout, so that your
+:rem changes are not overwritten every time you make an svn update
+
+:rem like this:
+:rem set KDEROOT=e:\mingwroot
+:rem set KDECOMPILER=mingw
+:rem set PYTHONPATH=e:\python25
+:rem set PATH=%PATH%;%PYTHONPATH%
+
+call etc\kdesettings.bat
 
 
 set PATH=%KDEROOT%\emerge\bin;%PATH%

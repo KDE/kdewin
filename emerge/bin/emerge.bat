@@ -1,3 +1,4 @@
 echo emerge.bat executed
 
-emerge.py %*
+:rem emerge.py %*
+python %KDEROOT%\emerge\bin\emerge.py %*
