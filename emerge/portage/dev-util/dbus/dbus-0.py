@@ -1,6 +1,7 @@
 import base
 import utils
 import os
+import shutil
 
 
 DEPENDS = """
@@ -110,11 +111,21 @@ class subclass(base.baseclass):
     print "dbus install called"
     os.chdir( os.path.join( self.workdir, "dbus-build-debug" ) )
     if ( self.compiler == "mingw" ):
-				os.system( "mingw32-make DESTDIR=%s install" % self.imagedir ) \
-    				and die ( "mingw32-make install failed" )
-				utils.fixCmakeImageDir( self.imagedir, self.rootdir )
+	os.system( "mingw32-make DESTDIR=%s install" % self.imagedir ) \
+		and die ( "mingw32-make install failed" )
+	utils.fixCmakeImageDir( self.imagedir, self.rootdir )
     elif ( self.compiler == "msvc2005" ):
 		    os.system( "nmake install" ) and die ( "nmake install failed" )
+
+    # some hack to copy dbus1.dll to dbus1d.dll
+    # FIXME do this in a proper way
+    src = os.path.join( self.imagedir, "dbus", "bin", "libdbus-1.dll" )
+    dest = os.path.join( self.imagedir, "dbus", "bin", "libdbus-1d.dll" )
+    shutil.copyfile( src, dest )
+    src = os.path.join( self.imagedir, "dbus", "lib", "libdbus-1.dll.a" )
+    dest = os.path.join( self.imagedir, "dbus", "lib", "libdbus-1d.dll.a" )
+    shutil.copyfile( src, dest )
+    
     return True
 
 
