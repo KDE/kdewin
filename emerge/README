@@ -1,3 +1,29 @@
+short introduction:
+
+these things must be done only once:
+- get a ms windows computer
+- install python 2.5 on it
+- create a new directory somewhere (e.g. e:\mingwroot) this is called
+    KDEROOT from now on
+- put the emerge subdirectory in it (the directory where you found
+    this file in)
+- create another subdirectory etc in KDEROOT
+- put a file kdesettings.bat in it
+- copy the file kdesettings-example.bat from emerge to etc\kdesettings.bat
+- adapt the settings to your needs
+
+do this every time you want to use the system:
+- open a shell window
+- go to the KDEROOT dir
+- execute emerge\kdesettings.bat
+- use emerge, like
+    emerge qt
+
+
+
+
+
+
 this is the readme for the emerge scripts to build kde on windows.
 
 first you should create some directory where your kde installation

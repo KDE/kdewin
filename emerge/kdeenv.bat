@@ -1,18 +1,9 @@
-::rem   this file sets some environment variables that are needed
-::rem   for finding programs and libraries etc.
-::rem   by Holger Schroeder <schroder@kde.org>
+: this file sets some environment variables that are needed
+: for finding programs and libraries etc.
+: by Holger Schroeder <schroder@kde.org>
 
-:rem in ..\etc\kdesettings.bat you should set the following env vars:
-:rem KDEROOT, KDECOMPILER and PYTHONPATH
-:rem msvc2005 and mingw are supported right now
-:rem they must be in a file outside of this svn checkout, so that your
-:rem changes are not overwritten every time you make an svn update
-
-:rem like this:
-:rem set KDEROOT=e:\mingwroot
-:rem set KDECOMPILER=mingw
-:rem set PYTHONPATH=e:\python25
-:rem set PATH=%PATH%;%PYTHONPATH%
+: you should copy kdesettings-example.bat to ..\etc\kdesettings.bat
+: and adapt it to your needs (see that file for more info)
 
 call etc\kdesettings.bat
 
