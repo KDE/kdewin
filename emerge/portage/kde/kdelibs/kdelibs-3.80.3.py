@@ -12,30 +12,30 @@ kde/kdewin32
 
 # FIXME KComponentDataPrivate destructor
 
-SRC_URI = "ftp://ftp.kde.org/pub/kde/unstable/3.80.3/src/kdelibs-3.80.3.tar.bz2"
+#SRC_URI = "ftp://ftp.kde.org/pub/kde/unstable/3.80.3/src/kdelibs-3.80.3.tar.bz2"
 
 class subclass(base.baseclass):
   def __init__(self):
-    base.baseclass.__init__( self, SRC_URI )
+    base.baseclass.__init__( self, "" )
 
-    #def unpack( self ):
-    #print "%s unpack called" % self.progname
+  def unpack( self ):
+    print "%s unpack called" % self.package
 
-    #repo = "svn://anonsvn.kde.org/home/kde/trunk/KDE/%s" % self.progname
-    #self.svnFetch( repo )
+    repo = "svn://anonsvn.kde.org/home/kde/trunk/KDE/%s" % self.package
+    self.svnFetch( repo )
 
-    #utils.cleanDirectory( self.workdir )
+    utils.cleanDirectory( self.workdir )
 
     # now copy the tree to workdir
-    #srcdir = os.path.join( self.svndir, self.progname )
-    #destdir = os.path.join( self.workdir, self.progname )
-    #utils.copySrcDirToDestDir( srcdir, destdir )
+    srcdir = os.path.join( self.svndir, self.package )
+    destdir = os.path.join( self.workdir, self.package )
+    utils.copySrcDirToDestDir( srcdir, destdir )
     
     #copy the needed changed cmake files over...
-    #destdir = os.path.join( self.workdir, self.progname, "cmake", "modules" )
-    #utils.copySrcDirToDestDir( self.filesdir, destdir )
+    destdir = os.path.join( self.workdir, self.package, "cmake", "modules" )
+    utils.copySrcDirToDestDir( self.filesdir, destdir )
 
-    #return True
+    return True
 
   def compile( self ):
     print "%s compile called" % self.package
@@ -55,14 +55,16 @@ class subclass(base.baseclass):
 
     os.chdir( builddir )
 
-    options = "-DCMAKE_INSTALL_PREFIX=/kde ..\\%s-%s " % \
-        ( self.package, self.version )
+    options = "-DCMAKE_INSTALL_PREFIX=/kde ..\\%s " % self.package
 
     options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
         os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
 
     options = options + "-DWIN32LIBS_INSTALL_PREFIX=%s " % \
         os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
+
+    options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
+        os.path.join( self.rootdir, "strigi" ).replace( "\\", "/" )
 
     command = r"""cmake -G "MinGW Makefiles" %s """ % options
     print "cmake command:", command
