@@ -172,7 +172,7 @@ def unZip( file, destdir ):
 
 ### svn fetch/unpack functions
 
-def svnFetch( repo, destdir ):
+def svnFetch( repo, destdir, username = None, password = None ):
     print "utils svnfetch", repo, destdir
     if ( not os.path.exists( destdir ) ):
         os.makedirs( destdir )
@@ -182,6 +182,10 @@ def svnFetch( repo, destdir ):
     if ( len( os.listdir( destdir ) ) == 0 ):
         # not checked out yet
         command = "svn checkout %s" % repo
+        if ( username != None ):
+            command = command + " --username " + username
+        if ( password != None ):
+            command = command + " --password " + password
         print "executing this:", command
         ret = os.system( command )
     else:

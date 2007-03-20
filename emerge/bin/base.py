@@ -12,14 +12,23 @@ print "KDEROOT:", ROOTDIR
 COMPILER=os.getenv( "KDECOMPILER" )
 print "KDECOMPILER:", COMPILER
 
-KDESVNDIR=os.getenv( "KDESVNDIR" )
-print "KDESVNDIR:", KDESVNDIR
-
 DOWNLOADDIR=os.getenv( "DOWNLOADDIR" )
 if ( DOWNLOADDIR == None ):
         DOWNLOADDIR=os.path.join( ROOTDIR, "distfiles" )
 print "DOWNLOADDIR:", DOWNLOADDIR
 
+KDESVNDIR=os.getenv( "KDESVNDIR" )
+if ( KDESVNDIR == None ):
+        KDESVNDIR=os.path.join( DOWNLOADDIR, "svn-src", "kde" )
+print "KDESVNDIR:", KDESVNDIR
+
+KDESVNSERVER=os.getenv( "KDESVNSERVER" )
+if ( KDESVNSERVER == None ):
+        KDESVNSERVER="svn://anonsvn.kde.org"
+print "KDESVNSERVER:", KDESVNSERVER
+
+KDESVNUSERNAME=os.getenv( "KDESVNUSERNAME" )
+KDESVNPASSWORD=os.getenv( "KDESVNPASSWORD" )
 
 
 # ok, we have the following dirs:
@@ -155,13 +164,21 @@ class baseclass:
 		self.packagedir = os.path.join( ROOTDIR, "emerge", \
 		    "portage", self.category, self.package )
 		self.filesdir = os.path.join( self.packagedir, "files" )
+		self.kdesvndir = KDESVNDIR
+		self.kdesvnserver = KDESVNSERVER
+		self.kdesvnuser = KDESVNUSERNAME
+		self.kdesvnpass = KDESVNPASSWORD
 
 	def svnFetch( self, repo ):
 		print "base svnFetch called"
 		self.svndir = os.path.join( self.downloaddir, "svn-src", self.package )
 		utils.svnFetch( repo, self.svndir )
 		
-		
-		
-		
-		
+	def kdeSvnFetch( self, path, dir ):
+                # path is the part of the repo url after /home/kde, for example
+                # "trunk/kdesupport/", which leads to the package itself,
+                # without the package
+		print "base kdeSvnFetch called"
+		self.svndir = os.path.join( self.kdesvndir, path )
+		repo = self.kdesvnserver + "/home/kde/" + path + dir
+		utils.svnFetch( repo, self.svndir, self.kdesvnuser, self.kdesvnpass )
