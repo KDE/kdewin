@@ -58,7 +58,7 @@ def doExec( category, package, version, action ):
     file = os.path.join( utils.getPortageDir(), category, package, "%s-%s.py" % \
                          ( package, version ) )
     print "file:", file
-    commandstring = "%s %s" % ( file, action )
+    commandstring = "python %s %s" % ( file, action )
     if ( os.system( commandstring ) ):
         return False
     return True
