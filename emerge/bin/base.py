@@ -12,7 +12,15 @@ print "KDEROOT:", ROOTDIR
 COMPILER=os.getenv( "KDECOMPILER" )
 print "KDECOMPILER:", COMPILER
 
-DOWNLOADDIR=os.path.join( ROOTDIR, "distfiles" )
+KDESVNDIR=os.getenv( "KDESVNDIR" )
+print "KDESVNDIR:", KDESVNDIR
+
+DOWNLOADDIR=os.getenv( "DOWNLOADDIR" )
+if ( DOWNLOADDIR == None ):
+        DOWNLOADDIR=os.path.join( ROOTDIR, "distfiles" )
+print "DOWNLOADDIR:", DOWNLOADDIR
+
+
 
 # ok, we have the following dirs:
 # ROOTDIR: the root where all this is below
@@ -140,7 +148,7 @@ class baseclass:
 		print "cmakeInstallPrefix:", self.cmakeInstallPrefix
 
 		self.rootdir     = ROOTDIR
-		self.downloaddir = os.path.join( ROOTDIR, "distfiles" )
+		self.downloaddir = DOWNLOADDIR
 		self.workdir     = os.path.join( ROOTDIR, "tmp", self.PV, "work" )
 		self.imagedir    = os.path.join( ROOTDIR, "tmp", self.PV, "image" )
 
