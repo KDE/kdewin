@@ -5,12 +5,12 @@ import os
 import sys
 import shutil
 
-#DEPEND = """
-#dev-util/dbus
-#dev-util/mingw
-#gnuwin32/sed
-#gnuwin32/patch
-#"""
+DEPEND = """
+dev-util/dbus
+dev-util/mingw
+gnuwin32/sed
+gnuwin32/patch
+"""
 
 SRC_URI= """
 ftp://ftp.trolltech.com/pub/qt/source/qt-win-opensource-src-4.2.2.zip
@@ -33,8 +33,8 @@ class subclass(base.baseclass):
 	os.path.join( self.workdir, "qt-win-opensource-src-4.2.2" ) )
 
     os.chdir( os.path.join( self.workdir, "qt-win-opensource-src-4.2.2" ) )
-    patchfile = os.path.join( self.rootdir, \
-        "distfiles\\svn-src\\dbus\\trunk\\QtDBus-win32.patch" )
+    patchfile = os.path.join( self.downloaddir, \
+        "svn-src\\dbus\\trunk\\QtDBus-win32.patch" )
     command = "patch -p0 < %s" % patchfile
     os.system( command ) and die( "qt patch" )
     
