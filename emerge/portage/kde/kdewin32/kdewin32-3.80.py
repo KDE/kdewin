@@ -15,14 +15,16 @@ class subclass(base.baseclass):
   def unpack( self ):
     print "%s unpack called" % self.package
 
-    repo = "svn://anonsvn.kde.org/home/kde/trunk/kdesupport/kdewin32"
-    self.svnFetch( repo )
+    #repo = "svn://anonsvn.kde.org/home/kde/trunk/kdesupport/kdewin32"
+    svnpath = "trunk/kdesupport/"
+    dir = "kdewin32/"
+    self.kdeSvnFetch( svnpath, dir )
 
     utils.cleanDirectory( self.workdir )
 
     # now copy the tree to workdir
-    srcdir = os.path.join( self.svndir, "kdewin32" )
-    destdir = os.path.join( self.workdir, "kdewin32" )
+    srcdir = os.path.join( self.kdesvndir, svnpath, dir ).replace( "/", "\\" )
+    destdir = os.path.join( self.workdir, dir )
     utils.copySrcDirToDestDir( srcdir, destdir )
 
     return True
