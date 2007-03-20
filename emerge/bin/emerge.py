@@ -43,6 +43,9 @@ for i in sys.argv:
         buildaction = "qmerge"
     elif ( i == "--digest" ):
         buildaction = "digest"
+    elif ( i.startswith( "-" ) ):
+        print "error: emerge flag %s not understood" % i
+        exit ( 1 )
     else:
         packagename = i
 
@@ -66,18 +69,31 @@ def doExec( category, package, version, action ):
 def handlePackage( category, package, version, buildaction ):
     print "handlePackage called:", category, package, version, buildaction
     success = True
-    if ( ( buildaction == "fetch" or buildaction == "all" ) and success ):
-         success = doExec( category, package, version, "fetch" )       
-    if ( ( buildaction == "unpack" or buildaction == "all" ) and success ):
-         success = doExec( category, package, version, "unpack" )       
-    if ( ( buildaction == "compile" or buildaction == "all" ) and success ):
-         success = doExec( category, package, version, "compile" )       
-    if ( ( buildaction == "install" or buildaction == "all" ) and success ):
-         success = doExec( category, package, version, "install" )       
-    if ( ( buildaction == "qmerge" or buildaction == "all" ) and success ):
-         success = doExec( category, package, version, "qmerge" )       
-    if ( ( buildaction == "digest" ) and success ):
-         success = doExec( category, package, version, "digest" )       
+    if ( buildaction == "all" ):
+        if ( success ):
+            success = doExec( category, package, version, "fetch" )
+        if ( success ):
+            success = doExec( category, package, version, "unpack" )       
+        if ( success ):
+            success = doExec( category, package, version, "compile" )       
+        if ( success ):
+            success = doExec( category, package, version, "install" )       
+        if ( success ):
+            success = doExec( category, package, version, "qmerge" )
+
+    elif ( buildaction == "fetch" ):
+        success = doExec( category, package, version, "fetch" )       
+    elif ( buildaction == "unpack" ):
+        success = doExec( category, package, version, "unpack" )       
+    elif ( buildaction == "compile" ):
+        success = doExec( category, package, version, "compile" )       
+    elif ( buildaction == "install" ):
+        success = doExec( category, package, version, "install" )       
+    elif ( buildaction == "qmerge" ):
+        success = doExec( category, package, version, "qmerge" )
+    else:
+        print "could not understand this buildaction: %s" % buildaction
+        success = false
 
     return success
     
