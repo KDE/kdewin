@@ -5,6 +5,7 @@ import os
 
 DEPEND = """
 virtual/base
+gnuwin32/openssl
 """
 
 class subclass(base.baseclass):
@@ -13,17 +14,17 @@ class subclass(base.baseclass):
 
   def unpack( self ):
     print "%s unpack called" % self.package
-
-    repo = "svn://anonsvn.kde.org/home/kde/trunk/kdesupport/strigi"
-    self.svnFetch( repo )
+    svnpath = "trunk/kdesupport/"
+    dir = "strigi"
+    self.kdeSvnFetch( svnpath, dir )
 
     utils.cleanDirectory( self.workdir )
 
     # now copy the tree to workdir
-    srcdir = os.path.join( self.svndir, "strigi" )
-    destdir = os.path.join( self.workdir, "strigi" )
-    utils.copySrcDirToDestDir( srcdir, destdir )
-    
+    #srcdir = os.path.join( self.kdesvndir, svnpath, dir ).replace( "/", "\\" )
+    destdir = os.path.join( self.workdir, dir )
+    utils.copySrcDirToDestDir( self.svndir, destdir )
+
     #copy the needed changed cmake files over...
     destdir = os.path.join( self.workdir, "strigi", "cmake" )
     utils.copySrcDirToDestDir( self.filesdir, destdir )
