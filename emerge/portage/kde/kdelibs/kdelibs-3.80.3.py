@@ -10,26 +10,37 @@ dev-util/win32libs
 kde/kdewin32
 """
 
-# FIXME KComponentDataPrivate destructor
+comment = """
+get rid of this kdebug.h warning if possible:
+[ 31%] Building CXX object kdeui/CMakeFiles/kdeui.dir/actions/kaction.obj
+e:/mingwroot/tmp/kdelibs-3.80.3/work/kdelibs/kdecore/io/kdebug.h: In instantiati
+on of `kdbgstream& kdbgstream::operator<<(const T&) [with T = QLatin1Char]':
+e:/mingwroot/tmp/kdelibs-3.80.3/work/kdelibs/kdecore/io/kdebug.h:130:   instanti
+ated from here
+e:/mingwroot/tmp/kdelibs-3.80.3/work/kdelibs/kdecore/io/kdebug.h:296: warning: '
+kdbgstream& kdbgstream::operator<<(const T&) [with T = QLatin1Char]' defined loc
+ally after being referenced with dllimport linkage
 
-#SRC_URI = "ftp://ftp.kde.org/pub/kde/unstable/3.80.3/src/kdelibs-3.80.3.tar.bz2"
-
+"""
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
 
   def unpack( self ):
     print "%s unpack called" % self.package
-
-    repo = "svn://anonsvn.kde.org/home/kde/trunk/KDE/%s" % self.package
-    self.svnFetch( repo )
+    svnpath = "trunk/KDE/"
+    dir = "kdelibs"
+    self.kdeSvnFetch( svnpath, dir )
 
     utils.cleanDirectory( self.workdir )
 
     # now copy the tree to workdir
-    srcdir = os.path.join( self.svndir, self.package )
-    destdir = os.path.join( self.workdir, self.package )
+    srcdir = os.path.join( self.kdesvndir, svnpath, dir ).replace( "/", "\\" )
+    destdir = os.path.join( self.workdir, dir )
     utils.copySrcDirToDestDir( srcdir, destdir )
+    #srcdir = os.path.join( self.svndir, self.package )
+    #destdir = os.path.join( self.workdir, self.package )
+    #utils.copySrcDirToDestDir( srcdir, destdir )
     
     #copy the needed changed cmake files over...
     destdir = os.path.join( self.workdir, self.package, "cmake", "modules" )
@@ -39,11 +50,6 @@ class subclass(base.baseclass):
 
   def compile( self ):
     print "%s compile called" % self.package
-
-    #copy the needed changed cmake files over...
-    destdir = os.path.join( self.workdir, self.PV, "cmake", "modules" )
-    utils.copySrcDirToDestDir( self.filesdir, destdir )
-
     os.chdir( self.workdir )
 
     builddir = "%s-build" % self.package
@@ -66,6 +72,9 @@ class subclass(base.baseclass):
     options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
         os.path.join( self.rootdir, "strigi" ).replace( "\\", "/" )
 
+    options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
+        os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
+
     command = r"""cmake -G "MinGW Makefiles" %s """ % options
     print "cmake command:", command
     os.system( command ) and die ( "cmake" )
@@ -74,7 +83,7 @@ class subclass(base.baseclass):
     return True
 
   def install( self ):
-    print "kdewin32 install called"
+    print "%s install called" % self.package
     os.chdir( os.path.join( self.workdir, "%s-build" % self.package ) )
     os.system( "mingw32-make DESTDIR=%s install" % self.imagedir ) \
                and die( "mingw32-make install" )
