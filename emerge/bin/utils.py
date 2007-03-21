@@ -179,7 +179,12 @@ def svnFetch( repo, destdir, username = None, password = None ):
     os.chdir( destdir )
 
     ret = 0
-    if ( len( os.listdir( destdir ) ) == 0 ):
+    #if ( len( os.listdir( destdir ) ) == 0 ):
+
+    dir = os.path.basename( repo.replace( "/", "\\" ) )
+    path = os.path.join( destdir, dir )
+    print "path: ", path 
+    if ( not os.path.exists( path ) ):
         # not checked out yet
         command = "svn checkout %s" % repo
         if ( username != None ):
@@ -191,7 +196,7 @@ def svnFetch( repo, destdir, username = None, password = None ):
     else:
         # already checked out, so only update
         mode = "update"
-        os.chdir( os.path.join( destdir, os.listdir( destdir )[0] ) )
+        os.chdir( path )
         print "svn up cwd:", os.getcwd()
         ret = os.system( "svn update" )
 

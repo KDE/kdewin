@@ -148,8 +148,8 @@ class baseclass:
 					   utils.getCategoryPackageVersion( sys.argv[ 0 ] )
 
 		#self.progname = self.package		
-		#print "setdir category: %s, package: %s, version: %s" %\
-		#	  ( self.category, self.package, self.version )
+		print "setdir category: %s, package: %s, version: %s" %\
+			  ( self.category, self.package, self.version )
 
   
 		
@@ -179,6 +179,7 @@ class baseclass:
                 # "trunk/kdesupport/", which leads to the package itself,
                 # without the package
 		print "base kdeSvnFetch called"
-		self.svndir = os.path.join( self.kdesvndir, path )
+		svndir = os.path.join( self.kdesvndir, path ).replace( "/", "\\" )
 		repo = self.kdesvnserver + "/home/kde/" + path + dir
-		utils.svnFetch( repo, self.svndir, self.kdesvnuser, self.kdesvnpass )
+		utils.svnFetch( repo, svndir, self.kdesvnuser, self.kdesvnpass )
+		self.svndir = os.path.join( svndir, dir )
