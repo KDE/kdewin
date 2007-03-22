@@ -1,9 +1,9 @@
-: this file sets some environment variables that are needed
-: for finding programs and libraries etc.
-: by Holger Schroeder <schroder@kde.org>
+rem    this file sets some environment variables that are needed
+rem    for finding programs and libraries etc.
+rem    by Holger Schroeder <schroder@kde.org>
 
-: you should copy kdesettings-example.bat to ..\etc\kdesettings.bat
-: and adapt it to your needs (see that file for more info)
+rem    you should copy kdesettings-example.bat to ..\etc\kdesettings.bat
+rem    and adapt it to your needs (see that file for more info)
 
 call etc\kdesettings.bat
 
@@ -19,5 +19,9 @@ set PATH=%KDEROOT%\mc;%PATH%
 set PATH=%KDEROOT%\qt\bin;%PATH%
 set PATH=%KDEROOT%\dbus\bin;%PATH%
 set PATH=%KDEROOT%\perl\bin;%PATH%
+set PATH=%KDEROOT%\strigi\bin;%PATH%
 set PATH=%KDEROOT%\kde\bin;%PATH%
 set PATH=%KDEROOT%\kde\lib;%PATH%
+@
+@rem to find FindKDEInternal.cmake from kdepimlibs etc...
+set KDEDIRS=%KDEROOT%\kde
