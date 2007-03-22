@@ -5,6 +5,7 @@ import shutil
 
 # for get functions etc...
 import utils
+from utils import die
 
 ROOTDIR=os.getenv( "KDEROOT" )
 print "KDEROOT:", ROOTDIR
@@ -173,13 +174,102 @@ class baseclass:
 		print "base svnFetch called"
 		self.svndir = os.path.join( self.downloaddir, "svn-src", self.package )
 		utils.svnFetch( repo, self.svndir )
-		
-	def kdeSvnFetch( self, path, dir ):
-                # path is the part of the repo url after /home/kde, for example
+
+	def __kdesinglecheckout( self, repourl, ownpath, codir, doRecursive = False ):
+                # in ownpath try to checkout codir from repourl
+                # if codir exists, simply return,
+                # if codir does not exist, but ownpath/.svn exists,
+                # do a svn update codir
+                # else do svn co repourl/codir
+                # if doRecursive is false, add -N to the svn command
+
+                if ( os.path.exists( os.path.join( ownpath, codir ) ) ):
+                        print "ksco exists:", ownpath, codir
+                        return
+
+                if ( doRecursive ):
+                        recFlag = ""
+                else:
+                        recFlag = "-N"
+
+                if ( os.path.exists( os.path.join( ownpath, ".svn" ) ) ):
+                        # svn up
+                        svncmd = "svn update %s %s" % ( recFlag, codir)
+                else:
+                        #svn co
+                        svncmd = "svn checkout %s %s" % \
+                                 ( recFlag, repourl + codir )
+
+                print "kdesinglecheckout:pwd ", ownpath
+                print "kdesinglecheckout:   ", svncmd
+                os.chdir( ownpath )
+                os.system( svncmd ) and die( "kdesinglecheckout failed" )
+                
+	def kdeSvnFetch( self, svnpath, packagedir ):
+                # svnpath is the part of the repo url after /home/kde, for example
                 # "trunk/kdesupport/", which leads to the package itself,
                 # without the package
-		print "base kdeSvnFetch called"
-		svndir = os.path.join( self.kdesvndir, path ).replace( "/", "\\" )
-		repo = self.kdesvnserver + "/home/kde/" + path + dir
-		utils.svnFetch( repo, svndir, self.kdesvnuser, self.kdesvnpass )
-		self.svndir = os.path.join( svndir, dir )
+		print "base kdeSvnFetch called. svnpath: %s dir: %s" % \
+                      ( svnpath, dir )
+
+                mydir = self.kdesvndir
+                if ( not os.path.exists( mydir ) ):
+                        os.mkdir( mydir )
+
+                repourl = "https://svn.kde.org/home/kde/"
+		for tmpdir in svnpath.split( "/" ):
+                        if ( tmpdir == "" ):
+                                continue
+                        print "  mydir: %s" % mydir
+                        print "  dir to checkout: %s" % tmpdir
+                        print "  repourl", repourl
+
+                        self.__kdesinglecheckout( repourl, mydir, tmpdir, False )
+                        mydir = os.path.join( mydir, tmpdir )
+                        repourl = repourl + tmpdir + "/"
+                
+                print "dir in which to really checkout: %s" % mydir
+                print "dir to really checkout: %s" % packagedir
+                self.__kdesinglecheckout( repourl, mydir, packagedir, True )
+
+		svndir = os.path.join( self.kdesvndir, svnpath ).replace( "/", "\\" )
+		#repo = self.kdesvnserver + "/home/kde/" + svnpath + dir
+		#utils.svnFetch( repo, svndir, self.kdesvnuser, self.kdesvnpass )
+		print "kdesvndir", self.kdesvndir
+		print "svndir", svndir
+		print "dir", dir
+		self.svndir = os.path.join( svndir, packagedir )
+
+        def kdeSvnUnpack( self, svnpath, packagedir ):
+                self.kdeSvnFetch( svnpath, packagedir )
+        
+                utils.cleanDirectory( self.workdir )
+
+                # now copy the tree to workdir
+                srcdir = os.path.join( self.kdesvndir, svnpath, packagedir ).replace( "/", "\\" )
+                destdir = os.path.join( self.workdir, packagedir )
+                utils.copySrcDirToDestDir( srcdir, destdir )
+    
+        def kdeDefaultDefines( self ):
+                options = "-DCMAKE_INSTALL_PREFIX=%s/kde ..\\%s " % \
+                      ( self.rootdir.replace( "\\", "/" ), self.package )
+
+                options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
+                        os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
+
+                options = options + "-DWIN32LIBS_INSTALL_PREFIX=%s " % \
+                        os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
+
+                options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
+                        os.path.join( self.rootdir, "strigi" ).replace( "\\", "/" )
+
+                options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
+                        os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
+
+                return options
+
+        def kdeInstall( self ):
+                os.chdir( os.path.join( self.workdir, "%s-build" % self.package ) )
+                os.system( "mingw32-make DESTDIR=%s install" % self.imagedir ) \
+                       and die( "mingw32-make install" )
+                utils.fixCmakeImageDir( self.imagedir, self.rootdir )

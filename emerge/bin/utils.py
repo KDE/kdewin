@@ -403,10 +403,10 @@ def copySrcDirToDestDir( srcdir, destdir ):
             #print "srcdir:", srcdir
             #print "destdir:", destdir
             tmpdir = root.replace( mysrcdir, mydestdir )
-            print "tmpdir:", tmpdir
+            #print "tmpdir:", tmpdir
             if ( not os.path.exists( tmpdir ) ): os.makedirs( tmpdir )
             for file in files:
-                print "src file:", root, file
+                #print "src file:", root, file
                 shutil.copy( os.path.join( root, file ), tmpdir )
 
 
