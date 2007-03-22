@@ -1,6 +1,11 @@
 import base
 import utils
+from utils import die
 import os
+
+DEPEND = """
+kde/kdelibs
+"""
 
 class subclass(base.baseclass):
   def __init__(self):
@@ -9,22 +14,19 @@ class subclass(base.baseclass):
   def unpack( self ):
     print "%s unpack called" % self.package
     svnpath = "trunk/KDE/"
-    dir = "kdebase"
+    dir = "kdegames"
     self.kdeSvnUnpack( svnpath, dir )
-
     return True
 
   def compile( self ):
     print "%s compile called" % self.package
     os.chdir( self.workdir )
-
     builddir = "%s-build" % self.package
 
     if ( not os.path.exists( builddir ) ):
       os.mkdir( builddir )
 
     utils.cleanDirectory( builddir )
-
     os.chdir( builddir )
 
     command = r"""cmake -G "MinGW Makefiles" %s """ % self.kdeDefaultDefines()
@@ -38,5 +40,5 @@ class subclass(base.baseclass):
     print "%s install called" % self.package
     self.kdeInstall()
     return True
-		
+
 subclass().execute()

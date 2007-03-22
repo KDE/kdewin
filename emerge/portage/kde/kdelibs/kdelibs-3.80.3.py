@@ -22,6 +22,9 @@ kdbgstream& kdbgstream::operator<<(const T&) [with T = QLatin1Char]' defined loc
 ally after being referenced with dllimport linkage
 
 """
+
+# FIXME why are the changed cmake files not installed ?
+
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
@@ -61,20 +64,10 @@ class subclass(base.baseclass):
 
     os.chdir( builddir )
 
-    options = "-DCMAKE_INSTALL_PREFIX=/kde ..\\%s " % self.package
-
-    options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
-        os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
-
-    options = options + "-DWIN32LIBS_INSTALL_PREFIX=%s " % \
-        os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
-
-    options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
-        os.path.join( self.rootdir, "strigi" ).replace( "\\", "/" )
-
-    options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
-        os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
-
+    options = self.kdeDefaultDefines()
+    # build tests in kdelibs
+    options = options + " -DKDE4_BUILD_TESTS=ON"
+ 
     command = r"""cmake -G "MinGW Makefiles" %s """ % options
     print "cmake command:", command
     os.system( command ) and die ( "cmake" )
@@ -84,10 +77,7 @@ class subclass(base.baseclass):
 
   def install( self ):
     print "%s install called" % self.package
-    os.chdir( os.path.join( self.workdir, "%s-build" % self.package ) )
-    os.system( "mingw32-make DESTDIR=%s install" % self.imagedir ) \
-               and die( "mingw32-make install" )
-    #utils.fixCmakeImageDir( self.imagedir, self.rootdir )
+    self.kdeInstall()
     return True
 
 subclass().execute()
