@@ -29,8 +29,6 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "win32_utils.h"
-
 KDEWIN32_EXPORT int getgroups(int size, gid_t list[])
 {
 	/* TODO */
@@ -60,12 +58,26 @@ KDEWIN32_EXPORT int readlink(const char *__path, char *__buf, int __buflen)
 
 KDEWIN32_EXPORT int symlink(const char *__name1, const char *__name2)
 {
-	return fcopy(__name1, __name2);
+	if(!CopyFileA(__name1, __name2, FALSE)) {
+	    switch(GetLastError()) {
+	        case ERROR_FILE_EXISTS:
+    	        errno = EEXIST;
+    	        break;
+    	    case ERROR_CANNOT_MAKE:
+    	        errno = EACCES;
+    	        break;
+    	    default:
+    	        errno = EFAULT;
+    	        break;
+        }
+	    return -1; 
+	}
+	return 0;
 }
 
 KDEWIN32_EXPORT int link(const char *__name1, const char *__name2)
 {
-	return fcopy(__name1, __name2);
+	return symlink(__name1, __name2);
 }
 
 KDEWIN32_EXPORT int chown(const char *__path, uid_t __owner, gid_t __group)

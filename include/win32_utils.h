@@ -29,16 +29,6 @@
 extern "C" {
 #endif
 
-#define fcopy_src_err -1
-#define fcopy_dest_err -2
-
-/**
- Copies @p src file to @p dest file.
- @return 0 on success, fcopy_src_err on source file error,
- fcopy_dest_err on destination file error.
-*/
-KDEWIN32_EXPORT int fcopy(const char *src, const char *dest);
-
 #ifdef  __cplusplus
 }
 

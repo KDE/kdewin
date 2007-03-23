@@ -75,7 +75,7 @@ set(win_LIB_SRCS
    src/time.c
    src/uname.c
    src/unistd.c
-   src/win32_utils.c
+#   src/win32_utils.c
    src/win32_utils2.cpp
 #   src/io.c
    )
