@@ -106,6 +106,13 @@ install_files(/include/${_incDirPrefix} FILES ${_headers} )
 install_files(/include FILES ${_win_headers} )
 
 if (KDEWIN_INSTALLER_FOUND)
+    if (MINGW)
+        configure_file(${CMAKE_SOURCE_DIR}/make-kdewin-package.bat.cmake ${CMAKE_BINARY_DIR}/make-kdewin-package.bat)
+        set (INSTALL_TYPE "mingw")
+    else (MINGW)
+        configure_file(${CMAKE_SOURCE_DIR}/kdewin-sln.bat.cmake ${CMAKE_BINARY_DIR}/kdewin-sln.bat)
+        set (INSTALL_TYPE "msvc")
+    endif (MINGW)
     add_custom_target(kdewinpackage
         COMMAND ${KDEWIN_PACKAGER} 
             -name kdewin
@@ -113,6 +120,7 @@ if (KDEWIN_INSTALLER_FOUND)
             -srcroot ${CMAKE_SOURCE_DIR} 
             -srcexclude "emerge unused"
             -version ${VERSION} 
+            -type ${INSTALL_TYPE}
             -notes "description"
 #        DEPENDS install
     )
