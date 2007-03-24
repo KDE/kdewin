@@ -1,5 +1,11 @@
-project(kdewin32)
-set (VERSION 0.1)
+set (NAME kdewin32)
+set (VERSION 0.2)
+
+project(${NAME})
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+
+find_package(KDEWIN_INSTALLER)
 
 if (NOT WIN32)
    message(FATAL_ERROR "This directory can only be built under Windows")
@@ -98,3 +104,16 @@ install_files(/include/${_incDirPrefix}/net FILES ${_net_headers} )
 install_files(/include/${_incDirPrefix}/sys FILES ${_sys_headers} )
 install_files(/include/${_incDirPrefix} FILES ${_headers} )
 install_files(/include FILES ${_win_headers} )
+
+if (KDEWIN_INSTALLER_FOUND)
+    add_custom_target(kdewinpackage
+        COMMAND ${KDEWIN_PACKAGER} 
+            -name kdewin
+            -root ${CMAKE_INSTALL_PREFIX} 
+            -srcroot ${CMAKE_SOURCE_DIR} 
+            -srcexclude "emerge unused"
+            -version ${VERSION} 
+            -notes "description"
+#        DEPENDS install
+    )
+endif (KDEWIN_INSTALLER_FOUND)
