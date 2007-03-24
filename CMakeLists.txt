@@ -1,4 +1,4 @@
-set (NAME kdewin32)
+set (NAME kdewin)
 set (VERSION 0.2)
 
 project(${NAME})
@@ -104,6 +104,7 @@ install_files(/include/${_incDirPrefix}/net FILES ${_net_headers} )
 install_files(/include/${_incDirPrefix}/sys FILES ${_sys_headers} )
 install_files(/include/${_incDirPrefix} FILES ${_headers} )
 install_files(/include FILES ${_win_headers} )
+install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
 
 if (KDEWIN_INSTALLER_FOUND)
     if (MINGW)
@@ -115,7 +116,7 @@ if (KDEWIN_INSTALLER_FOUND)
     endif (MINGW)
     add_custom_target(kdewinpackage
         COMMAND ${KDEWIN_PACKAGER} 
-            -name kdewin
+            -name ${NAME}
             -root ${CMAKE_INSTALL_PREFIX} 
             -srcroot ${CMAKE_SOURCE_DIR} 
             -srcexclude "emerge unused"
