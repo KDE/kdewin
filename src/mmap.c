@@ -91,6 +91,7 @@ void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offse
     struct mmapInfos mmi;
     DWORD dwAccess;
     DWORD flProtect;
+    DWORD dwFlags;
     HANDLE hfd;
 
     if ( g_maxMMapInfos == -1 ) {
@@ -114,9 +115,18 @@ void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offse
         return MAP_FAILED;
 	}
 
-	hfd = (HANDLE)_get_osfhandle( fd );
-	if ( hfd == INVALID_HANDLE_VALUE )
-		return MAP_FAILED;
+	// fd can be a crt or a win32 handle -> convert to win32 handle
+	if(!GetHandleInformation( (HANDLE)fd, &dwFlags )) {
+	    if(GetLastError() == ERROR_INVALID_HANDLE) {
+        	hfd = (HANDLE)_get_osfhandle( fd );
+        	if ( hfd == INVALID_HANDLE_VALUE )
+        		return MAP_FAILED;
+	    } else {
+		    return MAP_FAILED;
+	    }
+	} else {
+	    hfd = (HANDLE)fd;
+	}
 
 	if ( !DuplicateHandle( GetCurrentProcess(), hfd, GetCurrentProcess(),
                            &mmi.hFile, 0, FALSE, DUPLICATE_SAME_ACCESS ) ) {
