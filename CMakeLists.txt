@@ -106,12 +106,29 @@ install_files(/include/${_incDirPrefix} FILES ${_headers} )
 install_files(/include FILES ${_win_headers} )
 install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
 
+#
+# write explorer wrappers 
+#
+get_filename_component(QT_BIN_PATH ${QT_QMAKE_EXECUTABLE} PATH)
+if (MINGW)
+    get_filename_component(MINGW_BIN_PATH ${CMAKE_CXX_COMPILER} PATH)
+    write_file (${CMAKE_BINARY_DIR}/kdewin-shell.bat "set PATH=${MINGW_BIN_PATH};${QT_BIN_PATH};%PATH%\ncmd.exe")
+else (MINGW)
+    # @TODO: how to distinguish sln from nmake mode 
+    write_file (${CMAKE_BINARY_DIR}/kdewin-sln.bat "set ${QT_BIN_PATH};%PATH%\nstart kdewin.sln")
+endif (MINGW)
+
+#
+# kdewin installer integration 
+#
+# @TODO: use temporay installation root 
+# 
 if (KDEWIN_INSTALLER_FOUND)
     if (MINGW)
-        configure_file(${CMAKE_SOURCE_DIR}/make-kdewin-package.bat.cmake ${CMAKE_BINARY_DIR}/make-kdewin-package.bat)
+        # wrapper to make package from explorer
+        write_file(${CMAKE_BINARY_DIR}/make-kdewin-package.bat "rmdir /Q /S %CD%\\temp\n${CMAKE_COMMAND} -G \"MinGW Makefiles\" ${CMAKE_SOURCE_DIR} -DCMAKE_INSTALL_PREFIX=%CD%\\temp -DCMAKE_BUILD_TYPE=Debug\n${CMAKE_BUILD_TOOL} install\n${CMAKE_COMMAND} -G \"MinGW Makefiles\" ${CMAKE_SOURCE_DIR} -DCMAKE_INSTALL_PREFIX=%CD%\\temp -DCMAKE_BUILD_TYPE=Release\n${CMAKE_BUILD_TOOL} install\n${CMAKE_BUILD_TOOL} kdewinpackage\n")
         set (INSTALL_TYPE "mingw")
     else (MINGW)
-        configure_file(${CMAKE_SOURCE_DIR}/kdewin-sln.bat.cmake ${CMAKE_BINARY_DIR}/kdewin-sln.bat)
         set (INSTALL_TYPE "msvc")
     endif (MINGW)
     add_custom_target(kdewinpackage
