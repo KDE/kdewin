@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006 Jos van den Oever <jos@vandenoever.info>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,9 +28,18 @@
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 #endif
 
+char* strndup(const char *src, size_t n)
+{
+	const size_t len = MIN(strlen(src), n);
+	char *copy = malloc(len + 1);
+	if (copy) {
+		memcpy (copy, src, len);
+		copy[len] = '\0';
+	}
+	return copy;
+}
 
-// from kdecore/fakes.c
-KDEWIN32_EXPORT unsigned long strlcpy(char *d, const char *s, unsigned long bufsize)
+unsigned long strlcpy(char *d, const char *s, unsigned long bufsize)
 {
 	unsigned long len, ret = strlen(s);
 
@@ -45,8 +55,7 @@ KDEWIN32_EXPORT unsigned long strlcpy(char *d, const char *s, unsigned long bufs
     return ret;
 }
 
-// from kdecore/fakes.c
-KDEWIN32_EXPORT unsigned long strlcat(char *d, const char *s, unsigned long bufsize)
+unsigned long strlcat(char *d, const char *s, unsigned long bufsize)
 {
 	char *cp;
 	unsigned long ret, len1, len2 = strlen(s);
@@ -66,14 +75,21 @@ KDEWIN32_EXPORT unsigned long strlcat(char *d, const char *s, unsigned long bufs
 	return ret;
 }
 
-KDEWIN32_EXPORT char* strndup(const char *src, size_t n)
+const char *strcasestr(const char *big, const char *little)
 {
-	const size_t len = MIN(strlen(src), n);
-	char *copy = malloc(len + 1);
-	if (copy) {
-		memcpy (copy, src, len);
-		copy[len] = '\0';
-	}
-	return copy;
-}
+    char *tmp1 = strdup(big);
+    char *tmp2 = strdup(little);
+    const char *ret;
+    strlwr(tmp1);
+    strlwr(tmp2);
 
+    ret = strstr(tmp1, tmp2);
+
+    if ( ret )
+        ret = big + (ret - tmp1);
+
+    free(tmp1);
+    free(tmp2);
+
+    return ret;
+}
