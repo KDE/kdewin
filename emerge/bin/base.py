@@ -177,13 +177,14 @@ class baseclass:
 
 	def __kdesinglecheckout( self, repourl, ownpath, codir, doRecursive = False ):
                 # in ownpath try to checkout codir from repourl
-                # if codir exists, simply return,
+                # if codir exists and doRecursive is false, simply return,
                 # if codir does not exist, but ownpath/.svn exists,
                 # do a svn update codir
                 # else do svn co repourl/codir
                 # if doRecursive is false, add -N to the svn command
 
-                if ( os.path.exists( os.path.join( ownpath, codir ) ) ):
+                if ( os.path.exists( os.path.join( ownpath, codir ) ) \
+                                     and not doRecursive ):
                         print "ksco exists:", ownpath, codir
                         return
 
@@ -210,7 +211,7 @@ class baseclass:
                 # "trunk/kdesupport/", which leads to the package itself,
                 # without the package
 		print "base kdeSvnFetch called. svnpath: %s dir: %s" % \
-                      ( svnpath, dir )
+                      ( svnpath, packagedir )
 
                 mydir = self.kdesvndir
                 if ( not os.path.exists( mydir ) ):
