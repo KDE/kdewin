@@ -16,14 +16,15 @@ SRC_URI = """
 http://switch.dl.sf.net/sourceforge/mingw/binutils-2.15.91-20040904-1.tar.gz
 http://switch.dl.sf.net/sourceforge/mingw/gcc-core-3.4.2-20040916-1.tar.gz
 http://switch.dl.sf.net/sourceforge/mingw/gcc-g++-3.4.2-20040916-1.tar.gz
-http://switch.dl.sf.net/sourceforge/mingw/mingw32-make-3.80.0-3.tar.gz
-http://switch.dl.sf.net/sourceforge/mingw/mingw-runtime-3.9.tar.gz
-http://switch.dl.sf.net/sourceforge/mingw/w32api-3.6.tar.gz
+http://switch.dl.sf.net/sourceforge/mingw/mingw32-make-3.81-2.tar.gz
+http://switch.dl.sf.net/sourceforge/mingw/mingw-runtime-3.12.tar.gz
+http://switch.dl.sf.net/sourceforge/mingw/w32api-3.9.tar.gz
+http://switch.dl.sf.net/sourceforge/mingw/gdb-5.1.1-1-mingw.tar.gz
 """
 
 class subclass(base.baseclass):
   def __init__( self ):
     base.baseclass.__init__( self, SRC_URI )
     self.instdestdir = "mingw"
-		
+
 subclass().execute()
