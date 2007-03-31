@@ -45,25 +45,33 @@ class subclass(base.baseclass):
 
     os.chdir( builddir )
 
-    options = "-DCMAKE_INSTALL_PREFIX=%s/%s ..\\%s " \
-      % (self.cmakeInstallPrefix, self.package, self.package)
+    options = "-DCMAKE_INSTALL_PREFIX=%s/strigi ..\\%s " % \
+        ( self.rootdir.replace( "\\", "/" ), self.package )
+
+    options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
+        os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
 
     options = options + "-DWIN32LIBS_INSTALL_PREFIX=%s " % \
         os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
 
-    options = options + "-DGNUWIN32_INSTALL_PREFIX=%s " % \
-        os.path.join( self.rootdir, "gnuwin32" ).replace( "\\", "/" )
-	    
-    command = r"""cmake -G "MinGW Makefiles" %s """ % options 
-    print "command: %s" % command
-    os.system( command ) and die( "cmake" )
-    os.system( "mingw32-make" ) and die( "mingw32-make" )
+    if ( self.compiler == "mingw" ):
+      command = r"""cmake -G "MinGW Makefiles" %s """ % options 
+      print "command: %s" % command
+      os.system( command ) and die( "cmake" )
+      os.system( "mingw32-make" ) and die( "mingw32-make" )
+    elif ( self.compiler == "msvc2005" ):
+      command = r"""cmake -G "NMake Makefiles" %s """ % options 
+      print "command: %s" % command
+      os.system( command ) and die( "cmake" )
+      os.system( "nmake" ) and die( "nmake" )
     
     return True
 
   def install( self ):
-    print "kdewin32 install called"
+    print "%s install called" % self.package
     os.chdir( os.path.join( self.workdir, "%s-build" % self.package ) )
+
+    # FIXME how to install with nmake ?
     os.system( "mingw32-make DESTDIR=%s install" % self.imagedir ) \
                and die( "mingw32-make install" )
     utils.fixCmakeImageDir( self.imagedir, self.rootdir )
