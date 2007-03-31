@@ -5,12 +5,7 @@ import shutil
 
 
 DEPENDS = """
-dev-util/subversion
-gnuwin32/patch
-gnuwin32/sed
-dev-util/cmake
-dev-util/mingw
-dev-util/win32libs
+virtual/base
 """
 
 # FIXME create dbus-1d lib for qt to link against...
