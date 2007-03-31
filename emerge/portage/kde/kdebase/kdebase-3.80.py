@@ -1,6 +1,7 @@
 import base
 import utils
 import os
+from utils import die
 
 class subclass(base.baseclass):
   def __init__(self):
