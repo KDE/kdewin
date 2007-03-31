@@ -125,6 +125,9 @@ def unpackFile( downloaddir, filename, workdir ):
             print "error:", myext
             return False
     else:
+        if ( ext == ".exe" ):
+            print "unpack ignoring exe file"
+            return True
         print "dont know how to unpack this file:", filename
         return False
 
