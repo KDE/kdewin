@@ -100,35 +100,35 @@ void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offse
     }
 
     flProtect = mapProtFlags( flags, &dwAccess );
-	if ( flProtect == 0 ) {
+    if ( flProtect == 0 ) {
         _set_errno( EINVAL );
-		return MAP_FAILED;
-	}
-	// we don't support this atm
-	if ( prot == MAP_FIXED ) {
-		_set_errno( ENOTSUP );
-		return MAP_FAILED;
-	}
-
-	if ( fd == -1 ) {
-		_set_errno( EBADF );
         return MAP_FAILED;
-	}
+    }
+    // we don't support this atm
+    if ( prot == MAP_FIXED ) {
+        _set_errno( ENOTSUP );
+        return MAP_FAILED;
+    }
 
-	// fd can be a crt or a win32 handle -> convert to win32 handle
-	if(!GetHandleInformation( (HANDLE)fd, &dwFlags )) {
-	    if(GetLastError() == ERROR_INVALID_HANDLE) {
-        	hfd = (HANDLE)_get_osfhandle( fd );
-        	if ( hfd == INVALID_HANDLE_VALUE )
-        		return MAP_FAILED;
-	    } else {
-		    return MAP_FAILED;
-	    }
-	} else {
-	    hfd = (HANDLE)fd;
-	}
+    if ( fd == -1 ) {
+        _set_errno( EBADF );
+        return MAP_FAILED;
+    }
 
-	if ( !DuplicateHandle( GetCurrentProcess(), hfd, GetCurrentProcess(),
+    // fd can be a crt or a win32 handle -> convert to win32 handle
+    if(!GetHandleInformation( (HANDLE)fd, &dwFlags )) {
+        if(GetLastError() == ERROR_INVALID_HANDLE) {
+            hfd = (HANDLE)_get_osfhandle( fd );
+            if ( hfd == INVALID_HANDLE_VALUE )
+                return MAP_FAILED;
+        } else {
+            return MAP_FAILED;
+        }
+    } else {
+        hfd = (HANDLE)fd;
+    }
+
+    if ( !DuplicateHandle( GetCurrentProcess(), hfd, GetCurrentProcess(),
                            &mmi.hFile, 0, FALSE, DUPLICATE_SAME_ACCESS ) ) {
 #ifdef _DEBUG
         DWORD dwLastErr = GetLastError();
@@ -138,19 +138,22 @@ void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offse
     mmi.hMap = CreateFileMapping( mmi.hFile, NULL, flProtect,
                                   0, length, NULL );
     if ( mmi.hMap == 0 ) {
+        CloseHandle( mmi.hFile );
         _set_errno( EACCES );
-		return MAP_FAILED;
+        return MAP_FAILED;
     }
 
     mmi.start = MapViewOfFile( mmi.hMap, dwAccess, 0, offset, 0 );
-	if ( mmi.start == 0 ) {
-		DWORD dwLastErr = GetLastError();
-		if ( dwLastErr == ERROR_MAPPED_ALIGNMENT )
-			_set_errno( EINVAL );
-		else
-			_set_errno( EACCES );
-		return MAP_FAILED;
-	}
+    if ( mmi.start == 0 ) {
+        DWORD dwLastErr = GetLastError();
+        CloseHandle( mmi.hMap );
+        CloseHandle( mmi.hFile );
+        if ( dwLastErr == ERROR_MAPPED_ALIGNMENT )
+            _set_errno( EINVAL );
+        else
+            _set_errno( EACCES );
+        return MAP_FAILED;
+    }
     EnterCriticalSection( &cs );
     if ( g_mmapInfos == NULL ) {
         g_maxMMapInfos = NEW_MMAP_STRUCT_CNT;
