@@ -1,5 +1,5 @@
 set (NAME kdewin)
-set (VERSION 0.2)
+set (VERSION 0.2.2)
 
 project(${NAME})
 
