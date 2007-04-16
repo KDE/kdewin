@@ -36,7 +36,7 @@ KDEWIN32_EXPORT unsigned long strlcpy(char *dst, const char *src, unsigned long 
 
 KDEWIN32_EXPORT unsigned long strlcat(char *dst, const char *src, unsigned long siz);
 
-KDEWIN32_EXPORT const char *strcasestr(const char *big, const char *little);
+KDEWIN32_EXPORT char *strcasestr(const char *big, const char *little);
 
 #ifdef __cplusplus
 }

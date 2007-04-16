@@ -75,7 +75,7 @@ unsigned long strlcat(char *d, const char *s, unsigned long bufsize)
 	return ret;
 }
 
-const char *strcasestr(const char *big, const char *little)
+char *strcasestr(const char *big, const char *little)
 {
     char *tmp1 = strdup(big);
     char *tmp2 = strdup(little);
