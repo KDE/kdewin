@@ -33,7 +33,8 @@
  *	@(#)pwd.h	5.13 (Berkeley) 5/28/91
  */
 
-#ifndef _PWD_H_
+#ifndef _KDEWIN_PWD_H_
+#define _KDEWIN_PWD_H_
 
 #include <sys/types.h>
 
@@ -41,7 +42,6 @@
 extern "C" {
 #endif
 
-#define _PWD_H_
 
 struct passwd {
 	char	*pw_name;		/* user name */
