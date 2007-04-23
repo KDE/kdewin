@@ -34,6 +34,7 @@
  */
 
 #ifndef KDEWIN_PWD_H
+#define KDEWIN_PWD_H
 
 // include everywhere
 #include <sys/types.h>
