@@ -1,4 +1,4 @@
-set (NAME kdewin)
+set (NAME kdewin32)
 set (VERSION 0.2.2)
 
 project(${NAME})
@@ -106,16 +106,19 @@ install_files(/include/${_incDirPrefix} FILES ${_headers} )
 install_files(/include FILES ${_win_headers} )
 install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
 
-#
-# write explorer wrappers 
-#
+# write explorer wrappers
 get_filename_component(QT_BIN_PATH ${QT_QMAKE_EXECUTABLE} PATH)
+get_filename_component(CMAKE_BIN_PATH ${CMAKE_COMMAND} PATH)
 if (MINGW)
     get_filename_component(MINGW_BIN_PATH ${CMAKE_CXX_COMPILER} PATH)
-    write_file (${CMAKE_BINARY_DIR}/kdewin-shell.bat "set PATH=${MINGW_BIN_PATH};${QT_BIN_PATH};%PATH%\ncmd.exe")
+    write_file (${CMAKE_BINARY_DIR}/kdewin32-shell.bat "set PATH=${MINGW_BIN_PATH};${QT_BIN_PATH};${CMAKE_BIN_PATH};%PATH%\ncmd.exe")
 else (MINGW)
-    # @TODO: how to distinguish sln from nmake mode 
-    write_file (${CMAKE_BINARY_DIR}/kdewin-sln.bat "set ${QT_BIN_PATH};%PATH%\nstart kdewin.sln")
+    if (CMAKE_BUILD_TOOL STREQUAL  "nmake")
+        get_filename_component(VC_BIN_PATH ${CMAKE_CXX_COMPILER} PATH)
+        write_file (${CMAKE_BINARY_DIR}/kdewin32-shell.bat "set PATH=${QT_BIN_PATH};${CMAKE_BIN_PATH};%PATH%\ncall \"${VC_BIN_PATH}\\vcvars32.bat\"\ncmd.exe")
+    else (CMAKE_BUILD_TOOL STREQUAL  "nmake")
+        write_file (${CMAKE_BINARY_DIR}/kdewin32-sln.bat "set ${QT_BIN_PATH};${CMAKE_BIN_PATH};%PATH%\nstart kdewin32.sln")
+    endif (CMAKE_BUILD_TOOL STREQUAL  "nmake")
 endif (MINGW)
 
 #
