@@ -33,6 +33,7 @@
 #include <limits.h>
 
 #define isnan _isnan
+#define finite _finite
 
 // some functions which aren't available with msvc
 // float rintf( float x )
@@ -212,6 +213,11 @@ __inline long double nearbyintl(long double x)
 __inline long double log(int x)
 {
     return logl((long double)x);	
+}
+
+__inline long double floor(int x)
+{
+    return floor((long double)x);	
 }
 #endif
 
