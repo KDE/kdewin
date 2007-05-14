@@ -31,8 +31,10 @@ extern "C"
 
 typedef unsigned int in_addr_t;
 
-KDEWIN32_EXPORT const char *inet_ntop(int af, const void * src, char * dst, size_t size);
-KDEWIN32_EXPORT int inet_pton(int af, const char * src, void * dst);
+#if (NTDDI_VERSION < 0x06000000)
+  KDEWIN32_EXPORT const char *inet_ntop(int af, const void * src, char * dst, size_t size);
+  KDEWIN32_EXPORT int inet_pton(int af, const char * src, void * dst);
+#endif  // NTDDI_VERSION < 0x06000000
 KDEWIN32_EXPORT int inet_aton(const char *src, struct in_addr *addr);
 
 // FIXME - move to sys/errno.h

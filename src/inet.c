@@ -39,7 +39,7 @@ static int fromHex(const char c)
 	return ret;
 }
 
-KDEWIN32_EXPORT
+#if (NTDDI_VERSION < 0x06000000)
 const char *inet_ntop(int af, const void *src, char *dst, size_t cnt)
 {
 	switch (af) {
@@ -83,7 +83,6 @@ const char *inet_ntop(int af, const void *src, char *dst, size_t cnt)
 	return NULL;
 }
 
-KDEWIN32_EXPORT
 int inet_pton(int af, const char * src, void * dst)
 {
 	switch (af) {
@@ -121,6 +120,7 @@ int inet_pton(int af, const char * src, void * dst)
 	_set_errno( EAFNOSUPPORT );
 	return -1;
 }
+#endif // (NTDDI_VERSION < 0x06000000)
 
 KDEWIN32_EXPORT
 int inet_aton(const char *src, struct in_addr *addr)

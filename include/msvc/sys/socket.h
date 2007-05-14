@@ -43,40 +43,42 @@ struct msghdr
 	int		msg_accrightslen;	/* Length of rights list */
 };
 
+#if (NTDDI_VERSION < 0x06000000)
 /* Socket types. */
-#define SOCK_STREAM	1		/* stream (connection) socket	*/
-#define SOCK_DGRAM	2		/* datagram (conn.less) socket	*/
-#define SOCK_RAW	3		/* raw socket			*/
-#define SOCK_RDM	4		/* reliably-delivered message	*/
-#define SOCK_SEQPACKET	5		/* sequential packet socket	*/
+# define SOCK_STREAM    1   /* stream (connection) socket	*/
+# define SOCK_DGRAM     2   /* datagram (conn.less) socket	*/
+# define SOCK_RAW       3   /* raw socket			*/
+# define SOCK_RDM       4   /* reliably-delivered message	*/
+# define SOCK_SEQPACKET 5   /* sequential packet socket	*/
 
 /* Supported address families. */
 /*
  * Address families.
  */
-#define AF_UNSPEC       0               /* unspecified */
-#define AF_UNIX         1               /* local to host (pipes, portals) */
-#define AF_LOCAL        1               /* POSIX name for AF_UNIX */
-#define AF_INET         2               /* internetwork: UDP, TCP, etc. */
-#define AF_IMPLINK      3               /* arpanet imp addresses */
-#define AF_PUP          4               /* pup protocols: e.g. BSP */
-#define AF_CHAOS        5               /* mit CHAOS protocols */
-#define AF_NS           6               /* XEROX NS protocols */
-#define AF_ISO          7               /* ISO protocols */
-#define AF_OSI          AF_ISO          /* OSI is ISO */
-#define AF_ECMA         8               /* european computer manufacturers */
-#define AF_DATAKIT      9               /* datakit protocols */
-#define AF_CCITT        10              /* CCITT protocols, X.25 etc */
-#define AF_SNA          11              /* IBM SNA */
-#define AF_DECnet       12              /* DECnet */
-#define AF_DLI          13              /* Direct data link interface */
-#define AF_LAT          14              /* LAT */
-#define AF_HYLINK       15              /* NSC Hyperchannel */
-#define AF_APPLETALK    16              /* AppleTalk */
-#define AF_NETBIOS      17              /* NetBios-style addresses */
-#define AF_INET6        23              /* IP version 6 */
+# define AF_UNSPEC       0               /* unspecified */
+# define AF_UNIX         1               /* local to host (pipes, portals) */
+# define AF_LOCAL        1               /* POSIX name for AF_UNIX */
+# define AF_INET         2               /* internetwork: UDP, TCP, etc. */
+# define AF_IMPLINK      3               /* arpanet imp addresses */
+# define AF_PUP          4               /* pup protocols: e.g. BSP */
+# define AF_CHAOS        5               /* mit CHAOS protocols */
+# define AF_NS           6               /* XEROX NS protocols */
+# define AF_ISO          7               /* ISO protocols */
+# define AF_OSI          AF_ISO          /* OSI is ISO */
+# define AF_ECMA         8               /* european computer manufacturers */
+# define AF_DATAKIT      9               /* datakit protocols */
+# define AF_CCITT        10              /* CCITT protocols, X.25 etc */
+# define AF_SNA          11              /* IBM SNA */
+# define AF_DECnet       12              /* DECnet */
+# define AF_DLI          13              /* Direct data link interface */
+# define AF_LAT          14              /* LAT */
+# define AF_HYLINK       15              /* NSC Hyperchannel */
+# define AF_APPLETALK    16              /* AppleTalk */
+# define AF_NETBIOS      17              /* NetBios-style addresses */
+# define AF_INET6        23              /* IP version 6 */
+# define AF_MAX          32
+#endif // NTDDI_VERSION < 0x06000000
 
-#define AF_MAX          32
 /*
  * Protocol families, same as address families for now.
  */
@@ -133,7 +135,9 @@ struct msghdr
 
 /* TCP options - this way around because someone left a set in the c library includes */
 #define TCP_NODELAY     0x0001
-#define TCP_MAXSEG	2
+#ifndef TCP_MAXSEG
+# define TCP_MAXSEG	2
+#endif
 
 /* The various priorities. */
 #define SOPRI_INTERACTIVE	0

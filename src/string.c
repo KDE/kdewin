@@ -79,7 +79,7 @@ char *strcasestr(const char *big, const char *little)
 {
     char *tmp1 = strdup(big);
     char *tmp2 = strdup(little);
-    const char *ret;
+    char *ret;
     strlwr(tmp1);
     strlwr(tmp2);
 
