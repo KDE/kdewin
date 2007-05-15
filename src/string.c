@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <math.h>   // just to create the stubs - moveme to math.c once it's available
+
 #ifndef MIN
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 #endif
@@ -86,7 +88,7 @@ char *strcasestr(const char *big, const char *little)
     ret = strstr(tmp1, tmp2);
 
     if ( ret )
-        ret = big + (ret - tmp1);
+        ret = (char*)big + (ret - tmp1);
 
     free(tmp1);
     free(tmp2);
