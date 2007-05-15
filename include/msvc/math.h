@@ -34,6 +34,10 @@
 #include <errno.h>
 #include <limits.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define isnan(x) _isnan(x)
 #define finite(x) _finite(x)
 
@@ -325,23 +329,24 @@ WINPOSIX_EXPORT __inline long double fminl (long double a, long double b)
     return a < b ? a : b;
 }
 
-
 #ifdef __cplusplus
+}
+
 // convenience function to avoid useless casts from int to whatever
-WINPOSIX_EXPORT __inline long double log(int x)
+__inline long double log(int x)
 {
     return logl((long double)x);	
 }
 
-WINPOSIX_EXPORT __inline long double floor(int x)
+__inline long double floor(int x)
 {
     return floor((long double)x);	
 }
 
-WINPOSIX_EXPORT __inline long double pow(int x, int y)
+__inline long double pow(int x, int y)
 {
     return pow((long double)x, y);	
 }
-#endif
+#endif // __cplusplus
 
 #endif /* KDEWIN_MATH_H */
