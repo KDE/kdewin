@@ -347,6 +347,11 @@ __inline long double pow(int x, int y)
 {
     return pow((long double)x, y);	
 }
+
+__inline long double pow(int x, long double y)
+{
+    return pow((long double)x, y);	
+}
 #endif // __cplusplus
 
 #endif /* KDEWIN_MATH_H */
