@@ -1,5 +1,5 @@
 set (NAME kdewin32)
-set (VERSION 0.2.2)
+set (VERSION 0.2.4)
 
 project(${NAME})
 
@@ -24,36 +24,28 @@ add_subdirectory( tests)
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${QT_INCLUDES} )
 
-# find the headers
-file(GLOB _win_headers include/*.h)
-
 if(MINGW)
    # we are using mingw, so do whatever required for mingw
    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include/mingw )
-   # find the headers for mingw
-   file(GLOB _arpa_headers include/mingw/arpa/*.h)
-   file(GLOB _asm_headers include/mingw/asm/*.h)
-   file(GLOB _net_headers include/mingw/net/*.h)
-   file(GLOB _netinet_headers include/mingw/netinet/*.h)
-   file(GLOB _sys_headers include/mingw/sys/*.h)
-   file(GLOB _headers include/mingw/*.h)
    set(_incDirPrefix mingw)
 else (MINGW)
    # we are using msvc, so do whatever required for msvc
    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include/msvc )
    # disable msvc callings to use the _s versions
    add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE )
-   # find the headers for msvc
-   file(GLOB _arpa_headers include/msvc/arpa/*.h)
-   file(GLOB _asm_headers include/msvc/asm/*.h)
-   file(GLOB _machine_headers include/msvc/machine/*.h)
-   file(GLOB _netinet_headers include/msvc/netinet/*.h)
-   file(GLOB _sys_headers include/msvc/sys/*.h)
-   file(GLOB _headers include/msvc/*.h)
-
+   add_definitions( -wd4244 )    # 'argument' : conversion from 'type1' to 'type2', possible loss of data
+   add_definitions( -wd4305 )    # 'identifier' : truncation from 'type1' to 'type2'
    set(_incDirPrefix msvc)
-
 endif(MINGW)
+
+# find the headers
+file(GLOB _win_headers     include/*.h)
+file(GLOB _arpa_headers    include/${_incDirPrefix}/arpa/*.h)
+file(GLOB _asm_headers     include/${_incDirPrefix}/asm/*.h)
+file(GLOB _net_headers     include/${_incDirPrefix}/net/*.h)
+file(GLOB _netinet_headers include/${_incDirPrefix}/netinet/*.h)
+file(GLOB _sys_headers     include/${_incDirPrefix}/sys/*.h)
+file(GLOB _headers         include/${_incDirPrefix}/*.h)
 
 add_definitions(-DUNICODE -DWIN32_LEAN_AND_MEAN )
 
@@ -85,10 +77,24 @@ set(win_LIB_SRCS
    src/win32_utils2.cpp
 #   src/io.c
    )
-
+if(MSVC)
+  set(win_LIB_SRCS ${win_LIB_SRCS}
+      src/math/tgamma.c
+      src/math/tgammaf.c
+  )
+endif(MSVC)
 
 set(CMAKE_DEBUG_POSTFIX "d")
-add_library(kdewin32 SHARED ${win_LIB_SRCS} )
+add_library(kdewin32 SHARED ${win_LIB_SRCS}
+                            ${_arpa_headers}
+                            ${_asm_headers}
+                            ${_machine_headers}
+                            ${_netinet_headers}
+                            ${_net_headers}
+                            ${_sys_headers}
+                            ${_headers}
+                            ${_win_headers}
+                            )
 target_link_libraries(kdewin32 ${QT_QTCORE_LIBRARY} advapi32 shell32 ws2_32 )
 set_target_properties(kdewin32 PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN32_LIB )
 # which version number should kdewin32 get ? Does version numbers for libs actually exist on windows ? Alex

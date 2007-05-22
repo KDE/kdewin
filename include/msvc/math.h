@@ -110,9 +110,9 @@ extern "C" {
 #define atanhl(x) atan(x)
 
 /* 7.12.8.4 The tgamma functions */
-//WINPOSIX_EXPORT double tgamma (double);
-//WINPOSIX_EXPORT float tgammaf (float);
-//WINPOSIX_EXPORT long double tgammal (long double);
+WINPOSIX_EXPORT double tgamma (double);
+WINPOSIX_EXPORT float tgammaf (float);
+#define tgammal(x) tgamma(x)
 
 /* 7.12.9.3 */
 // this is a little bit more complicated - don't raise an exception
