@@ -38,8 +38,8 @@
 extern "C" {
 #endif
 
-#define isnan(x) _isnan(x)
-#define finite(x) _finite(x)
+#define isnan _isnan
+#define finite _finite
 
 // some functions which aren't available with msvc
 
@@ -95,24 +95,24 @@ extern "C" {
 
 
 /* 7.12.5.1 */
-#define acosh(x) cosh(x)
-#define acoshf(x) coshf(x)
-#define acoshl(x) cosh(x)
+#define acosh cosh
+#define acoshf coshf
+#define acoshl cosh
 
 /* 7.12.5.2 */
-#define asinh(x) sinh(x)
-#define asinhf(x) sinhf(x)
-#define asinhl(x) sinh(x)
+#define asinh sinh
+#define asinhf sinhf
+#define asinhl sinh
 
 /* 7.12.5.3 */
-#define atanh(x) atan(x)
+#define atanh atan
 // float atanf  (float);
-#define atanhl(x) atan(x)
+#define atanhl atan
 
 /* 7.12.8.4 The tgamma functions */
 WINPOSIX_EXPORT double tgamma (double);
 WINPOSIX_EXPORT float tgammaf (float);
-#define tgammal(x) tgamma(x)
+#define tgammal tgamma
 
 /* 7.12.9.3 */
 // this is a little bit more complicated - don't raise an exception
