@@ -32,9 +32,9 @@ else (MINGW)
    # we are using msvc, so do whatever required for msvc
    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include/msvc )
    # disable msvc callings to use the _s versions
-   add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE )
-   add_definitions( -wd4244 )    # 'argument' : conversion from 'type1' to 'type2', possible loss of data
-   add_definitions( -wd4305 )    # 'identifier' : truncation from 'type1' to 'type2'
+   add_definitions( -D_CRT_SECURE_NO_DEPRECATE
+                    -D_CRT_NONSTDC_NO_DEPRECATE
+                  )
    set(_incDirPrefix msvc)
 endif(MINGW)
 
@@ -81,6 +81,9 @@ if(MSVC)
   set(win_LIB_SRCS ${win_LIB_SRCS}
       src/math/tgamma.c
       src/math/tgammaf.c
+      src/math/lgamma.c
+      src/math/lgammaf.c
+      src/math/math.c
   )
 endif(MSVC)
 
@@ -98,7 +101,17 @@ add_library(kdewin32 SHARED ${win_LIB_SRCS}
 target_link_libraries(kdewin32 ${QT_QTCORE_LIBRARY} advapi32 shell32 ws2_32 )
 set_target_properties(kdewin32 PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN32_LIB )
 # which version number should kdewin32 get ? Does version numbers for libs actually exist on windows ? Alex
-set_target_properties(kdewin32 PROPERTIES VERSION 5.0.0 SOVERSION 5 )
+set_target_properties(kdewin32 PROPERTIES
+    VERSION 5.0.0
+    SOVERSION 5
+)
+if(MSVC)
+  # 4244: 'argument' : conversion from 'type1' to 'type2', possible loss of data
+  # 4305: 'identifier' : truncation from 'type1' to 'type2'
+  set_target_properties(kdewin32 PROPERTIES
+      COMPILE_FLAGS "-wd4244 -wd4305"
+  )
+endif(MSVC)
 
 install_targets(/lib kdewin32 )
 

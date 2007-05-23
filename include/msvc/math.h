@@ -38,8 +38,17 @@
 extern "C" {
 #endif
 
-#define isnan _isnan
-#define finite _finite
+// some definitions
+extern const float __INFF;
+#define HUGE_VALF __INFF
+extern const long double  __INFL;
+#define HUGE_VALL __INFL
+#define INFINITY HUGE_VALF
+extern const double __QNAN;
+#define NAN __QNAN
+
+#define isnan(x) _isnan(x)
+#define finite(x) _finite(x)
 
 // some functions which aren't available with msvc
 
@@ -57,6 +66,11 @@ extern "C" {
 // double atanh (double)
 // float atanf  (float)
 // long double atanhl (long double)
+
+/* 7.12.8.3 The lgamma functions */
+// double lgamma (double)
+// float lgammaf (float)
+// long double lgammal (long double)
 
 /* 7.12.8.4 The tgamma functions */
 // double tgamma (double)
@@ -108,6 +122,11 @@ extern "C" {
 #define atanh atan
 // float atanf  (float);
 #define atanhl atan
+
+/* 7.12.8.3 The lgamma functions */
+WINPOSIX_EXPORT double lgamma (double);
+WINPOSIX_EXPORT float lgammaf (float);
+#define lgammal lgamma
 
 /* 7.12.8.4 The tgamma functions */
 WINPOSIX_EXPORT double tgamma (double);

@@ -60,7 +60,7 @@
 #else
 extern double __INF;
 #define INFINITY (__INF)
-extern double __QNAN;
+extern const double __QNAN;
 #define NAN (__QNAN)
 #endif
 
@@ -87,7 +87,7 @@ extern double __QNAN;
 #define INFINITYL __builtin_huge_vall()
 #define NANL __builtin_nanl("")
 #else
-extern long double __INFL;
+extern const long double __INFL;
 #define INFINITYL (__INFL)
 extern long double __QNANL;
 #define NANL (__QNANL)
@@ -117,7 +117,7 @@ extern long double __QNANL;
 #define INFINITYF __builtin_huge_valf()
 #define NANF __builtin_nanf("")
 #else
-extern float __INFF;
+extern const float __INFF;
 #define INFINITYF (__INFF)
 extern float __QNANF;
 #define NANF (__QNANF)
