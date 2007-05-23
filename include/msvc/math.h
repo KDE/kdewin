@@ -333,24 +333,39 @@ WINPOSIX_EXPORT __inline long double fminl (long double a, long double b)
 }
 
 // convenience function to avoid useless casts from int to whatever
+__inline long double sqrt(int x)
+{
+    return sqrt((long double)x);
+}
+
 __inline long double log(int x)
 {
-    return logl((long double)x);	
+    return logl((long double)x);
+}
+
+__inline long double log10(int x)
+{
+    return log10((long double)x);
 }
 
 __inline long double floor(int x)
 {
-    return floor((long double)x);	
+    return floor((long double)x);
 }
 
 __inline long double pow(int x, int y)
 {
-    return pow((long double)x, y);	
+    return pow((long double)x, y);
+}
+
+__inline long double pow(int x, unsigned int y)
+{
+    return pow((long double)x, (long double)y);
 }
 
 __inline long double pow(int x, long double y)
 {
-    return pow((long double)x, y);	
+    return pow((long double)x, y);
 }
 #endif // __cplusplus
 
