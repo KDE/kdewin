@@ -23,19 +23,19 @@ union _ieee_rep
   long double ldouble_val;
 } ;
 
-KDEWIN32_EXPORT const union _ieee_rep __QNANF = { __FLOAT_QNAN_REP };   
-KDEWIN32_EXPORT const union _ieee_rep __SNANF = { __FLOAT_SNAN_REP };   
-KDEWIN32_EXPORT const union _ieee_rep __INFF = { __FLOAT_INF_REP };   
-KDEWIN32_EXPORT const union _ieee_rep __DENORMF = { __FLOAT_DENORM_REP };   
+KDEWIN32_EXPORT union _ieee_rep __QNANF = { __FLOAT_QNAN_REP };   
+KDEWIN32_EXPORT union _ieee_rep __SNANF = { __FLOAT_SNAN_REP };   
+KDEWIN32_EXPORT union _ieee_rep __INFF = { __FLOAT_INF_REP };   
+KDEWIN32_EXPORT union _ieee_rep __DENORMF = { __FLOAT_DENORM_REP };   
 
-KDEWIN32_EXPORT const union _ieee_rep __QNAN = { __DOUBLE_QNAN_REP };
-KDEWIN32_EXPORT const union _ieee_rep __SNAN  = { __DOUBLE_SNAN_REP };
-KDEWIN32_EXPORT const union _ieee_rep __INF = { __DOUBLE_INF_REP };
-KDEWIN32_EXPORT const union _ieee_rep __DENORM = { __DOUBLE_DENORM_REP };
+KDEWIN32_EXPORT union _ieee_rep __QNAN = { __DOUBLE_QNAN_REP };
+KDEWIN32_EXPORT union _ieee_rep __SNAN  = { __DOUBLE_SNAN_REP };
+KDEWIN32_EXPORT union _ieee_rep __INF = { __DOUBLE_INF_REP };
+KDEWIN32_EXPORT union _ieee_rep __DENORM = { __DOUBLE_DENORM_REP };
 // msdn:
 // The representation of long double and double is identical.
 // However, long double and double are separate types.
-KDEWIN32_EXPORT const union _ieee_rep __QNANL = { __DOUBLE_QNAN_REP };
-KDEWIN32_EXPORT const union _ieee_rep __SNANL  = { __DOUBLE_SNAN_REP };
-KDEWIN32_EXPORT const union _ieee_rep __INFL = { __DOUBLE_INF_REP };
-KDEWIN32_EXPORT const union _ieee_rep __DENORML = { __DOUBLE_DENORM_REP };
+KDEWIN32_EXPORT union _ieee_rep __QNANL = { __DOUBLE_QNAN_REP };
+KDEWIN32_EXPORT union _ieee_rep __SNANL  = { __DOUBLE_SNAN_REP };
+KDEWIN32_EXPORT union _ieee_rep __INFL = { __DOUBLE_INF_REP };
+KDEWIN32_EXPORT union _ieee_rep __DENORML = { __DOUBLE_DENORM_REP };

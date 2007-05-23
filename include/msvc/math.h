@@ -39,16 +39,16 @@ extern "C" {
 #endif
 
 // some definitions
-extern const float __INFF;
+KDEWIN32_EXPORT float __INFF;
 #define HUGE_VALF __INFF
-extern const long double  __INFL;
+KDEWIN32_EXPORT long double  __INFL;
 #define HUGE_VALL __INFL
 #define INFINITY HUGE_VALF
-extern const double __QNAN;
+KDEWIN32_EXPORT double __QNAN;
 #define NAN __QNAN
 
-#define isnan(x) _isnan(x)
-#define finite(x) _finite(x)
+#define isnan _isnan
+#define finite _finite
 
 // some functions which aren't available with msvc
 
