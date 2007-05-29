@@ -2,6 +2,7 @@ import gnuwin32
 
 SRC_URI = """
 http://switch.dl.sf.net/sourceforge/gnuwin32/diffutils-2.8.7-1-bin.zip
+http://switch.dl.sf.net/sourceforge/gnuwin32/diffutils-2.8.7-1-dep.zip
 """
 
 class subclass(gnuwin32.gnuwin32class):
