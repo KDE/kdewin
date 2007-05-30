@@ -17,6 +17,7 @@ set PATH=%KDEROOT%\win32libs\bin;%PATH%
 set PATH=%KDEROOT%\kdewin32\bin;%PATH%
 set PATH=%KDEROOT%\mc;%PATH%
 set PATH=%KDEROOT%\qt\bin;%PATH%
+set PATH=%KDEROOT%\qt\lib;%PATH%
 set PATH=%KDEROOT%\dbus\bin;%PATH%
 set PATH=%KDEROOT%\perl\bin;%PATH%
 set PATH=%KDEROOT%\strigi\bin;%PATH%
