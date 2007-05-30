@@ -18,13 +18,12 @@ class subclass(base.baseclass):
     print "dbus unpack called"
     # do the svn fetch/update
     repo = "https://windbus.svn.sourceforge.net/svnroot/windbus/trunk"
-    svndir = os.path.join( self.downloaddir, "svn-src", "dbus" )
-    utils.svnFetch( repo, svndir )
+    self.svnFetch( repo )
 
     utils.cleanDirectory( self.workdir )
 
     # now copy the tree below destdir/trunk to workdir
-    srcdir = os.path.join( svndir, "trunk" )
+    srcdir = os.path.join( self.svndir, "trunk" )
     destdir = os.path.join( self.workdir, "dbus" )
     utils.copySrcDirToDestDir( srcdir, destdir )
 
