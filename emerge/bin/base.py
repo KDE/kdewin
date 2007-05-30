@@ -53,8 +53,15 @@ class baseclass:
 		#print "fetch url:", self.SRC_URI
 
 		command = sys.argv[ 1 ]
-		#print "command:", command
-
+		options = ""
+		if ( len( sys.argv)  > 2 ):
+			options = sys.argv[ 2 ]
+		self.noFetch = False
+		if ( options == "--offline" ):
+			self.noFetch  = True
+		print "command:", command
+		print "opts:", options
+		
 		self.setDirectories()
 		
 		if COMPILER == "msvc2005":
@@ -98,6 +105,10 @@ class baseclass:
 
 	def fetch( self ):
 		print "base fetch called"
+		if ( self.noFetch ):
+			print "skipping fetch (--offline)"
+			return True
+		
 		return utils.getFiles( self.SRC_URI, self.downloaddir )
 
 	def unpack( self ):
@@ -173,6 +184,10 @@ class baseclass:
 	def svnFetch( self, repo ):
 		print "base svnFetch called"
 		self.svndir = os.path.join( self.downloaddir, "svn-src", self.package )
+		if ( self.noFetch ):
+			print "skipping svn fetch/update (--offline)"
+			return True
+		
 		utils.svnFetch( repo, self.svndir )
 
 	def __kdesinglecheckout( self, repourl, ownpath, codir, doRecursive = False ):
@@ -213,6 +228,10 @@ class baseclass:
 		print "base kdeSvnFetch called. svnpath: %s dir: %s" % \
                       ( svnpath, packagedir )
 
+		if ( self.noFetch ):
+			print "skipping svn fetch/update (--offline)"
+			return True
+		
                 mydir = self.kdesvndir
                 if ( not os.path.exists( mydir ) ):
                         os.mkdir( mydir )

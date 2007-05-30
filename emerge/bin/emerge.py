@@ -26,11 +26,16 @@ print "KDEROOT:", KDEROOT
 buildaction = "all"
 
 doPretend = False
+offline = False
+opts = ""
 
 for i in sys.argv:
     print "got this param: %s" % i
     if ( i == "-p" ):
         doPretend = True
+    elif ( i == "--offline" ):
+        opts = i
+        offline = True
     elif ( i == "--fetch" ):
         buildaction = "fetch"
     elif ( i == "--unpack" ):
@@ -56,41 +61,42 @@ print "packagename", packagename
 
 os.putenv( "PYTHONPATH", os.path.join( KDEROOT, "emerge", "bin" ) )
 
-def doExec( category, package, version, action ):
-    print "doExec called"
+def doExec( category, package, version, action, opts ):
+    print "doExec called opts:", opts
     file = os.path.join( utils.getPortageDir(), category, package, "%s-%s.py" % \
                          ( package, version ) )
     print "file:", file
-    commandstring = "python %s %s" % ( file, action )
+    commandstring = "python %s %s %s" % ( file, action, opts )
+    print "commandstring", commandstring
     if ( os.system( commandstring ) ):
         return False
     return True
 
-def handlePackage( category, package, version, buildaction ):
+def handlePackage( category, package, version, buildaction, opts ):
     print "handlePackage called:", category, package, version, buildaction
     success = True
     if ( buildaction == "all" ):
         if ( success ):
-            success = doExec( category, package, version, "fetch" )
+            success = doExec( category, package, version, "fetch", opts )
         if ( success ):
-            success = doExec( category, package, version, "unpack" )       
+            success = doExec( category, package, version, "unpack", opts )       
         if ( success ):
-            success = doExec( category, package, version, "compile" )       
+            success = doExec( category, package, version, "compile", opts )       
         if ( success ):
-            success = doExec( category, package, version, "install" )       
+            success = doExec( category, package, version, "install", opts )       
         if ( success ):
-            success = doExec( category, package, version, "qmerge" )
+            success = doExec( category, package, version, "qmerge", opts )
 
     elif ( buildaction == "fetch" ):
-        success = doExec( category, package, version, "fetch" )       
+        success = doExec( category, package, version, "fetch", opts )       
     elif ( buildaction == "unpack" ):
-        success = doExec( category, package, version, "unpack" )       
+        success = doExec( category, package, version, "unpack", opts )       
     elif ( buildaction == "compile" ):
-        success = doExec( category, package, version, "compile" )       
+        success = doExec( category, package, version, "compile", opts )       
     elif ( buildaction == "install" ):
-        success = doExec( category, package, version, "install" )       
+        success = doExec( category, package, version, "install", opts )       
     elif ( buildaction == "qmerge" ):
-        success = doExec( category, package, version, "qmerge" )
+        success = doExec( category, package, version, "qmerge", opts )
     else:
         print "could not understand this buildaction: %s" % buildaction
         success = false
@@ -108,18 +114,24 @@ success = True
 
 if ( buildaction == "digest" ):
     package = deplist[0]
-    ok = handlePackage( package[0], package[1], package[2], buildaction )
+    ok = handlePackage( package[0], package[1], package[2], buildaction, opts )
+elif ( buildaction != "all" ):
+    # if a buildaction is given, then do not try to build dependencies
+    # and do the action although the package might already be installed
+    package = deplist[-1]
+    ok = handlePackage( package[0], package[1], package[2], buildaction, opts )
 else:
   for package in deplist:
     file = os.path.join( KDEROOT, "emerge", "portage", package[0], package[1], "%s-%s.py" % ( package[1], package[2] ) )
     if ( doPretend ):
         if ( utils.isInstalled( package[0], package[1], package[2] ) ):
-            print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
+            #print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
+            pass
         else:
             print "pretending %s/%s-%s" % ( package[0], package[1], package[2] )
     else:
         if ( not utils.isInstalled( package[0], package[1], package[2] ) ):
-            ok = handlePackage( package[0], package[1], package[2], buildaction )
+            ok = handlePackage( package[0], package[1], package[2], buildaction, opts )
             if ( not ok ):
                 print "fatal error: package %s/%s-%s %s failed" % \
                     (package[0], package[1], package[2], buildaction)
