@@ -8,6 +8,7 @@ virtual/base
 dev-util/dbus
 dev-util/win32libs
 kde/kdewin32
+libs/strigi
 """
 
 comment = """
