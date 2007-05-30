@@ -54,7 +54,7 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/redland-1.0.3-2-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/tiff-3.8.2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/tiff-3.8.2-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/update-mime-database-0.21-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/update-mime-database-0.21-6-bin.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/zlib-1.2.3-1-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/zlib-1.2.3-1-lib.zip
