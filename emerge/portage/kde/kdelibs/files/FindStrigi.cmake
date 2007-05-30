@@ -7,6 +7,8 @@
 #  STRIGI_STREAMS_LIBRARY - Link these to use Strigi streams
 #  STRIGI_LIBRARIES - Link these to use both Strigi libraries
 
+
+
 if (WIN32)
   file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _program_FILES_DIR)
 endif(WIN32)
@@ -14,21 +16,21 @@ endif(WIN32)
 FIND_PATH(STRIGI_INCLUDE_DIR strigi/streamanalyzer.h
   PATHS
   $ENV{STRIGI_HOME}/include
-  ${CMAKE_INSTALL_PREFIX}/include
+  ${INCLUDE_INSTALL_DIR}
   ${_program_FILES_DIR}/strigi/include
   ${STRIGI_INSTALL_PREFIX}/include
 )
 FIND_LIBRARY(STRIGI_STREAMANALYZER_LIBRARY NAMES streamanalyzer
   PATHS
   $ENV{STRIGI_HOME}/lib
-  ${CMAKE_INSTALL_PREFIX}/lib
+  ${LIB_INSTALL_DIR}
   ${_program_FILES_DIR}/strigi/lib
   ${STRIGI_INSTALL_PREFIX}/lib
 )
 FIND_LIBRARY(STRIGI_STREAMS_LIBRARY NAMES streams
   PATHS
   $ENV{STRIGI_HOME}/lib
-  ${CMAKE_INSTALL_PREFIX}/lib
+  ${LIB_INSTALL_DIR}
   ${_program_FILES_DIR}/strigi/lib
   ${STRIGI_INSTALL_PREFIX}/lib
 )

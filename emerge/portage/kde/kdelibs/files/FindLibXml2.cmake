@@ -5,6 +5,9 @@
 #  LIBXML2_INCLUDE_DIR - the LibXml2 include directory
 #  LIBXML2_LIBRARIES - the libraries needed to use LibXml2
 #  LIBXML2_DEFINITIONS - Compiler switches required for using LibXml2
+#
+# Copyright (c) 2006, Alexander Neundorf <neundorf@kde.org>
+# This code is available under the BSD license, see licenses/BSD for details.
 
 # Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
 #
@@ -43,12 +46,6 @@ IF (LIBXML2_INCLUDE_DIR AND LIBXML2_LIBRARIES)
 ELSE (LIBXML2_INCLUDE_DIR AND LIBXML2_LIBRARIES)
    SET(LIBXML2_FOUND FALSE)
 ENDIF (LIBXML2_INCLUDE_DIR AND LIBXML2_LIBRARIES)
-
-FIND_PROGRAM(XMLLINT_EXECUTABLE xmllint)
-
-if( NOT XMLLINT_EXECUTABLE )
-   MESSAGE(STATUS "xmllint program not found. Install it if you want validate generated doc file.")
-endif(NOT XMLLINT_EXECUTABLE )
 
 IF (LIBXML2_FOUND)
    IF (NOT LibXml2_FIND_QUIETLY)
