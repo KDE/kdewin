@@ -26,9 +26,10 @@
 #include <sys/types.h>
 
 /* regular header from msvc includes */
-#define _USE_MATH_DEFINES
+#ifndef _USE_MATH_DEFINES
+# define _USE_MATH_DEFINES
+#endif
 #include <../include/math.h>
-
 #include <../include/float.h>
 
 #include <errno.h>
@@ -380,6 +381,11 @@ __inline long double pow(int x, int y)
 __inline long double pow(int x, unsigned int y)
 {
     return pow((long double)x, (long double)y);
+}
+
+__inline long double pow(int x, double y)
+{
+    return pow((double)x, y);
 }
 
 __inline long double pow(int x, long double y)
