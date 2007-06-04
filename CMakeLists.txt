@@ -50,7 +50,6 @@ file(GLOB _headers         include/${_incDirPrefix}/*.h)
 add_definitions(-DUNICODE -DWIN32_LEAN_AND_MEAN )
 
 set(win_LIB_SRCS
-   src/bootstrap.cpp
    src/dirent.c
    src/errno.c
    src/fcntl.c
@@ -73,8 +72,6 @@ set(win_LIB_SRCS
    src/time.c
    src/uname.c
    src/unistd.c
-#   src/win32_utils.c
-   src/win32_utils2.cpp
 #   src/io.c
    )
 if(MSVC)
