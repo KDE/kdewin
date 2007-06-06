@@ -2,12 +2,10 @@ import base
 
 DEPENDS = """
 dev-util/cmake
-dev-util/mc
 dev-util/mingw
 dev-util/perl
 dev-util/subversion
 dev-util/win32libs
-gnuwin32/grep
 gnuwin32/patch
 gnuwin32/sed
 gnuwin32/wget
