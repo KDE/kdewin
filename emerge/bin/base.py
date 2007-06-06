@@ -288,6 +288,10 @@ class baseclass:
 
                 options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
                         os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
+			
+                options = options + "-DWIN32LIBS_DIR=%s " % \
+                        os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
+			
 
                 return options
 
