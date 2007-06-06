@@ -480,4 +480,14 @@ def cleanDirectory( dir ):
                 os.rmdir(os.path.join(root, name))
 
 
-    
+def sedFile( directory, file, sedcommand ):
+    """runs the given sed command on the given file"""
+    os.chdir( directory )
+    backup = "%s.orig" % file
+
+    os.rename( file, backup )
+
+    command = "type %s | sed %s > %s" % ( backup, sedcommand, file )
+    print "sedFile command:", command
+
+    os.system( command ) and die( "utils sedFile failed" )
