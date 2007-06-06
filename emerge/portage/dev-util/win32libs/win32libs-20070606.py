@@ -1,8 +1,7 @@
 import base
+import os
+import utils
 
-
-# use the new bzip2-1.0.4-2.zip from .../complete/...
-# dbus
 SRC_URI= """
 http://82.149.170.66/kde-windows/win32libs/zip/single/aspell-0.50.3-3-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/aspell-0.50.3-3-lib.zip
@@ -64,5 +63,13 @@ class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
     self.instdestdir = "win32libs"
-		
+
+  def compile(self):
+    # here we need an own compile step, because we have to copy
+    # the boost headers around, so that they are found for kdepimlibs
+    srcdir  = os.path.join( self.workdir, "include", "boost-1_34" )
+    destdir = os.path.join( self.workdir, "include", "boost-1_34_0" )
+    utils.copySrcDirToDestDir( srcdir, destdir )
+    return True
+
 subclass().execute()
