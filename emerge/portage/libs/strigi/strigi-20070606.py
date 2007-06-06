@@ -6,6 +6,7 @@ import os
 DEPEND = """
 virtual/base
 gnuwin32/openssl
+kde/kdewin32
 """
 
 class subclass(base.baseclass):
@@ -28,33 +29,7 @@ class subclass(base.baseclass):
     return True
 
   def compile( self ):
-    print "%s compile called" % self.package
-    os.chdir( self.workdir )
-
-    builddir = "%s-build" % self.package
-
-    if ( not os.path.exists( builddir ) ):
-      os.mkdir( builddir )
-
-    utils.cleanDirectory( builddir )
-
-    os.chdir( builddir )
-
-    options = "-DCMAKE_INSTALL_PREFIX=%s/strigi ..\\%s " % \
-        ( self.rootdir.replace( "\\", "/" ), self.package )
-
-    options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
-        os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
-
-    options = options + "-DWIN32LIBS_INSTALL_PREFIX=%s " % \
-        os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
-
-    command = r"""cmake -G "MinGW Makefiles" %s """ % options 
-    print "command: %s" % command
-    os.system( command ) and die( "cmake" )
-    os.system( "mingw32-make" ) and die( "mingw32-make" )
-    
-    return True
+    return self.kdeCompile()
 
   def install( self ):
     return self.kdeInstall()
