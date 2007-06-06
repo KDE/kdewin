@@ -48,6 +48,8 @@ class baseclass:
 		self.instsrcdir=""
 		self.instdestdir=""
 
+		self.kdeCustomDefines = ""
+
 	def execute( self ):
 		print "base exec called. args:", sys.argv
 		#print "fetch url:", self.SRC_URI
@@ -266,9 +268,10 @@ class baseclass:
                 utils.cleanDirectory( self.workdir )
 
                 # now copy the tree to workdir
-                srcdir = os.path.join( self.kdesvndir, svnpath, packagedir ).replace( "/", "\\" )
+                srcdir  = os.path.join( self.kdesvndir, svnpath, packagedir )
                 destdir = os.path.join( self.workdir, packagedir )
                 utils.copySrcDirToDestDir( srcdir, destdir )
+		return True
     
         def kdeDefaultDefines( self ):
                 options = "-DCMAKE_INSTALL_PREFIX=%s/kde ..\\%s " % \
@@ -288,8 +291,29 @@ class baseclass:
 
                 return options
 
+	def kdeCompile( self ):
+		print "kdeCompile called. workdir: %s" % self.workdir
+		os.chdir( self.workdir )
+		builddir = "%s-build" % self.package
+
+		if ( not os.path.exists( builddir ) ):
+			os.mkdir( builddir )
+
+		utils.cleanDirectory( builddir )
+		os.chdir( builddir )
+
+		command = r"""cmake -G "MinGW Makefiles" %s %s""" % \
+			  ( self.kdeDefaultDefines(), self.kdeCustomDefines )
+
+		print "cmake command:", command
+		os.system( command ) and die( "kdeCompile cmake call failed." )
+		os.system( "mingw32-make" ) and die( "kdeCompile mingw32-make failed." )
+		return True
+		
+
         def kdeInstall( self ):
                 os.chdir( os.path.join( self.workdir, "%s-build" % self.package ) )
                 os.system( "mingw32-make DESTDIR=%s install" % self.imagedir ) \
                        and die( "mingw32-make install" )
                 utils.fixCmakeImageDir( self.imagedir, self.rootdir )
+		return True
