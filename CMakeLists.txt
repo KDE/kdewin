@@ -14,15 +14,13 @@ endif (NOT WIN32)
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/modules")
 
-find_package(Qt4 REQUIRED)
-
 if(NOT MSVC)
    add_subdirectory( examples)
 endif(NOT MSVC)
 
 add_subdirectory( tests)
 
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${QT_INCLUDES} )
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 
 if(MINGW)
    # we are using mingw, so do whatever required for mingw
@@ -95,7 +93,7 @@ add_library(kdewin32 SHARED ${win_LIB_SRCS}
                             ${_headers}
                             ${_win_headers}
                             )
-target_link_libraries(kdewin32 ${QT_QTCORE_LIBRARY} advapi32 shell32 ws2_32 )
+target_link_libraries(kdewin32 advapi32 shell32 ws2_32 )
 set_target_properties(kdewin32 PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN32_LIB )
 # which version number should kdewin32 get ? Does version numbers for libs actually exist on windows ? Alex
 set_target_properties(kdewin32 PROPERTIES
@@ -123,17 +121,16 @@ install_files(/include FILES ${_win_headers} )
 install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
 
 # write explorer wrappers
-get_filename_component(QT_BIN_PATH ${QT_QMAKE_EXECUTABLE} PATH)
 get_filename_component(CMAKE_BIN_PATH ${CMAKE_COMMAND} PATH)
 if (MINGW)
     get_filename_component(MINGW_BIN_PATH ${CMAKE_CXX_COMPILER} PATH)
-    write_file (${CMAKE_BINARY_DIR}/kdewin32-shell.bat "set PATH=${MINGW_BIN_PATH};${QT_BIN_PATH};${CMAKE_BIN_PATH};%PATH%\ncmd.exe")
+    write_file (${CMAKE_BINARY_DIR}/kdewin32-shell.bat "set PATH=${MINGW_BIN_PATH};${CMAKE_BIN_PATH};%PATH%\ncmd.exe")
 else (MINGW)
     if (CMAKE_BUILD_TOOL STREQUAL  "nmake")
         get_filename_component(VC_BIN_PATH ${CMAKE_CXX_COMPILER} PATH)
-        write_file (${CMAKE_BINARY_DIR}/kdewin32-shell.bat "set PATH=${QT_BIN_PATH};${CMAKE_BIN_PATH};%PATH%\ncall \"${VC_BIN_PATH}\\vcvars32.bat\"\ncmd.exe")
+        write_file (${CMAKE_BINARY_DIR}/kdewin32-shell.bat "set PATH=${CMAKE_BIN_PATH};%PATH%\ncall \"${VC_BIN_PATH}\\vcvars32.bat\"\ncmd.exe")
     else (CMAKE_BUILD_TOOL STREQUAL  "nmake")
-        write_file (${CMAKE_BINARY_DIR}/kdewin32-sln.bat "set ${QT_BIN_PATH};${CMAKE_BIN_PATH};%PATH%\nstart kdewin32.sln")
+        write_file (${CMAKE_BINARY_DIR}/kdewin32-sln.bat "set ${CMAKE_BIN_PATH};%PATH%\nstart kdewin32.sln")
     endif (CMAKE_BUILD_TOOL STREQUAL  "nmake")
 endif (MINGW)
 
