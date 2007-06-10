@@ -130,7 +130,7 @@ else (MINGW)
         get_filename_component(VC_BIN_PATH ${CMAKE_CXX_COMPILER} PATH)
         write_file (${CMAKE_BINARY_DIR}/kdewin32-shell.bat "set PATH=${CMAKE_BIN_PATH};%PATH%\ncall \"${VC_BIN_PATH}\\vcvars32.bat\"\ncmd.exe")
     else (CMAKE_BUILD_TOOL STREQUAL  "nmake")
-        write_file (${CMAKE_BINARY_DIR}/kdewin32-sln.bat "set ${CMAKE_BIN_PATH};%PATH%\nstart kdewin32.sln")
+        write_file (${CMAKE_BINARY_DIR}/kdewin32-sln.bat "set PATH=${CMAKE_BIN_PATH};%PATH%\nstart kdewin32.sln")
     endif (CMAKE_BUILD_TOOL STREQUAL  "nmake")
 endif (MINGW)
 
