@@ -1,13 +1,13 @@
 #
-# find KDEWIN installer. 
+# find KDEWIN packager. 
 # 
-# This scripts supports the following options 
+# This scripts tries to find the kdewin packager in the following pathes and order 
 # 
-#  -  install KDEWIN installer in <default application dir>/kdewin-installer
-#  -  set the environment variable KDEWIN_INSTALLER_DIR=<path>
-#  -  add -DKDEWIN_INSTALLER_DIR=<path> to the cmake command line 
+#    path specified by the environment dir KDEWIN_PACKAGER_DIR
+#    <ProgramFiles>/kdewin-packager 
+#    <ProgramFiles>/kdewin-installer
 #
-# Copyright (c) 2006, Ralf Habacker
+# Copyright (c) 2006-2007, Ralf Habacker
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 #
