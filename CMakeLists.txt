@@ -119,7 +119,7 @@ install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
 
 
 include(Win32Macros)
-addExplorerWrappers(${NAME})
+addExplorerWrapper(${NAME})
 
 # kdewin package support 
 install_files(/share/apps/cmake/modules FILES cmake/modules/FindKDEWIN_Packager.cmake)
