@@ -117,20 +117,9 @@ install_files(/include/${_incDirPrefix} FILES ${_headers} )
 install_files(/include FILES ${_win_headers} )
 install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
 
-# write explorer wrappers
-# TODO put into separate package
-get_filename_component(CMAKE_BIN_PATH ${CMAKE_COMMAND} PATH)
-if (MINGW)
-    get_filename_component(MINGW_BIN_PATH ${CMAKE_CXX_COMPILER} PATH)
-    write_file (${CMAKE_BINARY_DIR}/kdewin32-shell.bat "set PATH=${MINGW_BIN_PATH};${CMAKE_BIN_PATH};%PATH%\ncmd.exe")
-else (MINGW)
-    if (CMAKE_BUILD_TOOL STREQUAL  "nmake")
-        get_filename_component(VC_BIN_PATH ${CMAKE_CXX_COMPILER} PATH)
-        write_file (${CMAKE_BINARY_DIR}/kdewin32-shell.bat "set PATH=${CMAKE_BIN_PATH};%PATH%\ncall \"${VC_BIN_PATH}\\vcvars32.bat\"\ncmd.exe")
-    else (CMAKE_BUILD_TOOL STREQUAL  "nmake")
-        write_file (${CMAKE_BINARY_DIR}/kdewin32-sln.bat "set PATH=${CMAKE_BIN_PATH};%PATH%\nstart kdewin32.sln")
-    endif (CMAKE_BUILD_TOOL STREQUAL  "nmake")
-endif (MINGW)
+
+include(Win32Macros)
+addExplorerWrappers(${NAME})
 
 # kdewin package support 
 install_files(/share/apps/cmake/modules FILES cmake/modules/FindKDEWIN_Packager.cmake)
