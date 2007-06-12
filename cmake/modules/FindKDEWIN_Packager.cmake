@@ -54,37 +54,53 @@ endif (WIN32)
 MACRO (KDEWIN_PACKAGER _name _version _notes _options)
     if (KDEWIN_PACKAGER_FOUND)
         if (MSVC)
-            add_custom_target(kdewin_package
-                COMMAND ${CMAKE_COMMAND} 
-                    -P ${CMAKE_BINARY_DIR}/cmake_install.cmake -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/temp
-                COMMAND ${KDEWIN_PACKAGER_EXECUTABLE} 
-                    -name ${_name}
-                    -root ${CMAKE_BINARY_DIR}/temp
-                    -srcroot ${CMAKE_SOURCE_DIR}
-                    -version ${_version} 
-                    -notes "${_notes}"
-                    -type msvc
-                    ${_options}               
-                # FIXME: cleanup does not work 
-                #COMMAND rmdir /Q /S ${CMAKE_BINARY_DIR}\temp
-            )
+            set (type "msvc")
         else (MSVC)
-            add_custom_target(kdewin_package
-                COMMAND ${CMAKE_COMMAND} 
-                    -P ${CMAKE_BINARY_DIR}/cmake_install.cmake -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/temp
-                COMMAND ${KDEWIN_PACKAGER_EXECUTABLE} 
-                    -name ${_name}
-                    -root ${CMAKE_BINARY_DIR}/temp
-                    -srcroot ${CMAKE_SOURCE_DIR}
-                    -version ${_version} 
-                    -notes "${_notes}"
-                    -type mingw
-                    ${_options}               
-                # FIXME: cleanup does not work 
-                #COMMAND rmdir /Q /S ${CMAKE_BINARY_DIR}\temp
-            )
+            set (type "mingw")
         endif (MSVC)
+    
+        add_custom_target(kdewin_package
+            COMMAND ${CMAKE_COMMAND} 
+                -P ${CMAKE_BINARY_DIR}/cmake_install.cmake -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/temp
+            COMMAND ${KDEWIN_PACKAGER_EXECUTABLE} 
+                -name ${_name}
+                -root ${CMAKE_BINARY_DIR}/temp
+                -srcroot ${CMAKE_SOURCE_DIR}
+                -version ${_version} 
+                -notes "${_notes}"
+                -type ${type}
+                ${_options}               
+            # FIXME: cleanup does not work 
+            #COMMAND rmdir /Q /S ${CMAKE_BINARY_DIR}\temp
+        )
+        add_custom_target(kdewin_package_debug_and_release
+            COMMAND ${CMAKE_COMMAND} 
+                -H$(CMAKE_SOURCE_DIR) 
+                -B$(CMAKE_BINARY_DIR)
+                -DCMAKE_BUILD_TYPE=Release
+            COMMAND ${CMAKE_MAKE_PROGRAM} 
+                clean
+            COMMAND ${CMAKE_MAKE_PROGRAM} 
+                install/local
+            COMMAND ${CMAKE_COMMAND} 
+                -H$(CMAKE_SOURCE_DIR) 
+                -B$(CMAKE_BINARY_DIR)
+                -DCMAKE_BUILD_TYPE=Debug
+            COMMAND ${CMAKE_MAKE_PROGRAM} 
+                clean
+            COMMAND ${CMAKE_MAKE_PROGRAM} 
+                install/local
+            COMMAND ${KDEWIN_PACKAGER_EXECUTABLE} 
+                -name ${_name}
+                -root ${CMAKE_BINARY_DIR}/temp
+                -srcroot ${CMAKE_SOURCE_DIR}
+                -version ${_version} 
+                -notes "${_notes}"
+                -type ${type}
+                ${_options}               
+            # FIXME: cleanup does not work 
+            #COMMAND rmdir /Q /S ${CMAKE_BINARY_DIR}\temp
+        )
     endif (KDEWIN_PACKAGER_FOUND)
 ENDMACRO (KDEWIN_PACKAGER)
-
 
