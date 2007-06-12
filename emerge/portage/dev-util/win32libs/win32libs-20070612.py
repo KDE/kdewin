@@ -23,8 +23,8 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-20070306-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/iconv-1.9.2-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/iconv-1.9.2-2-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/jasper-1.701.0-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/jasper-1.701.0-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/jasper-1.900.1-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/jasper-1.900.1-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/jpeg-6.b-5-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/jpeg-6.b-5-lib.zip
@@ -35,11 +35,11 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/libintl-0.14.4-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.15-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.15-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/libxml2-2.6.27-4-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/libxml2-2.6.27-4-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libxml2-2.6.28-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libxml2-2.6.28-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/libxslt-1.1.17-1-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/libxslt-1.1.17-1-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libxslt-1.1.19-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libxslt-1.1.19-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/openssl-0.9.8e-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/openssl-0.9.8e-2-lib.zip
