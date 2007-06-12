@@ -138,28 +138,3 @@ if (KDEWIN_PACKAGER_FOUND)
     KDEWIN_PACKAGER(kdewin32 ${VERSION} "KDEWIN32 supplementary library" "-srcexclude \"emerge unused\"")
 endif (KDEWIN_PACKAGER_FOUND)
 
-#
-# kdewin installer integration 
-#
-# @TODO: use temporay installation root 
-# 
-if (KDEWIN_INSTALLER_FOUND)
-    if (MINGW)
-        # wrapper to make package from explorer
-        write_file(${CMAKE_BINARY_DIR}/make-kdewin-package.bat "rmdir /Q /S %CD%\\temp\n${CMAKE_COMMAND} -G \"MinGW Makefiles\" ${CMAKE_SOURCE_DIR} -DCMAKE_INSTALL_PREFIX=%CD%\\temp -DCMAKE_BUILD_TYPE=Debug\n${CMAKE_BUILD_TOOL} install\n${CMAKE_COMMAND} -G \"MinGW Makefiles\" ${CMAKE_SOURCE_DIR} -DCMAKE_INSTALL_PREFIX=%CD%\\temp -DCMAKE_BUILD_TYPE=Release\n${CMAKE_BUILD_TOOL} install\n${CMAKE_BUILD_TOOL} kdewinpackage\n")
-        set (INSTALL_TYPE "mingw")
-    else (MINGW)
-        set (INSTALL_TYPE "msvc")
-    endif (MINGW)
-    add_custom_target(kdewinpackage
-        COMMAND ${KDEWIN_PACKAGER} 
-            -name ${NAME}
-            -root ${CMAKE_INSTALL_PREFIX} 
-            -srcroot ${CMAKE_SOURCE_DIR} 
-            -srcexclude "emerge unused"
-            -version ${VERSION} 
-            -type ${INSTALL_TYPE}
-            -notes "description"
-#        DEPENDS install
-    )
-endif (KDEWIN_INSTALLER_FOUND)
