@@ -1,18 +1,15 @@
 set (NAME kdewin32)
-set (VERSION 0.2.4)
+set (VERSION 0.2.5)
 
 project(${NAME})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-find_package(KDEWIN_INSTALLER)
-
 if (NOT WIN32)
    message(FATAL_ERROR "This directory can only be built under Windows")
 endif (NOT WIN32)
 
-# where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/modules")
+find_package(KDEWIN_Packager)
 
 if(NOT MSVC)
    add_subdirectory( examples)
@@ -121,6 +118,7 @@ install_files(/include FILES ${_win_headers} )
 install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
 
 # write explorer wrappers
+# TODO put into separate package
 get_filename_component(CMAKE_BIN_PATH ${CMAKE_COMMAND} PATH)
 if (MINGW)
     get_filename_component(MINGW_BIN_PATH ${CMAKE_CXX_COMPILER} PATH)
@@ -133,6 +131,12 @@ else (MINGW)
         write_file (${CMAKE_BINARY_DIR}/kdewin32-sln.bat "set PATH=${CMAKE_BIN_PATH};%PATH%\nstart kdewin32.sln")
     endif (CMAKE_BUILD_TOOL STREQUAL  "nmake")
 endif (MINGW)
+
+# kdewin package support 
+install_files(/share/apps/cmake/modules FILES cmake/modules/FindKDEWIN_Packager.cmake)
+if (KDEWIN_PACKAGER_FOUND)
+    KDEWIN_PACKAGER(kdewin32 ${VERSION} "KDEWIN32 supplementary library" "-srcexclude \"emerge unused\"")
+endif (KDEWIN_PACKAGER_FOUND)
 
 #
 # kdewin installer integration 
