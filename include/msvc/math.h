@@ -98,6 +98,11 @@ KDEWIN32_EXPORT double __QNAN;
 // long lround (double)
 // long lroundl (long double)
 
+/* 7.12.9.8 */
+// float truncf(float)
+// double trunc(double)
+// long double truncl(long double)
+
 /* 7.12.12.2 */
 // double fmax (double, double)
 // float fmaxf (float, float)
@@ -291,6 +296,80 @@ WINPOSIX_EXPORT __inline double round ( double x )
 WINPOSIX_EXPORT __inline long double roundl ( long double x )
 {
   return (long double)lroundl( x );
+}
+
+/* 7.12.9.8 */
+/* round towards zero, regardless of fpu control word settings */
+WINPOSIX_EXPORT __inline float truncf( float x )
+{
+    unsigned int tmpMSW1;
+    unsigned int tmpMSW2;
+    __asm {
+        // get current state
+        fnstcw tmpMSW1
+    }
+    // set bit 5
+    tmpMSW2 = (tmpMSW1 & ~(0x0000 | 0x0400 | 0x0800 | 0x0c00))
+                       | 0x0c00;
+	__asm {
+        // and load
+        fldcw tmpMSW2
+        // do the job
+        fld x
+        frndint
+        // clear exception
+        fclex
+        // restore old state
+        fldcw tmpMSW1
+    }
+}
+
+WINPOSIX_EXPORT __inline double trunc( double x )
+{
+    unsigned int tmpMSW1;
+    unsigned int tmpMSW2;
+    __asm {
+        // get current state
+        fnstcw tmpMSW1
+    }
+    // set bit 5
+    tmpMSW2 = (tmpMSW1 & ~(0x0000 | 0x0400 | 0x0800 | 0x0c00))
+                       | 0x0c00;
+	__asm {
+        // and load
+        fldcw tmpMSW2
+        // do the job
+        fld x
+        frndint
+        // clear exception
+        fclex
+        // restore old state
+        fldcw tmpMSW1
+    }
+}
+
+WINPOSIX_EXPORT __inline long double truncl( long double x )
+{
+    unsigned int tmpMSW1;
+    unsigned int tmpMSW2;
+    __asm {
+        // get current state
+        fnstcw tmpMSW1
+    }
+    // set bit 5
+    tmpMSW2 = (tmpMSW1 & ~(0x0000 | 0x0400 | 0x0800 | 0x0c00))
+                       | 0x0c00;
+	__asm {
+        // and load
+        fldcw tmpMSW2
+        // do the job
+        fld x
+        frndint
+        // clear exception
+        fclex
+        // restore old state
+        fldcw tmpMSW1
+    }
 }
 
 /* 7.12.12.2 */
