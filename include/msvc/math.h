@@ -163,44 +163,25 @@ WINPOSIX_EXPORT __inline float sinf (float)
 {
  return ((float)sin((double)x));
 }
-
 // double sin (double)
-
-WINPOSIX_EXPORT __inline long double sinl (long double)
-{
- return ((long double)sin((double)x));
-}
+// long double sinl (long double)
 
 // cos
 WINPOSIX_EXPORT __inline float cosf (float)
 {
  return ((float)cos((double)x));
 }
-
 // double cos (double)
-
-WINPOSIX_EXPORT __inline long double cosl (long double)
-{
- return ((long double)cos((double)x));
-}
-
-WINPOSIX_EXPORT __inline long double sinl (long double)
-{
- return ((long double)sin((double)x));
-}
+// long double cosl (long double)
 
 // tan
 WINPOSIX_EXPORT __inline float tanf (float)
 {
  return ((float)tan((double)x));
 }
-
 // double tan (double)
+// long double tanl (long double)
 
-WINPOSIX_EXPORT __inline long double tanl (long double)
-{
- return ((long double)tan((double)x));
-}
 #endif /* _MSC_VER <= 1300 */
 
 /* 7.12.5.1 */
@@ -224,13 +205,9 @@ WINPOSIX_EXPORT __inline float expf (float x)
 {
  return ((float)exp((double)x));
 }
-
 // double exp (double)
+// double expl (long double)
 
-WINPOSIX_EXPORT __inline double expl (long double x)
-{
- return ((long double)exp((double)x));
-}
 #endif /* _MSC_VER <= 1300 */
 
 /* 7.12.6.7 */
@@ -239,13 +216,9 @@ WINPOSIX_EXPORT __inline float logf (float x)
 {
  return ((float)log((double)x));
 }
-
 // double logf (double)
+// double logl (long double)
 
-WINPOSIX_EXPORT __inline double logl (long double x)
-{
- return ((long double)log((double)x));
-}
 #endif /* _MSC_VER <= 1300 */
 
 /* 7.12.6.8 */
@@ -254,13 +227,9 @@ WINPOSIX_EXPORT __inline float log10f (float x)
 {
  return ((float)log10((double)x));
 }
-
 // double log10 (double)
+// double log10l (long double)
 
-WINPOSIX_EXPORT __inline double log10l (long double x)
-{
- return ((long double)log10((double)x));
-}
 #endif /* _MSC_VER <= 1300 */
 
 /* 7.12.8.3 The lgamma functions */
@@ -279,26 +248,17 @@ WINPOSIX_EXPORT __inline float ceilf (float x)
 {
  return ((float)ceil((double)x));
 }
-
 // double ceilf (double);
-
-WINPOSIX_EXPORT __inline long double ceill (long double x)
-{
- return ((long double)ceil((double)x));
-}
+// long double ceill (long double)
 
 /* 7.12.9.2 */
 WINPOSIX_EXPORT __inline float floorf (float x)
 {
  return ((float)floor((double)x));
 }
-
 // double floor (double);
+// long double floorl (long double)
 
-WINPOSIX_EXPORT __inline long double floorl (long double x);
-{
- return ((long double)floor((double)x));
-}
 #endif
 
 /* 7.12.9.3 */
