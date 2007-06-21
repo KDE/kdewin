@@ -367,3 +367,8 @@ double lgamma(double x)
   int local_sgngam=0;
   return (__lgamma_r(x, &local_sgngam));
 }
+
+long double lgammal(long double x)
+{
+  return ((long double)lgamma((double)x));
+}

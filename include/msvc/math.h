@@ -17,6 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifdef _MSC_VER
+
 #ifndef KDEWIN_MATH_H
 #define KDEWIN_MATH_H
 
@@ -53,10 +55,23 @@ KDEWIN32_EXPORT double __QNAN;
 
 // some functions which aren't available with msvc
 
+/* 7.12.4 Trigonometric functions: Double in C89 */
+// float sinf (float)
+// double sinf (double)
+// long double sinl (long double)
+
+// float cosf (float)
+// double cosf (double)
+// long double cosl (long double)
+
+// float tanf (float)
+// double tanf (double)
+// long double tanl (long double)
+
 /* 7.12.5.1 */
-// double __cdecl acosh (double);
-// float __cdecl acoshf (float);
-// long double __cdecl acoshl (long double);
+// double __cdecl acosh (double)
+// float __cdecl acoshf (float)
+// long double __cdecl acoshl (long double)
 
 /* 7.12.5.2 */
 // double asinh (double)
@@ -68,6 +83,22 @@ KDEWIN32_EXPORT double __QNAN;
 // float atanf  (float)
 // long double atanhl (long double)
 
+/* Exponentials and logarithms  */
+/* 7.12.6.1 Double in C89 */
+// float expf (float)
+// double expf (double)
+// long double expl (long double)
+
+/* 7.12.6.7 */
+// float logf (float)
+// double logf (double)
+// long double logl (long double)
+
+/* 7.12.6.8 */
+// float log10f (float)
+// double log10l (double)
+// long double log10l (long double)
+
 /* 7.12.8.3 The lgamma functions */
 // double lgamma (double)
 // float lgammaf (float)
@@ -77,6 +108,16 @@ KDEWIN32_EXPORT double __QNAN;
 // double tgamma (double)
 // float tgammaf (float)
 // long double tgammal (long double)
+
+/* 7.12.9.1 */
+// float ceilf (float)
+// double ceilf (double)
+// long double ceill (long double)
+
+/* 7.12.9.2 */
+// float floorf (float)
+// double floor (double)
+// long double floorl (long double)
 
 /* 7.12.9.3 */
 // float nearbyintf(float)
@@ -114,6 +155,54 @@ KDEWIN32_EXPORT double __QNAN;
 // long double fminl (long double, long double)
 
 
+
+/* 7.12.4 Trigonometric functions: Double in C89 */
+#if _MSC_VER <= 1300
+// sin
+WINPOSIX_EXPORT __inline float sinf (float)
+{
+ return ((float)sin((double)x));
+}
+
+// double sin (double)
+
+WINPOSIX_EXPORT __inline long double sinl (long double)
+{
+ return ((long double)sin((double)x));
+}
+
+// cos
+WINPOSIX_EXPORT __inline float cosf (float)
+{
+ return ((float)cos((double)x));
+}
+
+// double cos (double)
+
+WINPOSIX_EXPORT __inline long double cosl (long double)
+{
+ return ((long double)cos((double)x));
+}
+
+WINPOSIX_EXPORT __inline long double sinl (long double)
+{
+ return ((long double)sin((double)x));
+}
+
+// tan
+WINPOSIX_EXPORT __inline float tanf (float)
+{
+ return ((float)tan((double)x));
+}
+
+// double tan (double)
+
+WINPOSIX_EXPORT __inline long double tanl (long double)
+{
+ return ((long double)tan((double)x));
+}
+#endif /* _MSC_VER <= 1300 */
+
 /* 7.12.5.1 */
 #define acosh cosh
 #define acoshf coshf
@@ -129,15 +218,88 @@ KDEWIN32_EXPORT double __QNAN;
 // float atanf  (float);
 #define atanhl atan
 
+/* 7.12.6.1 */
+#if _MSC_VER <= 1300
+WINPOSIX_EXPORT __inline float expf (float x)
+{
+ return ((float)exp((double)x));
+}
+
+// double exp (double)
+
+WINPOSIX_EXPORT __inline double expl (long double x)
+{
+ return ((long double)exp((double)x));
+}
+#endif /* _MSC_VER <= 1300 */
+
+/* 7.12.6.7 */
+#if _MSC_VER <= 1300
+WINPOSIX_EXPORT __inline float logf (float x)
+{
+ return ((float)log((double)x));
+}
+
+// double logf (double)
+
+WINPOSIX_EXPORT __inline double logl (long double x)
+{
+ return ((long double)log((double)x));
+}
+#endif /* _MSC_VER <= 1300 */
+
+/* 7.12.6.8 */
+#if _MSC_VER <= 1300
+WINPOSIX_EXPORT __inline float log10f (float x)
+{
+ return ((float)log10((double)x));
+}
+
+// double log10 (double)
+
+WINPOSIX_EXPORT __inline double log10l (long double x)
+{
+ return ((long double)log10((double)x));
+}
+#endif /* _MSC_VER <= 1300 */
+
 /* 7.12.8.3 The lgamma functions */
-WINPOSIX_EXPORT double lgamma (double);
 WINPOSIX_EXPORT float lgammaf (float);
-#define lgammal lgamma
+WINPOSIX_EXPORT double lgamma (double);
+WINPOSIX_EXPORT long double lgammal (long double);
 
 /* 7.12.8.4 The tgamma functions */
-WINPOSIX_EXPORT double tgamma (double);
 WINPOSIX_EXPORT float tgammaf (float);
-#define tgammal tgamma
+WINPOSIX_EXPORT double tgamma (double);
+WINPOSIX_EXPORT long double tgammal (long double);
+
+/* 7.12.9.1 */
+#if _MSC_VER <= 1300
+WINPOSIX_EXPORT __inline float ceilf (float x)
+{
+ return ((float)ceil((double)x));
+}
+
+// double ceilf (double);
+
+WINPOSIX_EXPORT __inline long double ceill (long double x)
+{
+ return ((long double)ceil((double)x));
+}
+
+/* 7.12.9.2 */
+WINPOSIX_EXPORT __inline float floorf (float x)
+{
+ return ((float)floor((double)x));
+}
+
+// double floor (double);
+
+WINPOSIX_EXPORT __inline long double floorl (long double x);
+{
+ return ((long double)floor((double)x));
+}
+#endif
 
 /* 7.12.9.3 */
 // this is a little bit more complicated - don't raise an exception
@@ -452,10 +614,12 @@ __inline long double floor(int x)
     return floor((long double)x);
 }
 
+#ifdef _MSC_VER > 1300 /* msvc 7 has pow(int,int) */
 __inline long double pow(int x, int y)
 {
     return pow((long double)x, y);
 }
+#endif
 
 __inline long double pow(int x, unsigned int y)
 {
@@ -474,3 +638,7 @@ __inline long double pow(int x, long double y)
 #endif // __cplusplus
 
 #endif /* KDEWIN_MATH_H */
+
+#else  /* _MSC_VER */
+# error This header is for msvc only!
+#endif /* _MSC_VER */

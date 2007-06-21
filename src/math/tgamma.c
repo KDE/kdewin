@@ -386,3 +386,8 @@ double tgamma(double x)
   int local_sgngam=0;
   return (__tgamma_r(x, &local_sgngam));
 }
+
+long double tgammal(long double x)
+{
+  return ((long double)tgamma((double)x));
+}
