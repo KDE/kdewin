@@ -39,3 +39,4 @@ KDEWIN32_EXPORT union _ieee_rep __QNANL = { __DOUBLE_QNAN_REP };
 KDEWIN32_EXPORT union _ieee_rep __SNANL  = { __DOUBLE_SNAN_REP };
 KDEWIN32_EXPORT union _ieee_rep __INFL = { __DOUBLE_INF_REP };
 KDEWIN32_EXPORT union _ieee_rep __DENORML = { __DOUBLE_DENORM_REP };
+

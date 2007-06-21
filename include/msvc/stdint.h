@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -71,7 +71,25 @@ typedef unsigned long long uint_fast64_t;
 //#define __intptr_t_defined
 //typedef long intptr_t;
 //#endif
-//typedef unsigned long uintptr_t;
+
+/* Unix has uintptr_t in stdint.h, and it's safe not to include 
+   the whole win32's stddef.h here */
+#if !defined(_W64)
+#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
+#define _W64 __w64
+#else
+#define _W64
+#endif
+#endif
+
+#ifndef _UINTPTR_T_DEFINED
+#ifdef  _WIN64
+typedef unsigned __int64    uintptr_t;
+#else
+typedef _W64 unsigned int   uintptr_t;
+#endif
+#define _UINTPTR_T_DEFINED
+#endif
 
 /* Greatest-width integer types */
 

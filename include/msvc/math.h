@@ -1,6 +1,7 @@
 /*
    This file is part of the KDE libraries
    Copyright (C) 2005-2007 Christian Ehrlicher <Ch.Ehrlicher@gmx.de>
+   Copyright (C) 2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,7 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifdef _MSC_VER
+#ifndef _MSC_VER
+# error This header is for msvc only!
+#endif
 
 #ifndef KDEWIN_MATH_H
 #define KDEWIN_MATH_H
@@ -154,36 +157,6 @@ KDEWIN32_EXPORT double __QNAN;
 // float fminf (float, float)
 // long double fminl (long double, long double)
 
-
-
-/* 7.12.4 Trigonometric functions: Double in C89 */
-#if _MSC_VER <= 1300
-// sin
-WINPOSIX_EXPORT __inline float sinf (float)
-{
- return ((float)sin((double)x));
-}
-// double sin (double)
-// long double sinl (long double)
-
-// cos
-WINPOSIX_EXPORT __inline float cosf (float)
-{
- return ((float)cos((double)x));
-}
-// double cos (double)
-// long double cosl (long double)
-
-// tan
-WINPOSIX_EXPORT __inline float tanf (float)
-{
- return ((float)tan((double)x));
-}
-// double tan (double)
-// long double tanl (long double)
-
-#endif /* _MSC_VER <= 1300 */
-
 /* 7.12.5.1 */
 #define acosh cosh
 #define acoshf coshf
@@ -199,39 +172,6 @@ WINPOSIX_EXPORT __inline float tanf (float)
 // float atanf  (float);
 #define atanhl atan
 
-/* 7.12.6.1 */
-#if _MSC_VER <= 1300
-WINPOSIX_EXPORT __inline float expf (float x)
-{
- return ((float)exp((double)x));
-}
-// double exp (double)
-// double expl (long double)
-
-#endif /* _MSC_VER <= 1300 */
-
-/* 7.12.6.7 */
-#if _MSC_VER <= 1300
-WINPOSIX_EXPORT __inline float logf (float x)
-{
- return ((float)log((double)x));
-}
-// double logf (double)
-// double logl (long double)
-
-#endif /* _MSC_VER <= 1300 */
-
-/* 7.12.6.8 */
-#if _MSC_VER <= 1300
-WINPOSIX_EXPORT __inline float log10f (float x)
-{
- return ((float)log10((double)x));
-}
-// double log10 (double)
-// double log10l (long double)
-
-#endif /* _MSC_VER <= 1300 */
-
 /* 7.12.8.3 The lgamma functions */
 WINPOSIX_EXPORT float lgammaf (float);
 WINPOSIX_EXPORT double lgamma (double);
@@ -242,23 +182,20 @@ WINPOSIX_EXPORT float tgammaf (float);
 WINPOSIX_EXPORT double tgamma (double);
 WINPOSIX_EXPORT long double tgammal (long double);
 
+#if !defined __cplusplus && defined _MSC_VER && _MSC_VER < 1400
+/* 7.12.6.1 */
+KDEWIN32_EXPORT __inline float expf(float x) {return ((float)exp((double)x)); }
 /* 7.12.9.1 */
-#if _MSC_VER <= 1300
-WINPOSIX_EXPORT __inline float ceilf (float x)
-{
- return ((float)ceil((double)x));
-}
-// double ceilf (double);
-// long double ceill (long double)
-
-/* 7.12.9.2 */
-WINPOSIX_EXPORT __inline float floorf (float x)
-{
- return ((float)floor((double)x));
-}
-// double floor (double);
-// long double floorl (long double)
-
+KDEWIN32_EXPORT __inline float floorf(float x) {return ((float)floor((double)x)); }
+WINPOSIX_EXPORT __inline float ceilf(float x) {return ((float)ceil((double)x)); }
+KDEWIN32_EXPORT __inline float sinf(float x) {return ((float)sin((double)x)); }
+WINPOSIX_EXPORT __inline float cosf (float x) {return ((float)cos((double)x));}
+WINPOSIX_EXPORT __inline float tanf (float x) {return ((float)tan((double)x));}
+/* 7.12.6.7 */
+KDEWIN32_EXPORT __inline float logf(float x) {return ((float)log((double)x)); }
+KDEWIN32_EXPORT __inline float powf(float x, float y) {return ((float)pow((double)x, (double)y)); }
+/* 7.12.6.8 */
+WINPOSIX_EXPORT __inline float log10f (float x) {return ((float)log10((double)x));}
 #endif
 
 /* 7.12.9.3 */
@@ -553,6 +490,7 @@ WINPOSIX_EXPORT __inline long double fminl (long double a, long double b)
 #ifdef __cplusplus
 }
 
+#if _MSC_VER >= 1400
 // convenience function to avoid useless casts from int to whatever
 __inline long double sqrt(int x)
 {
@@ -574,12 +512,13 @@ __inline long double floor(int x)
     return floor((long double)x);
 }
 
-#ifdef _MSC_VER > 1300 /* msvc 7 has pow(int,int) */
-__inline long double pow(int x, int y)
+//*#ifdef _MSC_VER > 1300 
+/* msvc 7 has pow(int,int) */
+/*__inline long double pow(int x, int y)
 {
     return pow((long double)x, y);
 }
-#endif
+#endif*/
 
 __inline long double pow(int x, unsigned int y)
 {
@@ -595,10 +534,7 @@ __inline long double pow(int x, long double y)
 {
     return pow((long double)x, y);
 }
+#endif // _MSC_VER >= 1400
 #endif // __cplusplus
 
 #endif /* KDEWIN_MATH_H */
-
-#else  /* _MSC_VER */
-# error This header is for msvc only!
-#endif /* _MSC_VER */
