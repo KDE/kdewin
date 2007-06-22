@@ -512,13 +512,13 @@ __inline long double floor(int x)
     return floor((long double)x);
 }
 
-//*#ifdef _MSC_VER > 1300 
-/* msvc 7 has pow(int,int) */
-/*__inline long double pow(int x, int y)
+#ifdef _MSC_VER >= 1400 
+/* msvc 7/7.1 has pow(int,int) */
+__inline long double pow(int x, int y)
 {
     return pow((long double)x, y);
 }
-#endif*/
+#endif
 
 __inline long double pow(int x, unsigned int y)
 {
