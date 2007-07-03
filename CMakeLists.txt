@@ -10,6 +10,7 @@ if (NOT WIN32)
 endif (NOT WIN32)
 
 find_package(KDEWIN_Packager)
+find_package(WinScp)
 
 if(NOT MSVC)
    add_subdirectory( examples)
@@ -127,3 +128,6 @@ if (KDEWIN_PACKAGER_FOUND)
     KDEWIN_PACKAGER(kdewin32 ${VERSION} "KDEWIN32 supplementary library" "-srcexclude \"emerge unused\"")
 endif (KDEWIN_PACKAGER_FOUND)
 
+if (WINSCP_FOUND)
+    KDEWIN_UPLOAD("kdewin32-*-${VERSION}*.zip" kde-windows download.cegit.de /home/kde-windows/kde-windows/kdesupport/single/)
+endif (WINSCP_FOUND)
