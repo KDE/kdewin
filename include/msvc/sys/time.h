@@ -37,6 +37,9 @@ extern "C" {
 
 KDEWIN32_EXPORT int gettimeofday(struct timeval *__p, void *__t);
 
+//errno==EACCES on read-only devices
+KDEWIN32_EXPORT int utimes(const char *filename, const struct timeval times[2]);
+
 // this is no posix function
 //KDEWIN32_EXPORT int settimeofday(const struct timeval *, const struct timezone *); 
 

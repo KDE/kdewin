@@ -3,6 +3,12 @@ kdewin32 is a supplementary library
 history
 -------
 
+version 0.2.6
+- added utime 
+
+version 0.2.5
+- added upload function to build system
+
 version 0.2.4
 - added a lot of mathematical functions for msvc to compile kdeedu
 
