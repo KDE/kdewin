@@ -68,7 +68,7 @@ exit
         write_file("winscp-config.txt" ${CONFIG_FILE_TEXT})
         add_custom_target(kdewin_upload
             COMMAND ${CMAKE_MAKE_PROGRAM} 
-                kdewin_package
+                kdewin_package_debug_and_release
             COMMAND ${WINSCP_EXECUTABLE} 
                 /console 
                 /script=winscp-config.txt
