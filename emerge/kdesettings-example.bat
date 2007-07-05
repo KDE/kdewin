@@ -2,6 +2,8 @@ rem here you set the base directory onder which the whole kde
 rem system will live
 set KDEROOT=e:\mingwroot
 
+set PATH=%PATH%;%KDEROOT%\gnuwin32\bin
+
 rem here you set the compiler to be used:
 rem mingw : use the mingw gcc compiler (recommended)
 rem msvc2005: use the microsoft visual studio 2005 c-compiler
