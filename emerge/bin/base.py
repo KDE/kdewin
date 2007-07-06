@@ -238,7 +238,7 @@ class baseclass:
                 if ( not os.path.exists( mydir ) ):
                         os.mkdir( mydir )
 
-                repourl = "https://svn.kde.org/home/kde/"
+                repourl = self.kdesvnserver + "/home/kde/"
 		for tmpdir in svnpath.split( "/" ):
                         if ( tmpdir == "" ):
                                 continue
