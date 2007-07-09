@@ -1,8 +1,12 @@
-rem here you set the base directory onder which the whole kde
+rem here you set the base directory under which the whole kde
 rem system will live
 set KDEROOT=e:\mingwroot
 
 set PATH=%PATH%;%KDEROOT%\gnuwin32\bin
+set PATH=%PATH%;%KDEROOT%\qt\bin
+set PATH=%PATH%;%KDEROOT%\win32libs\bin
+set KDEWIN_DIR=%KDEROOT%\win32libs
+set STRIGI_HOME=%KDEROOT%\kde
 
 rem here you set the compiler to be used:
 rem mingw : use the mingw gcc compiler (recommended)
@@ -31,11 +35,17 @@ rem svn checkout from emerge, if you want.
 set KDESVNDIR=e:\kdesvn
 set KDESVNSERVER=svn://anonsvn.kde.org
 set KDESVNUSERNAME=username
-
 rem for security reasons you better log in to the kde server by hand
 rem and set the username and password at first login. then svn will
 rem remember the password and it does not have to be written down here
-set KDESVNPASSWORD=password
+rem set KDESVNPASSWORD=password
+
+
+rem if you use svn+ssh, you'll need a ssh-agent equaivalent for managing the authorization 
+rem plink is provided by putty, get it at 
+rem http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
+rem and make sure plink is in your path and configured (you need to import your key)
+set SVN_SSH=plink 
 
 @echo kdesettings.bat executed
 @echo KDEROOT     : %KDEROOT%
