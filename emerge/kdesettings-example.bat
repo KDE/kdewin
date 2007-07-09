@@ -4,6 +4,7 @@ set KDEROOT=e:\mingwroot
 
 set PATH=%PATH%;%KDEROOT%\gnuwin32\bin
 set PATH=%PATH%;%KDEROOT%\qt\bin
+set PATH=%PATH%;%KDEROOT%\cmake\bin
 set PATH=%PATH%;%KDEROOT%\win32libs\bin
 set KDEWIN_DIR=%KDEROOT%\win32libs
 set STRIGI_HOME=%KDEROOT%\kde
@@ -42,9 +43,9 @@ rem set KDESVNPASSWORD=password
 
 
 rem if you use svn+ssh, you'll need a ssh-agent equaivalent for managing the authorization 
-rem plink is provided by putty, get it at 
+rem Pageant is provided by putty, get it at 
 rem http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
-rem and make sure plink is in your path and configured (you need to import your key)
+rem and make sure plink is in your path and Pageant is configured (you need to import your key)
 set SVN_SSH=plink 
 
 @echo kdesettings.bat executed
