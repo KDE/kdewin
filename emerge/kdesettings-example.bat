@@ -4,6 +4,7 @@ set KDEROOT=e:\mingwroot
 
 set PATH=%PATH%;%KDEROOT%\gnuwin32\bin
 set PATH=%PATH%;%KDEROOT%\qt\bin
+set PATH=%PATH%;%KDEROOT%\qt\lib
 set PATH=%PATH%;%KDEROOT%\cmake\bin
 set PATH=%PATH%;%KDEROOT%\win32libs\bin
 set KDEWIN_DIR=%KDEROOT%\win32libs
