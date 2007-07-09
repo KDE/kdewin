@@ -7,6 +7,7 @@ set PATH=%PATH%;%KDEROOT%\qt\bin
 set PATH=%PATH%;%KDEROOT%\qt\lib
 set PATH=%PATH%;%KDEROOT%\cmake\bin
 set PATH=%PATH%;%KDEROOT%\win32libs\bin
+set PATH=%PATH%;%KDEROOT%\kde\bin
 set KDEWIN_DIR=%KDEROOT%\win32libs
 set STRIGI_HOME=%KDEROOT%\kde
 
