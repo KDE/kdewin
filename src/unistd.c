@@ -447,5 +447,62 @@ KDEWIN32_EXPORT int getopt(int argc, char **argv, const char *optstring)
 
 	return c;
 }
-#endif
+#endif  // __MINGW32__
+
+
+int truncate(const char *path, off_t length)
+{
+    HANDLE hFile;
+    LARGE_INTEGER fileSize;
+
+    if( length < 0 )
+    {
+        errno = EINVAL;
+        return -1;
+    }
+
+    hFile = CreateFileA( path, GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
+
+    if( hFile == INVALID_HANDLE_VALUE )
+    {
+        DWORD dwLastErr = GetLastError();
+        errno = EACCES;
+        return -1;
+    }
+
+    if( GetFileSizeEx( hFile, &fileSize ) == 0 )
+    {
+        DWORD dwLastErr = GetLastError();
+        CloseHandle( hFile );
+        errno = EACCES;
+        return -1;
+    }
+
+    if( fileSize.QuadPart < length)
+    {
+        CloseHandle( hFile );
+        errno = EINVAL;
+        return -1;
+    }
+
+    fileSize.QuadPart = length;
+
+    if( SetFilePointerEx( hFile, fileSize, 0, FILE_BEGIN ) == 0 )
+    {
+        DWORD dwLastErr = GetLastError();
+        CloseHandle( hFile );
+        errno = EACCES;
+        return -1;
+    }
+
+    CloseHandle( hFile );
+    return 0;
+}
+
+#ifndef __MINGW32__
+int ftruncate(int fd, off_t length)
+{
+  return _chsize (fd, length);
+}
+#endif  // __MINGW32__
 

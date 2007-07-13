@@ -135,6 +135,10 @@ extern KDEWIN32_EXPORT char *optarg;
 
 extern KDEWIN32_EXPORT int optind, opterr;/*, optopt */
 
+KDEWIN32_EXPORT int truncate(const char *path, off_t length);
+
+KDEWIN32_EXPORT int ftruncate(int fd, off_t length);
+
 #ifdef __cplusplus
 }
 #endif
