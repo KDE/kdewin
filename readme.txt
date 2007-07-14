@@ -3,6 +3,9 @@ kdewin32 is a supplementary library
 history
 -------
 
+version 0.2.7 (not released yet)
+- added (f)truncate
+
 version 0.2.6
 - added utime 
 
