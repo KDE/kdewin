@@ -3,8 +3,8 @@ import os
 import utils
 
 SRC_URI= """
-http://82.149.170.66/kde-windows/win32libs/zip/single/aspell-0.50.3-3-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/aspell-0.50.3-3-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/aspell-0.50.3-4-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/aspell-0.50.3-4-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/boost-headers-1.34-lib.zip
 
@@ -17,8 +17,8 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/expat-2.0.0-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/giflib-4.1.4-1-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/giflib-4.1.4-1-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-20070306-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-20070306-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-1.1.4-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-1.1.4-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/iconv-1.9.2-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/iconv-1.9.2-2-lib.zip
