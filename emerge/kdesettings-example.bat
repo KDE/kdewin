@@ -53,7 +53,7 @@ set PATH=%PATH%;%KDEROOT%\kde\lib
 set PATH=%PATH%;%KDEROOT%\dbus\bin
 set KDEWIN_DIR=%KDEROOT%\win32libs
 set STRIGI_HOME=%KDEROOT%\kde
-
+set DBUSDIR=%KDEROOT%\dbus
 
 @echo kdesettings.bat executed
 @echo KDEROOT     : %KDEROOT%
