@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#define _WIN32_WINNT 0x0500
 #include <winposix_export.h>
 #include <windows.h>
 
@@ -27,7 +28,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <unistd.h>
+
+// BEGIN stat.c
+KDEWIN32_EXPORT int lstat(const char *path, struct stat *sb)
+{
+  return _stat(path,(struct _stat*)sb);
+}
+
+KDEWIN32_EXPORT int fchmod(int __fd, mode_t __mode)
+{
+  return 0;
+}
+// END stat.c
 
 KDEWIN32_EXPORT int getgroups(int size, gid_t list[])
 {
@@ -89,22 +103,6 @@ KDEWIN32_EXPORT int fchown(int __fd, uid_t __owner, gid_t __group )
 {
   return 0; 
 }
-
-KDEWIN32_EXPORT int lstat(const char *path, struct stat *sb)
-{
-  return _stat(path,(struct _stat*)sb);
-}
-
-KDEWIN32_EXPORT int lstat64(const char *path, struct stat64 *sb)
-{
-  return _stat64(path,(struct __stat64*)sb);
-}
-
-KDEWIN32_EXPORT int fchmod(int __fd, mode_t __mode)
-{
-  return 0;
-}
-
 
 /* Get the real user ID of the calling process.  */
 KDEWIN32_EXPORT uid_t getuid()

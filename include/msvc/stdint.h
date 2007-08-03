@@ -24,24 +24,41 @@
 #include <sys/types.h>
 
 /* Exact-width integer types */
-
 #ifndef __int8_t_defined
-#define __int8_t_defined
-typedef signed char int8_t;
-typedef short int16_t;
-typedef long int32_t;
-typedef long long int64_t;
+# define __int8_t_defined
+  typedef signed char int8_t;
+#endif
+#ifndef __int16_t_defined
+# define __int16_t_defined
+  typedef signed short int16_t;
+#endif
+#ifndef __int32_t_defined
+# define __int32_t_defined
+  typedef signed long int32_t;
+#endif
+#ifndef __int64_t_defined
+# define __int64_t_defined
+  typedef signed long long int64_t;
 #endif
 
-typedef unsigned char uint8_t;
-typedef unsigned short uint16_t;
+#ifndef __uint8_t_defined
+# define __uint8_t_defined
+  typedef unsigned char uint8_t;
+#endif
+#ifndef __uint16_t_defined
+# define __uint16_t_defined
+  typedef unsigned short uint16_t;
+#endif
 #ifndef __uint32_t_defined
-#define __uint32_t_defined
-typedef unsigned long uint32_t;
+# define __uint32_t_defined
+  typedef unsigned long uint32_t;
 #endif
-typedef unsigned long long uint64_t;
+#ifndef __uint64_t_defined
+# define __uint64_t_defined
+  typedef unsigned long long uint64_t;
+#endif
 
-/* Minimum-width integer types */
+  /* Minimum-width integer types */
 
 typedef signed char int_least8_t;
 typedef short int_least16_t;
