@@ -3,7 +3,7 @@ set (VERSION 0.2.6)
 
 project(${NAME})
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 if (NOT WIN32)
    message(FATAL_ERROR "This directory can only be built under Windows")
