@@ -48,6 +48,10 @@ for i in sys.argv:
         buildaction = "qmerge"
     elif ( i == "--digest" ):
         buildaction = "digest"
+    elif ( i == "--package" ):
+        buildaction = "package"
+    elif ( i == "--full-package" ):
+        buildaction = "full-package"
     elif ( i.startswith( "-" ) ):
         print "error: emerge flag %s not understood" % i
         exit ( 1 )
@@ -75,7 +79,7 @@ def doExec( category, package, version, action, opts ):
 def handlePackage( category, package, version, buildaction, opts ):
     print "handlePackage called:", category, package, version, buildaction
     success = True
-    if ( buildaction == "all" ):
+    if ( buildaction == "all" or buildaction == "full-package" ):
         if ( success ):
             success = doExec( category, package, version, "fetch", opts )
         if ( success ):
@@ -86,6 +90,8 @@ def handlePackage( category, package, version, buildaction, opts ):
             success = doExec( category, package, version, "install", opts )       
         if ( success ):
             success = doExec( category, package, version, "qmerge", opts )
+        if( success and buildaction == "full-package" ):
+            success = doExec( category, package, version, "package", opts )
 
     elif ( buildaction == "fetch" ):
         success = doExec( category, package, version, "fetch", opts )       
@@ -97,6 +103,8 @@ def handlePackage( category, package, version, buildaction, opts ):
         success = doExec( category, package, version, "install", opts )       
     elif ( buildaction == "qmerge" ):
         success = doExec( category, package, version, "qmerge", opts )
+    elif ( buildaction == "package" ):
+        success = doExec( category, package, version, "package", opts )
     else:
         print "could not understand this buildaction: %s" % buildaction
         success = false

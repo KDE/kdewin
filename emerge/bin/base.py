@@ -97,6 +97,7 @@ class baseclass:
 			if ( ok ):
 				print "merge success"
 		elif command == "digest":   ok = self.digest()
+		elif command == "package":  ok = self.make_package()
 		else:
 			print "command %s not understood" % command
 			ok = False
@@ -141,6 +142,10 @@ class baseclass:
 		print "files: %s" % self.filenames
 		print "downloaddir: %s" % self.downloaddir
 		utils.digestFiles( self.downloaddir, self.filenames, self.packagedir )
+		return True
+
+	def make_package( self ):
+		print "currently only supported for some interal packages"
 		return True
 
 	def setDirectories( self ):
@@ -280,18 +285,17 @@ class baseclass:
                 options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
                         os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
 
-                options = options + "-DWIN32LIBS_INSTALL_PREFIX=%s " % \
-                        os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
-
                 options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
                         os.path.join( self.rootdir, "strigi" ).replace( "\\", "/" )
 
                 options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
                         os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
-			
-                options = options + "-DWIN32LIBS_DIR=%s " % \
-                        os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
-			
+
+                options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
+                        os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" )
+
+                options = options + "-DCMAKE_LIBRARY_PATH=%s " % \
+                        os.path.join( self.rootdir, "win32libs", "lib" ).replace( "\\", "/" )
 
                 return options
 
@@ -321,3 +325,46 @@ class baseclass:
                        and die( "mingw32-make install" )
                 utils.fixCmakeImageDir( self.imagedir, self.rootdir )
 		return True
+
+        def doPackaging( self, pkg_name,  pkg_version, packSources = True ):
+                # todo: most of the paths are well known -> no need to pass them
+                dstpath = os.path.join( self.rootdir, "tmp", self.PV )
+                binpath = os.path.join( self.imagedir, self.instdestdir )
+
+                if ( packSources ):
+                    srcpath = os.path.join( self.workdir, self.instsrcdir )
+                    cmd = "kdewin-packager.exe -name %s -root %s -srcroot %s -version %s -destdir %s -complete" % ( pkg_name, binpath, srcpath, pkg_version, dstpath )
+                else:
+                    cmd = "kdewin-packager.exe -name %s -root %s -version %s -destdir %s -complete" % ( pkg_name, binpath, pkg_version, dstpath )
+                os.system( cmd ) and die ( cmd )
+                return True
+
+        def createImportLibs( self, pkg_name ):
+                basepath = os.path.join( self.imagedir, self.instdestdir )
+ 
+                dst = os.path.join( basepath, "lib" )
+                if( not os.path.exists( dst ) ):
+                    os.mkdir( dst )
+
+                dllpath = os.path.join( basepath, "bin", "%s.dll" % pkg_name )
+                defpath = os.path.join( basepath, "lib", "%s.def" % pkg_name )
+                imppath = os.path.join( basepath, "lib", "%s.lib" % pkg_name )
+                gccpath = os.path.join( basepath, "lib", "%s.dll.a" % pkg_name )
+                gccpath_wrong = os.path.join( basepath, "lib", "lib%s.a" % pkg_name )
+
+                if( not os.path.isfile( imppath ) ):
+                        # create .def
+                        cmd = "pexports %s > %s " % ( dllpath, defpath )
+                        os.system( cmd ) and die ( cmd )
+                        
+                        # create .lib
+                        cmd = "lib /machine:x86 /def:%s /out:%s" % ( defpath, imppath )
+                        os.system( cmd ) and die ( cmd )
+                
+                # create .dll.a
+                os.chdir( os.path.join( basepath, "lib" ) )
+                cmd = "reimp %s" % ( imppath )
+                os.system( cmd ) and die ( cmd )
+                if ( os.path.isfile( gccpath ) ):
+                        os.remove( gccpath )
+                os.rename( gccpath_wrong, gccpath )

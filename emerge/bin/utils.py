@@ -385,7 +385,7 @@ def die( message ):
     exit( 1 )
 
 def copySrcDirToDestDir( srcdir, destdir ):
-    print "copySrcDirToDestDir called. srcdir: %s, destdir: %s" % ( srcdir, destdir )
+    #print "copySrcDirToDestDir called. srcdir: %s, destdir: %s" % ( srcdir, destdir )
 
     mysrcdir = srcdir
     if ( not srcdir.endswith( "\\" ) ):
@@ -394,11 +394,11 @@ def copySrcDirToDestDir( srcdir, destdir ):
     mydestdir = destdir
     if ( not destdir.endswith( "\\" ) ):
 	mydestdir = mydestdir + "\\"
-    print "copySrcDirToDestDir called. mysrcdir: %s, mydestdir: %s" % ( mysrcdir, mydestdir )
+    #print "copySrcDirToDestDir called. mysrcdir: %s, mydestdir: %s" % ( mysrcdir, mydestdir )
 	
     
     for root, dirs, files in os.walk( mysrcdir ):
-        print "rootdir:", root
+        #print "rootdir:", root
 
         # do not copy files under .svn directories, because they are write-protected
         # and the they cannot easily be deleted...
@@ -414,11 +414,11 @@ def copySrcDirToDestDir( srcdir, destdir ):
 
 
 def mergeImageDirToRootDir( imagedir, rootdir ):
-    print "mergeImageDirToRootDir called. id: %s, root: %s" % ( imagedir, rootdir )
+    #print "mergeImageDirToRootDir called. id: %s, root: %s" % ( imagedir, rootdir )
     copySrcDirToDestDir( imagedir, rootdir )
 
 def moveEntries( srcdir, destdir ):
-    print "moveEntries:", srcdir, destdir
+    #print "moveEntries:", srcdir, destdir
     for entry in os.listdir( srcdir ):
         #print "rootdir:", root
         print "entry:", entry
@@ -428,7 +428,7 @@ def moveEntries( srcdir, destdir ):
         os.rename( src, dest )
     
 def moveImageDirContents( imagedir, relSrcDir, relDestDir ):
-    print "moveImageDirContents:", imagedir, relSrcDir, relDestDir
+    #print "moveImageDirContents:", imagedir, relSrcDir, relDestDir
 
     srcdir = os.path.join( imagedir, relSrcDir )    
     destdir = os.path.join( imagedir, relDestDir )    
@@ -471,13 +471,15 @@ def fixCmakeImageDir( imagedir, rootdir ):
     os.rmdir( tmpdir )
 
 def cleanDirectory( dir ):
-    print "cleanDirectory called. dir:", dir
+    #print "cleanDirectory called. dir:", dir
     if ( os.path.exists( dir ) ):
         for root, dirs, files in os.walk( dir, topdown=False):
             for name in files:
                 os.remove(os.path.join(root, name))
             for name in dirs:
                 os.rmdir(os.path.join(root, name))
+    else:
+      os.mkdir( dir )
 
 
 def sedFile( directory, file, sedcommand ):
