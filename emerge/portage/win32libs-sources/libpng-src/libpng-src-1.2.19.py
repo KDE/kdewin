@@ -2,7 +2,6 @@ import base
 import os
 import shutil
 import utils
-from utils import die
 
 PACKAGE_NAME         = "libpng"
 PACKAGE_VER          = "1.2.19"
@@ -26,7 +25,7 @@ class subclass(base.baseclass):
   def execute( self ):
     base.baseclass.execute( self )
     if self.compiler <> "mingw":
-      print "error: can only be build with MinGW (but in the end a mingw/msvc combined packageis created"
+      print "error: can only be build with MinGW (but in the end a mingw/msvc combined package is created"
       exit( 1 )
 
   def compile( self ):

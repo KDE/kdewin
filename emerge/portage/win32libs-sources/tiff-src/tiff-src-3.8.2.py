@@ -2,7 +2,6 @@ import base
 import os
 import shutil
 import utils
-from utils import die
 
 PACKAGE_NAME         = "tiff"
 PACKAGE_VER          = "3.8.2"

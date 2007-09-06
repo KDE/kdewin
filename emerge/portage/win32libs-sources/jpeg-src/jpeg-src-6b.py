@@ -2,7 +2,6 @@ import base
 import os
 import shutil
 import utils
-from utils import die
 
 PACKAGE_NAME         = "jpeg"
 PACKAGE_VER          = "6b"

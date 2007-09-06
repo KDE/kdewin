@@ -2,16 +2,12 @@ import base
 import os
 import shutil
 import utils
-from utils import die
 
-GIFLIB_NAME         = "giflib"
-GIFLIB_VER          = "4.1.4"
-GIFLIB_FULL_VER     = "4.1.4-2"
-GIFLIB_FULL_NAME    = "%s-%s" % ( GIFLIB_NAME, GIFLIB_VER )
-GIFLIB_DLL_NAME     = "giflib4"
-
-# C:\tmp>expat-win32bin-2.0.1.exe /DIR="C:\tmp\expat" /SILENT
-# C:\tmp>c:\tmp\expat\Uninstall\unins000.exe /SILENT
+PACKAGE_NAME         = "giflib"
+PACKAGE_VER          = "4.1.4"
+PACKAGE_FULL_VER     = "4.1.4-2"
+PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
+PACKAGE_DLL_NAME     = "giflib4"
 
 SRC_URI= """
 http://switch.dl.sourceforge.net/sourceforge/gnuwin32/giflib-4.1.4-1.exe
@@ -47,11 +43,11 @@ class subclass(base.baseclass):
     dst = os.path.join( self.imagedir, self.instdestdir, "bin" )
     utils.cleanDirectory( dst )
 
-    src = os.path.join( self.workdir, self.instsrcdir, "bin", "giflib4.dll" )
-    dst = os.path.join( self.imagedir, self.instdestdir, "bin", "giflib4.dll" )
+    src = os.path.join( self.workdir, self.instsrcdir, "bin", PACKAGE_DLL_NAME + ".dll" )
+    dst = os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_DLL_NAME + "giflib4.dll" )
     shutil.copy( src, dst )
 
-    # /contrib/GIFLIB_NAME/GIFLIB_FULL_VER
+    # /contrib/PACKAGE_NAME/PACKAGE_FULL_VER
     src = os.path.join( self.workdir, self.instsrcdir, "contrib" )
     dst = os.path.join( self.imagedir, self.instdestdir, "contrib" )
     utils.copySrcDirToDestDir( src, dst )
@@ -75,10 +71,10 @@ class subclass(base.baseclass):
     self.instsrcdir = ""
 
     # auto-create both import libs with the help of pexports
-    self.createImportLibs( GIFLIB_DLL_NAME )
+    self.createImportLibs( PACKAGE_DLL_NAME )
 
     # now do packaging with kdewin-packager
-    self.doPackaging( GIFLIB_NAME, GIFLIB_FULL_VER, False )
+    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, False )
 
     return True
   

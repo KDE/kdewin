@@ -2,16 +2,12 @@ import base
 import os
 import shutil
 import utils
-from utils import die
 
 PACKAGE_NAME         = "expat"
 PACKAGE_VER          = "2.0.1"
 PACKAGE_FULL_VER     = "2.0.1"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 PACKAGE_DLL_NAME     = "libexpat"
-
-# C:\tmp>expat-win32bin-2.0.1.exe /DIR="C:\tmp\expat" /SILENT
-# C:\tmp>c:\tmp\expat\Uninstall\unins000.exe /SILENT
 
 SRC_URI= """
 http://kent.dl.sourceforge.net/sourceforge/expat/expat-win32bin-2.0.1.exe

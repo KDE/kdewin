@@ -3,29 +3,22 @@ import os
 import shutil
 import utils
 
-PACKAGE_NAME         = "redland"
-PACKAGE_VER          = "1.0.3"
-PACKAGE_FULL_VER     = "1.0.3-4"
+PACKAGE_NAME         = "aspell"
+PACKAGE_VER          = "0.50.3"
+PACKAGE_FULL_VER     = "0.50.3-4"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
-PACKAGE_DLL_NAMES    = """
-libcurl
-libdb43
-librdf
-raptor
-rasqal
+PACKAGE_DLL_NAMES     = """
+aspell-15
+pspell-15
 """
 PACKAGE_CONTRIB_FILES= """
-AUTHORS
 COPYING
-COPYING.LIB
-LICENSE.txt
-LICENSE-2.0.txt
-NOTICE
 README
 """
 
 SRC_URI= """
-http://download.librdf.org/binaries/win32/1.0.3/redland-1.0.3-Win32-Dev.zip
+http://ftp.gnu.org/gnu/aspell/w32/aspell-dev-0-50-3-3.zip
+http://ftp.gnu.org/gnu/aspell/w32/Aspell-0-50-3-3-Setup.exe
 """
 
 DEPEND = """
@@ -34,6 +27,26 @@ DEPEND = """
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
+
+  def unpack( self ):
+    # make sure that the workdir is empty
+    if ( os.path.exists( self.workdir ) ):
+        utils.cleanDirectory( self.workdir )
+
+    # make sure the workdir exists
+    if ( not os.path.exists( self.workdir ) ):
+        os.makedirs( self.workdir )
+
+    # hopefully only one...
+    for filename in self.filenames:
+        ( shortname, ext ) = os.path.splitext( filename )
+        if( ext == ".exe" ):
+            os.system( os.path.join( self.downloaddir, filename ) + " /DIR=\"" + self.workdir + "\" /VERYSILENT")
+        else:
+            if( not utils.unpackFile( self.downloaddir, filename, self.workdir ) ):
+                return False
+
+    return True
 
   def compile( self ):
     # binary-only package - nothing to compile
@@ -51,7 +64,7 @@ class subclass(base.baseclass):
     utils.cleanDirectory( dst )
 
     for libs in PACKAGE_DLL_NAMES.split():
-        src = os.path.join( self.workdir, self.instsrcdir, libs + ".dll" )
+        src = os.path.join( self.workdir, self.instsrcdir, "bin", libs + ".dll" )
         dst = os.path.join( self.imagedir, self.instdestdir, "bin", libs + ".dll" )
         shutil.copy( src, dst )
 
@@ -68,7 +81,17 @@ class subclass(base.baseclass):
         shutil.copy( os.path.join( src, f ),  os.path.join( dst, f ) )
 
     # /doc can be used from zip package
-    src = os.path.join( self.workdir, self.instsrcdir, "include" )
+    src = os.path.join( self.workdir, self.instsrcdir, "doc" )
+    dst = os.path.join( self.imagedir, self.instdestdir, "doc" )
+    utils.copySrcDirToDestDir( src, dst )
+
+    # /data can be used from zip package
+    src = os.path.join( self.workdir, self.instsrcdir, "data" )
+    dst = os.path.join( self.imagedir, self.instdestdir, "data" )
+    utils.copySrcDirToDestDir( src, dst )
+
+    # /include comes from devel package
+    src = os.path.join( self.workdir, self.instsrcdir, "aspell-dev-0-50-3-3", "include" )
     dst = os.path.join( self.imagedir, self.instdestdir, "include" )
     utils.copySrcDirToDestDir( src, dst )
 
@@ -81,6 +104,7 @@ class subclass(base.baseclass):
     self.instsrcdir = ""
 
     # auto-create both import libs with the help of pexports
+    # one problem here - aspell has also a c++ interface which can't be used...
     for libs in PACKAGE_DLL_NAMES.split():
         self.createImportLibs( libs )
 

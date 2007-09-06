@@ -2,21 +2,21 @@ import base
 import os
 import shutil
 import utils
-from utils import die
 
 PACKAGE_NAME         = "libxslt"
 PACKAGE_VER          = "1.1.22"
 PACKAGE_PACKAGER_VER = "-2"
 PACKAGE_FULL_VER     = "1.1.22-2"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
-PACKAGE_DLL_NAME     = "libxslt"
+PACKAGE_DLL_NAMES    = """
+libxslt
+libexslt
+"""
 PACKAGE_INSTSRCDIR   = PACKAGE_FULL_NAME + ".win32"
-LIBEXSLT_DLL_NAME    = "libexslt"
 
 SRC_URI= """ftp://ftp.zlatkovic.com/pub/libxml/""" + PACKAGE_FULL_NAME + """.win32.zip"""
 
 DEPEND = """
-dev-util/win32libs
 """
 
 class subclass(base.baseclass):
@@ -61,16 +61,16 @@ class subclass(base.baseclass):
     dst = os.path.join( self.imagedir, self.instdestdir, "lib" )
     utils.cleanDirectory( dst )
     # no need to recreate msvc import lib
-    shutil.copy( os.path.join( src, PACKAGE_DLL_NAME + ".lib" ), os.path.join( dst, PACKAGE_DLL_NAME + ".lib" ) )
-    shutil.copy( os.path.join( src, LIBEXSLT_DLL_NAME + ".lib" ), os.path.join( dst, LIBEXSLT_DLL_NAME + ".lib" ) )
+    for libs in PACKAGE_DLL_NAMES.split():
+        shutil.copy( os.path.join( src, libs + ".lib" ), os.path.join( dst, libs + ".lib" ) )
     
     return True
   def make_package( self ):
     self.instsrcdir = PACKAGE_INSTSRCDIR
 
     # auto-create both import libs with the help of pexports
-    self.createImportLibs( PACKAGE_DLL_NAME )
-    self.createImportLibs( LIBEXSLT_DLL_NAME )
+    for libs in PACKAGE_DLL_NAMES.split():
+        self.createImportLibs( libs )
 
     # now do packaging with kdewin-packager
     self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, False )

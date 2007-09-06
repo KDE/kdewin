@@ -2,7 +2,6 @@ import base
 import os
 import shutil
 import utils
-from utils import die
 
 PACKAGE_NAME         = "libxml2"
 PACKAGE_VER          = "2.6.30"
@@ -15,7 +14,6 @@ PACKAGE_INSTSRCDIR   = PACKAGE_FULL_NAME + ".win32"
 SRC_URI= """ftp://ftp.zlatkovic.com/pub/libxml/""" + PACKAGE_FULL_NAME + """.win32.zip"""
 
 DEPEND = """
-dev-util/win32libs
 """
 
 class subclass(base.baseclass):
