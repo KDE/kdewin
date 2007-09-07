@@ -7,7 +7,6 @@ from utils import die
 
 PACKAGE_NAME         = "gpgme"
 PACKAGE_VER          = "1.1.4"
-PACKAGE_PACKAGER_VER = ""
 PACKAGE_FULL_VER     = "1.1.4"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
 PACKAGE_GPGERR_NAME  = "%s-%s" % ( "libgpg-error", "1.5")
@@ -35,39 +34,40 @@ class subclass(base.baseclass):
              mingw/msvc combined package is created"
       exit( 1 )
 
-  def win2msys( self, path ):
-    path = path.replace( '\\', '/' )
-    if ( path[1] == ':' ):
-      path = '/' + path[0].lower() + '/' + path[3:]
-    return path
-
-  def compile( self ):
-    # we need a patch to /bin/sh from msys... hmmm
-    dst = os.path.join( self.imagedir )
-    utils.cleanDirectory( dst )
-    dst = os.path.join( self.imagedir, self.instdestdir )
-    utils.cleanDirectory( dst )
-
-    src = os.path.join( self.workdir, self.instdestdir )
+  def unpack( self ):
+    if( not base.baseclass.unpack( self ) ):
+      return False
+    src = os.path.join( self.workdir, self.instsrcdir )
     gpgerr_dir = os.path.join( src, PACKAGE_GPGERR_NAME )
-    gpglib_dir = os.path.join( src, PACKAGE_FULL_NAME )
-    msys_dir = os.environ[ "MSYSPATH" ]
-    sh = os.path.join( msys_dir, "bin", "sh.exe" )
 
     # ok, ok - we maybe should split this into libgpg-error and libgpgme
     cmd = "cd %s && patch -p0 < %s" % \
           ( gpgerr_dir, os.path.join( self.packagedir , "libgpg-error-1.5.diff" ) )
     os.system( cmd ) or die
+    
+    return True
 
-    cmd = "%s --login -c \"cd %s && configure --disable-static && make install DESTDIR=%s\"" % \
-          ( sh, self.win2msys( gpgerr_dir ), self.win2msys( src ) )
+  def compile( self ):
+    # we need a patch to /bin/sh from msys... hmmm
+    dst = os.path.join( self.workdir, self.instsrcdir )
+    utils.cleanDirectory( dst )
+
+    src = os.path.join( self.workdir, self.instsrcdir )
+    gpgerr_dir = os.path.join( src, PACKAGE_GPGERR_NAME )
+    gpglib_dir = os.path.join( src, PACKAGE_FULL_NAME )
+
+    msys_dir = os.environ[ "MSYSPATH" ]
+    sh = os.path.join( msys_dir, "bin", "sh.exe" )
+
+    cmd = "%s --login -c \"cd %s && configure --disable-static && make -j2 install DESTDIR=%s\"" % \
+          ( sh, utils.toMSysPath( gpgerr_dir ), utils.toMSysPath( dst ) )
     os.system( cmd ) or die
 
-    gpgerr_inst_dir = os.path.join( src, "usr", "local" )
-    os.environ[ "LDFLAGS" ] = "-L" + self.win2msys( os.path.join( gpgerr_inst_dir, "lib" ) )
-    os.environ[ "CFLAGS" ]  = "-I" + self.win2msys( os.path.join( gpgerr_inst_dir, "include" ) )
-    cmd = "%s --login -c \"cd %s && configure --disable-static --with-gpg-error-prefix=%s && make install DESTDIR=%s\"" % \
-          ( sh, self.win2msys( gpglib_dir ), self.win2msys( gpgerr_inst_dir ), self.win2msys( src ) )
+    gpgerr_inst_dir = os.path.join( dst, "usr", "local" )
+    os.environ[ "LDFLAGS" ] = "-L" + utils.toMSysPath( os.path.join( gpgerr_inst_dir, "lib" ) )
+    os.environ[ "CFLAGS" ]  = "-I" + utils.toMSysPath( os.path.join( gpgerr_inst_dir, "include" ) )
+    cmd = "%s --login -c \"cd %s && configure --disable-static --with-gpg-error-prefix=%s && make -j2 install DESTDIR=%s\"" % \
+          ( sh, utils.toMSysPath( gpglib_dir ), utils.toMSysPath( gpgerr_inst_dir ), utils.toMSysPath( dst ) )
     os.system( cmd ) or die
 
     return True
@@ -91,6 +91,7 @@ class subclass(base.baseclass):
         self.createImportLibs( lib )
 
     # now do packaging with kdewin-packager
+    # We can add the source once we do an out-of-source build
     self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, False )
 
     return True
