@@ -1,0 +1,13 @@
+--- slpd\slpd_win32.h.orig	2007-09-07 13:44:32.406250000 +0200
++++ slpd\slpd_win32.h	2007-09-07 12:58:50.156250000 +0200
+@@ -74,7 +74,10 @@
+     #define MAX_PATH    256
+ #endif
+ 
++#ifndef _PID_T_
++#define	_PID_T_
+ typedef DWORD               pid_t;
++#endif
+ typedef DWORD               uid_t;
+ typedef int                 socklen_t;
+ typedef DWORD               gid_t;
