@@ -279,8 +279,8 @@ class baseclass:
 		return True
     
         def kdeDefaultDefines( self ):
-                options = "-DCMAKE_INSTALL_PREFIX=%s/kde ..\\%s " % \
-                      ( self.rootdir.replace( "\\", "/" ), self.package )
+                options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s/kde " % \
+                      ( self.package, self.rootdir.replace( "\\", "/" ) )
 
                 options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
                         os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
@@ -321,21 +321,23 @@ class baseclass:
 
         def kdeInstall( self ):
                 os.chdir( os.path.join( self.workdir, "%s-build" % self.package ) )
+                print "self.imagedir: " + self.imagedir
                 os.system( "mingw32-make DESTDIR=%s install" % self.imagedir ) \
                        and die( "mingw32-make install" )
                 utils.fixCmakeImageDir( self.imagedir, self.rootdir )
 		return True
 
         def doPackaging( self, pkg_name,  pkg_version, packSources = True ):
-                # todo: most of the paths are well known -> no need to pass them
                 dstpath = os.path.join( self.rootdir, "tmp", self.PV )
                 binpath = os.path.join( self.imagedir, self.instdestdir )
 
                 if ( packSources ):
                     srcpath = os.path.join( self.workdir, self.instsrcdir )
-                    cmd = "kdewin-packager.exe -name %s -root %s -srcroot %s -version %s -destdir %s -complete" % ( pkg_name, binpath, srcpath, pkg_version, dstpath )
+                    cmd = "kdewin-packager.exe -name %s -root %s -srcroot %s -version %s -destdir %s -complete" % \
+                          ( pkg_name, binpath, srcpath, pkg_version, dstpath )
                 else:
-                    cmd = "kdewin-packager.exe -name %s -root %s -version %s -destdir %s -complete" % ( pkg_name, binpath, pkg_version, dstpath )
+                    cmd = "kdewin-packager.exe -name %s -root %s -version %s -destdir %s -complete" % \
+                          ( pkg_name, binpath, pkg_version, dstpath )
                 os.system( cmd ) and die ( cmd )
                 return True
 

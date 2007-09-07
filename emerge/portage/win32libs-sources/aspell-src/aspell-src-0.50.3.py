@@ -30,12 +30,7 @@ class subclass(base.baseclass):
 
   def unpack( self ):
     # make sure that the workdir is empty
-    if ( os.path.exists( self.workdir ) ):
-        utils.cleanDirectory( self.workdir )
-
-    # make sure the workdir exists
-    if ( not os.path.exists( self.workdir ) ):
-        os.makedirs( self.workdir )
+    utils.cleanDirectory( self.workdir )
 
     # hopefully only one...
     for filename in self.filenames:

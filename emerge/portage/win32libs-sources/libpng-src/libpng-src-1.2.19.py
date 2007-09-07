@@ -5,7 +5,6 @@ import utils
 
 PACKAGE_NAME         = "libpng"
 PACKAGE_VER          = "1.2.19"
-PACKAGE_PACKAGER_VER = ""
 PACKAGE_FULL_VER     = "1.2.19"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
 PACKAGE_DLL_NAME     = "libpng12"

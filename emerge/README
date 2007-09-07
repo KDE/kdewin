@@ -109,6 +109,8 @@ options can be:
 --install -> to install the package into tmp/packagename/image
              (if that is possible, not yet for nmake install)
 --qmerge -> to copy the files from tmp/packagename/image to KDEROOT
+--package -> create a package for the kdewin-installer (currently only supported for some internal libs)
+--full-package -> == --fetch + --unpack + --compile + --install + --package
 
 to see which packages can be installed, look into KDEROOT/emerge/portage
 and look at the files below that directory.

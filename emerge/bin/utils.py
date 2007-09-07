@@ -493,3 +493,9 @@ def sedFile( directory, file, sedcommand ):
     print "sedFile command:", command
 
     os.system( command ) and die( "utils sedFile failed" )
+
+def toMSysPath( path ):
+    path = path.replace( '\\', '/' )
+    if ( path[1] == ':' ):
+      path = '/' + path[0].lower() + '/' + path[3:]
+    return path

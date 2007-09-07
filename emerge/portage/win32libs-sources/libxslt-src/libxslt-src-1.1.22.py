@@ -5,7 +5,6 @@ import utils
 
 PACKAGE_NAME         = "libxslt"
 PACKAGE_VER          = "1.1.22"
-PACKAGE_PACKAGER_VER = "-2"
 PACKAGE_FULL_VER     = "1.1.22-2"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
 PACKAGE_DLL_NAMES    = """
