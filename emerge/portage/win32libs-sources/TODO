@@ -1,0 +1,9 @@
+boost headers
+dbus
+openssl
+pcre
+mingw runtime
+subversion
+
+update-mime-database (ok, this will maybe never be scriptable at all -
+                      one of the most funniest gnome projects... ;-) )
