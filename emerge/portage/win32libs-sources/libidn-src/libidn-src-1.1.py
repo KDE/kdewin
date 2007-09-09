@@ -42,7 +42,10 @@ class subclass(base.baseclass):
     # clean directory
     dst = os.path.join( self.imagedir, self.instdestdir, "lib" )
     utils.cleanDirectory( dst )
-    
+
+    for lib in PACKAGE_DLL_NAME.split():
+        self.stripLibs( lib )
+
     # auto-create both import libs with the help of pexports
     for lib in PACKAGE_DLL_NAME.split():
         self.createImportLibs( lib )

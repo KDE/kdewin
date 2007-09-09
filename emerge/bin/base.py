@@ -372,24 +372,48 @@ class baseclass:
                 os.rename( gccpath_wrong, gccpath )
                 return True
 
-        def msysCompile( self ):
+        def stripLibs( self, pkg_name ):
+                basepath = os.path.join( self.imagedir, self.instdestdir )
+                dllpath = os.path.join( basepath, "bin", "%s.dll" % pkg_name )
+
+                cmd = "strip -s " + dllpath
+                os.system( cmd ) and die ( cmd )
+                return True
+
+        def msysConfigureFlags ( sef ):
+                flags  = "--disable-nls "
+                flags += "--disable-static "
+                flags += "--prefix=/ "
+                return flags
+
+        def msysCompile( self, bOutOfSource = True ):
                 config = os.path.join( self.workdir, self.instsrcdir, "configure" )
-                build  = os.path.join( self.workdir, self.instsrcdir + "-build" )
-                utils.cleanDirectory( build )
+                build  = os.path.join( self.workdir )
+                if( bOutOfSource ):
+                   build  = os.path.join( build, self.instsrcdir + "-build" )
+                   utils.cleanDirectory( build )
+                else:
+                   build  = os.path.join( build, self.instsrcdir )
 
                 msys_dir = os.environ[ "MSYSPATH" ]
                 sh = os.path.join( msys_dir, "bin", "sh.exe" )
 
-                cmd = "%s --login -c \"cd %s && %s --disable-static --prefix=/ && make -j2\"" % \
-                      ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ) )
+                cmd = "%s --login -c \"cd %s && %s %s && make -j2\"" % \
+                      ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
+                        self.msysConfigureFlags() )
+                print cmd
                 os.system( cmd ) or die
 
                 return True
 
-        def msysInstall( self ):
+        def msysInstall( self, bOutOfSource = True ):
                 install = os.path.join( self.imagedir, self.instdestdir )
-                build  = os.path.join( self.workdir, self.instsrcdir + "-build" )
-    
+                build  = os.path.join( self.workdir )
+                if( bOutOfSource ):
+                   build  = os.path.join( build, self.instsrcdir + "-build" )
+                else:
+                   build  = os.path.join( build, self.instsrcdir )
+
                 msys_dir = os.environ[ "MSYSPATH" ]
                 sh = os.path.join( msys_dir, "bin", "sh.exe" )
 
