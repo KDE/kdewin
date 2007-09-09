@@ -7,7 +7,7 @@ from utils import die
 
 PACKAGE_NAME         = "gpgme"
 PACKAGE_VER          = "1.1.4"
-PACKAGE_FULL_VER     = "1.1.4"
+PACKAGE_FULL_VER     = "1.1.4-2"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
 PACKAGE_GPGERR_NAME  = "%s-%s" % ( "libgpg-error", "1.5")
 PACKAGE_DLL_NAME     = """
@@ -88,8 +88,7 @@ class subclass(base.baseclass):
         self.createImportLibs( lib )
 
     # now do packaging with kdewin-packager
-    # We can add the source once we do an out-of-source build
-    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, False )
+    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
 
     return True
 

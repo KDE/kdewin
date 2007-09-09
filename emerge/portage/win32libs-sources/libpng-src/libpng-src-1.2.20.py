@@ -4,8 +4,8 @@ import shutil
 import utils
 
 PACKAGE_NAME         = "libpng"
-PACKAGE_VER          = "1.2.19"
-PACKAGE_FULL_VER     = "1.2.19"
+PACKAGE_VER          = "1.2.20"
+PACKAGE_FULL_VER     = "1.2.20"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
 PACKAGE_DLL_NAME     = "libpng12"
 
@@ -20,6 +20,7 @@ dev-util/win32libs
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
+    self.package = PACKAGE_FULL_NAME
 
   def execute( self ):
     base.baseclass.execute( self )
@@ -29,21 +30,21 @@ class subclass(base.baseclass):
 
   def compile( self ):
     # the cmake script is in libpng-src/scripts
-    srcdir  = os.path.join( self.workdir, PACKAGE_FULL_NAME, "scripts", "CMakeLists.txt" )
-    destdir = os.path.join( self.workdir, PACKAGE_FULL_NAME, "",        "CMakeLists.txt" )
+    srcdir  = os.path.join( self.workdir, self.package, "scripts", "CMakeLists.txt" )
+    destdir = os.path.join( self.workdir, self.package, "",        "CMakeLists.txt" )
     shutil.copy( srcdir, destdir )
 
-    self.kdeCustomDefines = ""
-    self.package = PACKAGE_FULL_NAME
     self.kdeCustomDefines = "-DPNG_TESTS=OFF -DPNG_STATIC=OFF"
     return self.kdeCompile()
 
   def install( self ):
-    self.package = PACKAGE_FULL_NAME
     return self.kdeInstall()
 
   def make_package( self ):
     self.instdestdir = "kde"
+
+    # auto-create both import libs with the help of pexports
+    self.stripLibs( PACKAGE_DLL_NAME )
 
     # auto-create both import libs with the help of pexports
     self.createImportLibs( PACKAGE_DLL_NAME )
