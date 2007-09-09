@@ -33,28 +33,10 @@ class subclass(base.baseclass):
       exit( 1 )
 
   def compile( self ):
-    # we need a patch to /bin/sh from msys... hmmm
-    src = os.path.join( self.workdir, self.instsrcdir )
-    dst = os.path.join( self.workdir, self.instsrcdir )
-
-    msys_dir = os.environ[ "MSYSPATH" ]
-    sh = os.path.join( msys_dir, "bin", "sh.exe" )
-
-    cmd = "%s --login -c \"cd %s && configure --disable-static && make -j2 install DESTDIR=%s\"" % \
-          ( sh, utils.toMSysPath( src ), utils.toMSysPath( dst ) )
-    print cmd
-    os.system( cmd ) or die
-
-    return True
+    return self.msysCompile()
 
   def install( self ):
-    # we already installed in compile... not fine but currently no other idea
-    # nearly all can be used from zip package
-    src = os.path.join( self.workdir, self.instsrcdir, "usr", "local")
-    dst = os.path.join( self.imagedir, self.instdestdir )
-    utils.copySrcDirToDestDir( src, dst )
-
-    return True
+    return self.msysInstall()
 
   def make_package( self ):
     # clean directory
@@ -66,8 +48,7 @@ class subclass(base.baseclass):
         self.createImportLibs( lib )
 
     # now do packaging with kdewin-packager
-    # We can add the source once we do an out-of-source build
-    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, False )
+    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
 
     return True
 

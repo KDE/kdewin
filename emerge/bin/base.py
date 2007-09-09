@@ -370,3 +370,32 @@ class baseclass:
                 if ( os.path.isfile( gccpath ) ):
                         os.remove( gccpath )
                 os.rename( gccpath_wrong, gccpath )
+                return True
+
+        def msysCompile( self ):
+                config = os.path.join( self.workdir, self.instsrcdir, "configure" )
+                build  = os.path.join( self.workdir, self.instsrcdir + "-build" )
+                utils.cleanDirectory( build )
+
+                msys_dir = os.environ[ "MSYSPATH" ]
+                sh = os.path.join( msys_dir, "bin", "sh.exe" )
+
+                cmd = "%s --login -c \"cd %s && %s --disable-static --prefix=/ && make -j2\"" % \
+                      ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ) )
+                os.system( cmd ) or die
+
+                return True
+
+        def msysInstall( self ):
+                install = os.path.join( self.imagedir, self.instdestdir )
+                build  = os.path.join( self.workdir, self.instsrcdir + "-build" )
+    
+                msys_dir = os.environ[ "MSYSPATH" ]
+                sh = os.path.join( msys_dir, "bin", "sh.exe" )
+
+                cmd = "%s --login -c \"cd %s && make -j2 install DESTDIR=%s\"" % \
+                      ( sh, utils.toMSysPath( build ), utils.toMSysPath( install ) )
+                print cmd
+                os.system( cmd ) or die
+
+                return True
