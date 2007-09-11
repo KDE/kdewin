@@ -97,14 +97,9 @@ def getHttpFile( host, path, destdir, filename ):
 ### unpack functions
 
 def unpackFiles( downloaddir, filenames, workdir ):
-    # make sure that the workdir is empty
-    if ( os.path.exists( workdir ) ):
-        cleanDirectory( workdir )
+    # make sure that the workdir exists and is empty
+    cleanDirectory( workdir )
 
-    # make sure the workdir exists
-    if ( not os.path.exists( workdir ) ):
-        os.makedirs( workdir )
-    
     for filename in filenames:
         print "unpacking this file:", filename
         if ( not unpackFile( downloaddir, filename, workdir ) ):
@@ -305,6 +300,9 @@ def getNewestVersion( category, package ):
     """
     returns the newest version of this category/package
     """
+    if( category == None ):
+        print "Could not find package " + package
+        exit( 1 )
     print "getNewestVersion:", category, package
     packagepath = os.path.join( getPortageDir(), category, package )
 
@@ -479,13 +477,15 @@ def cleanDirectory( dir ):
             for name in dirs:
                 os.rmdir(os.path.join(root, name))
     else:
-      os.mkdir( dir )
+      os.makedirs( dir )
 
 
 def sedFile( directory, file, sedcommand ):
     """runs the given sed command on the given file"""
     os.chdir( directory )
     backup = "%s.orig" % file
+    if( os.path.isfile( backup ) ):
+        os.remove( backup )
 
     os.rename( file, backup )
 

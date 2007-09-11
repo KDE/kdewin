@@ -16,6 +16,10 @@ rem you don´t have to change the environment settings of
 rem windows at all
 set PYTHONPATH=e:\python25
 
+rem here you set set the path to msys if you want to compile
+rem automake-based projects (only needed for some internal packages)
+set MSYSDIR=c:\msys\1.0
+
 rem here you can set the download directory to another dir
 rem if you want, so you can share the same download dir between
 rem mingw and msvc

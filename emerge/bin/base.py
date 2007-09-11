@@ -8,20 +8,20 @@ import utils
 from utils import die
 
 ROOTDIR=os.getenv( "KDEROOT" )
-print "KDEROOT:", ROOTDIR
+print "KDEROOT:     ", ROOTDIR
 
 COMPILER=os.getenv( "KDECOMPILER" )
-print "KDECOMPILER:", COMPILER
+print "KDECOMPILER: ", COMPILER
 
 DOWNLOADDIR=os.getenv( "DOWNLOADDIR" )
 if ( DOWNLOADDIR == None ):
         DOWNLOADDIR=os.path.join( ROOTDIR, "distfiles" )
-print "DOWNLOADDIR:", DOWNLOADDIR
+print "DOWNLOADDIR: ", DOWNLOADDIR
 
 KDESVNDIR=os.getenv( "KDESVNDIR" )
 if ( KDESVNDIR == None ):
         KDESVNDIR=os.path.join( DOWNLOADDIR, "svn-src", "kde" )
-print "KDESVNDIR:", KDESVNDIR
+print "KDESVNDIR:   ", KDESVNDIR
 
 KDESVNSERVER=os.getenv( "KDESVNSERVER" )
 if ( KDESVNSERVER == None ):
@@ -31,6 +31,9 @@ print "KDESVNSERVER:", KDESVNSERVER
 KDESVNUSERNAME=os.getenv( "KDESVNUSERNAME" )
 KDESVNPASSWORD=os.getenv( "KDESVNPASSWORD" )
 
+# an optional dir to compile autmake based sources
+MSYSDIR = os.getenv( "MSYSDIR" )
+print "MSYSDIR:", MSYSDIR
 
 # ok, we have the following dirs:
 # ROOTDIR: the root where all this is below
@@ -187,6 +190,17 @@ class baseclass:
 		self.kdesvnserver = KDESVNSERVER
 		self.kdesvnuser = KDESVNUSERNAME
 		self.kdesvnpass = KDESVNPASSWORD
+		
+		if COMPILER == "msvc2005":
+  		     self.cmakeMakefileGenerator = "NMake Makefiles"
+  		     self.cmakeMakeProgramm = "nmake"
+		elif COMPILER == "mingw":
+  		     self.cmakeMakefileGenerator = "MinGW Makefiles"
+  		     self.cmakeMakeProgramm = "mingw32-make"
+		else:
+		     print "error: KDECOMPILER: %s not understood" % COMPILER
+     		     exit( 1 )
+                self.msysdir = MSYSDIR
 
 	def svnFetch( self, repo ):
 		print "base svnFetch called"
@@ -310,20 +324,24 @@ class baseclass:
 		utils.cleanDirectory( builddir )
 		os.chdir( builddir )
 
-		command = r"""cmake -G "MinGW Makefiles" %s %s""" % \
-			  ( self.kdeDefaultDefines(), self.kdeCustomDefines )
+		command = r"""cmake -G "%s" %s %s""" % \
+			  ( self.cmakeMakefileGenerator, \
+                            self.kdeDefaultDefines(), \
+                            self.kdeCustomDefines )
 
 		print "cmake command:", command
 		os.system( command ) and die( "kdeCompile cmake call failed." )
-		os.system( "mingw32-make" ) and die( "kdeCompile mingw32-make failed." )
+		os.system( self.cmakeMakeProgramm ) \
+                           and die( "kdeCompile%s failed." % self.cmakeMakeProgramm )
 		return True
 		
 
         def kdeInstall( self ):
                 os.chdir( os.path.join( self.workdir, "%s-build" % self.package ) )
                 print "self.imagedir: " + self.imagedir
-                os.system( "mingw32-make DESTDIR=%s install" % self.imagedir ) \
-                       and die( "mingw32-make install" )
+                os.system( "%s DESTDIR=%s install" % \
+                           ( self.cmakeMakeProgramm , self.imagedir ) ) \
+                       and die( "%s install" % self.cmakeMakeProgramm )
                 utils.fixCmakeImageDir( self.imagedir, self.rootdir )
 		return True
 
@@ -395,13 +413,12 @@ class baseclass:
                 else:
                    build  = os.path.join( build, self.instsrcdir )
 
-                msys_dir = os.environ[ "MSYSPATH" ]
-                sh = os.path.join( msys_dir, "bin", "sh.exe" )
+                sh = os.path.join( self.msysdir, "bin", "sh.exe" )
 
                 cmd = "%s --login -c \"cd %s && %s %s && make -j2\"" % \
                       ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
                         self.msysConfigureFlags() )
-                print cmd
+                #print cmd
                 os.system( cmd ) or die
 
                 return True
@@ -414,12 +431,11 @@ class baseclass:
                 else:
                    build  = os.path.join( build, self.instsrcdir )
 
-                msys_dir = os.environ[ "MSYSPATH" ]
-                sh = os.path.join( msys_dir, "bin", "sh.exe" )
+                sh = os.path.join( self.msysdir, "bin", "sh.exe" )
 
                 cmd = "%s --login -c \"cd %s && make -j2 install DESTDIR=%s\"" % \
                       ( sh, utils.toMSysPath( build ), utils.toMSysPath( install ) )
-                print cmd
+                #print cmd
                 os.system( cmd ) or die
 
                 return True
