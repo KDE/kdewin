@@ -25,6 +25,7 @@ class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
     self.instsrcdir = PACKAGE_FULL_NAME
+    self.createCombinedPackage = false
 
   def unpack( self ):
     if( not base.baseclass.unpack( self ) ):
@@ -47,8 +48,6 @@ class subclass(base.baseclass):
     return self.msysInstall( False )
 
   def make_package( self ):
-    self.instsrcdir = ""
-
     for libs in PACKAGE_DLL_NAMES.split():
         self.stripLibs( libs )
 
