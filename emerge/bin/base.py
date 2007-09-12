@@ -192,15 +192,17 @@ class baseclass:
 		self.kdesvnpass = KDESVNPASSWORD
 		
 		if COMPILER == "msvc2005":
-  		     self.cmakeMakefileGenerator = "NMake Makefiles"
-  		     self.cmakeMakeProgramm = "nmake"
+		    self.cmakeMakefileGenerator = "NMake Makefiles"
+		    self.cmakeMakeProgramm = "nmake"
 		elif COMPILER == "mingw":
-  		     self.cmakeMakefileGenerator = "MinGW Makefiles"
-  		     self.cmakeMakeProgramm = "mingw32-make"
+		    self.cmakeMakefileGenerator = "MinGW Makefiles"
+		    self.cmakeMakeProgramm = "mingw32-make"
 		else:
-		     print "error: KDECOMPILER: %s not understood" % COMPILER
-     		     exit( 1 )
-                self.msysdir = MSYSDIR
+		    print "error: KDECOMPILER: %s not understood" % COMPILER
+		    exit( 1 )
+
+		self.msysdir = MSYSDIR
+		self.createCombinedPackage = False
 
 	def svnFetch( self, repo ):
 		print "base svnFetch called"
@@ -345,7 +347,7 @@ class baseclass:
                 utils.fixCmakeImageDir( self.imagedir, self.rootdir )
 		return True
 
-        def doPackaging( self, pkg_name,  pkg_version, packSources = True ):
+        def doPackaging( self, pkg_name, pkg_version, packSources = True ):
                 dstpath = os.path.join( self.rootdir, "tmp", self.PV )
                 binpath = os.path.join( self.imagedir, self.instdestdir )
 
@@ -356,6 +358,11 @@ class baseclass:
                 else:
                     cmd = "kdewin-packager.exe -name %s -root %s -version %s -destdir %s -complete" % \
                           ( pkg_name, binpath, pkg_version, dstpath )
+                if( not self.createCombinedPackage ):
+                    if( self.compiler == "mingw"):
+                      cmd = cmd + " -type mingw "
+                    else:
+                      cmd = cmd + " -type msvc "
                 os.system( cmd ) and die ( cmd )
                 return True
 

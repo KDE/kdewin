@@ -423,6 +423,10 @@ def moveEntries( srcdir, destdir ):
         src = os.path.join( srcdir, entry )
         dest = os.path.join( destdir, entry )
         print "src: %s dest: %s" %( src, dest )
+        if( os.path.isfile( dest ) ):
+          os.remove( dest )
+        if( os.path.isdir( dest ) ):
+          continue
         os.rename( src, dest )
     
 def moveImageDirContents( imagedir, relSrcDir, relDestDir ):
@@ -466,6 +470,7 @@ def fixCmakeImageDir( imagedir, rootdir ):
     os.chdir( imagedir )    
     os.removedirs( rootpath )
     moveEntries( tmpdir, imagedir )
+    cleanDirectory( tmpdir )
     os.rmdir( tmpdir )
 
 def cleanDirectory( dir ):

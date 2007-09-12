@@ -2,17 +2,21 @@ import base
 import utils
 import os
 import shutil
+from utils import die
 
 
+PACKAGE_NAME = "dbus"
+PACKAGE_FULL_VER = "0.20070912"
 DEPENDS = """
 virtual/base
 """
 
-# FIXME create dbus-1d lib for qt to link against...
+buildtypes = "debug release"
 
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
+    self.instdestdir = "dbus"
 
   def unpack( self ):
     print "dbus unpack called"
@@ -34,7 +38,7 @@ class subclass(base.baseclass):
     destdir = os.path.join( self.workdir, "dbus", "cmake", "modules" )
     utils.copySrcDirToDestDir( self.filesdir, destdir )
 
-    file = r"cmake\CMakeLists.txt"		
+    file = r"cmake\CMakeLists.txt"
     os.rename( file, "%s.orig" % file )
 
     # disable doc subdir in recent dbus svn
@@ -51,43 +55,48 @@ class subclass(base.baseclass):
     print "dbus compile called"
     os.chdir( self.workdir )
 
-    if ( not os.path.exists( "dbus-build" ) ):
-        os.mkdir( "dbus-build" )
+    for type in buildtypes.split():
+      builddir = "dbus-build-" + type
+      utils.cleanDirectory( builddir )
+      os.chdir( os.path.join( self.workdir, builddir ) )
 
-    os.chdir( "dbus-build" )
+      options = "-DWIN32LIBS_INSTALL_PREFIX=%s " % \
+                os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
 
-    options = "-DWIN32LIBS_INSTALL_PREFIX=%s " % \
-        os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
+      options = options + "-DCMAKE_INSTALL_PREFIX=%s/dbus " % \
+                self.cmakeInstallPrefix
 
-    options = options + "-DCMAKE_INSTALL_PREFIX=%s/dbus " % \
-    		self.cmakeInstallPrefix 
+      options = options + "-DCMAKE_BUILD_TYPE=%s " % type
 
-    command = r"""cmake -G "MinGW Makefiles" ..\dbus\cmake\ %s""" % options
+      command = r"""cmake -G "%s" ..\dbus\cmake\ %s""" % \
+                (self.cmakeMakefileGenerator, options )
 
-    print "command:", command
-    os.system( command )
+      os.system( command )
 
-    os.system( "mingw32-make" ) and die ( "mingw32-make failed" )
+      os.system( self.cmakeMakeProgramm ) \
+                 and die ( self.cmakeMakeProgramm + " failed" )
+
     return True
 
   def install( self ):
-    print "dbus install called"
+    for type in buildtypes.split():
+      builddir = "dbus-build-" + type
 
-    os.chdir( os.path.join( self.workdir, "dbus-build" ) )
+      os.chdir( os.path.join( self.workdir, builddir ) )
 
-    os.system( "mingw32-make DESTDIR=%s install" % self.imagedir ) \
-		and die ( "mingw32-make install failed" )
+      os.system( "%s DESTDIR=%s install" % \
+                ( self.cmakeMakeProgramm, self.imagedir ) ) \
+		and die ( self.cmakeMakeProgramm + " install failed" )
 
     utils.fixCmakeImageDir( self.imagedir, self.rootdir )
-    
-    #now copy release dll to debug dll
-    os.chdir( os.path.join(self.imagedir, "dbus", "bin") )
-    shutil.copy( "libdbus-1.dll", "libdbus-1d.dll" )
 
-    os.chdir( os.path.join(self.imagedir, "dbus", "lib") )
-    shutil.copy( "libdbus-1.dll.a", "libdbus-1d.dll.a" )
-    
     return True
 
+  def make_package( self ):
+
+    # now do packaging with kdewin-packager
+    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, False )
+
+    return True
 
 subclass().execute()
