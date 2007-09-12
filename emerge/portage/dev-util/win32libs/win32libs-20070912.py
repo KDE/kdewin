@@ -11,20 +11,20 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/boost-headers-1.34-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/bzip2-1.0.4-4-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/bzip2-1.0.4-4-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/expat-2.0.0-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/expat-2.0.0-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/expat-2.0.1-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/expat-2.0.1-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/giflib-4.1.4-1-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/giflib-4.1.4-1-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-1.1.4-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-1.1.4-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-1.1.4-2-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-1.1.4-2-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/iconv-1.9.2-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/iconv-1.9.2-2-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/jasper-1.900.1-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/jasper-1.900.1-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/jasper-1.900.1-2-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/jasper-1.900.1-2-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/jpeg-6.b-5-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/jpeg-6.b-5-lib.zip
@@ -32,14 +32,20 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/jpeg-6.b-5-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/libintl-0.14.4-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/libintl-0.14.4-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.15-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.15-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libidn-1.1-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libidn-1.1-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/libxml2-2.6.28-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/libxml2-2.6.28-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.20-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.20-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/libxslt-1.1.19-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/libxslt-1.1.19-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libxml2-2.6.30-2-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libxml2-2.6.30-2-lib.zip
+
+http://82.149.170.66/kde-windows/win32libs/zip/single/libxslt-1.1.22-2-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libxslt-1.1.22-2-lib.zip
+
+http://82.149.170.66/kde-windows/win32libs/zip/single/openslp-1.2.1-2-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/openslp-1.2.1-2-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/openssl-0.9.8e-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/openssl-0.9.8e-2-lib.zip
@@ -55,8 +61,8 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/tiff-3.8.2-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/update-mime-database-0.21-6-bin.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/zlib-1.2.3-1-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/zlib-1.2.3-1-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/zlib-1.2.3-2-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/zlib-1.2.3-2-lib.zip
 """
 
 class subclass(base.baseclass):
