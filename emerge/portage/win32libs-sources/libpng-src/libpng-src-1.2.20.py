@@ -21,7 +21,7 @@ class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
     self.package = PACKAGE_FULL_NAME
-    self.createCombinedPackage = false
+    self.createCombinedPackage = False
 
   def execute( self ):
     base.baseclass.execute( self )

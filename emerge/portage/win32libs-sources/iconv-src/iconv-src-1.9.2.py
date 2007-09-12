@@ -22,7 +22,7 @@ DEPEND = """
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
-    self.createCombinedPackage = false
+    self.createCombinedPackage = False
 
   def unpack( self ):
 
