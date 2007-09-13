@@ -5,29 +5,48 @@ import os
 
 # FIXME implement shadow build and installation into image dir.
 
+PACKAGE_NAME         = "qt"
+PACKAGE_VER          = "4.3.1"
+PACKAGE_FULL_VER     = "4.3.1-1"
+PACKAGE_FULL_NAME    = "%s-all-opensource-src-%s" % ( PACKAGE_NAME, PACKAGE_VER )
+
 DEPEND = """
 dev-util/dbus
+dev-util/win32libs
 virtual/base
 """
 
+# do not change the order!
 SRC_URI= """
-ftp://ftp.trolltech.com/qt/source/qt-all-opensource-src-4.3.0.tar.gz
+ftp://ftp.trolltech.com/qt/source/""" + PACKAGE_FULL_NAME + """.tar.gz
+http://belnet.dl.sourceforge.net/sourceforge/qtwin/acs-4.3.x-patch3.zip
 """
 
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
+    self.instsrcdir = PACKAGE_FULL_NAME
 
   def unpack( self ):
-    print "qt unpack called"
-    qtsrcdir = os.path.join( self.workdir, "qt-all-opensource-src-4.3.0" )
+    qtsrcdir = os.path.join( self.workdir, self.instsrcdir )
 
-    base.baseclass.unpack( self )
-    
+    utils.cleanDirectory( self.workdir )
+
+    if ( not utils.unpackFile( self.downloaddir, self.filenames[0], self.workdir ) ):
+      return False
+
+    if ( not utils.unpackFile( self.downloaddir, self.filenames[1], qtsrcdir ) ):
+      return False
+
+    # apply patch for msvc support
+    sedcommand = r""" -e "s:pause::" """
+    utils.sedFile( qtsrcdir, "installpatch43.bat", sedcommand )
+    os.system( "cd " + qtsrcdir + " && " + os.path.join( qtsrcdir, "installpatch43.bat" ) )
+
     # disable demos and examples
     sedcommand = r""" -e "s:SUBDIRS += examples::" -e "s:SUBDIRS += demos::" """
     utils.sedFile( qtsrcdir, "projects.pro", sedcommand )
-    
+
     # patch to disable building of pbuilder_pbx.cpp, as it takes ages
     path = os.path.join( qtsrcdir, "qmake" )
     file = "Makefile.win32-g++"
@@ -41,21 +60,22 @@ class subclass(base.baseclass):
     utils.sedFile( path, file, sedcommand )
 
     # somehow linking against jpeg only works with this change for me...
-    path = os.path.join( qtsrcdir, "src", "plugins", "imageformats", "jpeg" )
-    file = "jpeg.pro"
-    sedcommand = r""" -e "s/libjpeg.lib/-ljpeg/" """
-    utils.sedFile( path, file, sedcommand )
+    #path = os.path.join( qtsrcdir, "src", "plugins", "imageformats", "jpeg" )
+    #file = "jpeg.pro"
+    #sedcommand = r""" -e "s/libjpeg.lib/-ljpeg/" """
+    #utils.sedFile( path, file, sedcommand )
 
     # somehow linking against tiff only works with this change for me...
-    path = os.path.join( qtsrcdir, "src", "plugins", "imageformats", "tiff" )
-    file = "tiff.pro"
-    sedcommand = r""" -e "s/libtiff.lib/-ltiff/" """
-    utils.sedFile( path, file, sedcommand )
+    #path = os.path.join( qtsrcdir, "src", "plugins", "imageformats", "tiff" )
+    #file = "tiff.pro"
+    #sedcommand = r""" -e "s/libtiff.lib/-ltiff/" """
+    #utils.sedFile( path, file, sedcommand )
+    
     return True
 
   def compile( self ):
     print "qt compile called"
-    qtsrcdir = os.path.join( self.workdir, "qt-all-opensource-src-4.3.0" )
+    qtsrcdir = os.path.join( self.workdir, self.instsrcdir )
     os.chdir( qtsrcdir )
 
     # so that the mkspecs can be found, when -prefix is set
@@ -79,25 +99,31 @@ class subclass(base.baseclass):
 
     # configure qt
     prefix = os.path.join( self.rootdir, "qt" ).replace( "\\", "/" )
-    command = r"echo yes | configure.exe -prefix %s " \
-      "-platform win32-g++ " \
+    platform = "win32-g++"
+    if self.compiler == "msvc2005":
+        platform = "win32-msvc2005"
+
+    command = r"echo y | configure-opensource.exe -prefix %s " \
+      "-platform %s " \
       "-qdbus -qt-gif -no-exceptions -debug -qt-libpng " \
       "-system-libjpeg -system-libtiff -openssl " \
-      "-I %s -L %s -I %s -L %s" % ( prefix, win32incdir, win32libdir, dbusincdir, dbuslibdir )
+      "-I %s -L %s -I %s -L %s" % \
+      ( prefix, platform, win32incdir, win32libdir, dbusincdir, dbuslibdir )
     print "command: ", command
     os.system( command ) and die( "qt configure failed" )
 
     # build qt
-    os.system( "mingw32-make" )and die( "qt make failed" )
+    os.system( self.cmakeMakeProgramm )and die( "qt make failed" )
     return True
 
   def install( self ):
     # FIXME create bin/qt.conf, so that qmake -v gives the right path
     print "qt install called"
-    qtsrcdir = os.path.join( self.workdir, "qt-all-opensource-src-4.3.0" )
+    qtsrcdir = os.path.join( self.workdir, self.instsrcdir )
     os.chdir( qtsrcdir )
 
-    os.system( "mingw32-make install" ) and die( "qt make install failed" )
+    os.system( "%s install" % self.cmakeMakeProgramm ) \
+               and die( "qt make install failed" )
     return True
 
 subclass().execute()

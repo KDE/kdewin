@@ -56,9 +56,9 @@ class subclass(base.baseclass):
     os.chdir( self.workdir )
 
     for type in buildtypes.split():
-      builddir = "dbus-build-" + type
+      builddir = os.path.join( self.workdir, "dbus-build-" + type )
       utils.cleanDirectory( builddir )
-      os.chdir( os.path.join( self.workdir, builddir ) )
+      os.chdir( builddir )
 
       options = "-DWIN32LIBS_INSTALL_PREFIX=%s " % \
                 os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
