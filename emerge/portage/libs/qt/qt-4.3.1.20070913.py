@@ -99,9 +99,15 @@ class subclass(base.baseclass):
 
     # configure qt
     prefix = os.path.join( self.rootdir, "qt" ).replace( "\\", "/" )
-    platform = "win32-g++"
+    platform = ""
     if self.compiler == "msvc2005":
         platform = "win32-msvc2005"
+    elif self.compiler == "mingw":
+        os.environ[ "LIB" ] = ""
+        os.environ[ "INCLUDE" ] = ""
+        platform = "win32-g++"
+    else:
+        exit( 1 )
 
     command = r"echo y | configure-opensource.exe -prefix %s " \
       "-platform %s " \
