@@ -59,18 +59,10 @@ class subclass(base.baseclass):
     sedcommand = r""" -e "s:^.*ProjectBuilder://\0:" """
     utils.sedFile( path, file, sedcommand )
 
-    # somehow linking against jpeg only works with this change for me...
-    #path = os.path.join( qtsrcdir, "src", "plugins", "imageformats", "jpeg" )
-    #file = "jpeg.pro"
-    #sedcommand = r""" -e "s/libjpeg.lib/-ljpeg/" """
-    #utils.sedFile( path, file, sedcommand )
+    # help qt a little bit :)
+    cmd = "cd %s && patch -p0 < %s" % \
+          ( qtsrcdir, os.path.join( self.packagedir, "qt-4.3.1.diff" ) )
 
-    # somehow linking against tiff only works with this change for me...
-    #path = os.path.join( qtsrcdir, "src", "plugins", "imageformats", "tiff" )
-    #file = "tiff.pro"
-    #sedcommand = r""" -e "s/libtiff.lib/-ltiff/" """
-    #utils.sedFile( path, file, sedcommand )
-    
     return True
 
   def compile( self ):
@@ -98,8 +90,11 @@ class subclass(base.baseclass):
     #  "-I %s -L %s" % ( win32incdir, win32libdir )
 
     # configure qt
-    prefix = os.path.join( self.rootdir, "qt" ).replace( "\\", "/" )
+    # prefix = os.path.join( self.rootdir, "qt" ).replace( "\\", "/" )
+    prefix = os.path.join( self.imagedir, self.instdestdir )
     platform = ""
+    libtmp = os.environ[ "LIB" ]
+    inctmp = os.environ[ "INCLUDE" ]
     if self.compiler == "msvc2005":
         platform = "win32-msvc2005"
     elif self.compiler == "mingw":
@@ -111,7 +106,7 @@ class subclass(base.baseclass):
 
     command = r"echo y | configure-opensource.exe -prefix %s " \
       "-platform %s " \
-      "-qdbus -qt-gif -no-exceptions -debug -qt-libpng " \
+      "-qdbus -qt-gif -no-exceptions -qt-libpng " \
       "-system-libjpeg -system-libtiff -openssl " \
       "-I %s -L %s -I %s -L %s" % \
       ( prefix, platform, win32incdir, win32libdir, dbusincdir, dbuslibdir )
@@ -119,7 +114,10 @@ class subclass(base.baseclass):
     os.system( command ) and die( "qt configure failed" )
 
     # build qt
-    os.system( self.cmakeMakeProgramm )and die( "qt make failed" )
+    os.system( self.cmakeMakeProgramm ) and die( "qt make failed" )
+
+    os.environ[ "LIB" ] = libtmp
+    os.environ[ "INCLUDE" ] = inctmp
     return True
 
   def install( self ):

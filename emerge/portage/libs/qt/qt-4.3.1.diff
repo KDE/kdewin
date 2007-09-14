@@ -24,3 +24,8 @@
  }
  !contains(QT_CONFIG, system-tiff) {
  	INCLUDEPATH += ../../../3rdparty/libtiff/libtiff
+--- tools\qdbus\tools\qdbusviewer\qdbusviewer.rc.orig	2007-08-07 15:22:00.000000000 +0200
++++ tools\qdbus\tools\qdbusviewer\qdbusviewer.rc	2007-09-14 23:34:41.561250000 +0200
+@@ -1 +1 @@
+-IDI_ICON1		ICON		DISCARDABLE	"images/qdbusviewer.ico"
++IDI_ICON1		ICON		DISCARDABLE	"images/dbusviewer.ico"
