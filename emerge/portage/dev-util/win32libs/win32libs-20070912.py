@@ -53,8 +53,8 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/openssl-0.9.8e-2-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-7.0-1-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-7.0-1-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/redland-1.0.3-3-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/redland-1.0.3-3-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/redland-1.0.3-4-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/redland-1.0.3-4-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/tiff-3.8.2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/tiff-3.8.2-lib.zip
