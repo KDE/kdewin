@@ -7,7 +7,9 @@ virtual/base
 dev-util/dbus
 dev-util/win32libs
 kde/kdewin32
-libs/strigi
+kdesupport/qimageblitz
+kdesupport/soprano
+kdesupport/strigi
 """
 
 class subclass(base.baseclass):

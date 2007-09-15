@@ -7,7 +7,7 @@
 -        unix:LIBS += -ljpeg
 -        win32:LIBS += libjpeg.lib
 +        unix|win32-g++:LIBS += -ljpeg
-+        win32-msvc*LIBS += libjpeg.lib
++        win32-msvc*LIBS += jpeg.lib
  }
  !contains(QT_CONFIG, system-jpeg) {
  	INCLUDEPATH += ../../../3rdparty/libjpeg
@@ -20,7 +20,7 @@
 -        unix:LIBS += -ltiff
 -        win32:LIBS += libtiff.lib
 +        unix|win32-g++:LIBS += -ltiff
-+        win32-msvc*:LIBS += libtiff.lib
++        win32-msvc*:LIBS += tiff.lib
  }
  !contains(QT_CONFIG, system-tiff) {
  	INCLUDEPATH += ../../../3rdparty/libtiff/libtiff

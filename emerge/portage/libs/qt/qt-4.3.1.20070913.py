@@ -62,7 +62,7 @@ class subclass(base.baseclass):
     # help qt a little bit :)
     cmd = "cd %s && patch -p0 < %s" % \
           ( qtsrcdir, os.path.join( self.packagedir, "qt-4.3.1.diff" ) )
-
+    os.system( cmd ) and die( "qt unpack failed" )
     return True
 
   def compile( self ):
@@ -96,20 +96,20 @@ class subclass(base.baseclass):
     libtmp = os.environ[ "LIB" ]
     inctmp = os.environ[ "INCLUDE" ]
     if self.compiler == "msvc2005":
-        platform = "win32-msvc2005"
+        platform = "msvc2005"
     elif self.compiler == "mingw":
         os.environ[ "LIB" ] = ""
         os.environ[ "INCLUDE" ] = ""
-        platform = "win32-g++"
+        platform = "g++"
     else:
         exit( 1 )
 
-    command = r"echo y | configure-opensource.exe -prefix %s " \
-      "-platform %s " \
+    os.environ[ "USERIN" ] = "y"
+    command = r"echo y | qconfigure.bat %s -prefix %s " \
       "-qdbus -qt-gif -no-exceptions -qt-libpng " \
       "-system-libjpeg -system-libtiff -openssl " \
       "-I %s -L %s -I %s -L %s" % \
-      ( prefix, platform, win32incdir, win32libdir, dbusincdir, dbuslibdir )
+      ( platform, prefix, win32incdir, win32libdir, dbusincdir, dbuslibdir )
     print "command: ", command
     os.system( command ) and die( "qt configure failed" )
 
@@ -121,8 +121,11 @@ class subclass(base.baseclass):
     return True
 
   def install( self ):
-    # FIXME create bin/qt.conf, so that qmake -v gives the right path
-    print "qt install called"
+
+    src = os.path.join( self.packagedir, "qt.conf" )
+    dst = os.path.join( self.imagedir, self.instdestdir, "qt.conf" )
+    shutil.copy( src, dst )
+
     qtsrcdir = os.path.join( self.workdir, self.instsrcdir )
     os.chdir( qtsrcdir )
 
