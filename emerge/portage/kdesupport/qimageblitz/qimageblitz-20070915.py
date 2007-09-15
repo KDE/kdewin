@@ -5,7 +5,7 @@ import os
 
 DEPEND = """
 virtual/base
-kde/kdewin32
+libs/qt
 """
 
 class subclass(base.baseclass):

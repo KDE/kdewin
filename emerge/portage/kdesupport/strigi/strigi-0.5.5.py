@@ -5,9 +5,11 @@ import os
 
 DEPEND = """
 virtual/base
-gnuwin32/openssl
+libs/qt
 kde/kdewin32
 """
+
+#currently build without clucene...
 
 class subclass(base.baseclass):
   def __init__(self):
