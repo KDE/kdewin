@@ -15,7 +15,7 @@ these things must be done only once:
 do this every time you want to use the system:
 - open a shell window
 - go to the KDEROOT dir
-- execute emerge\kdesettings.bat
+- execute emerge\kdeenv.bat
 - use emerge, like
     emerge qt
 
