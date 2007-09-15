@@ -23,7 +23,7 @@ class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
     self.instsrcdir = os.path.join( PACKAGE_FULL_NAME, "src", "libjasper" )
-    self.createCombinedPackage = False
+    self.createCombinedPackage = True
 
   def kdeDefaultDefines( self ):
     # adjust some vars for proper compile
