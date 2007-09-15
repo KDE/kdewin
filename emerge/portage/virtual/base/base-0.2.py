@@ -2,7 +2,6 @@ import base
 
 DEPENDS = """
 dev-util/cmake
-dev-util/mingw
 dev-util/perl
 dev-util/subversion
 dev-util/win32libs
