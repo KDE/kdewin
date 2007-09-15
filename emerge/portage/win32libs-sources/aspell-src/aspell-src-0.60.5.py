@@ -38,10 +38,11 @@ class subclass(base.baseclass):
     return True
 
   def compile( self ):
-    print os.path.join( self.rootdir, "win32libs", "include" )
+    incdir = os.path.join( self.rootdir, "win32libs", "include" )
+    libdir = os.path.join( self.rootdir, "win32libs", "lib" )
     # fixme: libiconv is a dependency...
-    os.environ[ "LDFLAGS" ] = "-L" + utils.toMSysPath( "D:\\dev\\kde\\kdewin32\\kdewin32\\tmp\\win32libs-20070612\\image\\win32libs\\lib" )
-    os.environ[ "CFLAGS" ]  = "-I" + utils.toMSysPath( "D:\\dev\\kde\\kdewin32\\kdewin32\\tmp\\win32libs-20070612\\image\\win32libs\\include" )
+    os.environ[ "LDFLAGS" ] = "-L" + utils.toMSysPath( libdir )
+    os.environ[ "CFLAGS" ]  = "-I" + utils.toMSysPath( incdir )
     return self.msysCompile( False )
 
   def install( self ):
