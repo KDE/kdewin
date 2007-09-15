@@ -34,6 +34,9 @@ KDESVNPASSWORD=os.getenv( "KDESVNPASSWORD" )
 # an optional dir to compile autmake based sources
 MSYSDIR = os.getenv( "MSYSDIR" )
 print "MSYSDIR:", MSYSDIR
+# an option to switch between cmake build types (for packaging)
+# FIXME plz.
+CMAKE_BUILD_TYPE=os.getenv( "CMAKE_BUILD_TYPE" )
 
 # ok, we have the following dirs:
 # ROOTDIR: the root where all this is below
@@ -52,6 +55,7 @@ class baseclass:
 		self.instdestdir=""
 
 		self.kdeCustomDefines = ""
+		self.createCombinedPackage = False
 
 	def execute( self ):
 		print "base exec called. args:", sys.argv
@@ -173,24 +177,9 @@ class baseclass:
 		print "setdir category: %s, package: %s, version: %s" %\
 			  ( self.category, self.package, self.version )
 
-  
-		
 		self.cmakeInstallPrefix = ROOTDIR.replace( "\\", "/" )
 		print "cmakeInstallPrefix:", self.cmakeInstallPrefix
 
-		self.rootdir     = ROOTDIR
-		self.downloaddir = DOWNLOADDIR
-		self.workdir     = os.path.join( ROOTDIR, "tmp", self.PV, "work" )
-		self.imagedir    = os.path.join( ROOTDIR, "tmp", self.PV, "image" )
-
-		self.packagedir = os.path.join( ROOTDIR, "emerge", \
-		    "portage", self.category, self.package )
-		self.filesdir = os.path.join( self.packagedir, "files" )
-		self.kdesvndir = KDESVNDIR
-		self.kdesvnserver = KDESVNSERVER
-		self.kdesvnuser = KDESVNUSERNAME
-		self.kdesvnpass = KDESVNPASSWORD
-		
 		if COMPILER == "msvc2005":
 		    self.cmakeMakefileGenerator = "NMake Makefiles"
 		    self.cmakeMakeProgramm = "nmake"
@@ -201,8 +190,19 @@ class baseclass:
 		    print "error: KDECOMPILER: %s not understood" % COMPILER
 		    exit( 1 )
 
+		self.rootdir     = ROOTDIR
+		self.downloaddir = DOWNLOADDIR
+		self.workdir     = os.path.join( ROOTDIR, "tmp", self.PV, "work" )
+		self.imagedir    = os.path.join( ROOTDIR, "tmp", self.PV, "image-" + COMPILER )
+
+		self.packagedir = os.path.join( ROOTDIR, "emerge", \
+		    "portage", self.category, self.package )
+		self.filesdir = os.path.join( self.packagedir, "files" )
+		self.kdesvndir = KDESVNDIR
+		self.kdesvnserver = KDESVNSERVER
+		self.kdesvnuser = KDESVNUSERNAME
+		self.kdesvnpass = KDESVNPASSWORD
 		self.msysdir = MSYSDIR
-		self.createCombinedPackage = False
 
 	def svnFetch( self, repo ):
 		print "base svnFetch called"
@@ -286,7 +286,8 @@ class baseclass:
         def kdeSvnUnpack( self, svnpath, packagedir ):
                 self.kdeSvnFetch( svnpath, packagedir )
         
-                utils.cleanDirectory( self.workdir )
+                if( not os.path.exists( self.workdir ) ):
+                    os.makedirs( self. workdir )
 
                 # now copy the tree to workdir
                 srcdir  = os.path.join( self.kdesvndir, svnpath, packagedir )
@@ -315,37 +316,67 @@ class baseclass:
 
                 return options
 
-	def kdeCompile( self ):
-		print "kdeCompile called. workdir: %s" % self.workdir
-		os.chdir( self.workdir )
-		builddir = "%s-build" % self.package
+        def kdeCompileInternal( self, buildType = None ):
+            builddir = "%s-build" % self.package
 
-		if ( not os.path.exists( builddir ) ):
-			os.mkdir( builddir )
+            if( not buildType == None ):
+                self.kdeCustomDefines = self.kdeCustomDefines + \
+                                            "-DCMAKE_BUILD_TYPE=%s" % buildType
+                builddir = "%s-build-%s-%s" % ( self.package, self.compiler, buildType )
 
-		utils.cleanDirectory( builddir )
-		os.chdir( builddir )
+            os.chdir( self.workdir )
+            utils.cleanDirectory( builddir )
+            os.chdir( builddir )
 
-		command = r"""cmake -G "%s" %s %s""" % \
-			  ( self.cmakeMakefileGenerator, \
-                            self.kdeDefaultDefines(), \
-                            self.kdeCustomDefines )
+            command = r"""cmake -G "%s" %s %s""" % \
+            	  ( self.cmakeMakefileGenerator, \
+                    self.kdeDefaultDefines(), \
+                    self.kdeCustomDefines )
 
-		print "cmake command:", command
-		os.system( command ) and die( "kdeCompile cmake call failed." )
-		os.system( self.cmakeMakeProgramm ) \
-                           and die( "kdeCompile%s failed." % self.cmakeMakeProgramm )
-		return True
+            os.system( command ) and die( "kdeCompile cmake call failed." )
+            os.system( self.cmakeMakeProgramm ) \
+                               and die( "kdeCompile%s failed." % self.cmakeMakeProgramm )
+            return True
 		
+        def kdeCompile( self ):
+            if( not CMAKE_BUILD_TYPE == None ) :
+                if( not self.kdeCompileInternal() ):
+                    return False
+            else:
+                if( not self.kdeCompileInternal( "debug" ) ):
+                    return False
+                if( not self.kdeCompileInternal( "release" ) ):
+                    return False
+            return True
+
+        def kdeInstallInternal( self, buildType = None ):
+            builddir = "%s-build" % self.package
+
+            if( not buildType == None ):
+                self.kdeCustomDefines = self.kdeCustomDefines + \
+                                            "-DCMAKE_BUILD_TYPE=%s" % buildType
+                builddir = "%s-build-%s-%s" % ( self.package, self.compiler, buildType )
+
+            os.chdir( self.workdir )
+            os.chdir( builddir )
+            print "builddir: " + builddir
+
+            os.system( "%s DESTDIR=%s install" % \
+                       ( self.cmakeMakeProgramm , self.imagedir ) ) \
+                   and die( "%s install" % self.cmakeMakeProgramm )
+            return True
 
         def kdeInstall( self ):
-                os.chdir( os.path.join( self.workdir, "%s-build" % self.package ) )
-                print "self.imagedir: " + self.imagedir
-                os.system( "%s DESTDIR=%s install" % \
-                           ( self.cmakeMakeProgramm , self.imagedir ) ) \
-                       and die( "%s install" % self.cmakeMakeProgramm )
-                utils.fixCmakeImageDir( self.imagedir, self.rootdir )
-		return True
+            if( not CMAKE_BUILD_TYPE == None ):
+                if( not self.kdeInstallInternal() ):
+                    return False
+            else:
+                if( not self.kdeInstallInternal( "debug" ) ):
+                    return False
+                if( not self.kdeInstallInternal( "release" ) ):
+                    return False
+            utils.fixCmakeImageDir( self.imagedir, self.rootdir )
+            return True
 
         def doPackaging( self, pkg_name, pkg_version, packSources = True ):
                 dstpath = os.path.join( self.rootdir, "tmp", self.PV )
@@ -358,11 +389,13 @@ class baseclass:
                 else:
                     cmd = "kdewin-packager.exe -name %s -root %s -version %s -destdir %s -complete" % \
                           ( pkg_name, binpath, pkg_version, dstpath )
+
                 if( not self.createCombinedPackage ):
                     if( self.compiler == "mingw"):
                       cmd = cmd + " -type mingw "
                     else:
                       cmd = cmd + " -type msvc "
+
                 os.system( cmd ) and die ( cmd )
                 return True
 
