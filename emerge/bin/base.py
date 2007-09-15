@@ -320,19 +320,20 @@ class baseclass:
             builddir = "%s-build" % self.package
 
             if( not buildType == None ):
-                self.kdeCustomDefines = self.kdeCustomDefines + \
-                                            "-DCMAKE_BUILD_TYPE=%s" % buildType
+                buildtype = "-DCMAKE_BUILD_TYPE=%s" % buildType
                 builddir = "%s-build-%s-%s" % ( self.package, self.compiler, buildType )
 
             os.chdir( self.workdir )
             utils.cleanDirectory( builddir )
             os.chdir( builddir )
 
-            command = r"""cmake -G "%s" %s %s""" % \
+            command = r"""cmake -G "%s" %s %s %s""" % \
             	  ( self.cmakeMakefileGenerator, \
                     self.kdeDefaultDefines(), \
-                    self.kdeCustomDefines )
+                    self.kdeCustomDefines, \
+                    buildtype )
 
+            print command
             os.system( command ) and die( "kdeCompile cmake call failed." )
             os.system( self.cmakeMakeProgramm ) \
                                and die( "kdeCompile%s failed." % self.cmakeMakeProgramm )
@@ -350,11 +351,10 @@ class baseclass:
             return True
 
         def kdeInstallInternal( self, buildType = None ):
+
             builddir = "%s-build" % self.package
 
             if( not buildType == None ):
-                self.kdeCustomDefines = self.kdeCustomDefines + \
-                                            "-DCMAKE_BUILD_TYPE=%s" % buildType
                 builddir = "%s-build-%s-%s" % ( self.package, self.compiler, buildType )
 
             os.chdir( self.workdir )
