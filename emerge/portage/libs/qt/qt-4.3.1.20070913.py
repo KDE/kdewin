@@ -1,5 +1,6 @@
 import base
 import utils
+import shutil
 from utils import die
 import os
 
@@ -66,7 +67,6 @@ class subclass(base.baseclass):
     return True
 
   def compile( self ):
-    print "qt compile called"
     qtsrcdir = os.path.join( self.workdir, self.instsrcdir )
     os.chdir( qtsrcdir )
 
@@ -121,16 +121,16 @@ class subclass(base.baseclass):
     return True
 
   def install( self ):
-
-    src = os.path.join( self.packagedir, "qt.conf" )
-    dst = os.path.join( self.imagedir, self.instdestdir, "qt.conf" )
-    shutil.copy( src, dst )
-
     qtsrcdir = os.path.join( self.workdir, self.instsrcdir )
     os.chdir( qtsrcdir )
 
     os.system( "%s install" % self.cmakeMakeProgramm ) \
                and die( "qt make install failed" )
+
+    src = os.path.join( self.packagedir, "qt.conf" )
+    dst = os.path.join( self.imagedir, self.instdestdir, "qt.conf" )
+    shutil.copy( src, dst )
+
     return True
 
 subclass().execute()
