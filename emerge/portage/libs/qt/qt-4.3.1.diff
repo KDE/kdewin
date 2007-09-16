@@ -18,9 +18,9 @@
  
  contains(QT_CONFIG, system-tiff) {
 -        unix:LIBS += -ltiff
--        win32:LIBS += libtiff3.lib
+-        win32:LIBS += libtiff.lib
 +        unix|win32-g++:LIBS += -ltiff
-+        win32-msvc*:LIBS += tiff.lib
++        win32-msvc*:LIBS += libtiff3.lib
  }
  !contains(QT_CONFIG, system-tiff) {
  	INCLUDEPATH += ../../../3rdparty/libtiff/libtiff
