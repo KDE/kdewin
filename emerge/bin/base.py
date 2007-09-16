@@ -242,7 +242,7 @@ class baseclass:
                 print "kdesinglecheckout:pwd ", ownpath
                 print "kdesinglecheckout:   ", svncmd
                 os.chdir( ownpath )
-                os.system( svncmd ) and die( "kdesinglecheckout failed" )
+                self.system( svncmd )
                 
 	def kdeSvnFetch( self, svnpath, packagedir ):
                 # svnpath is the part of the repo url after /home/kde, for example
@@ -334,9 +334,8 @@ class baseclass:
                     buildtype )
 
             print command
-            os.system( command ) and die( "kdeCompile cmake call failed." )
-            os.system( self.cmakeMakeProgramm ) \
-                               and die( "kdeCompile%s failed." % self.cmakeMakeProgramm )
+            self.system( command )
+            self.system( self.cmakeMakeProgramm )
             return True
 		
         def kdeCompile( self ):
@@ -361,9 +360,8 @@ class baseclass:
             os.chdir( builddir )
             print "builddir: " + builddir
 
-            os.system( "%s DESTDIR=%s install" % \
-                       ( self.cmakeMakeProgramm , self.imagedir ) ) \
-                   and die( "%s install" % self.cmakeMakeProgramm )
+            self.system( "%s DESTDIR=%s install" % \
+                       ( self.cmakeMakeProgramm , self.imagedir ) )
             return True
 
         def kdeInstall( self ):
@@ -396,7 +394,7 @@ class baseclass:
                     else:
                       cmd = cmd + " -type msvc "
 
-                os.system( cmd ) and die ( cmd )
+                self.system( cmd )
                 return True
 
         def createImportLibs( self, pkg_name ):
@@ -415,16 +413,16 @@ class baseclass:
                 if( not os.path.isfile( imppath ) ):
                         # create .def
                         cmd = "pexports %s > %s " % ( dllpath, defpath )
-                        os.system( cmd ) and die ( cmd )
+                        self.system( cmd )
                         
                         # create .lib
                         cmd = "lib /machine:x86 /def:%s /out:%s" % ( defpath, imppath )
-                        os.system( cmd ) and die ( cmd )
-                
+                        self.system( cmd )
+
                 # create .dll.a
                 os.chdir( os.path.join( basepath, "lib" ) )
                 cmd = "reimp %s" % ( imppath )
-                os.system( cmd ) and die ( cmd )
+                self.system( cmd )
                 if ( os.path.isfile( gccpath ) ):
                         os.remove( gccpath )
                 os.rename( gccpath_wrong, gccpath )
@@ -435,7 +433,7 @@ class baseclass:
                 dllpath = os.path.join( basepath, "bin", "%s.dll" % pkg_name )
 
                 cmd = "strip -s " + dllpath
-                os.system( cmd ) and die ( cmd )
+                self.system( cmd )
                 return True
 
         def msysConfigureFlags ( sef ):
@@ -459,7 +457,7 @@ class baseclass:
                       ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
                         self.msysConfigureFlags() )
                 #print cmd
-                os.system( cmd ) or die
+                self.system( cmd )
 
                 return True
 
@@ -475,7 +473,10 @@ class baseclass:
 
                 cmd = "%s --login -c \"cd %s && make -j2 install DESTDIR=%s\"" % \
                       ( sh, utils.toMSysPath( build ), utils.toMSysPath( install ) )
-                #print cmd
-                os.system( cmd ) or die
+                self.system( cmd )
 
+                return True
+        def system( self, command ):
+                os.system( command ) and \
+                    utils.die( "os.system ( %s ) failed" % command)
                 return True
