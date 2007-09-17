@@ -3,8 +3,9 @@ kdewin32 is a supplementary library
 history
 -------
 
-version 0.2.7 (not released yet)
+version 0.2.7
 - added (f)truncate
+- fix asinh/acosh/atanh for msvc
 
 version 0.2.6
 - added utime 
