@@ -158,19 +158,19 @@ KDEWIN32_EXPORT double __QNAN;
 // long double fminl (long double, long double)
 
 /* 7.12.5.1 */
-#define acosh cosh
-#define acoshf coshf
-#define acoshl cosh
+WINPOSIX_EXPORT float acoshf (float);
+WINPOSIX_EXPORT double acosh (double);
+WINPOSIX_EXPORT long double acoshl (long double);
 
 /* 7.12.5.2 */
-#define asinh sinh
-#define asinhf sinhf
-#define asinhl sinh
+WINPOSIX_EXPORT float asinhf (float);
+WINPOSIX_EXPORT double asinh (double);
+WINPOSIX_EXPORT long double asinhl (long double);
 
 /* 7.12.5.3 */
-#define atanh atan
-// float atanf  (float);
-#define atanhl atan
+//WINPOSIX_EXPORT float asinhf (float);
+WINPOSIX_EXPORT double atanh (double);
+WINPOSIX_EXPORT long double atanhl (long double);
 
 /* 7.12.8.3 The lgamma functions */
 WINPOSIX_EXPORT float lgammaf (float);

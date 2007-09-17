@@ -3,7 +3,14 @@
   public domain
 */
 
+#ifndef _USE_MATH_DEFINES
+# define _USE_MATH_DEFINES
+#endif
+#include <../include/math.h>
+#include <../include/float.h>
+
 #include <winposix_export.h>
+#include <errno.h>
 
 #define __FLOAT_INF_REP { 0, 0x7f80 }
 #define __FLOAT_QNAN_REP { 0, 0xffc0 }  /* { 0, 0x7fc0 }  */
@@ -40,3 +47,78 @@ KDEWIN32_EXPORT union _ieee_rep __SNANL  = { __DOUBLE_SNAN_REP };
 KDEWIN32_EXPORT union _ieee_rep __INFL = { __DOUBLE_INF_REP };
 KDEWIN32_EXPORT union _ieee_rep __DENORML = { __DOUBLE_DENORM_REP };
 
+/* 7.12.5.1 */
+// acosh(x) = log (x + sqrt(x * x - 1))
+float acoshf (float x)
+{
+  if (_isnan ( x ) ) 
+    return x;
+  if (x < 1.0f) {
+      errno = EDOM;
+      return __QNAN.float_val;
+  }
+  return( log( x + sqrt( x * x - 1 ) ) );
+}
+
+double acosh (double x)
+{
+  if (_isnan (x)) 
+    return x;
+  if (x < 1.0f) {
+      errno = EDOM;
+      return __QNAN.float_val;
+  }
+  return( log( x + sqrt( x * x - 1 ) ) );
+}
+
+long double acoshl (long double x)
+{
+  return acosh( (double) x );
+}
+
+/* 7.12.5.2 */
+static double log1p( double x )
+{
+  return ( log ( 1 + x ) );
+}
+// asinh(x) = copysign(log(fabs(x) + sqrt(x * x + 1.0)), x)
+float asinhf (float x)
+{
+  float z;
+  if (!_finite (x))
+    return x;
+  z = fabs (x);
+
+  z = log1p (z + z * z / (sqrt (z * z + 1.0) + 1.0));
+
+  return ( x > 0.0 ? z : -z);
+}
+
+double asinh (double x)
+{
+  double z;
+  if (!_finite (x))
+    return x;
+  z = fabs (x);
+
+  z = log1p (z + z * z / (sqrt (z * z + 1.0) + 1.0));
+
+  return ( x > 0.0 ? z : -z);
+}
+
+long double asinhl (long double x)
+{
+  return asinh( (double) x );
+}
+
+/* 7.12.5.3 */
+//WINPOSIX_EXPORT float asinhf (float)
+double atanh (double x)
+{
+  return asinhf( x );
+}
+
+long double atanhl (long double x)
+{
+  return asinhf( x );
+}
