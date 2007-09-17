@@ -5,7 +5,6 @@ import os
 
 DEPEND = """
 virtual/base
-libs/qt
 """
 
 class subclass(base.baseclass):
@@ -20,5 +19,12 @@ class subclass(base.baseclass):
 
   def install( self ):
     return self.kdeInstall()
+
+  def make_package( self ):
+    print "make_package called"
+    # FIXME?
+    self.instdestdir = "kde"
+    self.instsrcdir = "kdewin32"
+    return self.doPackaging( "kdewin32", "20070915", True )
 
 subclass().execute()
