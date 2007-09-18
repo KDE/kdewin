@@ -1,3 +1,4 @@
+@echo off
 rem here you set the base directory under which the whole kde
 rem system will live
 set KDEROOT=e:\mingwroot
@@ -61,10 +62,10 @@ set KDEWIN_DIR=%KDEROOT%\win32libs
 set STRIGI_HOME=%KDEROOT%\kde
 set DBUSDIR=%KDEROOT%\dbus
 
-@echo kdesettings.bat executed
-@echo KDEROOT     : %KDEROOT%
-@echo KDECOMPILER : %KDECOMPILER%
-@echo KDESVNDIR   : %KDESVNDIR%
-@echo PYTHONPATH  : %PYTHONPATH%
-@echo DOWNLOADDIR : %DOWNLOADDIR%
+echo kdesettings.bat executed
+echo KDEROOT     : %KDEROOT%
+echo KDECOMPILER : %KDECOMPILER%
+echo KDESVNDIR   : %KDESVNDIR%
+echo PYTHONPATH  : %PYTHONPATH%
+echo DOWNLOADDIR : %DOWNLOADDIR%
 
