@@ -252,6 +252,12 @@ def isInstalled( category, package, version ):
             break
 
     f.close()
+    if ( not found ):
+        """ try to detect packages from the installer """
+        releasepack = os.path.join( os.getenv( "KDEROOT" ), "manifest", package + "-" + version + "-bin.mft" )
+        develpack = os.path.join( os.getenv( "KDEROOT" ), "manifest", package + "-" + version + "-lib.mft" )
+        if( os.path.isfile( releasepack ) or os.path.isfile( develpack ) ):
+            found = True
     return found
     
 def addInstalled( category, package, version ):

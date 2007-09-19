@@ -62,7 +62,7 @@ print "buildaction:", buildaction
 print "doPretend:", doPretend
 print "packagename", packagename
 
-
+# FIXME: this shouldn't be hardcoded in here
 os.putenv( "PYTHONPATH", os.path.join( KDEROOT, "emerge", "bin" ) )
 
 def doExec( category, package, version, action, opts ):
