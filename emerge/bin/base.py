@@ -408,24 +408,21 @@ class baseclass:
                 defpath = os.path.join( basepath, "lib", "%s.def" % pkg_name )
                 imppath = os.path.join( basepath, "lib", "%s.lib" % pkg_name )
                 gccpath = os.path.join( basepath, "lib", "%s.dll.a" % pkg_name )
-                gccpath_wrong = os.path.join( basepath, "lib", "lib%s.a" % pkg_name )
+
+                # create .def
+                cmd = "pexports %s > %s " % ( dllpath, defpath )
+                self.system( cmd )
 
                 if( not os.path.isfile( imppath ) ):
-                        # create .def
-                        cmd = "pexports %s > %s " % ( dllpath, defpath )
-                        self.system( cmd )
-                        
                         # create .lib
                         cmd = "lib /machine:x86 /def:%s /out:%s" % ( defpath, imppath )
                         self.system( cmd )
 
-                # create .dll.a
-                os.chdir( os.path.join( basepath, "lib" ) )
-                cmd = "reimp %s" % ( imppath )
-                self.system( cmd )
-                if ( os.path.isfile( gccpath ) ):
-                        os.remove( gccpath )
-                os.rename( gccpath_wrong, gccpath )
+                if( not os.path.isfile( imppath ) ):
+                        # create .dll.a
+                        cmd = "dlltool -d %s -l " % ( defpath, gccpath )
+                        self.system( cmd )
+
                 return True
 
         def stripLibs( self, pkg_name ):
