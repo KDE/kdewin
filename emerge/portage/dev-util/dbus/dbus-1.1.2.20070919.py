@@ -6,7 +6,7 @@ from utils import die
 
 
 PACKAGE_NAME = "dbus"
-PACKAGE_FULL_VER = "0.20070912"
+PACKAGE_FULL_VER = "1.1.2.20070919"
 DEPENDS = """
 virtual/base
 """
@@ -55,6 +55,7 @@ class subclass(base.baseclass):
     print "dbus compile called"
     os.chdir( self.workdir )
 
+    # fixme: use kdesvncompile to avoid debug/release crap here
     for type in buildtypes.split():
       builddir = os.path.join( self.workdir, "dbus-build-" + type )
       utils.cleanDirectory( builddir )
