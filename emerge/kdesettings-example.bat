@@ -45,10 +45,23 @@ rem http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
 rem and make sure plink is in your path and Pageant is configured (you need to import your key)
 set SVN_SSH=plink 
 
+rem if you want to use emerge.py together with the kdewin-installer, you should set
+rem the value of directory_layout to 'installer', if you leave it unset or set it to
+rem 'traditional' you get the category sublayout
+set directory_layout=traditional
+
 rem No editing should be necessary below this line (in an ideal world)
 rem ##################################################################
 
 set PATH=%PATH%;%PYTHONPATH%
+if %directory_layout% equ installer (
+set PATH=%KDEROOT%\bin;%PATH%
+set PATH=%KDEROOT%\lib;%PATH%
+set KDEWIN_DIR=%KDEROOT%
+set STRIGI_HOME=%KDEROOT%
+set DBUSDIR=%KDEROOT%
+)
+else (
 set PATH=%PATH%;%KDEROOT%\mingw\bin
 set PATH=%PATH%;%KDEROOT%\gnuwin32\bin
 set PATH=%PATH%;%KDEROOT%\qt\bin
@@ -61,6 +74,7 @@ set PATH=%PATH%;%KDEROOT%\dbus\bin
 set KDEWIN_DIR=%KDEROOT%\win32libs
 set STRIGI_HOME=%KDEROOT%\kde
 set DBUSDIR=%KDEROOT%\dbus
+)
 
 echo kdesettings.bat executed
 echo KDEROOT     : %KDEROOT%
