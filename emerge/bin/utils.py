@@ -13,6 +13,9 @@ import portage_versions
 
 ### fetch functions
 
+#FIXME: get this from somewhere else:
+WGetExecutable = os.path.join( os.getenv( "KDEROOT" ), "gnuwin32", "bin", "wget.exe" )
+
 def getFiles( urls, destdir ):
     print "getfiles called. urls:", urls
     # make sure distfiles dir exists
@@ -32,7 +35,8 @@ def getFile( url, destdir ):
         print "fetch error: no url given"
         return False
 
-    wgetpath = os.path.join( os.getenv( "KDEROOT" ), "gnuwin32", "bin", "wget.exe" )
+
+    wgetpath = WGetExecutable
     if ( os.path.exists( wgetpath ) ):
         return wgetFile( url, destdir )
 
@@ -55,7 +59,7 @@ def getFile( url, destdir ):
 
 def wgetFile( url, destdir ):
     print "wgetfile called"
-    compath = os.path.join( os.getenv( "KDEROOT" ), "gnuwin32", "bin", "wget.exe" )
+    compath = WGetExecutable
     command = "%s -c -t 1 -P %s %s" % ( compath, destdir, url )
     print "executing this command:", command
     ret = os.system( command )
@@ -273,6 +277,7 @@ def getCategoryPackageVersion( path ):
     return [ category, package, version ]
 
 def getPortageDir():
+#FIXME: make this configurable
     return os.path.join( os.getenv( "KDEROOT" ), "emerge", "portage" )
 
 def getFilename( category, package, version ):
