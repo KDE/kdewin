@@ -1,15 +1,8 @@
 mhhh
 - boost headers
 
-stupid installer which needs user input
-- openssl
-
 special libs which need both compilers
 - dbus
-- pcre
 
 don't know how to compile this
 - subversion
-
-update-mime-database (ok, this will maybe never be scriptable at all -
-                      one of the most funniest gnome projects... ;-) )
