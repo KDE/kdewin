@@ -60,8 +60,7 @@ set PATH=%KDEROOT%\lib;%PATH%
 set KDEWIN_DIR=%KDEROOT%
 set STRIGI_HOME=%KDEROOT%
 set DBUSDIR=%KDEROOT%
-)
-else (
+) else (
 set PATH=%PATH%;%KDEROOT%\mingw\bin
 set PATH=%PATH%;%KDEROOT%\gnuwin32\bin
 set PATH=%PATH%;%KDEROOT%\qt\bin
