@@ -6,6 +6,7 @@ class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
     self.instsrcdir = "cmake-2.4.7-win32-x86"
-    self.instdestdir = "cmake"
+    if self.traditional:
+      self.instdestdir = "cmake"
 
 subclass().execute()
