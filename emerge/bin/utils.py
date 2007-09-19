@@ -14,7 +14,10 @@ import portage_versions
 ### fetch functions
 
 #FIXME: get this from somewhere else:
-WGetExecutable = os.path.join( os.getenv( "KDEROOT" ), "gnuwin32", "bin", "wget.exe" )
+if (os.getenv( "directory_layout" ) == "installer" ):
+    WGetExecutable = os.path.join( os.getenv( "KDEROOT" ), "bin", "wget.exe" )
+else:
+    WGetExecutable = os.path.join( os.getenv( "KDEROOT" ), "gnuwin32", "bin", "wget.exe" )
 
 def getFiles( urls, destdir ):
     print "getfiles called. urls:", urls
