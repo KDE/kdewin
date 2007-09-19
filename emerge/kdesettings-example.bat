@@ -57,6 +57,7 @@ set PATH=%PATH%;%PYTHONPATH%
 if %directory_layout% equ installer (
 set PATH=%KDEROOT%\bin;%PATH%
 set PATH=%KDEROOT%\lib;%PATH%
+set PATH=%KDEROOT%\emerge\bin;%PATH%
 set KDEWIN_DIR=%KDEROOT%
 set STRIGI_HOME=%KDEROOT%
 set DBUSDIR=%KDEROOT%
