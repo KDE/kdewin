@@ -19,8 +19,16 @@ if (os.getenv( "directory_layout" ) == "installer" ):
 else:
     WGetExecutable = os.path.join( os.getenv( "KDEROOT" ), "gnuwin32", "bin", "wget.exe" )
 
+def stayQuiet():
+    quiet=os.getenv( "STAYQUIET" )
+    if ( quiet == "TRUE" ):
+        return True
+    else:
+        return False
+
 def getFiles( urls, destdir ):
-    print "getfiles called. urls:", urls
+    if not stayQuiet():
+        print "getfiles called. urls:", urls
     # make sure distfiles dir exists
     if ( not os.path.exists( destdir ) ):
         os.makedirs( destdir )
@@ -33,7 +41,8 @@ def getFiles( urls, destdir ):
     return True
 
 def getFile( url, destdir ):
-    print "getFile called. url:", url
+    if not stayQuiet():
+        print "getFile called. url:", url
     if url == "":
         print "fetch error: no url given"
         return False
@@ -45,12 +54,13 @@ def getFile( url, destdir ):
 
     scheme, host, path, params, qu, fr = urlparse.urlparse( url )
 
-    print scheme
-    print host
-    print path
 
     filename = os.path.basename( path )
-    print filename
+    if not stayQuiet():
+        print scheme
+        print host
+        print path
+        print filename
 
     if ( scheme == "http" ):
         return getHttpFile( host, path, destdir, filename )
@@ -61,12 +71,14 @@ def getFile( url, destdir ):
         return False
 
 def wgetFile( url, destdir ):
-    print "wgetfile called"
     compath = WGetExecutable
     command = "%s -c -t 1 -P %s %s" % ( compath, destdir, url )
-    print "executing this command:", command
+    if not stayQuiet():
+        print "wgetfile called"
+        print "executing this command:", command
     ret = os.system( command )
-    print "wget ret:", ret
+    if not stayQuiet():
+        print "wget ret:", ret
     if ( ret == 0 ):
         return True
     else:
@@ -74,7 +86,8 @@ def wgetFile( url, destdir ):
     
 def getFtpFile( host, path, destdir, filename ):
     # FIXME check return values here (implement useful error handling)...
-    print "FIXME getFtpFile called.", host, path
+    if not stayQuiet():
+        print "FIXME getFtpFile called.", host, path
     
     outfile = open( os.path.join( destdir, filename ), "wb" )
     ftp = ftplib.FTP( host )
@@ -86,12 +99,14 @@ def getFtpFile( host, path, destdir, filename ):
 
 def getHttpFile( host, path, destdir, filename ):
     # FIXME check return values here (implement useful error handling)...
-    print "getHttpFile called.", host, path
+    if not stayQuiet():
+        print "getHttpFile called.", host, path
     
     conn = httplib.HTTPConnection( host )
     conn.request( "GET", path )
     r1 = conn.getresponse()
-    print r1.status, r1.reason
+    if not stayQuiet():
+        print r1.status, r1.reason
 
     data = r1.read()
 
@@ -108,7 +123,8 @@ def unpackFiles( downloaddir, filenames, workdir ):
     cleanDirectory( workdir )
 
     for filename in filenames:
-        print "unpacking this file:", filename
+        if not stayQuiet():
+            print "unpacking this file:", filename
         if ( not unpackFile( downloaddir, filename, workdir ) ):
             return False
 
@@ -135,7 +151,8 @@ def unpackFile( downloaddir, filename, workdir ):
 
 
 def unTar( file, destdir ):
-    print "unTar called. file: %s, destdir: %s" % ( file, destdir )
+    if not stayQuiet():
+        print "unTar called. file: %s, destdir: %s" % ( file, destdir )
     ( shortname, ext ) = os.path.splitext( file )
 
     mode = "r"
@@ -153,7 +170,8 @@ def unTar( file, destdir ):
     return True
 
 def unZip( file, destdir ):
-    print "unZip called:", file, destdir
+    if not stayQuiet():
+        print "unZip called:", file, destdir
 
     if not os.path.exists(destdir):
         os.makedirs(destdir)
@@ -178,7 +196,8 @@ def unZip( file, destdir ):
 ### svn fetch/unpack functions
 
 def svnFetch( repo, destdir, username = None, password = None ):
-    print "utils svnfetch", repo, destdir
+    if not stayQuiet():
+        print "utils svnfetch", repo, destdir
     if ( not os.path.exists( destdir ) ):
         os.makedirs( destdir )
     os.chdir( destdir )
@@ -188,7 +207,8 @@ def svnFetch( repo, destdir, username = None, password = None ):
 
     dir = os.path.basename( repo.replace( "/", "\\" ) )
     path = os.path.join( destdir, dir )
-    print "path: ", path 
+    if not stayQuiet():
+        print "path: ", path 
     if ( not os.path.exists( path ) ):
         # not checked out yet
         command = "svn checkout %s" % repo
@@ -196,13 +216,15 @@ def svnFetch( repo, destdir, username = None, password = None ):
             command = command + " --username " + username
         if ( password != None ):
             command = command + " --password " + password
-        print "executing this:", command
+        if not stayQuiet():
+            print "executing this:", command
         ret = os.system( command )
     else:
         # already checked out, so only update
         mode = "update"
         os.chdir( path )
-        print "svn up cwd:", os.getcwd()
+        if not stayQuiet():
+            print "svn up cwd:", os.getcwd()
         ret = os.system( "svn update" )
 
     if ( ret == 0 ):
@@ -214,7 +236,8 @@ def svnFetch( repo, destdir, username = None, password = None ):
 
 def digestFiles( downloaddir, filenames, packagedir ):
     for filename in filenames:
-        print "digestinging this file:", filename
+        if not stayQuiet():
+            print "digestinging this file:", filename
         if ( not digestFile( downloaddir, filename, packagedir ) ):
             return False
 
@@ -264,7 +287,8 @@ def isInstalled( category, package, version ):
     return found
     
 def addInstalled( category, package, version ):
-    print "addInstalled called"
+    if not stayQuiet():
+        print "addInstalled called"
     # write a line to etc/portage/installed,
     # that contains category/package-version
     path = os.path.join( os.getenv( "KDEROOT" ), "etc", "portage" )
@@ -275,14 +299,16 @@ def addInstalled( category, package, version ):
     f.close()
 
 def getCategoryPackageVersion( path ):
-    print "getCategoryPackageVersion:", path
+    if not stayQuiet():
+        print "getCategoryPackageVersion:", path
     ( head, file ) = os.path.split( path )
     ( head, package ) = os.path.split( head )
     ( head, category ) = os.path.split( head )
 
     (foo, ext) = os.path.splitext( file )
     ( package, version, foo2 ) = portage_versions.pkgsplit(foo)
-    print "category: %s, package: %s, version: %s" %( category, package, version )
+    if not stayQuiet():
+        print "category: %s, package: %s, version: %s" %( category, package, version )
     return [ category, package, version ]
 
 def getPortageDir():
@@ -297,7 +323,8 @@ def getCategory( package ):
     """
     returns the category of this package
     """
-    print "getCategory:", package
+    if not stayQuiet():
+        print "getCategory:", package
     basedir = getPortageDir()
 
     for cat in os.listdir( basedir ):
@@ -307,7 +334,8 @@ def getCategory( package ):
             for pack in os.listdir( catpath ):
                 #print "    package:", pack
                 if ( pack == package ):
-                    print "found:", cat, pack
+                    if not stayQuiet():
+                        print "found:", cat, pack
                     return cat
 
 def getNewestVersion( category, package ):
@@ -317,7 +345,8 @@ def getNewestVersion( category, package ):
     if( category == None ):
         print "Could not find package " + package
         exit( 1 )
-    print "getNewestVersion:", category, package
+    if not stayQuiet():
+        print "getNewestVersion:", category, package
     packagepath = os.path.join( getPortageDir(), category, package )
 
     versions = []
@@ -363,7 +392,8 @@ def getDependencies( category, package, version ):
         if ( line.startswith( "DEPEND" ) ):
             inDepend = True
 
-    print "deplines:", deplines
+    if not stayQuiet():
+        print "deplines:", deplines
 
     deps = []
     for line in deplines:
@@ -383,7 +413,8 @@ def solveDependencies( category, package, version, deplist ):
     deplist.append( [ category, package, version ] )
 
     mydeps = getDependencies( category, package, version )
-    print "mydeps:", mydeps
+    if not stayQuiet():
+        print "mydeps:", mydeps
     for dep in mydeps:
         solveDependencies( dep[0], dep[1], dep[2], deplist )
     # if package not in list, prepend it to list
@@ -433,10 +464,12 @@ def moveEntries( srcdir, destdir ):
     #print "moveEntries:", srcdir, destdir
     for entry in os.listdir( srcdir ):
         #print "rootdir:", root
-        print "entry:", entry
+        if not stayQuiet():
+            print "entry:", entry
         src = os.path.join( srcdir, entry )
         dest = os.path.join( destdir, entry )
-        print "src: %s dest: %s" %( src, dest )
+        if not stayQuiet():
+            print "src: %s dest: %s" %( src, dest )
         if( os.path.isfile( dest ) ):
           os.remove( dest )
         if( os.path.isdir( dest ) ):
@@ -464,7 +497,8 @@ def fixCmakeImageDir( imagedir, rootdir ):
     so when we want to be able to install imagedir into KDEROOT,
     we have to move things around...
     """
-    print "fixImageDir:", imagedir, rootdir
+    if not stayQuiet():
+        print "fixImageDir:", imagedir, rootdir
     # imagedir = e:\foo\thirdroot\tmp\dbus-0\image
     # rootdir  = e:\foo\thirdroot
     # files are installed to
@@ -474,7 +508,8 @@ def fixCmakeImageDir( imagedir, rootdir ):
     if ( rootpath.startswith( "\\" ) ):
         rootpath = rootpath[1:]
     tmp = os.path.join( imagedir, rootpath )
-    print "tmp:", tmp
+    if not stayQuiet():
+        print "tmp:", tmp
     tmpdir = os.path.join( imagedir, "tMpDiR" )
 
     if ( not os.path.isdir( tmpdir ) ):
@@ -500,7 +535,7 @@ def cleanDirectory( dir ):
 
 
 def sedFile( directory, file, sedcommand ):
-    """runs the given sed command on the given file"""
+    """ runs the given sed command on the given file """
     os.chdir( directory )
     backup = "%s.orig" % file
     if( os.path.isfile( backup ) ):
@@ -509,7 +544,8 @@ def sedFile( directory, file, sedcommand ):
     os.rename( file, backup )
 
     command = "type %s | sed %s > %s" % ( backup, sedcommand, file )
-    print "sedFile command:", command
+    if not stayQuiet():
+        print "sedFile command:", command
 
     os.system( command ) and die( "utils sedFile failed" )
 

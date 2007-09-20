@@ -17,22 +17,48 @@
 
 import sys
 import os
-import utils
 
-# get KDEROOT from env
-KDEROOT = os.getenv( "KDEROOT" )
-print "KDEROOT:", KDEROOT
+def usage():
+    print
+    print 'usage: emerge [-p][--fetch|--unpack|--compile|--install|--qmerge|--digest'
+    print '                   |--package|--full-package] packagename'
+    print 'emerge.py is a script for easier building.'
+    print
+    print 'options:'
+    print '-p               pretend to do everything - a dry run'
+    print '--fetch          just fetch the packages'
+    print '--unpack         unpack the packages and apply the patches if needed'
+    print '--compile        configure and build the package'
+    print '--install        install the package to an image directory'
+    print '--qmerge         install the image directories contents to the kderoot'
+    print '--package        package the image directory with the kdewin-packager[*]'
+    print '--full-package   make all of the above steps'
+    print '-q, --quiet      suppress all output'
+    print
+    print '[*] - this requires the packager to be installed already'
+    print 'please see http://windows.kde.org for more information'
+    print 'send bugs and feature requests to kde-windows@kde.org'
+    print
 
 buildaction = "all"
 
 doPretend = False
+stayQuiet = False
 offline = False
 opts = ""
 
+quiet=os.getenv( "STAYQUIET" )
+if ( quiet == "TRUE" ):
+    stayQuiet = True
+else:
+    stayQuiet = False
+    
 for i in sys.argv:
-    print "got this param: %s" % i
+#    print "got this param: %s" % i
     if ( i == "-p" ):
         doPretend = True
+    elif (i == "-q" or i == "--quiet" ):
+        stayQuiet = True
     elif ( i == "--offline" ):
         opts = i
         offline = True
@@ -53,31 +79,45 @@ for i in sys.argv:
     elif ( i == "--full-package" ):
         buildaction = "full-package"
     elif ( i.startswith( "-" ) ):
-        print "error: emerge flag %s not understood" % i
+        usage()
         exit ( 1 )
     else:
         packagename = i
+if stayQuiet == True:
+    os.environ["STAYQUIET"]="TRUE"
+else:
+    os.environ["STAYQUIET"]="FALSE"
+import utils
 
-print "buildaction:", buildaction
-print "doPretend:", doPretend
-print "packagename", packagename
+if not stayQuiet:
+    print "buildaction:", buildaction
+    print "doPretend:", doPretend
+    print "packagename", packagename
+
+# get KDEROOT from env
+KDEROOT = os.getenv( "KDEROOT" )
+if not stayQuiet:
+    print "KDEROOT:", KDEROOT
 
 # FIXME: this shouldn't be hardcoded in here
 os.putenv( "PYTHONPATH", os.path.join( KDEROOT, "emerge", "bin" ) )
 
 def doExec( category, package, version, action, opts ):
-    print "doExec called opts:", opts
+    if not stayQuiet:
+        print "doExec called opts:", opts
     file = os.path.join( utils.getPortageDir(), category, package, "%s-%s.py" % \
                          ( package, version ) )
-    print "file:", file
     commandstring = "python %s %s %s" % ( file, action, opts )
-    print "commandstring", commandstring
+    if not stayQuiet:
+        print "file:", file
+        print "commandstring", commandstring
     if ( os.system( commandstring ) ):
         return False
     return True
 
 def handlePackage( category, package, version, buildaction, opts ):
-    print "handlePackage called:", category, package, version, buildaction
+    if not stayQuiet:
+        print "handlePackage called:", category, package, version, buildaction
     success = True
     if ( buildaction == "all" or buildaction == "full-package" ):
         if ( success ):
@@ -106,7 +146,8 @@ def handlePackage( category, package, version, buildaction, opts ):
     elif ( buildaction == "package" ):
         success = doExec( category, package, version, "package", opts )
     else:
-        print "could not understand this buildaction: %s" % buildaction
+        if not stayQuiet:
+            print "could not understand this buildaction: %s" % buildaction
         success = false
 
     return success
@@ -115,7 +156,8 @@ def handlePackage( category, package, version, buildaction, opts ):
 
 deplist = []
 utils.solveDependencies( "", packagename, "", deplist )
-print "deplist:", deplist
+if not stayQuiet:
+    print "deplist:", deplist
 
 deplist.reverse()
 success = True
@@ -144,7 +186,7 @@ else:
                 print "fatal error: package %s/%s-%s %s failed" % \
                     (package[0], package[1], package[2], buildaction)
         else:
-	    print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
+            print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
 
 
 #os.system( "cmake.py fetch" )

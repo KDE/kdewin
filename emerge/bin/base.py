@@ -8,26 +8,17 @@ import utils
 from utils import die
 
 ROOTDIR=os.getenv( "KDEROOT" )
-print "KDEROOT:     ", ROOTDIR
-
 COMPILER=os.getenv( "KDECOMPILER" )
-print "KDECOMPILER: ", COMPILER
-
 DOWNLOADDIR=os.getenv( "DOWNLOADDIR" )
 if ( DOWNLOADDIR == None ):
     DOWNLOADDIR=os.path.join( ROOTDIR, "distfiles" )
-print "DOWNLOADDIR: ", DOWNLOADDIR
 
 KDESVNDIR=os.getenv( "KDESVNDIR" )
 if ( KDESVNDIR == None ):
     KDESVNDIR=os.path.join( DOWNLOADDIR, "svn-src", "kde" )
-print "KDESVNDIR:   ", KDESVNDIR
-
 KDESVNSERVER=os.getenv( "KDESVNSERVER" )
 if ( KDESVNSERVER == None ):
     KDESVNSERVER="svn://anonsvn.kde.org"
-print "KDESVNSERVER:", KDESVNSERVER
-
 KDESVNUSERNAME=os.getenv( "KDESVNUSERNAME" )
 KDESVNPASSWORD=os.getenv( "KDESVNPASSWORD" )
 
@@ -36,13 +27,26 @@ if ( not DIRECTORYLAYOUT == "installer" ):
     """ traditional layout is using the categories as subfolders of kderoot """
     """ installer layout has no category subfolder """
     DIRECTORYLAYOUT = "traditional"
-    
+
 # an optional dir to compile autmake based sources
 MSYSDIR = os.getenv( "MSYSDIR" )
-print "MSYSDIR:", MSYSDIR
 # an option to switch between cmake build types (for packaging)
 # FIXME plz.
 CMAKE_BUILD_TYPE=os.getenv( "CMAKE_BUILD_TYPE" )
+
+quiet=os.getenv( "STAYQUIET" )
+if ( quiet == "TRUE" ):
+    stayQuiet = True
+else:
+    stayQuiet = False
+    
+if not stayQuiet:    
+    print "KDEROOT:     ", ROOTDIR
+    print "KDECOMPILER: ", COMPILER
+    print "DOWNLOADDIR: ", DOWNLOADDIR
+    print "KDESVNDIR:   ", KDESVNDIR
+    print "KDESVNSERVER:", KDESVNSERVER
+    print "MSYSDIR:", MSYSDIR
 
 # ok, we have the following dirs:
 # ROOTDIR: the root where all this is below
@@ -60,6 +64,9 @@ class baseclass:
         self.instsrcdir=""
         self.instdestdir=""
         self.traditional=True
+        self.stayQuiet=True
+        if not os.getenv("STAYQUIET") == "TRUE":
+            self.stayQuiet=False
         if DIRECTORYLAYOUT == "installer":
             self.traditional=False
 
@@ -67,7 +74,8 @@ class baseclass:
         self.createCombinedPackage = False
 
     def execute( self ):
-        print "base exec called. args:", sys.argv
+        if not self.stayQuiet:
+            print "base exec called. args:", sys.argv
         #print "fetch url:", self.SRC_URI
 
         command = sys.argv[ 1 ]
@@ -77,8 +85,9 @@ class baseclass:
         self.noFetch = False
         if ( options == "--offline" ):
             self.noFetch  = True
-        print "command:", command
-        print "opts:", options
+        if not self.stayQuiet:
+            print "command:", command
+            print "opts:", options
         
         self.setDirectories()
         
@@ -97,7 +106,8 @@ class baseclass:
         elif command == "install":
             # make sure the image dir is clean
             if ( os.path.exists( self.imagedir ) ):
-                print "cleaning image dir:", self.imagedir
+                if not self.stayQuiet:
+                    print "cleaning image dir:", self.imagedir
                 utils.cleanDirectory( self.imagedir )
             ok = self.install()
         elif command == "qmerge":   ok = self.qmerge()
@@ -123,7 +133,8 @@ class baseclass:
             exit( 1 )
 
     def fetch( self ):
-        print "base fetch called"
+        if not self.stayQuiet:
+            print "base fetch called"
         if ( self.noFetch ):
             print "skipping fetch (--offline)"
             return True
@@ -131,41 +142,48 @@ class baseclass:
         return utils.getFiles( self.SRC_URI, self.downloaddir )
 
     def unpack( self ):
-        print "base unpack called, files:", self.filenames
+        if not self.stayQuiet:
+            print "base unpack called, files:", self.filenames
         return utils.unpackFiles( self.downloaddir, self.filenames, self.workdir )
 
     def compile( self ):
-        print "base compile called, doing nothing..."
+        if not self.stayQuiet:
+            print "base compile called, doing nothing..."
         return True
 
     def install( self ):
-        print "base install called"
+        if not self.stayQuiet:
+            print "base install called"
         srcdir = os.path.join( self.workdir, self.instsrcdir )
         destdir = os.path.join( self.imagedir, self.instdestdir )
         utils.copySrcDirToDestDir( srcdir, destdir )
         return True
 
     def qmerge( self ):
-        print "base qmerge called"
+        if not self.stayQuiet:
+            print "base qmerge called"
         utils.mergeImageDirToRootDir( self.imagedir, self.rootdir )
         utils.addInstalled( self.category, self.package, self.version )
         return True
 
 
     def digest( self ):
-        print "base digest called"
-        print "packagedir: %s" % self.packagedir
-        print "files: %s" % self.filenames
-        print "downloaddir: %s" % self.downloaddir
+        if not self.stayQuiet:
+            print "base digest called"
+            print "packagedir: %s" % self.packagedir
+            print "files: %s" % self.filenames
+            print "downloaddir: %s" % self.downloaddir
         utils.digestFiles( self.downloaddir, self.filenames, self.packagedir )
         return True
 
     def make_package( self ):
-        print "currently only supported for some interal packages"
+        if not self.stayQuiet:
+            print "currently only supported for some interal packages"
         return True
 
     def setDirectories( self ):
-        print "setdirectories called"
+        if not self.stayQuiet:
+            print "setdirectories called"
         #print "basename:", sys.argv[ 0 ]
         #print "src_uri", self.SRC_URI
 
@@ -183,11 +201,13 @@ class baseclass:
                        utils.getCategoryPackageVersion( sys.argv[ 0 ] )
 
         #self.progname = self.package        
-        print "setdir category: %s, package: %s, version: %s" %\
+        if not self.stayQuiet:
+            print "setdir category: %s, package: %s, version: %s" %\
               ( self.category, self.package, self.version )
 
         self.cmakeInstallPrefix = ROOTDIR.replace( "\\", "/" )
-        print "cmakeInstallPrefix:", self.cmakeInstallPrefix
+        if not self.stayQuiet:
+            print "cmakeInstallPrefix:", self.cmakeInstallPrefix
 
         if COMPILER == "msvc2005":
             self.cmakeMakefileGenerator = "NMake Makefiles"
@@ -214,10 +234,12 @@ class baseclass:
         self.msysdir = MSYSDIR
 
     def svnFetch( self, repo ):
-        print "base svnFetch called"
+        if not self.stayQuiet:
+            print "base svnFetch called"
         self.svndir = os.path.join( self.downloaddir, "svn-src", self.package )
         if ( self.noFetch ):
-            print "skipping svn fetch/update (--offline)"
+            if not self.stayQuiet:
+                print "skipping svn fetch/update (--offline)"
             return True
         
         utils.svnFetch( repo, self.svndir )
@@ -232,7 +254,8 @@ class baseclass:
 
                 if ( os.path.exists( os.path.join( ownpath, codir ) ) \
                                      and not doRecursive ):
-                        print "ksco exists:", ownpath, codir
+                        if not self.stayQuiet:
+                            print "ksco exists:", ownpath, codir
                         return
 
                 if ( doRecursive ):
@@ -248,8 +271,9 @@ class baseclass:
                         svncmd = "svn checkout %s %s" % \
                                  ( recFlag, repourl + codir )
 
-                print "kdesinglecheckout:pwd ", ownpath
-                print "kdesinglecheckout:   ", svncmd
+                if not self.stayQuiet:
+                    print "kdesinglecheckout:pwd ", ownpath
+                    print "kdesinglecheckout:   ", svncmd
                 os.chdir( ownpath )
                 self.system( svncmd )
                 
@@ -257,11 +281,13 @@ class baseclass:
                 # svnpath is the part of the repo url after /home/kde, for example
                 # "trunk/kdesupport/", which leads to the package itself,
                 # without the package
-        print "base kdeSvnFetch called. svnpath: %s dir: %s" % \
+        if not self.stayQuiet:
+            print "base kdeSvnFetch called. svnpath: %s dir: %s" % \
                       ( svnpath, packagedir )
 
         if ( self.noFetch ):
-            print "skipping svn fetch/update (--offline)"
+            if not self.stayQuiet:
+                print "skipping svn fetch/update (--offline)"
             return True
         
                 mydir = self.kdesvndir
@@ -272,24 +298,27 @@ class baseclass:
         for tmpdir in svnpath.split( "/" ):
                         if ( tmpdir == "" ):
                                 continue
-                        print "  mydir: %s" % mydir
-                        print "  dir to checkout: %s" % tmpdir
-                        print "  repourl", repourl
+                        if not self.stayQuiet:
+                            print "  mydir: %s" % mydir
+                            print "  dir to checkout: %s" % tmpdir
+                            print "  repourl", repourl
 
                         self.__kdesinglecheckout( repourl, mydir, tmpdir, False )
                         mydir = os.path.join( mydir, tmpdir )
                         repourl = repourl + tmpdir + "/"
                 
-                print "dir in which to really checkout: %s" % mydir
-                print "dir to really checkout: %s" % packagedir
+                if not self.stayQuiet:
+                    print "dir in which to really checkout: %s" % mydir
+                    print "dir to really checkout: %s" % packagedir
                 self.__kdesinglecheckout( repourl, mydir, packagedir, True )
 
         svndir = os.path.join( self.kdesvndir, svnpath ).replace( "/", "\\" )
         #repo = self.kdesvnserver + "/home/kde/" + svnpath + dir
         #utils.svnFetch( repo, svndir, self.kdesvnuser, self.kdesvnpass )
-        print "kdesvndir", self.kdesvndir
-        print "svndir", svndir
-        print "dir", dir
+        if not self.stayQuiet:
+            print "kdesvndir", self.kdesvndir
+            print "svndir", svndir
+            print "dir", dir
         self.svndir = os.path.join( svndir, packagedir )
 
         def kdeSvnUnpack( self, svnpath, packagedir ):
@@ -342,7 +371,8 @@ class baseclass:
                     self.kdeCustomDefines, \
                     buildtype )
 
-            print command
+            if not self.stayQuiet:
+                print command
             self.system( command )
             self.system( self.cmakeMakeProgramm )
             return True
@@ -367,7 +397,8 @@ class baseclass:
 
             os.chdir( self.workdir )
             os.chdir( builddir )
-            print "builddir: " + builddir
+            if not self.stayQuiet:
+                print "builddir: " + builddir
 
             self.system( "%s DESTDIR=%s install" % \
                        ( self.cmakeMakeProgramm , self.imagedir ) )
