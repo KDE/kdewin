@@ -30,9 +30,6 @@ if ( not DIRECTORYLAYOUT == "installer" ):
 
 # an optional dir to compile autmake based sources
 MSYSDIR = os.getenv( "MSYSDIR" )
-# an option to switch between cmake build types (for packaging)
-# FIXME plz.
-CMAKE_BUILD_TYPE=os.getenv( "CMAKE_BUILD_TYPE" )
 
 quiet=os.getenv( "STAYQUIET" )
 if ( quiet == "TRUE" ):
@@ -72,6 +69,9 @@ class baseclass:
 
         self.kdeCustomDefines = ""
         self.createCombinedPackage = False
+        # Build type for kdeCompile() / kdeInstall() - packages
+        # "" -> debug and release
+        self.buildType = None
 
     def execute( self ):
         if not self.stayQuiet:
@@ -321,200 +321,207 @@ class baseclass:
             print "svndir", svndir
             print "dir", dir
         self.svndir = os.path.join( svndir, packagedir )
-
-        def kdeSvnUnpack( self, svnpath, packagedir ):
-                self.kdeSvnFetch( svnpath, packagedir )
         
-                if( not os.path.exists( self.workdir ) ):
-                    os.makedirs( self. workdir )
-
-                # now copy the tree to workdir
-                srcdir  = os.path.join( self.kdesvndir, svnpath, packagedir )
-                destdir = os.path.join( self.workdir, packagedir )
-                utils.copySrcDirToDestDir( srcdir, destdir )
         return True
-    
-        def kdeDefaultDefines( self ):
-                options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s/kde " % \
-                      ( self.package, self.rootdir.replace( "\\", "/" ) )
 
-                options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
-                        os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
-
-                options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
-                        os.path.join( self.rootdir, "strigi" ).replace( "\\", "/" )
-
-                options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
-                        os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
-
-                options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
-                        os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" )
-
-                options = options + "-DCMAKE_LIBRARY_PATH=%s " % \
-                        os.path.join( self.rootdir, "win32libs", "lib" ).replace( "\\", "/" )
-
-                return options
-
-        def kdeCompileInternal( self, buildType = None ):
-            builddir = "%s-build" % self.package
-
-            if( not buildType == None ):
-                buildtype = "-DCMAKE_BUILD_TYPE=%s" % buildType
-                builddir = "%s-build-%s-%s" % ( self.package, self.compiler, buildType )
-
-            os.chdir( self.workdir )
-            utils.cleanDirectory( builddir )
-            os.chdir( builddir )
-
-            command = r"""cmake -G "%s" %s %s %s""" % \
-                  ( self.cmakeMakefileGenerator, \
-                    self.kdeDefaultDefines(), \
-                    self.kdeCustomDefines, \
-                    buildtype )
-
-            if not self.stayQuiet:
-                print command
-            self.system( command )
-            self.system( self.cmakeMakeProgramm )
-            return True
+    def kdeSvnUnpack( self, svnpath, packagedir ):
+        self.kdeSvnFetch( svnpath, packagedir )
         
-        def kdeCompile( self ):
-            if( not CMAKE_BUILD_TYPE == None ) :
-                if( not self.kdeCompileInternal() ):
-                    return False
+        if( not os.path.exists( self.workdir ) ):
+            os.makedirs( self. workdir )
+        
+        # now copy the tree to workdir
+        srcdir  = os.path.join( self.kdesvndir, svnpath, packagedir )
+        destdir = os.path.join( self.workdir, packagedir )
+        utils.copySrcDirToDestDir( srcdir, destdir )
+        return True
+        
+    def kdeDefaultDefines( self ):
+        package_path = self.package
+        if( not self.instsrcdir == "" ):
+            package_path = self.instsrcdir
+
+        options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s/kde " % \
+              ( package_path, self.rootdir.replace( "\\", "/" ) )
+        
+        options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
+                os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
+        
+        options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
+                os.path.join( self.rootdir, "strigi" ).replace( "\\", "/" )
+        
+        options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
+                os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
+        
+        options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
+                os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" )
+        
+        options = options + "-DCMAKE_LIBRARY_PATH=%s " % \
+                os.path.join( self.rootdir, "win32libs", "lib" ).replace( "\\", "/" )
+        
+        return options
+
+    def kdeCompileInternal( self, buildType = None ):
+        buildtype = ""
+        builddir = "%s-build-%s" % ( self.package, self.compiler )
+
+        if( not buildType == None ):
+            buildtype = "-DCMAKE_BUILD_TYPE=%s" % buildType
+            builddir = "%s-%s" % ( builddir, buildType )
+    
+        os.chdir( self.workdir )
+        utils.cleanDirectory( builddir )
+        os.chdir( builddir )
+
+        command = r"""cmake -G "%s" %s %s %s""" % \
+              ( self.cmakeMakefileGenerator, \
+                self.kdeDefaultDefines(), \
+                self.kdeCustomDefines, \
+                buildtype )
+
+        if not self.stayQuiet:
+            print command
+        self.system( command )
+        self.system( self.cmakeMakeProgramm )
+        return True
+
+    def kdeCompile( self ):
+        if( not self.buildType == None ) :
+            if( not self.kdeCompileInternal() ):
+                return False
+        else:
+            if( not self.kdeCompileInternal( "debug" ) ):
+                return False
+            if( not self.kdeCompileInternal( "release" ) ):
+                return False
+        return True
+
+    def kdeInstallInternal( self, buildType = None ):
+        builddir = "%s-build-%s" % ( self.package, self.compiler )
+
+        if( not buildType == None ):
+            builddir = "%s-%s" % ( builddir, buildType )
+
+        os.chdir( self.workdir )
+        os.chdir( builddir )
+        if not self.stayQuiet:
+            print "builddir: " + builddir
+
+        self.system( "%s DESTDIR=%s install" % \
+                   ( self.cmakeMakeProgramm , self.imagedir ) )
+        return True
+
+    def kdeInstall( self ):
+        if( not self.buildType == None ):
+            if( not self.kdeInstallInternal() ):
+                return False
+        else:
+            if( not self.kdeInstallInternal( "debug" ) ):
+                return False
+            if( not self.kdeInstallInternal( "release" ) ):
+                return False
+        utils.fixCmakeImageDir( self.imagedir, self.rootdir )
+        return True
+
+    def doPackaging( self, pkg_name, pkg_version, packSources = True ):
+        dstpath = os.path.join( self.rootdir, "tmp", self.PV )
+        binpath = os.path.join( self.imagedir, self.instdestdir )
+        tmp = os.path.join( binpath, "kde" )
+
+        if( os.path.exists( tmp ) ):
+            binpath = tmp
+
+        if ( packSources ):
+            srcpath = os.path.join( self.workdir, self.instsrcdir )
+            cmd = "kdewin-packager.exe -name %s -root %s -srcroot %s -version %s -destdir %s -complete" % \
+                  ( pkg_name, binpath, srcpath, pkg_version, dstpath )
+        else:
+            cmd = "kdewin-packager.exe -name %s -root %s -version %s -destdir %s -complete" % \
+                  ( pkg_name, binpath, pkg_version, dstpath )
+
+        if( not self.createCombinedPackage ):
+            if( self.compiler == "mingw"):
+              cmd = cmd + " -type mingw "
             else:
-                if( not self.kdeCompileInternal( "debug" ) ):
-                    return False
-                if( not self.kdeCompileInternal( "release" ) ):
-                    return False
-            return True
+              cmd = cmd + " -type msvc "
 
-        def kdeInstallInternal( self, buildType = None ):
+        self.system( cmd )
+        return True
 
-            builddir = "%s-build" % self.package
+    def createImportLibs( self, pkg_name ):
+        basepath = os.path.join( self.imagedir, self.instdestdir )
 
-            if( not buildType == None ):
-                builddir = "%s-build-%s-%s" % ( self.package, self.compiler, buildType )
+        dst = os.path.join( basepath, "lib" )
+        if( not os.path.exists( dst ) ):
+            os.mkdir( dst )
 
-            os.chdir( self.workdir )
-            os.chdir( builddir )
-            if not self.stayQuiet:
-                print "builddir: " + builddir
+        dllpath = os.path.join( basepath, "bin", "%s.dll" % pkg_name )
+        defpath = os.path.join( basepath, "lib", "%s.def" % pkg_name )
+        imppath = os.path.join( basepath, "lib", "%s.lib" % pkg_name )
+        gccpath = os.path.join( basepath, "lib", "%s.dll.a" % pkg_name )
 
-            self.system( "%s DESTDIR=%s install" % \
-                       ( self.cmakeMakeProgramm , self.imagedir ) )
-            return True
+        # create .def
+        cmd = "pexports %s > %s " % ( dllpath, defpath )
+        self.system( cmd )
 
-        def kdeInstall( self ):
-            if( not CMAKE_BUILD_TYPE == None ):
-                if( not self.kdeInstallInternal() ):
-                    return False
-            else:
-                if( not self.kdeInstallInternal( "debug" ) ):
-                    return False
-                if( not self.kdeInstallInternal( "release" ) ):
-                    return False
-            utils.fixCmakeImageDir( self.imagedir, self.rootdir )
-            return True
-
-        def doPackaging( self, pkg_name, pkg_version, packSources = True ):
-                dstpath = os.path.join( self.rootdir, "tmp", self.PV )
-                binpath = os.path.join( self.imagedir, self.instdestdir )
-
-                if ( packSources ):
-                    srcpath = os.path.join( self.workdir, self.instsrcdir )
-                    cmd = "kdewin-packager.exe -name %s -root %s -srcroot %s -version %s -destdir %s -complete" % \
-                          ( pkg_name, binpath, srcpath, pkg_version, dstpath )
-                else:
-                    cmd = "kdewin-packager.exe -name %s -root %s -version %s -destdir %s -complete" % \
-                          ( pkg_name, binpath, pkg_version, dstpath )
-
-                if( not self.createCombinedPackage ):
-                    if( self.compiler == "mingw"):
-                      cmd = cmd + " -type mingw "
-                    else:
-                      cmd = cmd + " -type msvc "
-
+        if( not os.path.isfile( imppath ) ):
+                # create .lib
+                cmd = "lib /machine:x86 /def:%s /out:%s" % ( defpath, imppath )
                 self.system( cmd )
-                return True
-
-        def createImportLibs( self, pkg_name ):
-                basepath = os.path.join( self.imagedir, self.instdestdir )
- 
-                dst = os.path.join( basepath, "lib" )
-                if( not os.path.exists( dst ) ):
-                    os.mkdir( dst )
-
-                dllpath = os.path.join( basepath, "bin", "%s.dll" % pkg_name )
-                defpath = os.path.join( basepath, "lib", "%s.def" % pkg_name )
-                imppath = os.path.join( basepath, "lib", "%s.lib" % pkg_name )
-                gccpath = os.path.join( basepath, "lib", "%s.dll.a" % pkg_name )
-
-                # create .def
-                cmd = "pexports %s > %s " % ( dllpath, defpath )
+        
+        if( not os.path.isfile( imppath ) ):
+                # create .dll.a
+                cmd = "dlltool -d %s -l " % ( defpath, gccpath )
                 self.system( cmd )
+        return True
 
-                if( not os.path.isfile( imppath ) ):
-                        # create .lib
-                        cmd = "lib /machine:x86 /def:%s /out:%s" % ( defpath, imppath )
-                        self.system( cmd )
+    def stripLibs( self, pkg_name ):
+        basepath = os.path.join( self.imagedir, self.instdestdir )
+        dllpath = os.path.join( basepath, "bin", "%s.dll" % pkg_name )
 
-                if( not os.path.isfile( imppath ) ):
-                        # create .dll.a
-                        cmd = "dlltool -d %s -l " % ( defpath, gccpath )
-                        self.system( cmd )
+        cmd = "strip -s " + dllpath
+        self.system( cmd )
+        return True
 
-                return True
+    def msysConfigureFlags ( sef ):
+        flags  = "--disable-nls "
+        flags += "--disable-static "
+        flags += "--prefix=/ "
+        return flags
 
-        def stripLibs( self, pkg_name ):
-                basepath = os.path.join( self.imagedir, self.instdestdir )
-                dllpath = os.path.join( basepath, "bin", "%s.dll" % pkg_name )
+    def msysCompile( self, bOutOfSource = True ):
+        config = os.path.join( self.workdir, self.instsrcdir, "configure" )
+        build  = os.path.join( self.workdir )
+        if( bOutOfSource ):
+           build  = os.path.join( build, self.instsrcdir + "-build" )
+           utils.cleanDirectory( build )
+        else:
+           build  = os.path.join( build, self.instsrcdir )
 
-                cmd = "strip -s " + dllpath
-                self.system( cmd )
-                return True
+        sh = os.path.join( self.msysdir, "bin", "sh.exe" )
 
-        def msysConfigureFlags ( sef ):
-                flags  = "--disable-nls "
-                flags += "--disable-static "
-                flags += "--prefix=/ "
-                return flags
+        cmd = "%s --login -c \"cd %s && %s %s && make -j2\"" % \
+              ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
+                self.msysConfigureFlags() )
+        self.system( cmd )
+        return True
 
-        def msysCompile( self, bOutOfSource = True ):
-                config = os.path.join( self.workdir, self.instsrcdir, "configure" )
-                build  = os.path.join( self.workdir )
-                if( bOutOfSource ):
-                   build  = os.path.join( build, self.instsrcdir + "-build" )
-                   utils.cleanDirectory( build )
-                else:
-                   build  = os.path.join( build, self.instsrcdir )
+    def msysInstall( self, bOutOfSource = True ):
+        install = os.path.join( self.imagedir, self.instdestdir )
+        build  = os.path.join( self.workdir )
+        if( bOutOfSource ):
+           build  = os.path.join( build, self.instsrcdir + "-build" )
+        else:
+           build  = os.path.join( build, self.instsrcdir )
 
-                sh = os.path.join( self.msysdir, "bin", "sh.exe" )
+        sh = os.path.join( self.msysdir, "bin", "sh.exe" )
 
-                cmd = "%s --login -c \"cd %s && %s %s && make -j2\"" % \
-                      ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
-                        self.msysConfigureFlags() )
-                #print cmd
-                self.system( cmd )
+        cmd = "%s --login -c \"cd %s && make -j2 install DESTDIR=%s\"" % \
+              ( sh, utils.toMSysPath( build ), utils.toMSysPath( install ) )
+        self.system( cmd )
+        return True
 
-                return True
-
-        def msysInstall( self, bOutOfSource = True ):
-                install = os.path.join( self.imagedir, self.instdestdir )
-                build  = os.path.join( self.workdir )
-                if( bOutOfSource ):
-                   build  = os.path.join( build, self.instsrcdir + "-build" )
-                else:
-                   build  = os.path.join( build, self.instsrcdir )
-
-                sh = os.path.join( self.msysdir, "bin", "sh.exe" )
-
-                cmd = "%s --login -c \"cd %s && make -j2 install DESTDIR=%s\"" % \
-                      ( sh, utils.toMSysPath( build ), utils.toMSysPath( install ) )
-                self.system( cmd )
-
-                return True
-        def system( self, command ):
-                os.system( command ) and \
-                    utils.die( "os.system ( %s ) failed" % command)
-                return True
+    def system( self, command ):
+        os.system( command ) and \
+            utils.die( "os.system ( %s ) failed" % command)
+        return True
