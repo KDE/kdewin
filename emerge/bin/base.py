@@ -245,42 +245,42 @@ class baseclass:
         utils.svnFetch( repo, self.svndir )
 
     def __kdesinglecheckout( self, repourl, ownpath, codir, doRecursive = False ):
-                # in ownpath try to checkout codir from repourl
-                # if codir exists and doRecursive is false, simply return,
-                # if codir does not exist, but ownpath/.svn exists,
-                # do a svn update codir
-                # else do svn co repourl/codir
-                # if doRecursive is false, add -N to the svn command
+        # in ownpath try to checkout codir from repourl
+        # if codir exists and doRecursive is false, simply return,
+        # if codir does not exist, but ownpath/.svn exists,
+        # do a svn update codir
+        # else do svn co repourl/codir
+        # if doRecursive is false, add -N to the svn command
 
-                if ( os.path.exists( os.path.join( ownpath, codir ) ) \
-                                     and not doRecursive ):
-                        if not self.stayQuiet:
-                            print "ksco exists:", ownpath, codir
-                        return
+        if ( os.path.exists( os.path.join( ownpath, codir ) ) \
+                             and not doRecursive ):
+            if not self.stayQuiet:
+                print "ksco exists:", ownpath, codir
+            return
 
-                if ( doRecursive ):
-                        recFlag = ""
-                else:
-                        recFlag = "-N"
+        if ( doRecursive ):
+                recFlag = ""
+        else:
+                recFlag = "-N"
 
-                if ( os.path.exists( os.path.join( ownpath, ".svn" ) ) ):
-                        # svn up
-                        svncmd = "svn update %s %s" % ( recFlag, codir)
-                else:
-                        #svn co
-                        svncmd = "svn checkout %s %s" % \
-                                 ( recFlag, repourl + codir )
+        if ( os.path.exists( os.path.join( ownpath, ".svn" ) ) ):
+            # svn up
+            svncmd = "svn update %s %s" % ( recFlag, codir)
+        else:
+            #svn co
+            svncmd = "svn checkout %s %s" % \
+                     ( recFlag, repourl + codir )
 
-                if not self.stayQuiet:
-                    print "kdesinglecheckout:pwd ", ownpath
-                    print "kdesinglecheckout:   ", svncmd
-                os.chdir( ownpath )
-                self.system( svncmd )
+        if not self.stayQuiet:
+            print "kdesinglecheckout:pwd ", ownpath
+            print "kdesinglecheckout:   ", svncmd
+        os.chdir( ownpath )
+        self.system( svncmd )
                 
     def kdeSvnFetch( self, svnpath, packagedir ):
-                # svnpath is the part of the repo url after /home/kde, for example
-                # "trunk/kdesupport/", which leads to the package itself,
-                # without the package
+        # svnpath is the part of the repo url after /home/kde, for example
+        # "trunk/kdesupport/", which leads to the package itself,
+        # without the package
         if not self.stayQuiet:
             print "base kdeSvnFetch called. svnpath: %s dir: %s" % \
                       ( svnpath, packagedir )
@@ -465,14 +465,14 @@ class baseclass:
         self.system( cmd )
 
         if( not os.path.isfile( imppath ) ):
-                # create .lib
-                cmd = "lib /machine:x86 /def:%s /out:%s" % ( defpath, imppath )
-                self.system( cmd )
+            # create .lib
+            cmd = "lib /machine:x86 /def:%s /out:%s" % ( defpath, imppath )
+            self.system( cmd )
         
         if( not os.path.isfile( gccpath ) ):
-                # create .dll.a
-                cmd = "dlltool -d %s -l %s" % ( defpath, gccpath )
-                self.system( cmd )
+            # create .dll.a
+            cmd = "dlltool -d %s -l %s" % ( defpath, gccpath )
+            self.system( cmd )
         return True
 
     def stripLibs( self, pkg_name ):
