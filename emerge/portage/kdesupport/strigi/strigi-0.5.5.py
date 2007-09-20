@@ -6,7 +6,7 @@ import os
 DEPEND = """
 virtual/base
 libs/qt
-kde/kdewin32
+kdesupport/kdewin32
 """
 
 #currently build without clucene...

@@ -12,7 +12,6 @@ PACKAGE_FULL_VER     = "4.3.1-1"
 PACKAGE_FULL_NAME    = "%s-all-opensource-src-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 
 DEPEND = """
-dev-util/dbus
 dev-util/win32libs
 virtual/base
 """
@@ -78,11 +77,6 @@ class subclass(base.baseclass):
     win32libdir = os.path.join( self.rootdir, "win32libs", "lib" ) \
                   .replace( "\\", "/" )
 
-    dbusincdir = os.path.join( self.rootdir, "dbus", "include" ) \
-                  .replace( "\\", "/" )
-    dbuslibdir = os.path.join( self.rootdir, "dbus", "lib" ) \
-                  .replace( "\\", "/" )
-
     # recommended from README.qt-copy
     #  "configure.exe -prefix ..\..\image\qt -platform win32-g++ " \
     #  "-qt-gif -no-exceptions -debug -system-zlib -system-libpng -system-libmng " \
@@ -104,12 +98,13 @@ class subclass(base.baseclass):
     else:
         exit( 1 )
 
+    # time for qt4.3.2 ...
     os.environ[ "USERIN" ] = "y"
     command = r"echo y | qconfigure.bat %s -prefix %s " \
       "-qdbus -qt-gif -no-exceptions -qt-libpng " \
       "-system-libjpeg -system-libtiff -openssl " \
-      "-I %s -L %s -I %s -L %s" % \
-      ( platform, prefix, win32incdir, win32libdir, dbusincdir, dbuslibdir )
+      "-I %s -L %s " % \
+      ( platform, prefix, win32incdir, win32libdir )
     print "command: ", command
     os.system( command ) and die( "qt configure failed" )
 

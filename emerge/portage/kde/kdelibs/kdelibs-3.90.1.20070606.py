@@ -4,9 +4,8 @@ import os
 
 DEPEND = """
 virtual/base
-dev-util/dbus
 dev-util/win32libs
-kde/kdewin32
+kdesupport/kdewin32
 kdesupport/qimageblitz
 kdesupport/soprano
 kdesupport/strigi
