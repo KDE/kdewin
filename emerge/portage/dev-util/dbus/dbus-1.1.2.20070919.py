@@ -16,7 +16,9 @@ buildtypes = "debug release"
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
-    self.instdestdir = "dbus"
+    self.instdestdir = "kde"
+    # cmake scripts are not in src root...
+    self.instsrcdir = os.path.join( "dbus", "cmake" )
 
   def unpack( self ):
     print "dbus unpack called"
@@ -52,51 +54,17 @@ class subclass(base.baseclass):
 
 
   def compile( self ):
-    print "dbus compile called"
-    os.chdir( self.workdir )
-
-    # fixme: use kdesvncompile to avoid debug/release crap here
-    for type in buildtypes.split():
-      builddir = os.path.join( self.workdir, "dbus-build-" + type )
-      utils.cleanDirectory( builddir )
-      os.chdir( builddir )
-
-      options = "-DWIN32LIBS_INSTALL_PREFIX=%s " % \
-                os.path.join( self.rootdir, "win32libs" ).replace( "\\", "/" )
-
-      options = options + "-DCMAKE_INSTALL_PREFIX=%s/dbus " % \
-                self.cmakeInstallPrefix
-
-      options = options + "-DCMAKE_BUILD_TYPE=%s " % type
-
-      command = r"""cmake -G "%s" ..\dbus\cmake\ %s""" % \
-                (self.cmakeMakefileGenerator, options )
-
-      os.system( command )
-
-      os.system( self.cmakeMakeProgramm ) \
-                 and die ( self.cmakeMakeProgramm + " failed" )
-
-    return True
+    return self.kdeCompile()
 
   def install( self ):
-    for type in buildtypes.split():
-      builddir = "dbus-build-" + type
-
-      os.chdir( os.path.join( self.workdir, builddir ) )
-
-      os.system( "%s DESTDIR=%s install" % \
-                ( self.cmakeMakeProgramm, self.imagedir ) ) \
-		and die ( self.cmakeMakeProgramm + " install failed" )
-
-    utils.fixCmakeImageDir( self.imagedir, self.rootdir )
-
-    return True
+    return self.kdeInstall()
 
   def make_package( self ):
+    # for src package
+    self.instsrcdir = "dbus"
 
     # now do packaging with kdewin-packager
-    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, False )
+    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
 
     return True
 
