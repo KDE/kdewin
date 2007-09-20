@@ -66,6 +66,8 @@ class subclass(base.baseclass):
     return True
 
   def compile( self ):
+    # time for qt4.3.2 ...
+
     qtsrcdir = os.path.join( self.workdir, self.instsrcdir )
     os.chdir( qtsrcdir )
 
@@ -76,6 +78,10 @@ class subclass(base.baseclass):
                   .replace( "\\", "/" )
     win32libdir = os.path.join( self.rootdir, "win32libs", "lib" ) \
                   .replace( "\\", "/" )
+
+    
+    sedcommand = r""" -e "s: msvc_dsp.o::" """
+    utils.sedFile( os.path.join( qtsrcdir, "qmake" ), "Makefile.win32-g++", sedcommand )
 
     # recommended from README.qt-copy
     #  "configure.exe -prefix ..\..\image\qt -platform win32-g++ " \
@@ -98,8 +104,8 @@ class subclass(base.baseclass):
     else:
         exit( 1 )
 
-    # time for qt4.3.2 ...
     os.environ[ "USERIN" ] = "y"
+    os.chdir( qtsrcdir )
     command = r"echo y | qconfigure.bat %s -prefix %s " \
       "-qdbus -qt-gif -no-exceptions -qt-libpng " \
       "-system-libjpeg -system-libtiff -openssl " \
