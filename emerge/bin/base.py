@@ -469,9 +469,9 @@ class baseclass:
                 cmd = "lib /machine:x86 /def:%s /out:%s" % ( defpath, imppath )
                 self.system( cmd )
         
-        if( not os.path.isfile( imppath ) ):
+        if( not os.path.isfile( gccpath ) ):
                 # create .dll.a
-                cmd = "dlltool -d %s -l " % ( defpath, gccpath )
+                cmd = "dlltool -d %s -l %s" % ( defpath, gccpath )
                 self.system( cmd )
         return True
 

@@ -5,7 +5,7 @@ import utils
 
 PACKAGE_NAME         = "libxml2"
 PACKAGE_VER          = "2.6.30"
-PACKAGE_FULL_VER     = "2.6.30-2"
+PACKAGE_FULL_VER     = "2.6.30-3"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
 PACKAGE_DLL_NAME     = "libxml2"
 PACKAGE_INSTSRCDIR   = PACKAGE_FULL_NAME + ".win32"

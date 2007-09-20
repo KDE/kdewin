@@ -45,10 +45,9 @@ class subclass(base.baseclass):
   def kdeDefaultDefines( self ):
     # adjust some vars for proper compile
     cmake_src  = os.path.join( self.workdir, self.instsrcdir )
-    cmake_dest = os.path.join( self.imagedir, self.instdestdir )
 
     options = "%s -DCMAKE_INSTALL_PREFIX=%s " % \
-              ( cmake_src, cmake_dest.replace( '\\', '/' ) )
+              ( cmake_src, self.rootdir.replace( '\\', '/' ) )
     options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
               os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" )
 
@@ -67,10 +66,7 @@ class subclass(base.baseclass):
     return self.kdeCompile()
 
   def install( self ):
-    os.chdir( os.path.join( self.workdir, "%s-build" % self.package ) )
-    os.system( "mingw32-make install" ) and die( "mingw32-make install" )
-
-    return True
+    return self.kdeInstall()
 
   def make_package( self ):
     # auto-create both import libs with the help of pexports

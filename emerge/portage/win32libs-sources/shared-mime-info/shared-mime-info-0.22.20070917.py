@@ -26,6 +26,7 @@ class subclass(base.baseclass):
     base.baseclass.__init__( self, SRC_URI )
     self.instsrcdir = PACKAGE_FULL_NAME
     self.createCombinedPackage = False
+    self.buildType = "Release"
 
   def unpack( self ):
     if(not base.baseclass.unpack( self ) ):
@@ -44,16 +45,16 @@ class subclass(base.baseclass):
                 if( p.match( name ) ):
                     utils.sedFile( root, name, sedcmd )
 
-    return True
+    if( self.compiler == "mingw"):
+        return True
     return self.kdeSvnUnpack( "trunk/kdesupport", "kdewin32")
 
   def kdeDefaultDefines( self ):
     # adjust some vars for proper compile
     cmake_src  = os.path.join( self.workdir, self.instsrcdir )
-    cmake_dest = os.path.join( self.imagedir, self.instdestdir )
 
     options = "%s -DCMAKE_INSTALL_PREFIX=%s " % \
-              ( cmake_src, cmake_dest.replace( '\\', '/' ) )
+              ( cmake_src, self.rootdir.replace( '\\', '/' ) )
 
     options = options + "-DKDEWIN32_DIR=%s " % \
               os.path.join( self.workdir, "kdewin32" ).replace( "\\", "/" )
@@ -85,15 +86,14 @@ class subclass(base.baseclass):
     return self.kdeCompile()
 
   def install( self ):
-    os.chdir( os.path.join( self.workdir, "%s-build" % self.package ) )
-    os.system( "mingw32-make install" ) and die( "mingw32-make install" )
-    cmd = os.path.join( self.imagedir, self.instdestdir, "bin", "update-mime-database.exe" )
-    cmd = cmd + os.path.join( self.imagedir, "share", "mime" )
-    os.system( cmd )
+    if( not self.kdeInstall() ):
+        return False
+    cmd = os.path.join( self.imagedir, self.instdestdir, "bin", "update-mime-database.exe" ) \
+        + " " + os.path.join( self.imagedir, "share", "mime" )
+    os.system( cmd ) and die( cmd )
     return True
 
   def make_package( self ):
-    # auto-create both import libs with the help of pexports
     cmd = "strip -s %s" % \
           os.path.join(self.imagedir, self.instdestdir, "bin", "update-mime-database.exe" )
     os.system( cmd ) and die ( cmd )
