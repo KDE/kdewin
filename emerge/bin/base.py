@@ -290,27 +290,28 @@ class baseclass:
                 print "skipping svn fetch/update (--offline)"
             return True
         
-                mydir = self.kdesvndir
-                if ( not os.path.exists( mydir ) ):
-                        os.mkdir( mydir )
+        mydir = self.kdesvndir
+        if ( not os.path.exists( mydir ) ):
+                os.mkdir( mydir )
 
-                repourl = self.kdesvnserver + "/home/kde/"
+        repourl = self.kdesvnserver + "/home/kde/"
+
         for tmpdir in svnpath.split( "/" ):
-                        if ( tmpdir == "" ):
-                                continue
-                        if not self.stayQuiet:
-                            print "  mydir: %s" % mydir
-                            print "  dir to checkout: %s" % tmpdir
-                            print "  repourl", repourl
+            if ( tmpdir == "" ):
+                    continue
+            if not self.stayQuiet:
+                print "  mydir: %s" % mydir
+                print "  dir to checkout: %s" % tmpdir
+                print "  repourl", repourl
 
-                        self.__kdesinglecheckout( repourl, mydir, tmpdir, False )
-                        mydir = os.path.join( mydir, tmpdir )
-                        repourl = repourl + tmpdir + "/"
+            self.__kdesinglecheckout( repourl, mydir, tmpdir, False )
+            mydir = os.path.join( mydir, tmpdir )
+            repourl = repourl + tmpdir + "/"
                 
-                if not self.stayQuiet:
-                    print "dir in which to really checkout: %s" % mydir
-                    print "dir to really checkout: %s" % packagedir
-                self.__kdesinglecheckout( repourl, mydir, packagedir, True )
+            if not self.stayQuiet:
+                print "dir in which to really checkout: %s" % mydir
+                print "dir to really checkout: %s" % packagedir
+            self.__kdesinglecheckout( repourl, mydir, packagedir, True )
 
         svndir = os.path.join( self.kdesvndir, svnpath ).replace( "/", "\\" )
         #repo = self.kdesvnserver + "/home/kde/" + svnpath + dir
