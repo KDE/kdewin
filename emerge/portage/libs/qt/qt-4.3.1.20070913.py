@@ -63,6 +63,10 @@ class subclass(base.baseclass):
     cmd = "cd %s && patch -p0 < %s" % \
           ( qtsrcdir, os.path.join( self.packagedir, "qt-4.3.1.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
+    # and once more... :)
+    cmd = "cd %s && patch -p0 < %s" % \
+          ( qtsrcdir, os.path.join( self.packagedir, "qmake-mingw.diff" ) )
+    os.system( cmd ) and die( "qt unpack failed" )
     return True
 
   def compile( self ):
@@ -133,5 +137,8 @@ class subclass(base.baseclass):
     shutil.copy( src, dst )
 
     return True
+
+  def make_package( self ):
+    return self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, False )
 
 subclass().execute()

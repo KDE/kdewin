@@ -1,0 +1,115 @@
+--- qmake\generators\win32\mingw_make.cpp.orig	2007-09-21 18:38:24.000000000 +0200
++++ qmake\generators\win32\mingw_make.cpp	2007-09-21 18:26:02.000000000 +0200
+@@ -81,7 +81,7 @@
+                 suffix = project->first("QMAKE_" + steam.toUpper() + "_SUFFIX");
+             QString extension;
+             for (QList<QMakeLocalFileName>::Iterator dir_it = dirs.begin(); dir_it != dirs.end(); ++dir_it) {
+-                int ver = findHighestVersion((*dir_it).local(), steam);
++                int ver = findHighestVersion((*dir_it).local(), steam, "dll.a|a");
+                 if (ver != -1) {
+                     extension += QString::number(ver);
+                     break;
+@@ -134,7 +134,7 @@
+     return false;
+  }
+ 
+-void createLdObjectScriptFile(const QString &fileName, const QStringList &objList)
++static void createLdObjectScriptFile(const QString &fileName, const QStringList &objList)
+ {
+     QString filePath = Option::output_dir + QDir::separator() + fileName;
+     QFile file(filePath);
+@@ -153,7 +153,7 @@
+     }
+ }
+ 
+-void createArObjectScriptFile(const QString &fileName, const QString &target, const QStringList &objList)
++static void createArObjectScriptFile(const QString &fileName, const QString &target, const QStringList &objList)
+ {
+     QString filePath = Option::output_dir + QDir::separator() + fileName;
+     QFile file(filePath);
+@@ -427,3 +427,7 @@
+     return aList;
+ }
+ 
++QString MingwMakefileGenerator::getLibTarget()
++{
++    return QString("lib" + project->first("TARGET")+project->first("TARGET_VERSION_EXT")+".a");
++}
+--- qmake\generators\win32\mingw_make.h.orig	2007-09-21 18:38:24.000000000 +0200
++++ qmake\generators\win32\mingw_make.h	2007-09-21 11:46:52.000000000 +0200
+@@ -65,6 +65,7 @@
+ 
+     virtual bool findLibraries();
+     void fixTargetExt();
++    virtual QString getLibTarget();
+ 
+     bool init_flag;
+     QString objectsLinkLine;
+--- qmake\generators\win32\winmakefile.cpp.orig	2007-08-07 15:21:56.000000000 +0200
++++ qmake\generators\win32\winmakefile.cpp	2007-09-21 23:02:31.486500000 +0200
+@@ -53,7 +53,7 @@
+ }
+
+ int
+-Win32MakefileGenerator::findHighestVersion(const QString &d, const QString &stem)
++Win32MakefileGenerator::findHighestVersion(const QString &d, const QString &stem, const QString &ext)
+ {
+     QString bd = Option::fixPathToLocalOS(d, true);
+     if(!exists(bd))
+@@ -75,7 +75,7 @@
+     if(!project->isActiveConfig("no_versionlink")) {
+         QDir dir(bd);
+         QStringList entries = dir.entryList();
+-        QRegExp regx("((lib)?" + dllStem + "([0-9]*)).(a|lib|prl)$", Qt::CaseInsensitive);
++        QRegExp regx(QString("((lib)?" + dllStem + "([0-9]*)).(%1|prl)$").arg(ext), Qt::CaseInsensitive);
+         for(QStringList::Iterator it = entries.begin(); it != entries.end(); ++it) {
+             if(regx.exactMatch((*it))) {
+ 				if (!regx.cap(3).isEmpty()) {
+@@ -719,6 +719,11 @@
+     }
+ }
+
++QString Win32MakefileGenerator::getLibTarget()
++{
++    return QString(project->first("TARGET")+project->first("TARGET_VERSION_EXT")+".lib");
++}
++
+ QString Win32MakefileGenerator::defaultInstall(const QString &t)
+ {
+     if((t != "target" && t != "dlltarget") ||
+@@ -748,9 +753,14 @@
+             uninst.append("-$(DEL_FILE) \"" + dst_prl + "\"");
+         }
+         if(project->isActiveConfig("shared") && !project->isActiveConfig("plugin")) {
+-            QString lib_target = QString(project->first("TARGET")+project->first("TARGET_VERSION_EXT")+".lib");
++            QString lib_target = getLibTarget();
+             lib_target.remove('"');
+-            QString src_targ = "$(DESTDIR)" + lib_target;
++            QString src_targ;
++	          if(!project->isEmpty("DESTDIR"))
++	              src_targ = project->first("DESTDIR");
++            else
++	              src_targ = "$(DESTDIR)";
++            src_targ += lib_target;
+             QString dst_targ = filePrefixRoot(root, fileFixify(targetdir + lib_target, FileFixifyAbsolute));
+             if(!ret.isEmpty())
+                 ret += "\n\t";
+--- qmake\generators\win32\winmakefile.h.orig	2007-09-21 18:38:24.000000000 +0200
++++ qmake\generators\win32\winmakefile.h	2007-09-21 11:46:42.000000000 +0200
+@@ -68,7 +68,7 @@
+ 
+     virtual void writeRcFilePart(QTextStream &t);
+ 
+-    int findHighestVersion(const QString &dir, const QString &stem);
++    int findHighestVersion(const QString &dir, const QString &stem, const QString &ext = QLatin1String("lib"));
+     bool findLibraries(const QString &);
+     virtual bool findLibraries();
+ 
+@@ -77,6 +77,7 @@
+     virtual void fixTargetExt();
+     virtual void processRcFileVar();
+     virtual void processFileTagsVar();
++    virtual QString getLibTarget();
+ };
+ 
+ inline Win32MakefileGenerator::~Win32MakefileGenerator()
