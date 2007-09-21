@@ -75,7 +75,10 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/zlib-1.2.3-2-lib.zip
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
-    self.instdestdir = "win32libs"
+    if self.traditional:
+        self.instdestdir = "win32libs"
+    else:
+        self.instdestdir = ""
 
   def compile(self):
     # here we need an own compile step, because we have to copy
