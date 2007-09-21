@@ -6,6 +6,7 @@ class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
     self.instsrcdir = "svn-win32-1.4.3"
-    self.instdestdir = "subversion"
+    if self.traditional:
+        self.instdestdir = "subversion"
 
 subclass().execute()
