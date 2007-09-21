@@ -37,14 +37,6 @@ if ( quiet == "TRUE" ):
 else:
     stayQuiet = False
     
-if not stayQuiet:    
-    print "KDEROOT:     ", ROOTDIR
-    print "KDECOMPILER: ", COMPILER
-    print "DOWNLOADDIR: ", DOWNLOADDIR
-    print "KDESVNDIR:   ", KDESVNDIR
-    print "KDESVNSERVER:", KDESVNSERVER
-    print "MSYSDIR:", MSYSDIR
-
 # ok, we have the following dirs:
 # ROOTDIR: the root where all this is below
 # DOWNLOADDIR: the dir under rootdir, where the downloaded files are put into
@@ -62,7 +54,7 @@ class baseclass:
         self.instdestdir=""
         self.traditional=True
         self.stayQuiet=True
-        if not os.getenv("STAYQUIET") == "TRUE":
+        if not os.getenv( "STAYQUIET" ) == "TRUE":
             self.stayQuiet=False
         if DIRECTORYLAYOUT == "installer":
             self.traditional=False
@@ -521,7 +513,25 @@ class baseclass:
         self.system( cmd )
         return True
 
-    def system( self, command ):
+    def system( self, command , infileName = None, outfileName = os.path.join( ROOTDIR, "out.log" ), errfileName = os.path.join( ROOTDIR, "out.log" ) ):
+        """ this function should be called instead of os.system it will return the errorstatus 
+            and take the name of a possible command file and the names of stdout and stderr
+            logfiles. it should be called  """
         os.system( command ) and \
             utils.die( "os.system ( %s ) failed" % command)
         return True
+
+# ############################################################################################
+# for testing purpose only:
+# ############################################################################################
+if '__main__' in globals().keys():
+    if not stayQuiet:    
+        print "KDEROOT:     ", ROOTDIR
+        print "KDECOMPILER: ", COMPILER
+        print "DOWNLOADDIR: ", DOWNLOADDIR
+        print "KDESVNDIR:   ", KDESVNDIR
+        print "KDESVNSERVER:", KDESVNSERVER
+        print "MSYSDIR:", MSYSDIR
+    
+    test = baseclass()
+    test.system( "dir" )
