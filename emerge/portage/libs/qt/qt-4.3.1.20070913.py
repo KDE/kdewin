@@ -78,10 +78,13 @@ class subclass(base.baseclass):
     # so that the mkspecs can be found, when -prefix is set
     os.putenv( "QMAKEPATH", qtsrcdir )
 
-    win32incdir = os.path.join( self.rootdir, "win32libs", "include" ) \
-                  .replace( "\\", "/" )
-    win32libdir = os.path.join( self.rootdir, "win32libs", "lib" ) \
-                  .replace( "\\", "/" )
+    if self.traditional:
+        win32incdir = os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" )
+        win32libdir = os.path.join( self.rootdir, "win32libs", "lib" ).replace( "\\", "/" )
+    else:
+        win32incdir = os.path.join( self.rootdir, "include" ).replace( "\\", "/" )
+        win32libdir = os.path.join( self.rootdir, "lib" ).replace( "\\", "/" )
+    
 
     
     sedcommand = r""" -e "s: msvc_dsp.o::" """
