@@ -23,7 +23,8 @@ class subclass(base.baseclass):
 
   def make_package( self ):
     # FIXME?
-    self.instdestdir = "kde"
+    if self.traditional:
+        self.instdestdir = "kde"
     self.instsrcdir = "qca"
     return self.doPackaging( "qca", "20070915", True )
 

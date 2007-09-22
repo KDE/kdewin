@@ -329,6 +329,7 @@ class baseclass:
         return True
         
     def kdeDefaultDefines( self ):
+        #FIXME: this should be cleaned for installer-layout
         package_path = self.package
         if( not self.instsrcdir == "" ):
             package_path = self.instsrcdir
