@@ -67,6 +67,11 @@ class subclass(base.baseclass):
     cmd = "cd %s && patch -p0 < %s" % \
           ( qtsrcdir, os.path.join( self.packagedir, "qmake-mingw.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
+    # the third one
+    cmd = "cd %s && patch -p0 < %s" % \
+          ( qtsrcdir, os.path.join( self.packagedir, "qdbus-win32-install.diff" ) )
+    os.system( cmd ) and die( "qt unpack failed" )
+
     return True
 
   def compile( self ):

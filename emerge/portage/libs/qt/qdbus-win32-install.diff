@@ -1,0 +1,13 @@
+--- tools\qdbus\src\src.pro.orig	2007-09-22 14:27:27.868500000 +0200
++++ tools\qdbus\src\src.pro	2007-09-22 14:14:28.071125000 +0200
+@@ -22,6 +22,10 @@
+ MOC_DIR         = tmp
+ DESTDIR = ../../../lib
+ DLLDESTDIR = ../../../bin
++win32 {
++   dlltarget.path=$${DLLDESTDIR}
++   INSTALLS += dlltarget
++}
+ isEmpty(QT_MAJOR_VERSION) {
+    VERSION=4.3.0
+ } else {
