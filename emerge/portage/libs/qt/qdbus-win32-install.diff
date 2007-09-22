@@ -5,7 +5,7 @@
  DESTDIR = ../../../lib
  DLLDESTDIR = ../../../bin
 +win32 {
-+   dlltarget.path=$${DLLDESTDIR}
++   dlltarget.path=$$[QT_INSTALL_BINS]
 +   INSTALLS += dlltarget
 +}
  isEmpty(QT_MAJOR_VERSION) {

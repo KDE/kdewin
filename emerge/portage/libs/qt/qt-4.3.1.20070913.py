@@ -105,8 +105,8 @@ class subclass(base.baseclass):
     # prefix = os.path.join( self.rootdir, "qt" ).replace( "\\", "/" )
     prefix = os.path.join( self.imagedir, self.instdestdir )
     platform = ""
-    libtmp = os.environ[ "LIB" ]
-    inctmp = os.environ[ "INCLUDE" ]
+    libtmp = os.getenv( "LIB" )
+    inctmp = os.getenv( "INCLUDE" )
     if self.compiler == "msvc2005":
         platform = "msvc2005"
     elif self.compiler == "mingw":
@@ -129,8 +129,10 @@ class subclass(base.baseclass):
     # build qt
     os.system( self.cmakeMakeProgramm ) and die( "qt make failed" )
 
-    os.environ[ "LIB" ] = libtmp
-    os.environ[ "INCLUDE" ] = inctmp
+    if( not libtmp == None ):
+        os.environ[ "LIB" ] = libtmp
+    if( not inctmp == None ):
+        os.environ[ "INCLUDE" ] = inctmp
     return True
 
   def install( self ):
