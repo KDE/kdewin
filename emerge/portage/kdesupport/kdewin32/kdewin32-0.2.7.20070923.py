@@ -25,6 +25,6 @@ class subclass(base.baseclass):
     # FIXME?
     self.instdestdir = "kde"
     self.instsrcdir = "kdewin32"
-    return self.doPackaging( "kdewin32", "20070915", True )
+    return self.doPackaging( "kdewin32", "0.2.7", True )
 
 subclass().execute()
