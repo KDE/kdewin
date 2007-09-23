@@ -344,7 +344,7 @@ class baseclass:
                     os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
             
             options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
-                    os.path.join( self.rootdir, "strigi" ).replace( "\\", "/" )
+                    os.path.join( self.rootdir, "kde" ).replace( "\\", "/" )
             
             options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
                     os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
