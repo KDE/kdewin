@@ -41,14 +41,14 @@ class subclass(base.baseclass):
       return False
     src = os.path.join( self.workdir )
     gpgerr_dir = os.path.join( src, PACKAGE_GPGERR_NAME )
-    gpgme _dir = os.path.join( src, PACKAGE_FULL_NAME )
+    gpgme_dir  = os.path.join( src, PACKAGE_FULL_NAME )
 
     cmd = "cd %s && patch -p0 < %s" % \
           ( gpgerr_dir, os.path.join( self.packagedir, "libgpg-error-1.5.diff" ) )
     os.system( cmd ) or die
 
     cmd = "cd %s && patch -p0 < %s" % \
-          ( gpgerr_dir, os.path.join( self.packagedir, "gpgme-1.1.4.diff" ) )
+          ( gpgme_dir, os.path.join( self.packagedir, "gpgme-1.1.4.diff" ) )
     os.system( cmd ) or die
 
     return True
