@@ -354,8 +354,7 @@ class baseclass:
         
         return options
 
-    def kdeCompileInternal( self, buildType = None ):
-        buildtype = ""
+    def kdeCompileInternal( self, buildType ):
         builddir = "%s-build-%s" % ( self.package, self.compiler )
 
         if( not buildType == None ):
@@ -380,7 +379,7 @@ class baseclass:
 
     def kdeCompile( self ):
         if( not self.buildType == None ) :
-            if( not self.kdeCompileInternal() ):
+            if( not self.kdeCompileInternal( self.buildType ) ):
                 return False
         else:
             if( not self.kdeCompileInternal( "debug" ) ):
@@ -389,7 +388,7 @@ class baseclass:
                 return False
         return True
 
-    def kdeInstallInternal( self, buildType = None ):
+    def kdeInstallInternal( self, buildType ):
         builddir = "%s-build-%s" % ( self.package, self.compiler )
 
         if( not buildType == None ):
@@ -406,7 +405,7 @@ class baseclass:
 
     def kdeInstall( self ):
         if( not self.buildType == None ):
-            if( not self.kdeInstallInternal() ):
+            if( not self.kdeInstallInternal( self.buildType ) ):
                 return False
         else:
             if( not self.kdeInstallInternal( "debug" ) ):

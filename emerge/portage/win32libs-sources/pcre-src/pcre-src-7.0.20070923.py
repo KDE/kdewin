@@ -6,7 +6,7 @@ from utils import die
 
 PACKAGE_NAME         = "pcre"
 PACKAGE_VER          = "7.0"
-PACKAGE_FULL_VER     = "7.0-2"
+PACKAGE_FULL_VER     = "7.0-3"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 PACKAGE_DLL_NAME     = "pcre"
 
