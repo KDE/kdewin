@@ -7,7 +7,7 @@ from utils import die
 
 PACKAGE_NAME         = "gpgme"
 PACKAGE_VER          = "1.1.4"
-PACKAGE_FULL_VER     = "1.1.4-2"
+PACKAGE_FULL_VER     = "1.1.4-3"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
 PACKAGE_GPGERR_NAME  = "%s-%s" % ( "libgpg-error", "1.5")
 PACKAGE_DLL_NAME     = """
@@ -41,12 +41,16 @@ class subclass(base.baseclass):
       return False
     src = os.path.join( self.workdir )
     gpgerr_dir = os.path.join( src, PACKAGE_GPGERR_NAME )
+    gpgme _dir = os.path.join( src, PACKAGE_FULL_NAME )
 
-    # ok, ok - we maybe should split this into libgpg-error and libgpgme
     cmd = "cd %s && patch -p0 < %s" % \
           ( gpgerr_dir, os.path.join( self.packagedir, "libgpg-error-1.5.diff" ) )
     os.system( cmd ) or die
-    
+
+    cmd = "cd %s && patch -p0 < %s" % \
+          ( gpgerr_dir, os.path.join( self.packagedir, "gpgme-1.1.4.diff" ) )
+    os.system( cmd ) or die
+
     return True
 
   def msysConfigureFlags ( self ):
