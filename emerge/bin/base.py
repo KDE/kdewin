@@ -224,6 +224,8 @@ class baseclass:
         self.kdesvnuser = KDESVNUSERNAME
         self.kdesvnpass = KDESVNPASSWORD
         self.msysdir = MSYSDIR
+        self.strigidir = os.getenv( "STRIGI_HOME" )
+        self.dbusdir = os.getenv( "DBUSDIR" )
 
     def svnFetch( self, repo ):
         if not self.stayQuiet:
@@ -329,28 +331,48 @@ class baseclass:
         return True
         
     def kdeDefaultDefines( self ):
-        #FIXME: this should be cleaned for installer-layout
+        #FIXME: can we define the paths externally???
         package_path = self.package
         if( not self.instsrcdir == "" ):
             package_path = self.instsrcdir
 
-        options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s/kde " % \
-              ( package_path, self.rootdir.replace( "\\", "/" ) )
-        
-        options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
-                os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
-        
-        options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
-                os.path.join( self.rootdir, "strigi" ).replace( "\\", "/" )
-        
-        options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
-                os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
-        
-        options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
-                os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" )
-        
-        options = options + "-DCMAKE_LIBRARY_PATH=%s " % \
-                os.path.join( self.rootdir, "win32libs", "lib" ).replace( "\\", "/" )
+        if self.traditional:
+            options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s/kde " % \
+                  ( package_path, self.rootdir.replace( "\\", "/" ) )
+            
+            options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
+                    os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
+            
+            options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
+                    os.path.join( self.rootdir, "strigi" ).replace( "\\", "/" )
+            
+            options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
+                    os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
+            
+            options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
+                    os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" )
+            
+            options = options + "-DCMAKE_LIBRARY_PATH=%s " % \
+                    os.path.join( self.rootdir, "win32libs", "lib" ).replace( "\\", "/" )
+        else:
+            options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s " % \
+                  ( package_path, self.rootdir.replace( "\\", "/" ) )
+            
+            options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
+                    self.rootdir.replace( "\\", "/" )
+            
+            options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
+                    self.strigidir.replace( "\\", "/" )
+            
+            options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
+                    self.rootdir.replace( "\\", "/" )
+            
+            options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
+                    os.path.join( self.rootdir, "include" ).replace( "\\", "/" )
+            
+            options = options + "-DCMAKE_LIBRARY_PATH=%s " % \
+                    os.path.join( self.rootdir, "lib" ).replace( "\\", "/" )
+
         
         return options
 
