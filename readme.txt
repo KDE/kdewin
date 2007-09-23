@@ -6,6 +6,7 @@ history
 version 0.2.7
 - added (f)truncate
 - fix asinh/acosh/atanh for msvc
+- add 'extern "C"' for langinfo.h
 
 version 0.2.6
 - added utime 
