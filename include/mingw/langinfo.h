@@ -5,9 +5,10 @@
 extern "C" {
 #endif
 
+#include <winposix_export.h>
 #include <nl_types.h>
 
-char *nl_langinfo(nl_item);
+KDEWIN32_EXPORT char *nl_langinfo(nl_item);
 
 #ifdef __cplusplus
 }
