@@ -1,0 +1,39 @@
+--- tools\assistant\lib\lib.pro.orig	2007-09-27 11:42:42.046875000 +0200
++++ tools\assistant\lib\lib.pro	2007-09-27 11:36:42.015625000 +0200
+@@ -19,6 +19,10 @@
+ DESTDIR                = ../../../lib
+ DLLDESTDIR             = ../../../bin
+ 
++win32 {
++   dlltarget.path=$$[QT_INSTALL_BINS]
++   INSTALLS += dlltarget
++}
+ unix {
+         QMAKE_CFLAGS += $$QMAKE_CFLAGS_SHLIB
+         QMAKE_CXXFLAGS += $$QMAKE_CXXFLAGS_SHLIB
+--- tools\designer\src\lib\lib.pro.orig	2007-09-27 11:43:53.875000000 +0200
++++ tools\designer\src\lib\lib.pro	2007-09-27 11:43:14.796875000 +0200
+@@ -7,6 +7,10 @@
+ DESTDIR = ../../../../lib
+ DLLDESTDIR = ../../../../bin
+ 
++win32 {
++   dlltarget.path=$$[QT_INSTALL_BINS]
++   INSTALLS += dlltarget
++}
+ isEmpty(QT_MAJOR_VERSION) {
+    VERSION=4.3.0
+ } else {
+--- tools\designer\src\components\lib\lib.pro.orig	2007-08-07 15:22:11.000000000 +0200
++++ tools\designer\src\components\lib\lib.pro	2007-09-27 11:50:23.171875000 +0200
+@@ -8,6 +8,10 @@
+     DLLDESTDIR = $$QT_BUILD_TREE/bin
+ }
+ 
++win32 {
++   dlltarget.path=$$[QT_INSTALL_BINS]
++   INSTALLS += dlltarget
++}
+ # QtDesignerComponents uses
+ DEFINES += QT_STATICPLUGIN
+ 

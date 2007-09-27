@@ -25,15 +25,19 @@ http://belnet.dl.sourceforge.net/sourceforge/qtwin/acs-4.3.x-patch3.zip
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
-    self.instsrcdir = PACKAGE_FULL_NAME
+    self.instsrcdir = PACKAGE_FULL_NAME + "-" + self.compiler
 
   def unpack( self ):
     qtsrcdir = os.path.join( self.workdir, self.instsrcdir )
+    qtsrcdir_tmp = os.path.join( self.workdir, PACKAGE_FULL_NAME )
 
-    utils.cleanDirectory( self.workdir )
+    utils.cleanDirectory( qtsrcdir )
+    utils.cleanDirectory( qtsrcdir_tmp )
 
     if ( not utils.unpackFile( self.downloaddir, self.filenames[0], self.workdir ) ):
       return False
+    os.rmdir( qtsrcdir )
+    os.rename( qtsrcdir_tmp, qtsrcdir )
 
     if ( not utils.unpackFile( self.downloaddir, self.filenames[1], qtsrcdir ) ):
       return False
@@ -42,6 +46,13 @@ class subclass(base.baseclass):
     sedcommand = r""" -e "s:pause::" """
     utils.sedFile( qtsrcdir, "installpatch43.bat", sedcommand )
     os.system( "cd " + qtsrcdir + " && " + os.path.join( qtsrcdir, "installpatch43.bat" ) )
+    
+    # I should update the msvc patch...
+    # either embed manifest or use static runtime - we use static runtime atm
+    path = os.path.join( qtsrcdir, "qmake" )
+    file = "Makefile.win32-msvc2005"
+    sedcommand = r""" -e "s/ -MD / -MT /" """
+    utils.sedFile( path, file, sedcommand )
 
     # disable demos and examples
     sedcommand = r""" -e "s:SUBDIRS += examples::" -e "s:SUBDIRS += demos::" """
@@ -63,13 +74,17 @@ class subclass(base.baseclass):
     cmd = "cd %s && patch -p0 < %s" % \
           ( qtsrcdir, os.path.join( self.packagedir, "qt-4.3.1.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
-    # and once more... :)
+    # and once more... :)  (Issue N180186)
     cmd = "cd %s && patch -p0 < %s" % \
           ( qtsrcdir, os.path.join( self.packagedir, "qmake-mingw.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
-    # the third one
+    # the third one (Issue N180187)
     cmd = "cd %s && patch -p0 < %s" % \
           ( qtsrcdir, os.path.join( self.packagedir, "qdbus-win32-install.diff" ) )
+    os.system( cmd ) and die( "qt unpack failed" )
+    # more libs to install
+    cmd = "cd %s && patch -p0 < %s" % \
+          ( qtsrcdir, os.path.join( self.packagedir, "qt_install_toollibs.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
 
     return True
