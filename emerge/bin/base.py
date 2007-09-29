@@ -65,6 +65,14 @@ class baseclass:
         # "" -> debug and release
         self.buildType = None
 
+        if COMPILER == "msvc2005":
+            self.compiler = "msvc2005"
+        elif COMPILER == "mingw":
+            self.compiler = "mingw"
+        else:
+            print "error: KDECOMPILER: %s not understood" % COMPILER
+            exit( 1 )
+
     def execute( self ):
         if not self.stayQuiet:
             print "base exec called. args:", sys.argv
@@ -82,14 +90,6 @@ class baseclass:
             print "opts:", options
         
         self.setDirectories()
-        
-        if COMPILER == "msvc2005":
-            self.compiler = "msvc2005"
-        elif COMPILER == "mingw":
-            self.compiler = "mingw"
-        else:
-            print "error: KDECOMPILER: %s not understood" % COMPILER
-            exit( 1 )
 
         ok = True
         if command == "fetch":        ok = self.fetch()
@@ -447,10 +447,10 @@ class baseclass:
 
         if ( packSources ):
             srcpath = os.path.join( self.workdir, self.instsrcdir )
-            cmd = "kdewin-packager.exe -name %s -root %s -srcroot %s -version %s -destdir %s -complete" % \
+            cmd = "kdewin-packager.exe -debuglibs -name %s -root %s -srcroot %s -version %s -destdir %s -complete" % \
                   ( pkg_name, binpath, srcpath, pkg_version, dstpath )
         else:
-            cmd = "kdewin-packager.exe -name %s -root %s -version %s -destdir %s -complete" % \
+            cmd = "kdewin-packager.exe -debuglibs -name %s -root %s -version %s -destdir %s -complete" % \
                   ( pkg_name, binpath, pkg_version, dstpath )
 
         if( not self.createCombinedPackage ):

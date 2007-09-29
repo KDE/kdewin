@@ -8,7 +8,7 @@ import os
 
 PACKAGE_NAME         = "qt"
 PACKAGE_VER          = "4.3.1"
-PACKAGE_FULL_VER     = "4.3.1-1"
+PACKAGE_FULL_VER     = "4.3.1-2"
 PACKAGE_FULL_NAME    = "%s-all-opensource-src-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 
 DEPEND = """
@@ -53,6 +53,11 @@ class subclass(base.baseclass):
     file = "Makefile.win32-msvc2005"
     sedcommand = r""" -e "s/ -MD / -MT /" """
     utils.sedFile( path, file, sedcommand )
+    # embed_manifest_exe should be in qmake.conf - or not?
+    path = os.path.join( qtsrcdir, "mkspecs", "win32-msvc2005" )
+    file = "qmake.conf"
+    sedcommand = r""" -e "s/ embed_manifest_dll/ embed_manifest_dll embed_manifest_exe/" """
+    utils.sedFile( path, file, sedcommand )
 
     # disable demos and examples
     sedcommand = r""" -e "s:SUBDIRS += examples::" -e "s:SUBDIRS += demos::" """
@@ -82,7 +87,7 @@ class subclass(base.baseclass):
     cmd = "cd %s && patch -p0 < %s" % \
           ( qtsrcdir, os.path.join( self.packagedir, "qdbus-win32-install.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
-    # more libs to install
+    # more libs to install (Issue N180864)
     cmd = "cd %s && patch -p0 < %s" % \
           ( qtsrcdir, os.path.join( self.packagedir, "qt_install_toollibs.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
