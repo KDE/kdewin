@@ -7,6 +7,7 @@ DEPEND = """
 virtual/base
 libs/qt
 kdesupport/kdewin32
+kdesupport/clucene-core
 """
 
 #currently build without clucene...

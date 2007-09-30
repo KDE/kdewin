@@ -16,12 +16,22 @@ class subclass(base.baseclass):
     base.baseclass.__init__( self, SRC_URI )
     self.instsrcdir = os.path.join( "clucene-core-0.9.16a", "src" )
 
-  def compile( self ):
+  def unpack( self ):
+    if( not base.baseclass.unpack( self ) ):
+      return True
+
     # we have an own cmake script - copy it to the right place
+    mydir = os.path.join( self.workdir, self.instsrcdir )
     cmake_script = os.path.join( self.packagedir , "CMakeLists.txt" )
-    cmake_dest = os.path.join( self.workdir, self.instsrcdir, "CMakeLists.txt" )
+    cmake_dest = os.path.join( mydir, "CMakeLists.txt" )
+    shutil.copy( cmake_script, cmake_dest )
+    cmake_script = os.path.join( self.packagedir , "clucene-config.h.cmake" )
+    cmake_dest = os.path.join( mydir, "Clucene", "clucene-config.h.cmake" )
     shutil.copy( cmake_script, cmake_dest )
 
+    return True
+
+  def compile( self ):
     return self.kdeCompile()
 
   def install( self ):

@@ -1,5 +1,83 @@
 project(CLucene)
 
+INCLUDE(CheckIncludeFile)
+INCLUDE(CheckIncludeFileCXX)
+INCLUDE(CheckFunctionExists)
+INCLUDE(CheckTypeSize)
+
+CHECK_INCLUDE_FILE_CXX(algorithm    _CL_HAVE_ALGORITHM)
+CHECK_INCLUDE_FILE_CXX(ext/hash_map _CL_HAVE_EXT_HASH_MAP)
+CHECK_INCLUDE_FILE_CXX(ext/hash_set _CL_HAVE_EXT_HASH_SET)
+CHECK_INCLUDE_FILE_CXX(functional   _CL_HAVE_FUNCTIONAL)
+CHECK_INCLUDE_FILE_CXX(hash_map     _CL_HAVE_HASH_MAP)
+CHECK_INCLUDE_FILE_CXX(hash_set     _CL_HAVE_HASH_SET)
+CHECK_INCLUDE_FILE_CXX(list         _CL_HAVE_LIST)
+CHECK_INCLUDE_FILE_CXX(map          _CL_HAVE_MAP)
+CHECK_INCLUDE_FILE_CXX(set          _CL_HAVE_SET)
+CHECK_INCLUDE_FILE_CXX(stdexcept    _CL_HAVE_STDEXCEPT)
+CHECK_INCLUDE_FILE_CXX(vector       _CL_HAVE_VECTOR)
+
+CHECK_INCLUDE_FILE(ctype.h      _CL_HAVE_CTYPE_H)
+CHECK_INCLUDE_FILE(dirent.h     _CL_HAVE_DIRENT_H)
+CHECK_INCLUDE_FILE(dlfcn.h      _CL_HAVE_DLFCN_H)
+CHECK_INCLUDE_FILE(errno.h      _CL_HAVE_ERRNO_H)
+CHECK_INCLUDE_FILE(fcntl.h      _CL_HAVE_FCNTL_H)
+CHECK_INCLUDE_FILE(inttypes.h   _CL_HAVE_INTTYPES_H)
+CHECK_INCLUDE_FILE(math.h       _CL_HAVE_MATH_H)
+CHECK_INCLUDE_FILE(memory.h     _CL_HAVE_MEMORY_H)
+CHECK_INCLUDE_FILE(ndir.h       _CL_HAVE_NDIR_H)
+CHECK_INCLUDE_FILE(stdarg.h     _CL_HAVE_STDARG_H)
+CHECK_INCLUDE_FILE(stdint.h     _CL_HAVE_STDINT_H)
+CHECK_INCLUDE_FILE(stdlib.h     _CL_HAVE_STDLIB_H)
+CHECK_INCLUDE_FILE(string.h     _CL_HAVE_STRING_H)
+CHECK_INCLUDE_FILE(strings.h    _CL_HAVE_STRINGS_H)
+CHECK_INCLUDE_FILE(sys/dir.h    _CL_HAVE_SYS_DIR_H)
+CHECK_INCLUDE_FILE(sys/ndir.h   _CL_HAVE_SYS_NDIR_H)
+CHECK_INCLUDE_FILE(sys/stat.h   _CL_HAVE_SYS_STAT_H)
+CHECK_INCLUDE_FILE(sys/timeb.h  _CL_HAVE_SYS_TIMEB_H)
+CHECK_INCLUDE_FILE(sys/types.h  _CL_HAVE_SYS_TYPES_H)
+CHECK_INCLUDE_FILE(tchar.h      _CL_HAVE_TCHAR_H)
+CHECK_INCLUDE_FILE(unistd.h     _CL_HAVE_UNISTD_H)
+CHECK_INCLUDE_FILE(wchar.h      _CL_HAVE_WCHAR_H)
+
+CHECK_FUNCTION_EXISTS(getpagesize _CL_HAVE_GETPAGESIZE)
+CHECK_FUNCTION_EXISTS(lltoa       _CL_HAVE_LLTOA)
+CHECK_FUNCTION_EXISTS(lltow       _CL_HAVE_LLTOW)
+CHECK_FUNCTION_EXISTS(nanosleep   _CL_HAVE_NANOSLEEP)
+CHECK_FUNCTION_EXISTS(printf      _CL_HAVE_PRINTF)
+CHECK_FUNCTION_EXISTS(snprintf    _CL_HAVE_SNPRINTF)
+CHECK_FUNCTION_EXISTS(snwprintf   _CL_HAVE_SNWPRINTF)
+CHECK_FUNCTION_EXISTS(strlwr      _CL_HAVE_STRLWR)
+CHECK_FUNCTION_EXISTS(strtoll     _CL_HAVE_STRTOLL)
+CHECK_FUNCTION_EXISTS(strupr      _CL_HAVE_STRUPR)
+CHECK_FUNCTION_EXISTS(tell        _CL_HAVE_TELL)
+CHECK_FUNCTION_EXISTS(vsnwprintf  _CL_HAVE_VSNWPRINTF)
+CHECK_FUNCTION_EXISTS(wcscasecmp  _CL_HAVE_WCSCASECMP)
+CHECK_FUNCTION_EXISTS(wcscat      _CL_HAVE_WCSCAT)
+CHECK_FUNCTION_EXISTS(wcschr      _CL_HAVE_WCSCHR)
+CHECK_FUNCTION_EXISTS(wcscmp      _CL_HAVE_WCSCMP)
+CHECK_FUNCTION_EXISTS(wcscpy      _CL_HAVE_WCSCPY)
+CHECK_FUNCTION_EXISTS(wcscspn     _CL_HAVE_WCSCSPN)
+CHECK_FUNCTION_EXISTS(wcsicmp     _CL_HAVE_WCSICMP)
+CHECK_FUNCTION_EXISTS(wcslen      _CL_HAVE_WCSLEN)
+CHECK_FUNCTION_EXISTS(wcsncmp     _CL_HAVE_WCSNCMP)
+CHECK_FUNCTION_EXISTS(wcsncpy     _CL_HAVE_WCSNCPY)
+CHECK_FUNCTION_EXISTS(wcsstr      _CL_HAVE_WCSSTR)
+CHECK_FUNCTION_EXISTS(wcstod      _CL_HAVE_WCSTOD)
+CHECK_FUNCTION_EXISTS(wcstoll     _CL_HAVE_WCSTOLL)
+CHECK_FUNCTION_EXISTS(wcsupr      _CL_HAVE_WCSUPR)
+CHECK_FUNCTION_EXISTS(wprintf     _CL_HAVE_WPRINTF)
+CHECK_FUNCTION_EXISTS(_filelength _CL_HAVE__FILELENGTH)
+
+SET(_CL_HAVE_WCHAR_T ${_CL_HAVE_WCHAR_H})
+
+IF(WIN32)
+  SET(_CL_HAVE_WINDOWS_H 1)
+ENDIF(WIN32)
+
+configure_file(${CMAKE_SOURCE_DIR}/CLucene/clucene-config.h.cmake
+               ${CMAKE_BINARY_DIR}/CLucene/clucene-config.h)
+
 set(CLucene_src_dir ${CMAKE_SOURCE_DIR}/CLucene)
 
 set(clucene_SRCS
@@ -251,20 +329,22 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
     ${CLucene_src_dir}
-    ${CLucene_src_dir}/analysis/standard
-    ${CLucene_src_dir}/analysis
-    ${CLucene_src_dir}/config
-    ${CLucene_src_dir}/debug
-    ${CLucene_src_dir}/document
-    ${CLucene_src_dir}/index
-    ${CLucene_src_dir}/queryParser
-    ${CLucene_src_dir}/search
-    ${CLucene_src_dir}/store
-    ${CLucene_src_dir}/util
 )
 
 if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
+    include_directories(
+      ${CLucene_src_dir}/analysis/standard
+      ${CLucene_src_dir}/analysis
+      ${CLucene_src_dir}/config
+      ${CLucene_src_dir}/debug
+      ${CLucene_src_dir}/document
+      ${CLucene_src_dir}/index
+      ${CLucene_src_dir}/queryParser
+      ${CLucene_src_dir}/search
+      ${CLucene_src_dir}/store
+      ${CLucene_src_dir}/util
+    )
 endif(MSVC)
 
 if(WIN32)
