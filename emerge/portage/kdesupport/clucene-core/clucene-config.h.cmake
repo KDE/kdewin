@@ -137,12 +137,12 @@ configure.
 
 /* Define to 1 if you have a working `mmap' system call. */
 #ifndef _CL_HAVE_MMAP
-#cmakedefine _CL_HAVE_MMAP
+#cmakedefine _CL_HAVE_MMAP 1
 #endif
 
 /* define if the compiler implements namespaces */
 #ifndef _CL_HAVE_NAMESPACES 
-#cmakedefine _CL_HAVE_NAMESPACES   
+#cmakedefine _CL_HAVE_NAMESPACES 1
 #endif
 
 /* Define if you have the nanosleep function */
