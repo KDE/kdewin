@@ -26,9 +26,8 @@ class subclass(base.baseclass):
     return self.kdeInstall()
 
   def make_package( self ):
-    # FIXME?
     self.instdestdir = "kde"
     self.instsrcdir = "strigi"
-    return self.doPackaging( "strigi", "0.5.5", True )
+    return self.doPackaging( "strigi", "0.5.5-1", True )
 
 subclass().execute()

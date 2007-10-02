@@ -367,7 +367,13 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/Clucene
         PATTERN "README" EXCLUDE
         PATTERN "*.v2" EXCLUDE
         PATTERN "*.txt" EXCLUDE
+        PATTERN "*.cmake" EXCLUDE
         PATTERN "*.h"
 )
+install(DIRECTORY ${CMAKE_BINARY_DIR}/Clucene
+        DESTINATION include
+        PATTERN "*.h"
+)
+
 install(FILES ${CMAKE_SOURCE_DIR}/CLucene.h
         DESTINATION include)

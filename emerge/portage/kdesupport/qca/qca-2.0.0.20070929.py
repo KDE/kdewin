@@ -26,6 +26,6 @@ class subclass(base.baseclass):
     if self.traditional:
         self.instdestdir = "kde"
     self.instsrcdir = "qca"
-    return self.doPackaging( "qca", "20070915", True )
+    return self.doPackaging( "qca", "20070929", True )
 
 subclass().execute()
