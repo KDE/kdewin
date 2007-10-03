@@ -1,12 +1,10 @@
 import base
 import utils
-from utils import die
 import os
 
 DEPEND = """
 virtual/base
 libs/qt
-kdesupport/clucene-core
 """
 
 class subclass(base.baseclass):
@@ -14,7 +12,7 @@ class subclass(base.baseclass):
     base.baseclass.__init__( self, "" )
 
   def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "soprano" )
+    return self.kdeSvnUnpack( "trunk/kdesupport", "qca" )
 
   def compile( self ):
     return self.kdeCompile()
@@ -23,8 +21,10 @@ class subclass(base.baseclass):
     return self.kdeInstall()
 
   def make_package( self ):
-    self.instdestdir = "kde"
-    self.instsrcdir = "soprano"
-    return self.doPackaging( "soprano", "20070929", True )
+    # FIXME?
+    if self.traditional:
+        self.instdestdir = "kde"
+    self.instsrcdir = "qca"
+    return self.doPackaging( "qca", "2.0.0-20071003", True )
 
 subclass().execute()
