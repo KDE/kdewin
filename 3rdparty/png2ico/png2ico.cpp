@@ -44,6 +44,11 @@ Notes about transparent and inverted pixels:
 
 #include <png.h>
 
+#ifdef _MSC_VER
+// ms does not use the std namespace :-(
+using namespace stdext;
+#endif
+
 // png_init_io isn't compiled in recent png releases
 
 void PNGAPI
