@@ -3,6 +3,9 @@ kdewin32 is a supplementary library
 history
 -------
 
+version 0.3.0
+- added png2ico tool used for application icons 
+
 version 0.2.7
 - added (f)truncate
 - fix asinh/acosh/atanh for msvc
