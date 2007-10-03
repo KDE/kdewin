@@ -11,8 +11,6 @@ DEPENDS = """
 virtual/base
 """
 
-buildtypes = "debug release"
-
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )

@@ -29,13 +29,16 @@ class subclass(base.baseclass):
       print "error: can only be build with MinGW (but in the end a mingw/msvc combined package is created"
       exit( 1 )
 
-  def compile( self ):
+  def unpack( self ):
     # the cmake script is in libpng-src/scripts
     srcdir  = os.path.join( self.workdir, self.package, "scripts", "CMakeLists.txt" )
     destdir = os.path.join( self.workdir, self.package, "",        "CMakeLists.txt" )
     shutil.copy( srcdir, destdir )
+    
+    return self.baseclass.unpack( self )
 
-    self.kdeCustomDefines = "-DPNG_TESTS=OFF -DPNG_STATIC=OFF"
+  def compile( self ):
+    self.kdeCustomDefines = "-DPNG_TESTS=OFF -DPNG_STATIC=OFF -DPNG_NO_STDIO=OFF"
     return self.kdeCompile()
 
   def install( self ):
