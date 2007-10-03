@@ -48,8 +48,7 @@ if (WIN32)
     message(STATUS "Could not find the location of the windows supplementary packages which is \n"
                     "\t\tenvironment variable WIN32LIBS_DIR\n"
                     "\t\t<ProgramFiles>/${DIR}\n"
-                    "\t\t<ProgramFiles>/WIN32LIBS\n" 
-                    "\t\t<ProgramFiles>/WIN32LIBS32\n" 
+                    "\t\t<ProgramFiles>/kdewin32\n" 
                     "\t\t<ProgramFiles>/win32libs\n"
                     "\t\t<ProgramFiles>/gnuwin32\n"
     )
