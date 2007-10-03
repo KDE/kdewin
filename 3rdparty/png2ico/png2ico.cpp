@@ -44,6 +44,16 @@ Notes about transparent and inverted pixels:
 
 #include <png.h>
 
+// png_init_io isn't compiled in recent png releases
+
+void PNGAPI
+png_init_io(png_structp png_ptr, png_FILE_p fp)
+{
+   png_debug(1, "in png_init_io\n");
+   if(png_ptr == NULL) return;
+   png_ptr->io_ptr = (png_voidp)fp;
+}
+
 #include "VERSION"
 
 using namespace std;
