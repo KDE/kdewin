@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/* 
+   This file is part of the KDE project
    Copyright (C) 2007 Ralf Habacker  <ralf.habacker@freenet.de>
 
    This program is free software; you can redistribute it and/or
@@ -25,131 +26,125 @@
 #include <QtCore/QStringList>
 #include <QtCore/QProcess>
 #include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 
 #include <zlib.h>
-#include <iostream>
-
-using std::cout;
-using std::endl;
 
 bool verbose = false;
+bool debug = false;
 
 // vista support - requires a patched png2ico to support compressed png in ico container 
 // see http://www.axialis.com/tutorials/tutorial-vistaicons.html for details 
 // #define VISTA_ICON_SUPPORT
 
-
-//  QSvgRenderer does not support svgz yet, feature request is submitted to qt-bugs@trolltech.com 
-//  as workaround we use ksvgtopng from kdeui/utils
-
 #include <QSvgRenderer>
 #include <QtGui/QImage>
 #include <QtGui/QPainter>
 
-bool svg2png_internal(const QString &svgFile, const QString &pngFile, int width, int height)
+
+bool unzipGZipFile(char *infile, char *outfile)
 {
-    QImage img(width, height, QImage::Format_ARGB32_Premultiplied);
-    img.fill(0);
-    QSvgRenderer *renderer;
-
-    if (svgFile.endsWith(".svgz")) {
-#if 1
-        qDebug() << "converting compressed svg isn't implemented yet";
-        return false;
-#else
-        QByteArray data;
-        // does not work 
-        gzFile fp = gzopen(svgFile.toAscii().data(),"r");
-        while (!gzeof(fp)) {
-            QByteArray buf(1024,0);
-            int size = gzread(fp, buf.data(), 1024);
-            if (size) 
-                data.append(buf);
-        }                
-        gzclose(fp);
-        renderer = new QSvgRenderer(data);
-#endif
-    }
-    else 
-        renderer = new QSvgRenderer(svgFile);
-
-    if(!renderer->isValid()) {
-        delete renderer;
+    gzFile file = gzopen(infile, "rb");
+    FILE *out = fopen(outfile,"w");
+    if (file == NULL) {
         return false;
     }
-    QPainter p(&img);
-    renderer->render(&p);
-    img.save(pngFile, "PNG");
-    delete renderer;
+    char buf[1024]; 
+    while (!gzeof(file)) {
+        int len = gzread(file, buf, 1024);
+        fwrite(buf,len,1,out);
+    }
+    gzclose(file);
+    fclose(out);
     return true;
 }
 
-bool svg2png_ksvgtopng(const QString &svgFile, const QString &pngFile, int width, int height)
+bool svg2png(const QString &inFile, const QString &outFile, int width, int height)
 {
-    QStringList params;
-    params << QString::number(width) << QString::number(height) << svgFile << pngFile;
-    int ret = QProcess::execute("ksvgtopng",params);
-    if (verbose)
-        qDebug() << "ksvgtopng" << params << "result=" << ret;
+    QImage img(width, height, QImage::Format_ARGB32_Premultiplied);
+    img.fill(0);
 
-    if (verbose && ret)
-        qDebug() << "error executing ksvgtopng"; 
-    return ret ? false : true;
+    QString svgFile = inFile;
+    QString tmpFile;
+    if (svgFile.endsWith(".svgz")) {
+        QFileInfo iif(inFile);
+        QFileInfo of(outFile);
+        tmpFile = of.absolutePath()+"/"+iif.baseName()+".svg";
+        bool ret = unzipGZipFile(svgFile.toAscii().data(),tmpFile.toAscii().data());
+        if (verbose || !ret)
+            qDebug() << "uncompressing" << svgFile << "to" << tmpFile << ":" << (ret ? "okay" : "error");
+
+        if (!ret) {
+            return false;
+        }
+        svgFile = tmpFile;
+    }
+
+
+    QSvgRenderer renderer(svgFile);
+
+    if(renderer.isValid()) {
+        QPainter p(&img);
+        renderer.render(&p);
+        img.save(outFile, "PNG");
+
+        if (verbose)
+            qDebug() << "converting" << svgFile << "to" << outFile;
+    }
+    if (!debug) {
+        if (verbose)
+            qDebug() << "deleting temporary file" << tmpFile;
+        QFile::remove(tmpFile);
+    }
+    return true;
 }
 
-bool svg2png(const QString &svgFile, const QString &pngFile, int width, int height)
-{
-    // if ksvgtopng is available 
-    //   return svg2png_ksvgtopng(svgFile, pngFile, width, height);
-    // else
-    return svg2png_internal(svgFile, pngFile, width, height);
-}
-
-bool png2ico(const QString &icoFile, const QStringList &pngFiles)
+bool png2ico(const QStringList &inFiles, const QString &outFile)
 {
     QStringList params;
-    params << icoFile;
+    params << outFile;
 
 #ifdef PNG2ICO_SUPPORTS_MULTIPLE_COLOR_DEPTH
-    foreach(QString file, pngFiles)
+    foreach(QString file, inFiles)
         params << "--colors" << "16" << file;
-    foreach(QString file, pngFiles)
+    foreach(QString file, inFiles)
         params << "--colors" << "256" << file;
-    foreach(QString file, pngFiles)
+    foreach(QString file, inFiles)
         params << "--colors" << "xxx" << file;
 #else
-    params << pngFiles;
+    params << inFiles;
 #endif
 
     int ret = QProcess::execute("png2ico",params);
 
     if (verbose)
-        qDebug() << "png2ico" << params << "result=" << ret;
+        qDebug() << "converting " << inFiles << "to" << outFile << ":" << (ret ? "error" : "okay");
     return ret ? false : true;
 }
     
 
 int main(int argc, char **argv)
 {
-    if(argc < 3)
-    {
-        cout << "Usage : svg2ico <options> <svgfilename> <icofilename>" << endl;
-        cout << "options: --verbose       print execution details" << endl;
+    if(argc < 3) {
+        qDebug() << "Usage : svg2ico <options> <svgfilename> <icofilename>";
+        qDebug() << "options: --verbose print execution details";
+        qDebug() << "         --debug   print debugging informations e.g. do not delete temporary files";
         return -1;
     }
     int i = 1;
-    if (QString(argv[i]) == "--verbose") 
-    {
+    if (QString(argv[i]) == "--verbose") {
         verbose = true;
         i++;
     }
+    else if (QString(argv[i]) == "--debug") {
+        debug = true;
+        i++;
+    }
+
     QString svgFile = QString::fromLocal8Bit(argv[i++]);
     QString icoFile = QString::fromLocal8Bit(argv[i++]);
     QString pngFile = icoFile; 
     pngFile.replace(".ico","-%1.png");
-
-    if (verbose)
-        qDebug() << svgFile << icoFile << pngFile;
     
     if ( !svg2png(svgFile, pngFile.arg("16"),16,16) )
         return 1;
@@ -169,13 +164,15 @@ int main(int argc, char **argv)
     pngFiles << pngFile.arg("128");
 #endif
 
-    int ret = png2ico(icoFile, pngFiles);
+    int ret = png2ico(pngFiles,icoFile);
 
-    QFile::remove(pngFile.arg("16"));
-    QFile::remove(pngFile.arg("32"));
-    QFile::remove(pngFile.arg("48"));
-#ifdef VISTA_ICON_SUPPORT
-    QFile::remove(pngFile.arg("128"));
-#endif
+    if (!debug) {
+        QFile::remove(pngFile.arg("16"));
+        QFile::remove(pngFile.arg("32"));
+        QFile::remove(pngFile.arg("48"));
+    #ifdef VISTA_ICON_SUPPORT
+        QFile::remove(pngFile.arg("128"));
+    #endif
+    }
     return ret;
 }
