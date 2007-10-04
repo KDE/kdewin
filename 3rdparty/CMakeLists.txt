@@ -17,8 +17,6 @@ if (EXTERNAL_LIBPNG)
     include_directories(${PNG_INCLUDE_DIR})
     add_definitions(-DPNG_USE_DLL)
 else(EXTERNAL_LIBPNG)
-    # should be better PNG_INSTALL
-    set (NOINSTALL YES)
     set (PNG_INSTALL NO)
     set (PNG_SHARED NO)
     set (PNG_NO_STDIO NO)
