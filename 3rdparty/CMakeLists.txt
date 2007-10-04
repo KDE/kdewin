@@ -1,2 +1,32 @@
+set (EXTERNAL_ZLIB 0)
+set (EXTERNAL_LIBPNG 0)
+
+if (EXTERNAL_ZLIB)
+    find_package(ZLIB)
+    include_directories(${ZLIB_INCLUDE_DIR})
+else (EXTERNAL_ZLIB)
+    set (ZLIB_INSTALL NO)
+    set (ZLIB_SHARED NO)
+    add_subdirectory(zlib)
+    set (ZLIB_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/3rdparty/zlib)
+    set (ZLIB_LIBRARY zlib_static)
+endif (EXTERNAL_ZLIB)
+
+if (EXTERNAL_LIBPNG)
+    find_package(PNG)
+    include_directories(${PNG_INCLUDE_DIR})
+    add_definitions(-DPNG_USE_DLL)
+else(EXTERNAL_LIBPNG)
+    # should be better PNG_INSTALL
+    set (NOINSTALL YES)
+    set (PNG_INSTALL NO)
+    set (PNG_SHARED NO)
+    set (PNG_NO_STDIO NO)
+    set (PNG_TESTS NO)
+    add_subdirectory(libpng)
+    set (PNG_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/3rdparty/libpng ${ZLIB_INCLUDE_DIR})
+    set (PNG_LIBRARIES libpng12_static ${ZLIB_LIBRARY})
+endif(EXTERNAL_LIBPNG)
+
 add_subdirectory(png2ico)
 
