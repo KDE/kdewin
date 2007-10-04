@@ -7,8 +7,8 @@ import os
 # FIXME implement shadow build and installation into image dir.
 
 PACKAGE_NAME         = "qt"
-PACKAGE_VER          = "4.3.1"
-PACKAGE_FULL_VER     = "4.3.1-2"
+PACKAGE_VER          = "4.3.2"
+PACKAGE_FULL_VER     = "4.3.2-1"
 PACKAGE_FULL_NAME    = "%s-all-opensource-src-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 
 DEPEND = """
@@ -16,10 +16,8 @@ dev-util/win32libs
 virtual/base
 """
 
-# do not change the order!
 SRC_URI= """
 ftp://ftp.trolltech.com/qt/source/""" + PACKAGE_FULL_NAME + """.tar.gz
-http://belnet.dl.sourceforge.net/sourceforge/qtwin/acs-4.3.x-patch3.zip
 """
 
 class subclass(base.baseclass):
@@ -39,26 +37,6 @@ class subclass(base.baseclass):
     os.rmdir( qtsrcdir )
     os.rename( qtsrcdir_tmp, qtsrcdir )
 
-    if ( not utils.unpackFile( self.downloaddir, self.filenames[1], qtsrcdir ) ):
-      return False
-
-    # apply patch for msvc support
-    sedcommand = r""" -e "s:pause::" """
-    utils.sedFile( qtsrcdir, "installpatch43.bat", sedcommand )
-    os.system( "cd " + qtsrcdir + " && " + os.path.join( qtsrcdir, "installpatch43.bat" ) )
-    
-    # I should update the msvc patch...
-    # either embed manifest or use static runtime - we use static runtime atm
-    path = os.path.join( qtsrcdir, "qmake" )
-    file = "Makefile.win32-msvc2005"
-    sedcommand = r""" -e "s/ -MD / -MT /" """
-    utils.sedFile( path, file, sedcommand )
-    # embed_manifest_exe should be in qmake.conf - or not?
-    path = os.path.join( qtsrcdir, "mkspecs", "win32-msvc2005" )
-    file = "qmake.conf"
-    sedcommand = r""" -e "s/ embed_manifest_dll/ embed_manifest_dll embed_manifest_exe/" """
-    utils.sedFile( path, file, sedcommand )
-
     # disable demos and examples
     sedcommand = r""" -e "s:SUBDIRS += examples::" -e "s:SUBDIRS += demos::" """
     utils.sedFile( qtsrcdir, "projects.pro", sedcommand )
@@ -77,7 +55,7 @@ class subclass(base.baseclass):
 
     # help qt a little bit :)
     cmd = "cd %s && patch -p0 < %s" % \
-          ( qtsrcdir, os.path.join( self.packagedir, "qt-4.3.1.diff" ) )
+          ( qtsrcdir, os.path.join( self.packagedir, "qt-4.3.2.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
     # and once more... :)  (Issue N180186)
     cmd = "cd %s && patch -p0 < %s" % \
@@ -109,11 +87,6 @@ class subclass(base.baseclass):
     else:
         win32incdir = os.path.join( self.rootdir, "include" ).replace( "\\", "/" )
         win32libdir = os.path.join( self.rootdir, "lib" ).replace( "\\", "/" )
-    
-
-    
-    sedcommand = r""" -e "s: msvc_dsp.o::" """
-    utils.sedFile( os.path.join( qtsrcdir, "qmake" ), "Makefile.win32-g++", sedcommand )
 
     # recommended from README.qt-copy
     #  "configure.exe -prefix ..\..\image\qt -platform win32-g++ " \
@@ -128,19 +101,20 @@ class subclass(base.baseclass):
     libtmp = os.getenv( "LIB" )
     inctmp = os.getenv( "INCLUDE" )
     if self.compiler == "msvc2005":
-        platform = "msvc2005"
+        platform = "win32-msvc2005"
     elif self.compiler == "mingw":
         os.environ[ "LIB" ] = ""
         os.environ[ "INCLUDE" ] = ""
-        platform = "g++"
+        platform = "win32-g++"
     else:
         exit( 1 )
 
     os.environ[ "USERIN" ] = "y"
     os.chdir( qtsrcdir )
-    command = r"echo y | qconfigure.bat %s -prefix %s " \
+    command = r"echo y | configure.exe -platform %s -prefix %s " \
       "-qdbus -qt-gif -no-exceptions -qt-libpng " \
       "-system-libjpeg -system-libtiff -openssl " \
+      "-fast -no-vcp -no-dsp " \
       "-I %s -L %s " % \
       ( platform, prefix, win32incdir, win32libdir )
     print "command: ", command
@@ -163,7 +137,7 @@ class subclass(base.baseclass):
                and die( "qt make install failed" )
 
     src = os.path.join( self.packagedir, "qt.conf" )
-    dst = os.path.join( self.imagedir, self.instdestdir, "qt.conf" )
+    dst = os.path.join( self.imagedir, self.instdestdir, "bin", "qt.conf" )
     shutil.copy( src, dst )
 
     return True
