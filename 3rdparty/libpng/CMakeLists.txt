@@ -65,9 +65,8 @@ endif(NOT WIN32)
 
 # SET LIBNAME
 # msvc does not append 'lib' - do it here to have consistent name
-if(MSVC)
- set(PNG_LIB_NAME lib)
-endif(MSVC)
+# (rh) unfortunally this breaks sharing lib names between mingw and msvc 
+# 
 set(PNG_LIB_NAME ${PNG_LIB_NAME}png${PNGLIB_MAJOR}${PNGLIB_MINOR})
 
 # to distinguish between debug and release lib

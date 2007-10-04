@@ -23,7 +23,7 @@ else(EXTERNAL_LIBPNG)
     set (PNG_TESTS NO)
     add_subdirectory(libpng)
     set (PNG_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/3rdparty/libpng ${ZLIB_INCLUDE_DIR})
-    set (PNG_LIBRARIES libpng12_static ${ZLIB_LIBRARY})
+    set (PNG_LIBRARIES png12_static ${ZLIB_LIBRARY})
 endif(EXTERNAL_LIBPNG)
 
 add_subdirectory(png2ico)
