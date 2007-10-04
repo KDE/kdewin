@@ -13,12 +13,15 @@ find_package(WIN32LIBS)
 find_package(KDEWIN_Packager)
 find_package(WinScp)
 
+set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+
 if(NOT MSVC)
    add_subdirectory( examples)
 endif(NOT MSVC)
 
 add_subdirectory(3rdparty)
-add_subdirectory( tests)
+add_subdirectory(tools/svg2ico)
+add_subdirectory(tests)
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 
