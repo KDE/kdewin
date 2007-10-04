@@ -58,10 +58,10 @@ typedef int	pid_t;
 
 #ifndef _MODE_T_
 #define	_MODE_T_
-typedef unsigned short _mode_t;
+typedef int _mode_t;
 
 #ifndef	_NO_OLDNAMES
-typedef unsigned short mode_t;
+typedef int mode_t;
 #endif
 #endif	/* Not _MODE_T_ */
 
