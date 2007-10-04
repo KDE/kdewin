@@ -24,6 +24,17 @@ class subclass(base.baseclass):
     base.baseclass.__init__( self, SRC_URI )
     self.instsrcdir = os.path.join( PACKAGE_FULL_NAME, "src", "libjasper" )
     self.createCombinedPackage = True
+    self.buildType = "Release"
+
+  def unpack( self ):
+    if( not base.baseclass.unpack( self ) ):
+      return False
+    # we have an own cmake script - copy it to the right place
+    cmake_script = os.path.join( self.packagedir , "CMakeLists.txt" )
+    cmake_dest = os.path.join( self.workdir, self.instsrcdir, "CMakeLists.txt" )
+    shutil.copy( cmake_script, cmake_dest )
+
+    return True
 
   def kdeDefaultDefines( self ):
     # adjust some vars for proper compile
@@ -40,12 +51,6 @@ class subclass(base.baseclass):
     return options
 
   def compile( self ):
-
-    # we have an own cmake script - copy it to the right place
-    cmake_script = os.path.join( self.packagedir , "CMakeLists.txt" )
-    cmake_dest = os.path.join( self.workdir, self.instsrcdir, "CMakeLists.txt" )
-    shutil.copy( cmake_script, cmake_dest )
-
     return self.kdeCompile()
 
   def install( self ):

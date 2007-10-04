@@ -4,8 +4,8 @@ import shutil
 import utils
 
 PACKAGE_NAME         = "libpng"
-PACKAGE_VER          = "1.2.20"
-PACKAGE_FULL_VER     = "1.2.20"
+PACKAGE_VER          = "1.2.21"
+PACKAGE_FULL_VER     = "1.2.21"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
 PACKAGE_DLL_NAME     = "libpng12"
 
@@ -20,8 +20,9 @@ dev-util/win32libs
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, SRC_URI )
-    self.package = PACKAGE_FULL_NAME
+    self.instsrcdir = PACKAGE_FULL_NAME
     self.createCombinedPackage = True
+    self.buildType = "Release"
 
   def execute( self ):
     base.baseclass.execute( self )
@@ -30,12 +31,14 @@ class subclass(base.baseclass):
       exit( 1 )
 
   def unpack( self ):
+    if( not base.baseclass.unpack( self ) ):
+      return False
     # the cmake script is in libpng-src/scripts
-    srcdir  = os.path.join( self.workdir, self.package, "scripts", "CMakeLists.txt" )
-    destdir = os.path.join( self.workdir, self.package, "",        "CMakeLists.txt" )
+    srcdir  = os.path.join( self.workdir, self.instsrcdir, "scripts", "CMakeLists.txt" )
+    destdir = os.path.join( self.workdir, self.instsrcdir,            "CMakeLists.txt" )
     shutil.copy( srcdir, destdir )
     
-    return self.baseclass.unpack( self )
+    return True
 
   def compile( self ):
     self.kdeCustomDefines = "-DPNG_TESTS=OFF -DPNG_STATIC=OFF -DPNG_NO_STDIO=OFF"

@@ -23,6 +23,7 @@ class subclass(base.baseclass):
     base.baseclass.__init__( self, SRC_URI )
     self.instsrcdir = PACKAGE_FULL_NAME
     self.createCombinedPackage = True
+    self.buildType = "Release"
 
   def execute( self ):
     base.baseclass.execute( self )
@@ -40,6 +41,11 @@ class subclass(base.baseclass):
           ( src, os.path.join( self.packagedir , "openslp-1.2.1.diff" ) )
     os.system( cmd ) or die
     
+    # we have an own cmake script - copy it to the right place
+    cmake_script = os.path.join( self.packagedir , "CMakeLists.txt" )
+    cmake_dest = os.path.join( self.workdir, self.instsrcdir, "CMakeLists.txt" )
+    shutil.copy( cmake_script, cmake_dest )
+
     return True
 
   def kdeDefaultDefines( self ):
@@ -57,12 +63,6 @@ class subclass(base.baseclass):
     return options
 
   def compile( self ):
-
-    # we have an own cmake script - copy it to the right place
-    cmake_script = os.path.join( self.packagedir , "CMakeLists.txt" )
-    cmake_dest = os.path.join( self.workdir, self.instsrcdir, "CMakeLists.txt" )
-    shutil.copy( cmake_script, cmake_dest )
-
     return self.kdeCompile()
 
   def install( self ):

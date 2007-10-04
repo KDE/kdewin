@@ -45,6 +45,15 @@ class subclass(base.baseclass):
                 if( p.match( name ) ):
                     utils.sedFile( root, name, sedcmd )
 
+    # we have an own cmake script - copy it to the right place
+    src = os.path.join( self.packagedir , "CMakeLists.txt" )
+    dst = os.path.join( self.workdir, self.instsrcdir, "CMakeLists.txt" )
+    shutil.copy( src, dst )
+
+    src = os.path.join( self.packagedir , "config.h.cmake" )
+    dst = os.path.join( self.workdir, self.instsrcdir, "config.h.cmake" )
+    shutil.copy( src, dst )
+
     if( self.compiler == "mingw"):
         return True
     return self.kdeSvnUnpack( "trunk/kdesupport", "kdewin32")
@@ -73,16 +82,6 @@ class subclass(base.baseclass):
     return options
 
   def compile( self ):
-
-    # we have an own cmake script - copy it to the right place
-    src = os.path.join( self.packagedir , "CMakeLists.txt" )
-    dst = os.path.join( self.workdir, self.instsrcdir, "CMakeLists.txt" )
-    shutil.copy( src, dst )
-
-    src = os.path.join( self.packagedir , "config.h.cmake" )
-    dst = os.path.join( self.workdir, self.instsrcdir, "config.h.cmake" )
-    shutil.copy( src, dst )
-
     return self.kdeCompile()
 
   def install( self ):
