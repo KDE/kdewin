@@ -4,7 +4,7 @@ history
 -------
 
 version 0.3.0
-- added png2ico tool used for application icons 
+- added tools png2ico and svg2ico for windows icons creating
 
 version 0.2.7
 - added (f)truncate
