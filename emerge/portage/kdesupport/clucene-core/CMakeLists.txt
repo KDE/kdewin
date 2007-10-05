@@ -333,7 +333,7 @@ include_directories(
 )
 
 if(MSVC)
-    add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
+    add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -Zc:wchar_t-)
     include_directories(
       ${CLucene_src_dir}/analysis/standard
       ${CLucene_src_dir}/analysis
