@@ -49,7 +49,7 @@ KDEWIN32_EXPORT union _ieee_rep __DENORML = { __DOUBLE_DENORM_REP };
 
 /* 7.12.5.1 */
 // acosh(x) = log (x + sqrt(x * x - 1))
-float acoshf (float x)
+KDEWIN32_EXPORT float acoshf (float x)
 {
   if (_isnan ( x ) ) 
     return x;
@@ -60,7 +60,7 @@ float acoshf (float x)
   return( log( x + sqrt( x * x - 1 ) ) );
 }
 
-double acosh (double x)
+KDEWIN32_EXPORT double acosh (double x)
 {
   if (_isnan (x)) 
     return x;
@@ -71,7 +71,7 @@ double acosh (double x)
   return( log( x + sqrt( x * x - 1 ) ) );
 }
 
-long double acoshl (long double x)
+KDEWIN32_EXPORT long double acoshl (long double x)
 {
   return acosh( (double) x );
 }
@@ -82,7 +82,7 @@ static double log1p( double x )
   return ( log ( 1 + x ) );
 }
 // asinh(x) = copysign(log(fabs(x) + sqrt(x * x + 1.0)), x)
-float asinhf (float x)
+KDEWIN32_EXPORT float asinhf (float x)
 {
   float z;
   if (!_finite (x))
@@ -94,7 +94,7 @@ float asinhf (float x)
   return ( x > 0.0 ? z : -z);
 }
 
-double asinh (double x)
+KDEWIN32_EXPORT double asinh (double x)
 {
   double z;
   if (!_finite (x))
@@ -106,19 +106,19 @@ double asinh (double x)
   return ( x > 0.0 ? z : -z);
 }
 
-long double asinhl (long double x)
+KDEWIN32_EXPORT long double asinhl (long double x)
 {
   return asinh( (double) x );
 }
 
 /* 7.12.5.3 */
 //WINPOSIX_EXPORT float asinhf (float)
-double atanh (double x)
+KDEWIN32_EXPORT double atanh (double x)
 {
   return asinhf( x );
 }
 
-long double atanhl (long double x)
+KDEWIN32_EXPORT long double atanhl (long double x)
 {
   return asinhf( x );
 }
