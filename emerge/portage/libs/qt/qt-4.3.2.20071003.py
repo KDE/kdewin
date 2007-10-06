@@ -4,8 +4,6 @@ import shutil
 from utils import die
 import os
 
-# FIXME implement shadow build and installation into image dir.
-
 PACKAGE_NAME         = "qt"
 PACKAGE_VER          = "4.3.2"
 PACKAGE_FULL_VER     = "4.3.2-1"
@@ -17,7 +15,7 @@ virtual/base
 """
 
 SRC_URI= """
-ftp://ftp.trolltech.com/qt/source/""" + PACKAGE_FULL_NAME + """.tar.gz
+ftp://ftp.tu-chemnitz.de/pub/Qt/qt/source/""" + PACKAGE_FULL_NAME + """.zip
 """
 
 class subclass(base.baseclass):

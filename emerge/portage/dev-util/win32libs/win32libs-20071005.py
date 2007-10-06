@@ -22,8 +22,8 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/expat-2.0.1-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/giflib-4.1.4-1-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/giflib-4.1.4-1-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-1.1.4-2-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-1.1.4-2-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-1.1.4-3-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/gpgme-1.1.4-3-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/iconv-1.9.2-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/iconv-1.9.2-2-lib.zip
@@ -40,8 +40,8 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/libintl-0.14.4-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/libidn-1.1-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/libidn-1.1-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.20-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.20-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.21-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.21-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/libxml2-2.6.30-3-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/libxml2-2.6.30-3-lib.zip
@@ -55,15 +55,15 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/openslp-1.2.1-2-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/openssl-0.9.8e-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/openssl-0.9.8e-2-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-msvc-7.0-2-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-msvc-7.0-2-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-msvc-7.0-3-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-msvc-7.0-3-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-mingw-7.0-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-mingw-7.0-2-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/redland-1.0.3-4-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/redland-1.0.3-4-lib.zip
 
-http://download.cegit.de/kde-windows/win32libs/zip/single/shared-mime-info-mingw-0.22-bin.zip
+http://download.cegit.de/kde-windows/win32libs/zip/single/shared-mime-info-0.22-bin.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/tiff-3.8.2-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/tiff-3.8.2-2-lib.zip

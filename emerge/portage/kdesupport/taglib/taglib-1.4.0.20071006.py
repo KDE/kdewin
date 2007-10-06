@@ -1,10 +1,7 @@
 import base
-import utils
-from utils import die
-import os
 
 DEPEND = """
-virtual/base
+dev-util/win32libs
 """
 
 class subclass(base.baseclass):
@@ -12,7 +9,7 @@ class subclass(base.baseclass):
     base.baseclass.__init__( self, "" )
 
   def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "kdewin32" )
+    return self.kdeSvnUnpack( "trunk/kdesupport", "taglib" )
 
   def compile( self ):
     return self.kdeCompile()
@@ -21,10 +18,9 @@ class subclass(base.baseclass):
     return self.kdeInstall()
 
   def make_package( self ):
-    print "make_package called"
     # FIXME?
     self.instdestdir = "kde"
-    self.instsrcdir = "kdewin32"
-    return self.doPackaging( "kdewin32", "0.2.7-1", True )
+    self.instsrcdir = "taglib"
+    return self.doPackaging( "taglib", "1.4.0-2", True )
 
 subclass().execute()

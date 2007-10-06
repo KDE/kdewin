@@ -6,18 +6,15 @@ import os
 DEPEND = """
 virtual/base
 libs/qt
-kdesupport/kdewin32
 kdesupport/clucene-core
 """
-
-#currently build without clucene...
 
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
 
   def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "strigi" )
+    return self.kdeSvnUnpack( "trunk/kdesupport", "soprano" )
 
   def compile( self ):
     return self.kdeCompile()
@@ -27,7 +24,7 @@ class subclass(base.baseclass):
 
   def make_package( self ):
     self.instdestdir = "kde"
-    self.instsrcdir = "strigi"
-    return self.doPackaging( "strigi", "0.5.5-1", True )
+    self.instsrcdir = "soprano"
+    return self.doPackaging( "soprano", "3.0.0-3", True )
 
 subclass().execute()
