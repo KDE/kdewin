@@ -1,5 +1,5 @@
-set (EXTERNAL_ZLIB 0)
-set (EXTERNAL_LIBPNG 0)
+set (EXTERNAL_ZLIB 1)
+set (EXTERNAL_LIBPNG 1)
 
 if (EXTERNAL_ZLIB)
     find_package(ZLIB)

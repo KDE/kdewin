@@ -1,6 +1,7 @@
 /* Copyright (C) 2002 Matthias S. Benkmann <matthias@winterdrache.de>
+   Copyright (C) 2007 Christian Ehrlicher <ch.ehrlicher@gmx.de>
 
-This program is free software; you can redistribute it and/or
+ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; version 2
 of the License (ONLY THIS VERSION).
@@ -59,6 +60,23 @@ const int word_max=65535;
 const int transparency_threshold=196;
 const int color_reduce_warning_threshold=512; //maximum quadratic euclidean distance in RGB color space that a palette color may have to a source color assigned to it before a warning is issued
 const unsigned int slow_reduction_warn_threshold=262144; //number of colors in source image times number of colors in target image that triggers the warning that the reduction may take a while
+
+static
+void io_read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+    FILE *f = (FILE *)png_get_io_ptr(png_ptr);
+    int pos = 0;
+
+    while (length) {
+        int nr = fread(data + pos, 1, length, f);
+        if (nr <= 0) {
+            png_error(png_ptr, "Read Error");
+            return;
+        }
+        pos += nr;
+        length -= nr;
+    }
+}
 
 void writeWord(FILE* f, int word)
 {
@@ -511,7 +529,7 @@ int main(int argc, char* argv[])
       exit(1);
     };
     
-    png_init_io(data.png_ptr, pngfile);
+    png_set_read_fn(data.png_ptr, (void*)pngfile, io_read_fn);
     png_set_sig_bytes(data.png_ptr,8);
     int trafo=PNG_TRANSFORM_PACKING|PNG_TRANSFORM_STRIP_16|PNG_TRANSFORM_EXPAND;
     png_read_png(data.png_ptr, data.info_ptr, trafo , NULL);
@@ -624,6 +642,20 @@ int main(int argc, char* argv[])
   };
   
   fclose(outfile);
+
+  // properly cleanup all allocated memory to not confuse memcheck
+  vector<png_data>::iterator it;
+  for(it=pngdata.begin(); it!=pngdata.end(); ++it)
+  {
+    for(int y = it->height - 1; y >= 0; --y)
+      free(it->transMap[y]);
+    free(it->transMap);
+    free(it->palette);
+
+    png_destroy_info_struct(it->png_ptr, &it->info_ptr);
+    png_destroy_info_struct(it->png_ptr, &it->end_info);
+    png_destroy_read_struct(&it->png_ptr, 0, 0);
+  }
 };
 
 
