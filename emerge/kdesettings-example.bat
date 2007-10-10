@@ -58,9 +58,6 @@ if %directory_layout% equ installer (
 set PATH=%KDEROOT%\bin;%PATH%
 set PATH=%KDEROOT%\lib;%PATH%
 set PATH=%KDEROOT%\emerge\bin;%PATH%
-set KDEWIN_DIR=%KDEROOT%
-set STRIGI_HOME=%KDEROOT%
-set DBUSDIR=%KDEROOT%
 ) else (
 set PATH=%PATH%;%KDEROOT%\mingw\bin
 set PATH=%PATH%;%KDEROOT%\gnuwin32\bin
@@ -71,9 +68,6 @@ set PATH=%PATH%;%KDEROOT%\win32libs\bin
 set PATH=%PATH%;%KDEROOT%\kde\bin
 set PATH=%PATH%;%KDEROOT%\kde\lib
 set PATH=%PATH%;%KDEROOT%\dbus\bin
-set KDEWIN_DIR=%KDEROOT%\win32libs
-set STRIGI_HOME=%KDEROOT%\kde
-set DBUSDIR=%KDEROOT%\dbus
 )
 
 echo kdesettings.bat executed
