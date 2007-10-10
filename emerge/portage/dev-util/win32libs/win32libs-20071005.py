@@ -13,8 +13,8 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/bzip2-1.0.4-4-lib.zip
 
 http://download.cegit.de/kde-windows/win32libs/zip/single/dbus-mingw-1.1.2.20070919-bin.zip
 http://download.cegit.de/kde-windows/win32libs/zip/single/dbus-mingw-1.1.2.20070919-lib.zip
-http://download.cegit.de/kde-windows/win32libs/zip/single/dbus-msvc-1.1.2.20070919-bin.zip
-http://download.cegit.de/kde-windows/win32libs/zip/single/dbus-msvc-1.1.2.20070919-lib.zip
+http://download.cegit.de/kde-windows/win32libs/zip/single/dbus-msvc-1.1.2.20071005-bin.zip
+http://download.cegit.de/kde-windows/win32libs/zip/single/dbus-msvc-1.1.2.20071005-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/expat-2.0.1-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/expat-2.0.1-lib.zip
