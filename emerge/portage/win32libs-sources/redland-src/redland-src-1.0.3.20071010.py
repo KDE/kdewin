@@ -5,7 +5,7 @@ import utils
 
 PACKAGE_NAME         = "redland"
 PACKAGE_VER          = "1.0.3"
-PACKAGE_FULL_VER     = "1.0.3-4"
+PACKAGE_FULL_VER     = "1.0.3-5"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 PACKAGE_DLL_NAMES    = """
 libcurl
@@ -68,9 +68,9 @@ class subclass(base.baseclass):
     for f in PACKAGE_CONTRIB_FILES.split():
         shutil.copy( os.path.join( src, f ),  os.path.join( dst, f ) )
 
-    # /doc can be used from zip package
+    # /include can be used from zip package
     src = os.path.join( self.workdir, self.instsrcdir, "include" )
-    dst = os.path.join( self.imagedir, self.instdestdir, "include" )
+    dst = os.path.join( self.imagedir, self.instdestdir, "include", "redland" )
     utils.copySrcDirToDestDir( src, dst )
 
     # /lib needs a complete rebuild - done in make_package
