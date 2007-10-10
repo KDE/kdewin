@@ -55,8 +55,8 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/openslp-1.2.1-2-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/openssl-0.9.8e-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/openssl-0.9.8e-2-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-msvc-7.0-3-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-msvc-7.0-3-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-msvc-7.0-4-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-msvc-7.0-4-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-mingw-7.0-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/pcre-mingw-7.0-2-lib.zip
 
