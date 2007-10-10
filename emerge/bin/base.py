@@ -358,15 +358,6 @@ class baseclass:
             options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s " % \
                   ( package_path, self.rootdir.replace( "\\", "/" ) )
             
-            options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
-                    self.rootdir.replace( "\\", "/" )
-            
-            options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
-                    self.strigidir.replace( "\\", "/" )
-            
-            options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
-                    self.rootdir.replace( "\\", "/" )
-            
             options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
                     os.path.join( self.rootdir, "include" ).replace( "\\", "/" )
             
