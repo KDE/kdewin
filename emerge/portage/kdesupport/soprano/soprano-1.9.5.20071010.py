@@ -25,6 +25,6 @@ class subclass(base.baseclass):
   def make_package( self ):
     self.instdestdir = "kde"
     self.instsrcdir = "soprano"
-    return self.doPackaging( "soprano", "3.0.0-3", True )
+    return self.doPackaging( "soprano", "1.9.5-1", True )
 
 subclass().execute()

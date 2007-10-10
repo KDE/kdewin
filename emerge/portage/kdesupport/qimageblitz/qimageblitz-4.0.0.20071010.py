@@ -25,6 +25,6 @@ class subclass(base.baseclass):
     # FIXME?
     self.instdestdir = "kde"
     self.instsrcdir = "qimageblitz"
-    return self.doPackaging( "qimageblitz", "4.0.0-2", True )
+    return self.doPackaging( "qimageblitz", "4.0.0-3", True )
 
 subclass().execute()
