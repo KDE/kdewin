@@ -20,12 +20,14 @@ import os
 
 def usage():
     print
-    print 'usage: emerge [-p][--fetch|--unpack|--compile|--install|--qmerge|--digest'
+    print 'usage: emerge [-p|-q][--fetch|--unpack|--compile|--install|--qmerge|--digest'
     print '                   |--package|--full-package] packagename'
     print 'emerge.py is a script for easier building.'
     print
-    print 'options:'
+    print 'flags:'
     print '-p               pretend to do everything - a dry run'
+    print '-q               suppress all output'
+    print 'options:'
     print '--fetch          just fetch the packages'
     print '--unpack         unpack the packages and apply the patches if needed'
     print '--compile        configure and build the package'
@@ -33,7 +35,6 @@ def usage():
     print '--qmerge         install the image directories contents to the kderoot'
     print '--package        package the image directory with the kdewin-packager[*]'
     print '--full-package   make all of the above steps'
-    print '-q, --quiet      suppress all output'
     print
     print '[*] - this requires the packager to be installed already'
     print 'please see http://windows.kde.org for more information'
@@ -57,7 +58,7 @@ for i in sys.argv:
 #    print "got this param: %s" % i
     if ( i == "-p" ):
         doPretend = True
-    elif (i == "-q" or i == "--quiet" ):
+    elif ( i == "-q" ):
         stayQuiet = True
     elif ( i == "--offline" ):
         opts = i
@@ -187,17 +188,3 @@ else:
                     (package[0], package[1], package[2], buildaction)
         else:
             print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
-
-
-#os.system( "cmake.py fetch" )
-#os.system( "cmake.py unpack" )
-#os.system( "cmake.py compile" )
-#os.system( "cmake.py install" )
-#os.system( "cmake.py qmerge" )
-
-# digest
-# clean
-# preinst
-# postinst
-# qmerge
-# unmerge, ...
