@@ -75,6 +75,8 @@ for i in sys.argv:
         buildaction = "qmerge"
     elif ( i == "--digest" ):
         buildaction = "digest"
+    elif ( i == "--manifest" ):
+        buildaction = "manifest"        
     elif ( i == "--package" ):
         buildaction = "package"
     elif ( i == "--full-package" ):
@@ -105,7 +107,7 @@ os.putenv( "PYTHONPATH", os.path.join( KDEROOT, "emerge", "bin" ) )
 
 def doExec( category, package, version, action, opts ):
     if not stayQuiet:
-        print "doExec called opts:", opts
+        print "emerge doExec called opts:", opts
     file = os.path.join( utils.getPortageDir(), category, package, "%s-%s.py" % \
                          ( package, version ) )
     commandstring = "python %s %s %s" % ( file, action, opts )
@@ -118,7 +120,7 @@ def doExec( category, package, version, action, opts ):
 
 def handlePackage( category, package, version, buildaction, opts ):
     if not stayQuiet:
-        print "handlePackage called:", category, package, version, buildaction
+        print "emerge handlePackage called:", category, package, version, buildaction
     success = True
     if ( buildaction == "all" or buildaction == "full-package" ):
         if ( success ):
@@ -146,6 +148,8 @@ def handlePackage( category, package, version, buildaction, opts ):
         success = doExec( category, package, version, "qmerge", opts )
     elif ( buildaction == "package" ):
         success = doExec( category, package, version, "package", opts )
+    elif ( buildaction == "manifest" ):
+        success = doExec( category, package, version, "manifest", opts )
     else:
         if not stayQuiet:
             print "could not understand this buildaction: %s" % buildaction

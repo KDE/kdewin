@@ -103,9 +103,10 @@ class baseclass:
                 utils.cleanDirectory( self.imagedir )
             ok = self.install()
         elif command == "qmerge":   ok = self.qmerge()
+        elif command == "manifest":   ok = self.manifest()
         elif command == "merge":
             ok = self.fetch()
-            if ( ok ):     ok = self.unpack()
+            if ( ok ):    ok = self.unpack()
             if ( ok ):    ok = self.compile()
             if ( os.path.exists( self.imagedir ) ):
                 print "cleaning image dir:", self.imagedir
@@ -158,7 +159,12 @@ class baseclass:
         utils.addInstalled( self.category, self.package, self.version )
         return True
 
-
+    def manifest( self ):
+        if not self.stayQuiet:
+            print "base manifest called"
+        utils.manifestDir( os.path.join( self.workdir, self.instsrcdir, self.package ), self.imagedir, self.package, self.version )
+        return True
+        
     def digest( self ):
         if not self.stayQuiet:
             print "base digest called"

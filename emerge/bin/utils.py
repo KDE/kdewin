@@ -7,6 +7,7 @@ import urlparse
 import shutil
 import zipfile
 import tarfile
+import hashlib
 
 import portage_versions
 
@@ -438,7 +439,6 @@ def copySrcDirToDestDir( srcdir, destdir ):
     if ( not destdir.endswith( "\\" ) ):
 	mydestdir = mydestdir + "\\"
     #print "copySrcDirToDestDir called. mysrcdir: %s, mydestdir: %s" % ( mysrcdir, mydestdir )
-	
     
     for root, dirs, files in os.walk( mysrcdir ):
         #print "rootdir:", root
@@ -455,7 +455,93 @@ def copySrcDirToDestDir( srcdir, destdir ):
                 #print "src file:", root, file
                 shutil.copy( os.path.join( root, file ), tmpdir )
 
+def manifestDir( srcdir, imagedir, package, version ):
+    """ make the manifest files for an imagedir like the kdewin-packager does """
+    if not stayQuiet():
+        print "manifestDir called: %s %s" % ( srcdir, imagedir )
+        
+#    mysrcdir = srcdir
+#    if ( not srcdir.endswith( "\\" ) ):
+#	mysrcdir = mysrcdir + "\\"
 
+    myimagedir = imagedir
+    if ( not imagedir.endswith( "\\" ) ):
+	myimagedir = myimagedir + "\\"
+
+    binList = list()
+    libList = list()
+    docList = list()
+    dirType=0
+    
+    for root, dirs, files in os.walk( imagedir ):
+        relativeRoot = root.replace( imagedir, "" )
+        if relativeRoot.startswith( "\\bin" ):
+            dirType=1
+        elif relativeRoot.startswith( "\\lib" ):
+            dirType=2
+        elif relativeRoot.startswith( "\\share" ):
+            dirType=3
+        elif relativeRoot.startswith( "\\data" ):
+            dirType=4
+        elif relativeRoot.startswith( "\\etc" ):
+            dirType=5
+        elif relativeRoot.startswith( "\\include" ):
+            dirType=6
+        elif relativeRoot.startswith( "\\doc" ):
+            dirType=7
+        elif relativeRoot.startswith( "\\man" ) and not relativeRoot.startswith("\\mani"):
+            dirType=8
+            
+        for file in files:
+            if dirType == 1 or dirType == 2:
+                if file.endswith( ".exe" ) or file.endswith( ".bat" ) or file.endswith( ".dll" ):
+                    binList.append( os.path.join( root, file ).replace( myimagedir, "" ) )
+            if dirType == 2:
+                if file.endswith( ".a" ) or file.endswith( ".lib" ):
+                    libList.append( os.path.join( root, file ).replace( myimagedir, "" ) )
+            if dirType == 3 or dirType == 4 or dirType == 5:
+                binList.append( os.path.join( root, file ).replace( myimagedir, "" ) )
+            if dirType == 6:
+                libList.append( os.path.join( root, file ).replace( myimagedir, "" ) )
+            if dirType == 7 or dirType == 8:
+                docList.append( os.path.join( root, file ).replace( myimagedir, "" ) )
+                
+    if not os.path.exists( os.path.join( imagedir, "manifest" ) ):
+        os.mkdir( os.path.join( imagedir, "manifest" ) )
+        
+    binmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-bin.mft" % ( package, version )), 'wb' )
+    libmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-lib.mft" % ( package, version )), 'wb' )
+    docmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-doc.mft" % ( package, version )), 'wb' )
+    if not stayQuiet():
+        print "bin: ", binList
+        print "lib: ", libList
+        print "doc: ", docList
+    for file in binList:
+        fptr = open( os.path.join( myimagedir, file ), 'rb' )
+        dig = hashlib.md5()
+        for line in fptr:
+            dig.update( line )
+        binmanifest.write( "%s %s\n" % ( file, dig.hexdigest() ) )
+    for file in libList:
+        fptr = open( os.path.join( myimagedir, file ), 'rb' )
+        dig = hashlib.md5()
+        for line in fptr:
+            dig.update( line )
+        libmanifest.write( "%s %s\n" % ( file, dig.hexdigest() ) )
+    for file in docList:
+        fptr = open( os.path.join( myimagedir, file ), 'rb' )
+        dig = hashlib.md5()
+        for line in fptr:
+            dig.update( line )
+        docmanifest.write( "%s %s\n" % ( file, dig.hexdigest() ) )
+            #print os.path.join( root, file ).replace( myimagedir, "" ), dig.hexdigest()
+    if len(binList) > 0:
+        binmanifest.write( os.path.join( "manifest", "%s-%s-bin.mft" % ( package, version ) ) )
+    if len(libList) > 0:
+        libmanifest.write( os.path.join( "manifest", "%s-%s-lib.mft" % ( package, version ) ) )
+    if len(docList) > 0:
+        docmanifest.write( os.path.join( "manifest", "%s-%s-doc.mft" % ( package, version ) ) )
+    
 def mergeImageDirToRootDir( imagedir, rootdir ):
     #print "mergeImageDirToRootDir called. id: %s, root: %s" % ( imagedir, rootdir )
     copySrcDirToDestDir( imagedir, rootdir )
