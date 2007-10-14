@@ -32,6 +32,7 @@ def usage():
     print '--unpack         unpack the packages and apply the patches if needed'
     print '--compile        configure and build the package'
     print '--install        install the package to an image directory'
+    print '--manifest       add the installdb files to the image directory'
     print '--qmerge         install the image directories contents to the kderoot'
     print '--package        package the image directory with the kdewin-packager[*]'
     print '--full-package   make all of the above steps'
@@ -131,8 +132,8 @@ def handlePackage( category, package, version, buildaction, opts ):
             success = doExec( category, package, version, "compile", opts )       
         if ( success ):
             success = doExec( category, package, version, "install", opts )       
-#        if ( success and buildaction == "all" ):
-#            success = doExec( category, package, version, "manifest", opts )
+        if ( success and buildaction == "all" ):
+            success = doExec( category, package, version, "manifest", opts )
         if ( success and buildaction == "all" ):
             success = doExec( category, package, version, "qmerge", opts )
         if( success and buildaction == "full-package" ):
