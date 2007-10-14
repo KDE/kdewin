@@ -295,6 +295,10 @@ def addInstalled( category, package, version ):
     path = os.path.join( os.getenv( "KDEROOT" ), "etc", "portage" )
     if ( not os.path.isdir( path ) ):
         os.makedirs( path )
+    f = open( os.path.join( path, "installed" ), "r" )
+    for line in f:
+        if line.startswith( "%s/%s" % ( category, package ) ):
+            return
     f = open( os.path.join( path, "installed" ), "a" )
     f.write( "%s/%s-%s\r\n" % ( category, package, version ) )
     f.close()
