@@ -460,6 +460,11 @@ def manifestDir( srcdir, imagedir, package, version ):
     if not stayQuiet():
         print "manifestDir called: %s %s" % ( srcdir, imagedir )
         
+    if os.path.exists( os.path.join( imagedir, "manifest"  ) ):
+        for file in os.listdir( os.path.join( imagedir, "manifest"  ) ):
+            if file.startswith( package ):
+                print "warning: found package %s according to file '%s'." % ( package, file )
+                return
 #    mysrcdir = srcdir
 #    if ( not srcdir.endswith( "\\" ) ):
 #	mysrcdir = mysrcdir + "\\"
@@ -509,13 +514,16 @@ def manifestDir( srcdir, imagedir, package, version ):
     if not os.path.exists( os.path.join( imagedir, "manifest" ) ):
         os.mkdir( os.path.join( imagedir, "manifest" ) )
         
-    binmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-bin.mft" % ( package, version )), 'wb' )
-    libmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-lib.mft" % ( package, version )), 'wb' )
-    docmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-doc.mft" % ( package, version )), 'wb' )
-    if not stayQuiet():
-        print "bin: ", binList
-        print "lib: ", libList
-        print "doc: ", docList
+    if len(binList) > 0:
+        binmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-bin.mft" % ( package, version )), 'wb' )
+    if len(libList) > 0:
+        libmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-lib.mft" % ( package, version )), 'wb' )
+    if len(docList) > 0:
+        docmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-doc.mft" % ( package, version )), 'wb' )
+#    if not stayQuiet():
+#        print "bin: ", binList
+#        print "lib: ", libList
+#        print "doc: ", docList
     for file in binList:
         fptr = open( os.path.join( myimagedir, file ), 'rb' )
         dig = hashlib.md5()
@@ -541,6 +549,21 @@ def manifestDir( srcdir, imagedir, package, version ):
         libmanifest.write( os.path.join( "manifest", "%s-%s-lib.mft" % ( package, version ) ) )
     if len(docList) > 0:
         docmanifest.write( os.path.join( "manifest", "%s-%s-doc.mft" % ( package, version ) ) )
+        
+    if len(binList) > 0:
+        binversion = open( os.path.join( imagedir, "manifest", "%s-%s-bin.ver" % ( package, version )), 'wb' )
+    if len(libList) > 0:
+        libversion = open( os.path.join( imagedir, "manifest", "%s-%s-lib.ver" % ( package, version )), 'wb' )
+    if len(docList) > 0:
+        docversion = open( os.path.join( imagedir, "manifest", "%s-%s-doc.ver" % ( package, version )), 'wb' )
+    if len(binList) > 0:
+        binversion.write( "%s %s Binaries\n%s:" % ( package, version, package ) )
+    if len(libList) > 0:
+        libversion.write( "%s %s developer files\n%s:" % ( package, version, package ) )
+    if len(docList) > 0:
+        docversion.write( "%s %s Documentation\n%s:" % ( package, version, package ) )
+    
+    
     
 def mergeImageDirToRootDir( imagedir, rootdir ):
     #print "mergeImageDirToRootDir called. id: %s, root: %s" % ( imagedir, rootdir )

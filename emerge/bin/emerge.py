@@ -131,6 +131,8 @@ def handlePackage( category, package, version, buildaction, opts ):
             success = doExec( category, package, version, "compile", opts )       
         if ( success ):
             success = doExec( category, package, version, "install", opts )       
+#        if ( success and buildaction == "all" ):
+#            success = doExec( category, package, version, "manifest", opts )
         if ( success and buildaction == "all" ):
             success = doExec( category, package, version, "qmerge", opts )
         if( success and buildaction == "full-package" ):
