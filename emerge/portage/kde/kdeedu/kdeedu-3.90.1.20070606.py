@@ -3,7 +3,7 @@ import utils
 import os
 
 DEPEND = """
-kde/kdelibs
+kde/kdebase
 """
 
 class subclass(base.baseclass):
