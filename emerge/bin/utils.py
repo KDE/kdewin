@@ -449,7 +449,7 @@ def die( message ):
     exit( 1 )
 
 def copySrcDirToDestDir( srcdir, destdir ):
-    if not StayQuiet():
+    if not stayQuiet():
         print "copySrcDirToDestDir called. srcdir: %s, destdir: %s" % ( srcdir, destdir )
 
     mysrcdir = srcdir
