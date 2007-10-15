@@ -54,6 +54,7 @@ class baseclass:
         self.instdestdir=""
         self.traditional=True
         self.stayQuiet=True
+        self.forced=False
         if not os.getenv( "STAYQUIET" ) == "TRUE":
             self.stayQuiet=False
         if DIRECTORYLAYOUT == "installer":
@@ -85,6 +86,8 @@ class baseclass:
         self.noFetch = False
         if ( options == "--offline" ):
             self.noFetch  = True
+        if ( options == "--forced" ):
+            self.forced = True
         if not self.stayQuiet:
             print "command:", command
             print "opts:", options
@@ -103,6 +106,7 @@ class baseclass:
                 utils.cleanDirectory( self.imagedir )
             ok = self.install()
         elif command == "qmerge":   ok = self.qmerge()
+        elif command == "unmerge":   ok = self.unmerge()
         elif command == "manifest":   ok = self.manifest()
         elif command == "merge":
             ok = self.fetch()
@@ -159,6 +163,13 @@ class baseclass:
         utils.addInstalled( self.category, self.package, self.version )
         return True
 
+    def unmerge( self ):
+        if not self.stayQuiet:
+            print "base unmerge called"
+        utils.unmerge( self.rootdir, self.package, self.forced )
+        utils.remInstalled( self.category, self.package, self.version )
+        return True
+        
     def manifest( self ):
         if not self.stayQuiet:
             print "base manifest called"

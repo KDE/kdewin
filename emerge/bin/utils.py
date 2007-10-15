@@ -268,11 +268,11 @@ def digestFile( downloaddir, filename, packagedir ):
 def isInstalled( category, package, version ):
     file = os.path.join( os.getenv( "KDEROOT" ), "etc", "portage", "installed" )
     if ( not os.path.isfile( file ) ):
-        print "isInstalled file does not exist"
+        print "installed db file does not exist"
         return False
 
     found = False
-    f = open( file, "r" )
+    f = open( file, "rb" )
     for line in f.read().splitlines():
         if ( line == "%s/%s-%s" % ( category, package, version ) ):
             found = True
@@ -295,14 +295,30 @@ def addInstalled( category, package, version ):
     path = os.path.join( os.getenv( "KDEROOT" ), "etc", "portage" )
     if ( not os.path.isdir( path ) ):
         os.makedirs( path )
-    f = open( os.path.join( path, "installed" ), "r" )
+    f = open( os.path.join( path, "installed" ), "rb" )
     for line in f:
         if line.startswith( "%s/%s" % ( category, package ) ):
             return
-    f = open( os.path.join( path, "installed" ), "a" )
+    f = open( os.path.join( path, "installed" ), "ab" )
     f.write( "%s/%s-%s\r\n" % ( category, package, version ) )
     f.close()
 
+def remInstalled( category, package, version ):
+    if not stayQuiet():
+        print "remInstalled called"
+    dbfile = os.path.join( os.getenv( "KDEROOT" ), "etc", "portage", "installed" )
+    tmpdbfile = os.path.join( os.getenv( "KDEROOT" ), "etc", "portage", "TMPinstalled" )
+    if os.path.exists( dbfile ):
+        file = open( dbfile, "rb" )
+        tfile = open( tmpdbfile, "wb" )
+        for line in file:
+            if not line.startswith("%s/%s" % ( category, package ) ):
+                tfile.write( line )
+        file.close()
+        tfile.close()
+        os.remove( dbfile )
+        os.rename( tmpdbfile, dbfile )
+        
 def getCategoryPackageVersion( path ):
     if not stayQuiet():
         print "getCategoryPackageVersion:", path
@@ -433,7 +449,8 @@ def die( message ):
     exit( 1 )
 
 def copySrcDirToDestDir( srcdir, destdir ):
-    #print "copySrcDirToDestDir called. srcdir: %s, destdir: %s" % ( srcdir, destdir )
+    if not StayQuiet():
+        print "copySrcDirToDestDir called. srcdir: %s, destdir: %s" % ( srcdir, destdir )
 
     mysrcdir = srcdir
     if ( not srcdir.endswith( "\\" ) ):
@@ -442,23 +459,52 @@ def copySrcDirToDestDir( srcdir, destdir ):
     mydestdir = destdir
     if ( not destdir.endswith( "\\" ) ):
 	mydestdir = mydestdir + "\\"
-    #print "copySrcDirToDestDir called. mysrcdir: %s, mydestdir: %s" % ( mysrcdir, mydestdir )
     
     for root, dirs, files in os.walk( mysrcdir ):
-        #print "rootdir:", root
 
         # do not copy files under .svn directories, because they are write-protected
         # and the they cannot easily be deleted...
         if ( root.find( ".svn" ) == -1 ):
-            #print "srcdir:", srcdir
-            #print "destdir:", destdir
             tmpdir = root.replace( mysrcdir, mydestdir )
-            #print "tmpdir:", tmpdir
             if ( not os.path.exists( tmpdir ) ): os.makedirs( tmpdir )
             for file in files:
-                #print "src file:", root, file
                 shutil.copy( os.path.join( root, file ), tmpdir )
 
+def unmerge( rootdir, package, forced = False ):
+    """ delete files according to the manifest files """
+    if not stayQuiet():
+        print "unmerge called: %s" % ( package )
+        
+    if os.path.exists( os.path.join( rootdir, "manifest"  ) ):
+        for file in os.listdir( os.path.join( rootdir, "manifest"  ) ):
+            if file.startswith( "%s-" % package ) and file.endswith( ".mft" ):
+                fptr = open( os.path.join( rootdir, "manifest", file ), 'rb' )
+                for line in fptr:
+                    line = line.replace( "\n", "" ).replace( "\r", "" )
+                    if not line.find( " " ) == -1:
+                        [ a, b ] = line.split( " ", 2 )
+                    else:
+                        a, b = line, ""
+                    if os.path.join( rootdir, "manifest", file ) == os.path.join( rootdir, os.path.normcase( a ) ):
+                        continue
+                    if os.path.isfile( os.path.join( rootdir, os.path.normcase( a ) ) ):
+                        hash = digestFile( os.path.join( rootdir, os.path.normcase( a ) ) )
+                        if b == "" or hash == b:
+                            if not stayQuiet():
+                                print "deleting file %s" % a
+                            os.remove( os.path.join( rootdir, os.path.normcase( a ) ) )
+                        else:
+                            if not stayQuiet():
+                                print "warning: file %s has different hash: %s %s" % ( os.path.normcase( a ), hash, b )
+                            if forced:
+                                os.remove( os.path.join( rootdir, os.path.normcase( a ) ) )
+                    else:
+                        if not stayQuiet():
+                            print "warning: file %s is not existing" % ( os.path.normcase( a ) )
+                fptr.close()
+                os.remove( os.path.join( rootdir, "manifest", file ) )
+    return
+    
 def manifestDir( srcdir, imagedir, package, version ):
     """ make the manifest files for an imagedir like the kdewin-packager does """
     if not stayQuiet():
@@ -500,6 +546,8 @@ def manifestDir( srcdir, imagedir, package, version ):
             dirType=7
         elif relativeRoot.startswith( "\\man" ) and not relativeRoot.startswith("\\mani"):
             dirType=8
+        else:
+            dirType=1
             
         for file in files:
             if dirType == 1 or dirType == 2:
@@ -529,30 +577,21 @@ def manifestDir( srcdir, imagedir, package, version ):
 #        print "lib: ", libList
 #        print "doc: ", docList
     for file in binList:
-        fptr = open( os.path.join( myimagedir, file ), 'rb' )
-        dig = hashlib.md5()
-        for line in fptr:
-            dig.update( line )
-        binmanifest.write( "%s %s\n" % ( file, dig.hexdigest() ) )
+        binmanifest.write( "%s %s\n" % ( file, digestFile( os.path.join( myimagedir, file ) ) ) )
     for file in libList:
-        fptr = open( os.path.join( myimagedir, file ), 'rb' )
-        dig = hashlib.md5()
-        for line in fptr:
-            dig.update( line )
-        libmanifest.write( "%s %s\n" % ( file, dig.hexdigest() ) )
+        libmanifest.write( "%s %s\n" % ( file, digestFile( os.path.join( myimagedir, file )) ) )
     for file in docList:
-        fptr = open( os.path.join( myimagedir, file ), 'rb' )
-        dig = hashlib.md5()
-        for line in fptr:
-            dig.update( line )
-        docmanifest.write( "%s %s\n" % ( file, dig.hexdigest() ) )
+        docmanifest.write( "%s %s\n" % ( file, digestFile( os.path.join( myimagedir, file ) ) ) )
             #print os.path.join( root, file ).replace( myimagedir, "" ), dig.hexdigest()
     if len(binList) > 0:
         binmanifest.write( os.path.join( "manifest", "%s-%s-bin.mft" % ( package, version ) ) )
+        binmanifest.write( os.path.join( "manifest", "%s-%s-bin.ver" % ( package, version ) ) )
     if len(libList) > 0:
         libmanifest.write( os.path.join( "manifest", "%s-%s-lib.mft" % ( package, version ) ) )
+        libmanifest.write( os.path.join( "manifest", "%s-%s-lib.ver" % ( package, version ) ) )
     if len(docList) > 0:
         docmanifest.write( os.path.join( "manifest", "%s-%s-doc.mft" % ( package, version ) ) )
+        docmanifest.write( os.path.join( "manifest", "%s-%s-doc.ver" % ( package, version ) ) )
         
     if len(binList) > 0:
         binversion = open( os.path.join( imagedir, "manifest", "%s-%s-bin.ver" % ( package, version )), 'wb' )
@@ -662,6 +701,15 @@ def sedFile( directory, file, sedcommand ):
 
     os.system( command ) and die( "utils sedFile failed" )
 
+def digestFile( filepath ):
+    """ md5-digests a file """
+    hash = hashlib.md5()
+    file = open( filepath, "rb" )
+    for line in file:
+        hash.update( line )
+    file.close()
+    return hash.hexdigest()
+    
 def toMSysPath( path ):
     path = path.replace( '\\', '/' )
     if ( path[1] == ':' ):

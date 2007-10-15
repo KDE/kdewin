@@ -20,13 +20,14 @@ import os
 
 def usage():
     print
-    print 'usage: emerge [-p|-q][--fetch|--unpack|--compile|--install|--qmerge|--digest'
-    print '                   |--package|--full-package] packagename'
+    print 'usage: emerge [-p|-q|-f][--fetch|--unpack|--compile|--install|--qmerge|--digest'
+    print '                   |--unmerge|--package|--full-package] packagename'
     print 'emerge.py is a script for easier building.'
     print
     print 'flags:'
     print '-p               pretend to do everything - a dry run'
     print '-q               suppress all output'
+    print '-f               force removal of files with unmerge'
     print 'options:'
     print '--fetch          just fetch the packages'
     print '--unpack         unpack the packages and apply the patches if needed'
@@ -36,6 +37,7 @@ def usage():
     print '--qmerge         install the image directories contents to the kderoot'
     print '--package        package the image directory with the kdewin-packager[*]'
     print '--full-package   make all of the above steps'
+    print '--unmerge        try to unmerge package'
     print
     print '[*] - this requires the packager to be installed already'
     print 'please see http://windows.kde.org for more information'
@@ -64,6 +66,8 @@ for i in sys.argv:
     elif ( i == "--offline" ):
         opts = i
         offline = True
+    elif ( i == "-f" ):
+        opts = "--forced"
     elif ( i == "--fetch" ):
         buildaction = "fetch"
     elif ( i == "--unpack" ):
@@ -80,6 +84,8 @@ for i in sys.argv:
         buildaction = "manifest"        
     elif ( i == "--package" ):
         buildaction = "package"
+    elif ( i == "--unmerge" ):
+        buildaction = "unmerge"
     elif ( i == "--full-package" ):
         buildaction = "full-package"
     elif ( i.startswith( "-" ) ):
@@ -153,6 +159,8 @@ def handlePackage( category, package, version, buildaction, opts ):
         success = doExec( category, package, version, "package", opts )
     elif ( buildaction == "manifest" ):
         success = doExec( category, package, version, "manifest", opts )
+    elif ( buildaction == "unmerge" ):
+        success = doExec( category, package, version, "unmerge", opts )
     else:
         if not stayQuiet:
             print "could not understand this buildaction: %s" % buildaction
