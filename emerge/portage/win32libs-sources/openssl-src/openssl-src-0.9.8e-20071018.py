@@ -6,8 +6,8 @@ import utils
 # attn: you need http://innounp.sourceforge.net/ !!
 
 PACKAGE_NAME         = "openssl"
-PACKAGE_VER          = "0.9.8.e"
-PACKAGE_FULL_VER     = "0.9.8.e"
+PACKAGE_VER          = "0.9.8e"
+PACKAGE_FULL_VER     = "0.9.8e-3"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 PACKAGE_DL_NAME      = "Win32OpenSSL-0_9_8e.exe"
 PACKAGE_DLL_NAMES     = """
@@ -58,6 +58,9 @@ class subclass(base.baseclass):
     src = os.path.join( self.workdir, self.instsrcdir, "{app}", "lib", "MinGW" )
     dst = os.path.join( self.imagedir, self.instdestdir, "lib" )
     utils.copySrcDirToDestDir( src, dst )
+    # hack for bug(??) in cmake
+    shutil.copy( os.path.join( src, "libeay32.a" ), os.path.join( dst, "libeay32d.a" ) )
+    shutil.copy( os.path.join( src, "ssleay32.a" ), os.path.join( dst, "ssleay32d.a" ) )
 
     src = os.path.join( self.workdir, self.instsrcdir, "{app}", "lib", "VC" )
     utils.copySrcDirToDestDir( src, dst )
