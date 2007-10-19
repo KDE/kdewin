@@ -515,9 +515,6 @@ def manifestDir( srcdir, imagedir, package, version ):
             if file.startswith( package ):
                 print "warning: found package %s according to file '%s'." % ( package, file )
                 return
-#    mysrcdir = srcdir
-#    if ( not srcdir.endswith( "\\" ) ):
-#	mysrcdir = mysrcdir + "\\"
 
     myimagedir = imagedir
     if ( not imagedir.endswith( "\\" ) ):

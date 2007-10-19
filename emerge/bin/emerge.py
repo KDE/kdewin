@@ -51,12 +51,16 @@ stayQuiet = False
 offline = False
 opts = ""
 
+if len( sys.argv ) < 2:
+    usage()
+    exit( 1 )
+
 quiet=os.getenv( "STAYQUIET" )
 if ( quiet == "TRUE" ):
     stayQuiet = True
 else:
     stayQuiet = False
-    
+
 for i in sys.argv:
 #    print "got this param: %s" % i
     if ( i == "-p" ):
