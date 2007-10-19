@@ -581,14 +581,14 @@ def manifestDir( srcdir, imagedir, package, version ):
         docmanifest.write( "%s %s\n" % ( file, digestFile( os.path.join( myimagedir, file ) ) ) )
             #print os.path.join( root, file ).replace( myimagedir, "" ), dig.hexdigest()
     if len(binList) > 0:
-        binmanifest.write( os.path.join( "manifest", "%s-%s-bin.mft" % ( package, version ) ) )
-        binmanifest.write( os.path.join( "manifest", "%s-%s-bin.ver" % ( package, version ) ) )
+        binmanifest.write( os.path.join( "manifest", "%s-%s-bin.mft\n" % ( package, version ) ) )
+        binmanifest.write( os.path.join( "manifest", "%s-%s-bin.ver\n" % ( package, version ) ) )
     if len(libList) > 0:
-        libmanifest.write( os.path.join( "manifest", "%s-%s-lib.mft" % ( package, version ) ) )
-        libmanifest.write( os.path.join( "manifest", "%s-%s-lib.ver" % ( package, version ) ) )
+        libmanifest.write( os.path.join( "manifest", "%s-%s-lib.mft\n" % ( package, version ) ) )
+        libmanifest.write( os.path.join( "manifest", "%s-%s-lib.ver\n" % ( package, version ) ) )
     if len(docList) > 0:
-        docmanifest.write( os.path.join( "manifest", "%s-%s-doc.mft" % ( package, version ) ) )
-        docmanifest.write( os.path.join( "manifest", "%s-%s-doc.ver" % ( package, version ) ) )
+        docmanifest.write( os.path.join( "manifest", "%s-%s-doc.mft\n" % ( package, version ) ) )
+        docmanifest.write( os.path.join( "manifest", "%s-%s-doc.ver\n" % ( package, version ) ) )
         
     if len(binList) > 0:
         binversion = open( os.path.join( imagedir, "manifest", "%s-%s-bin.ver" % ( package, version )), 'wb' )
