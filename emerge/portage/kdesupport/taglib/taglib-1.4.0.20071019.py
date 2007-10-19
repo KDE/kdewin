@@ -19,7 +19,8 @@ class subclass(base.baseclass):
 
   def make_package( self ):
     # FIXME?
-    self.instdestdir = "kde"
+    if self.traditional:
+        self.instdestdir = "kde"
     self.instsrcdir = "taglib"
     return self.doPackaging( "taglib", "1.4.0-2", True )
 

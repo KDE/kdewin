@@ -6,7 +6,6 @@ import os
 DEPEND = """
 virtual/base
 libs/qt
-kdesupport/clucene-core
 """
 
 class subclass(base.baseclass):
@@ -14,7 +13,7 @@ class subclass(base.baseclass):
     base.baseclass.__init__( self, "" )
 
   def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "soprano" )
+    return self.kdeSvnUnpack( "trunk/kdesupport", "qimageblitz" )
 
   def compile( self ):
     return self.kdeCompile()
@@ -23,8 +22,9 @@ class subclass(base.baseclass):
     return self.kdeInstall()
 
   def make_package( self ):
-    self.instdestdir = "kde"
-    self.instsrcdir = "soprano"
-    return self.doPackaging( "soprano", "1.9.5-1", True )
+    if self.traditional:
+        self.instdestdir = "kde"
+    self.instsrcdir = "qimageblitz"
+    return self.doPackaging( "qimageblitz", "4.0.0-3", True )
 
 subclass().execute()

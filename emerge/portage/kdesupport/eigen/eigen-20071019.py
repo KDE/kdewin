@@ -10,9 +10,11 @@ virtual/base
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
+    # header-only package
+    self.createCombinedPackage = True
 
   def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "kdewin32" )
+    return self.kdeSvnUnpack( "trunk/kdesupport", "eigen" )
 
   def compile( self ):
     return self.kdeCompile()
@@ -21,8 +23,9 @@ class subclass(base.baseclass):
     return self.kdeInstall()
 
   def make_package( self ):
-    self.instdestdir = "kde"
-    self.instsrcdir = "kdewin32"
-    return self.doPackaging( "kdewin32", "0.2.7-2", True )
+    if self.traditional:
+        self.instdestdir = "kde"
+    self.instsrcdir = "eigen"
+    return self.doPackaging( "eigen", "20071019", True )
 
 subclass().execute()

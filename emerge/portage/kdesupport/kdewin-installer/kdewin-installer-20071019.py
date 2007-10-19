@@ -5,16 +5,15 @@ import os
 
 DEPEND = """
 virtual/base
+libs/qt
 """
 
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
-    # header-only package
-    self.createCombinedPackage = True
 
   def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "eigen" )
+    return self.kdeSvnUnpack( "trunk/kdesupport", "kdewin-installer" )
 
   def compile( self ):
     return self.kdeCompile()
@@ -23,9 +22,9 @@ class subclass(base.baseclass):
     return self.kdeInstall()
 
   def make_package( self ):
-    # FIXME?
-    self.instdestdir = "kde"
-    self.instsrcdir = "eigen"
-    return self.doPackaging( "eigen", "20070915", True )
+    if self.traditional:
+        self.instdestdir = "kde"
+    self.instsrcdir = "kdewin-installer"
+    return self.doPackaging( "kdewin-installer", "20071019", True )
 
 subclass().execute()

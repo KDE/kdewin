@@ -5,15 +5,16 @@ import os
 
 DEPEND = """
 virtual/base
-libs/qt
 """
 
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
+    # header-only package
+    self.createCombinedPackage = True
 
   def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "qimageblitz" )
+    return self.kdeSvnUnpack( "trunk/kdesupport", "gmm" )
 
   def compile( self ):
     return self.kdeCompile()
@@ -23,8 +24,9 @@ class subclass(base.baseclass):
 
   def make_package( self ):
     # FIXME?
-    self.instdestdir = "kde"
-    self.instsrcdir = "qimageblitz"
-    return self.doPackaging( "qimageblitz", "4.0.0-3", True )
+    if self.traditional:
+        self.instdestdir = "kde"
+    self.instsrcdir = "gmm"
+    return self.doPackaging( "gmm", "20071019", True )
 
 subclass().execute()
