@@ -1,7 +1,4 @@
 import base
-import utils
-from utils import die
-import os
 
 DEPEND = """
 virtual/base
@@ -21,8 +18,9 @@ class subclass(base.baseclass):
     return self.kdeInstall()
 
   def make_package( self ):
-    self.instdestdir = "kde"
+    if self.traditional:
+      self.instdestdir = "kde"
     self.instsrcdir = "kdewin32"
-    return self.doPackaging( "kdewin32", "0.3.0-1", True )
+    return self.doPackaging( "kdewin32", "0.3.0-2", True )
 
 subclass().execute()
