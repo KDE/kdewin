@@ -1,0 +1,44 @@
+*** obmolecformat.h	2007-10-21 20:05:51.812500000 +0200
+--- obmolecformat.h2	2007-10-21 03:24:38.250000000 +0200
+***************
+*** 20,26 ****
+  #define OB_MOLECULEFORMAT_H
+  
+  #ifdef _WIN32
+!   #include <hash_map>
+  #endif
+  
+  #include <openbabel/mol.h>
+--- 20,26 ----
+  #define OB_MOLECULEFORMAT_H
+  
+  #ifdef _WIN32
+! //  #include <hash_map>
+  #endif
+  
+  #include <openbabel/mol.h>
+***************
+*** 110,120 ****
+    static OBMol* MakeCombinedMolecule(OBMol* pFirst, OBMol* pSecond);
+    //@}
+  
+! #ifdef _WIN32
+!   typedef stdext::hash_map<std::string, unsigned> NameIndexType;
+! #else
+    typedef std::map<std::string, unsigned> NameIndexType;
+! #endif
+    
+    // documentation in obmolecformat.cpp
+    static bool   ReadNameIndex(NameIndexType& index, const std::string& datafilename,
+--- 110,120 ----
+    static OBMol* MakeCombinedMolecule(OBMol* pFirst, OBMol* pSecond);
+    //@}
+  
+! //#ifdef _WIN32
+! //  typedef stdext::hash_map<std::string, unsigned> NameIndexType;
+! //#else
+    typedef std::map<std::string, unsigned> NameIndexType;
+! //#endif
+    
+    // documentation in obmolecformat.cpp
+    static bool   ReadNameIndex(NameIndexType& index, const std::string& datafilename,

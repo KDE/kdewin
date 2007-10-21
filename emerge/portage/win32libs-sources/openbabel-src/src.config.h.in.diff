@@ -1,0 +1,16 @@
+*** config.h.in	2007-10-21 20:08:13.000000000 +0200
+--- config.h.in2	2007-10-21 03:23:54.562500000 +0200
+***************
+*** 6,11 ****
+--- 6,16 ----
+  /* The version of Open Babel */
+  #undef BABEL_VERSION
+  
++ #if defined(WIN32)
++ #if defined(__MINGW__)
++ #undef USING_OBDLL
++ #endif
++ #endif
+  /* Used to export symbols for DLL / shared library builds */
+  #if defined(WIN32)
+   #if defined(USING_OBDLL) // e.g. in src/main.cpp
