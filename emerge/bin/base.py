@@ -505,7 +505,7 @@ class baseclass:
         self.system( cmd )
         return True
 
-    def msysConfigureFlags ( sef ):
+    def msysConfigureFlags ( self ):
         flags  = "--disable-nls "
         flags += "--disable-static "
         flags += "--prefix=/ "
@@ -522,9 +522,14 @@ class baseclass:
 
         sh = os.path.join( self.msysdir, "bin", "sh.exe" )
 
+        if not self.stayQuiet:
+            print config
+            print build
         cmd = "%s --login -c \"cd %s && %s %s && make -j2\"" % \
               ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
                 self.msysConfigureFlags() )
+        if not self.stayQuiet:
+            print cmd
         self.system( cmd )
         return True
 
