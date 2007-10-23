@@ -1,0 +1,28 @@
+*** configure	2007-10-22 01:13:12.109375000 +0200
+--- configure2	2007-10-22 01:17:43.109375000 +0200
+***************
+*** 3323,3328 ****
+--- 3323,3332 ----
+  	ARCH="linux"
+  	EXT="lnx"
+  	;;
++     MINGW*)
++         ARCH="cygwin"
++         EXT="mingw"
++ 	;;
+      CYGWIN*)
+  	ARCH="cygwin"
+  	EXT="cygwin"
+***************
+*** 3387,3392 ****
+--- 3391,3400 ----
+      SHLIB_LD="$CC -shared"
+      SHLIB_SUFFIX=".dll"
+      ;;
++   mingw)
++     SHLIB_LD="$CC -shared"
++     SHLIB_SUFFIX=".dll"
++     ;;
+    darwin)
+      SHLIB_LD="$CC -dynamiclib"
+      SHLIB_SUFFIX=".dylib"

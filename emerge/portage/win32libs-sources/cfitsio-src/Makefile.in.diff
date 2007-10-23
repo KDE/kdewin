@@ -1,0 +1,102 @@
+*** Makefile.in	2006-11-07 18:30:44.000000000 +0100
+--- Makefile.in2	2007-10-22 02:28:40.781250000 +0200
+***************
+*** 1,6 ****
+  #
+  # Makefile for cfitsio library:
+! #       libcfits.a
+  #
+  # Oct-96 : original version by 
+  #
+--- 1,7 ----
+  #
+  # Makefile for cfitsio library:
+! #       libcfitsio.a
+! #       libcfitsio.dll
+  #
+  # Oct-96 : original version by 
+  #
+***************
+*** 20,29 ****
+  
+  prefix		= @prefix@
+  exec_prefix	= @exec_prefix@
+! CFITSIO_PREFIX	= $(prefix)
+! CFITSIO_LIB	= $(exec_prefix)/lib
+! CFITSIO_INCLUDE	= $(prefix)/include
+! INSTALL_DIRS	= @INSTALL_ROOT@ ${CFITSIO_LIB} ${CFITSIO_LIB}/pkgconfig ${CFITSIO_INCLUDE}
+  
+  
+  SHELL =		/bin/sh
+--- 21,31 ----
+  
+  prefix		= @prefix@
+  exec_prefix	= @exec_prefix@
+! CFITSIO_PREFIX	= ${DESTDIR}$(prefix)
+! CFITSIO_RUNTIME	= ${CFITSIO_PREFIX}/bin
+! CFITSIO_LIB	= ${CFITSIO_PREFIX}/lib
+! CFITSIO_INCLUDE	= ${CFITSIO_PREFIX}/include
+! INSTALL_DIRS	= @INSTALL_ROOT@ ${CFITSIO_RUNTIME} ${CFITSIO_LIB} ${CFITSIO_INCLUDE}
+  
+  
+  SHELL =		/bin/sh
+***************
+*** 78,84 ****
+  all-nofitsio:
+  		${MAKE} stand_alone "FITSIO_SRC="
+  
+! stand_alone:	libcfitsio.a
+  
+  libcfitsio.a:	${OBJECTS}
+  		ar rv libcfitsio.a ${OBJECTS}; \
+--- 80,86 ----
+  all-nofitsio:
+  		${MAKE} stand_alone "FITSIO_SRC="
+  
+! stand_alone:	libcfitsio.a shared
+  
+  libcfitsio.a:	${OBJECTS}
+  		ar rv libcfitsio.a ${OBJECTS}; \
+***************
+*** 89,103 ****
+  libcfitsio${SHLIB_SUFFIX}: ${OBJECTS}
+  		${SHLIB_LD} -o $@ ${OBJECTS}
+  
+! install:	libcfitsio.a $(INSTALL_DIRS)
+  		@if [ -f libcfitsio.a ]; then \
+! 			/bin/mv libcfitsio.a ${CFITSIO_LIB}; \
+  		fi; \
+  		if [ -f libcfitsio${SHLIB_SUFFIX} ]; then \
+! 			/bin/mv libcfitsio${SHLIB_SUFFIX} ${CFITSIO_LIB}; \
+  		fi; \
+! 		/bin/cp fitsio.h fitsio2.h longnam.h drvrsmem.h ${CFITSIO_INCLUDE}/; \
+! 		/bin/cp cfitsio.pc ${CFITSIO_LIB}/pkgconfig
+  
+  smem:		smem.o libcfitsio.a ${OBJECTS}
+  		${CC} $(CFLAGS) $(DEFS) -o smem smem.o -L. -lcfitsio -lm
+--- 91,104 ----
+  libcfitsio${SHLIB_SUFFIX}: ${OBJECTS}
+  		${SHLIB_LD} -o $@ ${OBJECTS}
+  
+! install:	libcfitsio.a shared $(INSTALL_DIRS)
+  		@if [ -f libcfitsio.a ]; then \
+! 			/bin/cp libcfitsio.a ${CFITSIO_LIB}; \
+  		fi; \
+  		if [ -f libcfitsio${SHLIB_SUFFIX} ]; then \
+! 			/bin/cp libcfitsio${SHLIB_SUFFIX} ${CFITSIO_RUNTIME}; \
+  		fi; \
+! 		/bin/cp fitsio.h fitsio2.H longnam.h drvrsmem.h ${CFITSIO_INCLUDE}/; \
+  
+  smem:		smem.o libcfitsio.a ${OBJECTS}
+  		${CC} $(CFLAGS) $(DEFS) -o smem smem.o -L. -lcfitsio -lm
+***************
+*** 157,160 ****
+  objs: ${CORE_OBJECTS}
+  
+  $(INSTALL_DIRS):
+! 	@if [ ! -d $@ ]; then mkdir $@; fi
+--- 158,161 ----
+  objs: ${CORE_OBJECTS}
+  
+  $(INSTALL_DIRS):
+! 	@if [ ! -d $@ ]; then mkdir -p $@; fi
