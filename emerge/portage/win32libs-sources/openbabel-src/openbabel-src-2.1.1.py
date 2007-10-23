@@ -43,23 +43,28 @@ class subclass(base.baseclass):
 
         cmd = "cd %s && patch -p0 < %s" % \
               ( os.path.join( self.workdir, self.instsrcdir, "src" ), os.path.join( self.packagedir , "src.Makefile.in.diff" ) )
-        print cmd
+        if not self.stayQuiet:
+            print cmd
         os.system( cmd ) or die
         cmd = "cd %s && patch -p0 < %s" % \
               ( os.path.join( self.workdir, self.instsrcdir, "src" ), os.path.join( self.packagedir , "src.config.h.in.diff" ) )
-        print cmd
+        if not self.stayQuiet:
+            print cmd
         os.system( cmd ) or die
         cmd = "cd %s && patch -p0 < %s" % \
               ( os.path.join( self.workdir, self.instsrcdir, "include", "openbabel" ), os.path.join( self.packagedir , "include.openbabel.obmolecformat.h.diff" ) )
-        print cmd
+        if not self.stayQuiet:
+            print cmd
         os.system( cmd ) or die
         cmd = "cd %s && patch -p0 < %s" % \
               ( os.path.join( self.workdir, self.instsrcdir, "tools" ), os.path.join( self.packagedir , "tools.Makefile.in.diff" ) )
-        print cmd
+        if not self.stayQuiet:
+            print cmd
         os.system( cmd ) or die
         cmd = "cd %s && patch -p0 < %s" % \
               ( os.path.join( self.workdir, self.instsrcdir, "tools" ), os.path.join( self.packagedir , "tools.babel.cpp.diff" ) )
-        print cmd
+        if not self.stayQuiet:
+            print cmd
         os.system( cmd ) or die
         
         return True
@@ -77,17 +82,6 @@ class subclass(base.baseclass):
         return self.msysInstall()
 
     def make_package( self ):
-        # clean directory
-        dst = os.path.join( self.imagedir, self.instdestdir, "lib" )
-        utils.cleanDirectory( dst )
-
-        for lib in PACKAGE_DLL_NAME.split():
-            self.stripLibs( lib )
-
-        # auto-create both import libs with the help of pexports
-        for lib in PACKAGE_DLL_NAME.split():
-            self.createImportLibs( lib )
-
         # now do packaging with kdewin-packager
         self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
 
