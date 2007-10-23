@@ -522,9 +522,6 @@ class baseclass:
 
         sh = os.path.join( self.msysdir, "bin", "sh.exe" )
 
-        if not self.stayQuiet:
-            print config
-            print build
         cmd = "%s --login -c \"cd %s && %s %s && make -j2\"" % \
               ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
                 self.msysConfigureFlags() )
@@ -545,6 +542,8 @@ class baseclass:
 
         cmd = "%s --login -c \"cd %s && make -j2 install DESTDIR=%s\"" % \
               ( sh, utils.toMSysPath( build ), utils.toMSysPath( install ) )
+        if not self.stayQuiet:
+            print cmd
         self.system( cmd )
         return True
 
