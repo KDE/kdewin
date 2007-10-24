@@ -14,7 +14,7 @@ kdesupport/strigi
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
-    self.buildType = "Debug"
+    self.buildType = "RelWithDebInfo"
     self.instsrcdir = "kdelibs"
     self.instdestdir = "kde"
 
@@ -28,7 +28,7 @@ class subclass(base.baseclass):
     return self.kdeInstall()
 
   def make_package( self ):
-    return self.doPackaging( "kdelibs", "3.94-1", True )
+    return self.doPackaging( "kdelibs", "3.94-2", True )
 
 
 subclass().execute()
