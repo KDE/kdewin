@@ -19,7 +19,9 @@ DEPEND = """
 
 #
 # this library is used by kdeedu/kstars
-# a build with msvc should be possible, I just don't have enough time
+# the library is c-only but it may not work due to __stdcall - we'll see
+# it should be no problem to compile it with msvc and/or create a CMakeLists.txt
+# to fix this problem if there's one
 #
 
 class subclass(base.baseclass):
@@ -65,6 +67,11 @@ class subclass(base.baseclass):
         return self.msysInstall( False )
 
     def make_package( self ):
+        dst = os.path.join( self.imagedir, self.instdestdir, "lib" )
+        utils.cleanDirectory( dst )
+
+        self.stripLibs( "libcfitsio" )
+        self.createImportLibs( "libcfitsio" )
         # now do packaging with kdewin-packager
         self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
 
