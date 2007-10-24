@@ -18,7 +18,7 @@ class subclass(base.baseclass):
         path = os.path.join( self.rootdir, "win32libs" )
         os.putenv( "BOOST_ROOT", path )
 
-    return self.kdeCompile()
+        return self.kdeCompile()
 
     def install( self ):
         return self.kdeInstall()
