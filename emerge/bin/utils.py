@@ -455,11 +455,11 @@ def copySrcDirToDestDir( srcdir, destdir ):
 
     mysrcdir = srcdir
     if ( not srcdir.endswith( "\\" ) ):
-	mysrcdir = mysrcdir + "\\"
+        mysrcdir = mysrcdir + "\\"
 
     mydestdir = destdir
     if ( not destdir.endswith( "\\" ) ):
-	mydestdir = mydestdir + "\\"
+        mydestdir = mydestdir + "\\"
     
     for root, dirs, files in os.walk( mysrcdir ):
 
