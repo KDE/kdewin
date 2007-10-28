@@ -1,10 +1,7 @@
 import base
-import utils
-import os
 
 DEPEND = """
-virtual/base
-libs/qt
+dev-util/win32libs
 """
 
 class subclass(base.baseclass):
@@ -12,7 +9,7 @@ class subclass(base.baseclass):
     base.baseclass.__init__( self, "" )
 
   def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "qca" )
+    return self.kdeSvnUnpack( "trunk/kdesupport", "taglib" )
 
   def compile( self ):
     return self.kdeCompile()
@@ -23,7 +20,7 @@ class subclass(base.baseclass):
   def make_package( self ):
     if self.traditional:
         self.instdestdir = "kde"
-    self.instsrcdir = "qca"
-    return self.doPackaging( "qca", "2.0.0-3", True )
+    self.instsrcdir = "taglib"
+    return self.doPackaging( "taglib", "1.4.0-3", True )
 
 subclass().execute()

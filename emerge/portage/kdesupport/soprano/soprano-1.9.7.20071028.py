@@ -1,7 +1,9 @@
 import base
 
 DEPEND = """
-dev-util/win32libs
+virtual/base
+libs/qt
+kdesupport/clucene-core
 """
 
 class subclass(base.baseclass):
@@ -9,7 +11,7 @@ class subclass(base.baseclass):
     base.baseclass.__init__( self, "" )
 
   def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "taglib" )
+    return self.kdeSvnUnpack( "trunk/kdesupport", "soprano" )
 
   def compile( self ):
     return self.kdeCompile()
@@ -18,10 +20,9 @@ class subclass(base.baseclass):
     return self.kdeInstall()
 
   def make_package( self ):
-    # FIXME?
     if self.traditional:
         self.instdestdir = "kde"
-    self.instsrcdir = "taglib"
-    return self.doPackaging( "taglib", "1.4.0-2", True )
+    self.instsrcdir = "soprano"
+    return self.doPackaging( "soprano", "1.9.7-1", True )
 
 subclass().execute()

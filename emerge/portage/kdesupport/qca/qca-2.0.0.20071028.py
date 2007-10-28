@@ -1,23 +1,16 @@
 import base
-import utils
-from utils import die
-import os
 
 DEPEND = """
 virtual/base
 libs/qt
-kdesupport/kdewin32
-kdesupport/clucene-core
 """
-
-#currently build without clucene...
 
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
 
   def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "strigi" )
+    return self.kdeSvnUnpack( "trunk/kdesupport", "qca" )
 
   def compile( self ):
     return self.kdeCompile()
@@ -28,7 +21,7 @@ class subclass(base.baseclass):
   def make_package( self ):
     if self.traditional:
         self.instdestdir = "kde"
-    self.instsrcdir = "strigi"
-    return self.doPackaging( "strigi", "0.5.5-2", True )
+    self.instsrcdir = "qca"
+    return self.doPackaging( "qca", "2.0.0-4", True )
 
 subclass().execute()
