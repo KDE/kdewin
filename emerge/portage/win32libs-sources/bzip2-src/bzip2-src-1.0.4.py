@@ -2,6 +2,7 @@ import base
 import os
 import shutil
 import utils
+from utils import die
 
 PACKAGE_NAME         = "libbzip2"
 PACKAGE_VER          = "1.0.4"
@@ -31,6 +32,12 @@ class subclass(base.baseclass):
     cmake_script = os.path.join( self.packagedir , "CMakeLists.txt" )
     cmake_dest = os.path.join( self.workdir, self.instsrcdir, "CMakeLists.txt" )
     shutil.copy( cmake_script, cmake_dest )
+
+    bzip2_dir  = os.path.join( self.workdir, self.instsrcdir )
+
+    cmd = "cd %s && patch -p0 < %s" % \
+          ( bzip2_dir, os.path.join( self.packagedir, "bzip.diff" ) )
+    os.system( cmd ) or die
 
     return True
 
