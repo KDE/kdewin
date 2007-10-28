@@ -6,10 +6,10 @@ import utils
 # attn: you need http://innounp.sourceforge.net/ !!
 
 PACKAGE_NAME         = "openssl"
-PACKAGE_VER          = "0.9.8e"
-PACKAGE_FULL_VER     = "0.9.8e-3"
+PACKAGE_VER          = "0.9.8g"
+PACKAGE_FULL_VER     = "0.9.8g-1"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
-PACKAGE_DL_NAME      = "Win32OpenSSL-0_9_8e.exe"
+PACKAGE_DL_NAME      = "Win32OpenSSL-0_9_8g.exe"
 PACKAGE_DLL_NAMES     = """
 libeay32
 ssleay32
@@ -55,16 +55,16 @@ class subclass(base.baseclass):
         dst = os.path.join( self.imagedir, self.instdestdir, "bin", libs + ".dll" )
         shutil.copy( src, dst )
     # lib
-    src = os.path.join( self.workdir, self.instsrcdir, "{app}", "lib", "MinGW" )
     dst = os.path.join( self.imagedir, self.instdestdir, "lib" )
-    utils.copySrcDirToDestDir( src, dst )
-    # hack for bug(??) in cmake
-    shutil.copy( os.path.join( src, "libeay32.a" ), os.path.join( dst, "libeay32d.a" ) )
-    shutil.copy( os.path.join( src, "ssleay32.a" ), os.path.join( dst, "ssleay32d.a" ) )
-
     src = os.path.join( self.workdir, self.instsrcdir, "{app}", "lib", "VC" )
     utils.copySrcDirToDestDir( src, dst )
-    
+    # copy two mingw files separate
+    src = os.path.join( self.workdir, self.instsrcdir, "{app}", "lib", "MinGW" )
+    shutil.copy( os.path.join( src, "libeay32.a" ), os.path.join( dst, "libeay32.a" ) )
+    shutil.copy( os.path.join( src, "libeay32.a" ), os.path.join( dst, "libeay32d.a" ) )
+    shutil.copy( os.path.join( src, "ssleay32.a" ), os.path.join( dst, "libssleay32.a" ) )
+    shutil.copy( os.path.join( src, "ssleay32.a" ), os.path.join( dst, "libssleay32d.a" ) )
+
     dst = os.path.join( dst, "static" )
     utils.cleanDirectory( dst )
     os.removedirs( dst )
