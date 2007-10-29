@@ -3,7 +3,7 @@ import os
 import shutil
 import utils
 
-PACKAGE_NAME         = "iconv"
+PACKAGE_NAME         = "libiconv"
 PACKAGE_VER          = "1.9.2"
 PACKAGE_FULL_VER     = "1.9.2-2"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
