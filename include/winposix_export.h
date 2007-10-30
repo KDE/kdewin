@@ -21,6 +21,8 @@
 #ifndef WINPOSIX_EXPORT_H
 #define WINPOSIX_EXPORT_H
 
+#define KDEWIN32_VERSION 0x000300
+
 #ifdef __GNUC__
 # ifdef _HAVE_GCC_VISIBILITY
 #  define WINPOSIX_EXPORT __attribute__ ((visibility("default")))

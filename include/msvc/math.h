@@ -53,8 +53,10 @@ KDEWIN32_EXPORT long double  __INFL;
 KDEWIN32_EXPORT double __QNAN;
 #define NAN __QNAN
 
-#define isnan _isnan
-#define finite _finite
+KDEWIN32_EXPORT __inline int isnan(double num) { return _isnan(num); }
+KDEWIN32_EXPORT __inline int isinf(double num) { return !_finite(num) && !_isnan(num); }
+KDEWIN32_EXPORT __inline int finite(double num) { return _finite(num); }
+KDEWIN32_EXPORT __inline int signbit(double num) { return _copysign(1.0, num) < 0; }
 
 // some functions which aren't available with msvc
 
