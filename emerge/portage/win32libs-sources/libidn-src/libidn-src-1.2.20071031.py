@@ -1,9 +1,6 @@
 import base
 import os
-import shutil
-import re
 import utils
-from utils import die
 
 PACKAGE_NAME         = "libidn"
 PACKAGE_VER          = "1.2"
@@ -14,7 +11,7 @@ libidn-11
 """
 
 SRC_URI= """
-ftp://alpha.gnu.org/pub/gnu/libidn/ + """ PACKAGE_FULL_NAME + """.tar.gz
+ftp://alpha.gnu.org/pub/gnu/libidn/""" + PACKAGE_FULL_NAME + """.tar.gz
 """
 
 DEPEND = """
