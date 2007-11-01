@@ -1,7 +1,4 @@
 import base
-import utils
-from utils import die
-import os
 
 DEPEND = """
 virtual/base

@@ -6,15 +6,15 @@ import utils
 from utils import die
 
 PACKAGE_NAME         = "libidn"
-PACKAGE_VER          = "1.1"
-PACKAGE_FULL_VER     = "1.1"
-PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
+PACKAGE_VER          = "1.2"
+PACKAGE_FULL_VER     = "1.2-1"
+PACKAGE_FULL_NAME    = "%s-%s" % (PACKAGE_NAME, PACKAGE_VER)
 PACKAGE_DLL_NAME     = """
 libidn-11
 """
 
 SRC_URI= """
-ftp://alpha.gnu.org/pub/gnu/libidn/libidn-1.1.tar.gz
+ftp://alpha.gnu.org/pub/gnu/libidn/ + """ PACKAGE_FULL_NAME + """.tar.gz
 """
 
 DEPEND = """

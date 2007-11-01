@@ -356,21 +356,16 @@ class baseclass:
         if self.traditional:
             options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s/kde " % \
                   ( package_path, self.rootdir.replace( "\\", "/" ) )
-            
-            options = options + "-DKDEWIN32_INSTALL_PREFIX=%s " % \
-                    os.path.join( self.rootdir, "kdewin32" ).replace( "\\", "/" )
-            
-            options = options + "-DSTRIGI_INSTALL_PREFIX=%s " % \
-                    os.path.join( self.rootdir, "kde" ).replace( "\\", "/" )
-            
-            options = options + "-DSHARED_MIME_INFO_INSTALL_PREFIX=%s " % \
-                    os.path.join( self.rootdir, "shared-mime-info" ).replace( "\\", "/" )
-            
-            options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
-                    os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" )
-            
-            options = options + "-DCMAKE_LIBRARY_PATH=%s " % \
-                    os.path.join( self.rootdir, "win32libs", "lib" ).replace( "\\", "/" )
+
+            options = options + "-DCMAKE_INCLUDE_PATH=%s;%s " % \
+                    ( os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" ), \
+                      os.path.join( self.rootdir, "kde", "include" ).replace( "\\", "/" ) \
+                    )
+
+            options = options + "-DCMAKE_LIBRARY_PATH=%s;%s " % \
+                    ( os.path.join( self.rootdir, "win32libs", "lib" ).replace( "\\", "/" ), \
+                      os.path.join( self.rootdir, "kde", "lib" ).replace( "\\", "/" ) \
+                    )
         else:
             options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s " % \
                   ( package_path, self.rootdir.replace( "\\", "/" ) )
