@@ -453,11 +453,12 @@ class baseclass:
 
         if ( packSources ):
             srcpath = os.path.join( self.workdir, self.instsrcdir )
-            cmd = "kdewin-packager.exe -debuglibs -name %s -root %s -srcroot %s -version %s -destdir %s -complete" % \
+            cmd = "-name %s -root %s -srcroot %s -version %s -destdir %s" % \
                   ( pkg_name, binpath, srcpath, pkg_version, dstpath )
         else:
-            cmd = "kdewin-packager.exe -debuglibs -name %s -root %s -version %s -destdir %s -complete" % \
+            cmd = "-name %s -root %s -version %s -destdir %s" % \
                   ( pkg_name, binpath, pkg_version, dstpath )
+        cmd = "kdewin-packager.exe -debuglibs " + cmd + " -complete -compression 2 "
 
         if( not self.createCombinedPackage ):
             if( self.compiler == "mingw"):

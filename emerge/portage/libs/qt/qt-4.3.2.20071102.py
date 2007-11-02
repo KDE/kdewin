@@ -6,8 +6,8 @@ import os
 
 PACKAGE_NAME         = "qt"
 PACKAGE_VER          = "4.3.2"
-PACKAGE_FULL_VER     = "4.3.2-1"
-PACKAGE_FULL_NAME    = "%s-all-opensource-src-%s" % ( PACKAGE_NAME, PACKAGE_VER )
+PACKAGE_FULL_VER     = "4.3.2-2"
+PACKAGE_FULL_NAME    = "%s-win-opensource-src-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 
 DEPEND = """
 dev-util/win32libs
@@ -112,7 +112,7 @@ class subclass(base.baseclass):
     command = r"echo y | configure.exe -platform %s -prefix %s " \
       "-qdbus -qt-gif -no-exceptions -qt-libpng " \
       "-system-libjpeg -system-libtiff -openssl " \
-      "-fast -no-vcp -no-dsp " \
+      "-fast -no-vcproj -no-dsp -no-style-windowsvista " \
       "-I %s -L %s " % \
       ( platform, prefix, win32incdir, win32libdir )
     print "command: ", command
