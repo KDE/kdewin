@@ -367,8 +367,8 @@ def getNewestVersion( category, package ):
     if( category == None ):
         print "Could not find package " + package
         exit( 1 )
-    if not stayQuiet():
-        print "getNewestVersion:", category, package
+#    if not stayQuiet():
+#        print "getNewestVersion:", category, package
     packagepath = os.path.join( getPortageDir(), category, package )
 
     versions = []
@@ -405,6 +405,8 @@ def getDependencies( category, package, version ):
     deplines = []
     inDepend = False
 
+    if not stayQuiet():
+        print "solving package: %s-%s" % ( package, version )
     # FIXME make this more clever
     for line in lines.splitlines():
         if ( inDepend == True ):
@@ -414,8 +416,8 @@ def getDependencies( category, package, version ):
         if ( line.startswith( "DEPEND" ) ):
             inDepend = True
 
-    if not stayQuiet():
-        print "deplines:", deplines
+#    if not stayQuiet() and len( deplines ) > 0:
+#        print "deplines:", deplines
 
     deps = []
     for line in deplines:
@@ -432,11 +434,15 @@ def solveDependencies( category, package, version, deplist ):
     if ( version == "" ):
         version = getNewestVersion( category, package )
 
+    # FIXME: if you ever happen to find any errors with the dependencies, try to delete the next two lines
+    if [ category, package, version ] in deplist:
+        deplist.remove( [ category, package, version ] )
+        
     deplist.append( [ category, package, version ] )
 
     mydeps = getDependencies( category, package, version )
-    if not stayQuiet():
-        print "mydeps:", mydeps
+#    if not stayQuiet():
+#        print "mydeps:", mydeps
     for dep in mydeps:
         solveDependencies( dep[0], dep[1], dep[2], deplist )
     # if package not in list, prepend it to list

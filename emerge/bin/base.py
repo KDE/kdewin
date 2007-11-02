@@ -49,16 +49,17 @@ else:
 class baseclass:
     def __init__( self, SRC_URI ):
         #print "base init called"
-        self.SRC_URI=SRC_URI
-        self.instsrcdir=""
-        self.instdestdir=""
-        self.traditional=True
-        self.stayQuiet=True
-        self.forced=False
+        self.SRC_URI = SRC_URI
+        self.instsrcdir = ""
+        self.instdestdir = ""
+        self.traditional = True
+        self.stayQuiet = True
+        self.forced = False
+        self.versioned = False
         if not os.getenv( "STAYQUIET" ) == "TRUE":
-            self.stayQuiet=False
+            self.stayQuiet = False
         if DIRECTORYLAYOUT == "installer":
-            self.traditional=False
+            self.traditional = False
 
         self.kdeCustomDefines = ""
         self.createCombinedPackage = False
@@ -82,12 +83,14 @@ class baseclass:
         command = sys.argv[ 1 ]
         options = ""
         if ( len( sys.argv)  > 2 ):
-            options = sys.argv[ 2 ]
+            options = sys.argv[ 2: ]
         self.noFetch = False
-        if ( options == "--offline" ):
+        if ( "--offline" in options ):
             self.noFetch  = True
-        if ( options == "--forced" ):
+        if ( "--forced" in options ):
             self.forced = True
+        if ( "--versioned" in options ):
+            self.versioned = True
         if not self.stayQuiet:
             print "command:", command
             print "opts:", options

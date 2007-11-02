@@ -60,7 +60,7 @@ if ( quiet == "TRUE" ):
     stayQuiet = True
 else:
     stayQuiet = False
-
+opts = list()
 for i in sys.argv:
 #    print "got this param: %s" % i
     if ( i == "-p" ):
@@ -68,10 +68,14 @@ for i in sys.argv:
     elif ( i == "-q" ):
         stayQuiet = True
     elif ( i == "--offline" ):
-        opts = i
+        opts.append( "--offline" )
         offline = True
     elif ( i == "-f" ):
-        opts = "--forced"
+        opts.append( "--forced" )
+    elif ( i.startswith( "--version=" ) ):
+        print "versioned", i
+        srcversion = i.replace( "--version=", "" )
+        opts.append( "--versioned" )
     elif ( i == "--fetch" ):
         buildaction = "fetch"
     elif ( i == "--unpack" ):
@@ -121,7 +125,9 @@ def doExec( category, package, version, action, opts ):
         print "emerge doExec called opts:", opts
     file = os.path.join( utils.getPortageDir(), category, package, "%s-%s.py" % \
                          ( package, version ) )
-    commandstring = "python %s %s %s" % ( file, action, opts )
+    opts_string = ( "%s " * len(opts) ) % tuple( opts )
+    commandstring = "python %s %s %s" % ( file, action, opts_string )
+    print commandstring
     if not stayQuiet:
         print "file:", file
         print "commandstring", commandstring
