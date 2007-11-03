@@ -1,6 +1,4 @@
 ﻿import base
-import os
-import shutil
 
 PACKAGE_NAME         = "boost-jam"
 PACKAGE_VER          = "3.1.15"
@@ -22,5 +20,12 @@ class subclass(base.baseclass):
         else:
             self.instdestdir = "bin"
         self.instsrcdir = PACKAGE_FULL_NAME + "-ntx86"
+
+    def make_package( self ):
+        if self.traditional:
+            self.instdestdir = "bjam"
+        else:
+            self.instdestdir = ""
+        return self.doPackaging( PACKAGE_NAME, PACKAGE_VER, True )
 
 subclass().execute()
