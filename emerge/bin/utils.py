@@ -298,7 +298,10 @@ def addInstalled( category, package, version ):
     if( os.path.isfile( os.path.join( path, "installed" ) ) ):
         f = open( os.path.join( path, "installed" ), "rb" )
         for line in f:
-            if line.startswith( "%s/%s" % ( category, package ) ):
+            # FIXME: this is not a good definition of a package entry
+            if line.startswith( "%s/%s-" % ( category, package ) ):
+                if not stayQuiet():
+                    print "already installed"
                 return
     f = open( os.path.join( path, "installed" ), "ab" )
     f.write( "%s/%s-%s\r\n" % ( category, package, version ) )
