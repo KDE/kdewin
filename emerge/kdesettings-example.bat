@@ -45,10 +45,11 @@ rem http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
 rem and make sure plink is in your path and Pageant is configured (you need to import your key)
 set SVN_SSH=plink 
 
+rem it is not recommended anymore to use the traditional layout.
 rem if you want to use emerge.py together with the kdewin-installer, you should set
 rem the value of directory_layout to 'installer', if you leave it unset or set it to
 rem 'traditional' you get the category sublayout
-set directory_layout=traditional
+set directory_layout=installer
 
 rem No editing should be necessary below this line (in an ideal world)
 rem ##################################################################
