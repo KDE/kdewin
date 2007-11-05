@@ -21,6 +21,6 @@ class subclass(base.baseclass):
     if self.traditional:
       self.instdestdir = "kde"
     self.instsrcdir = "kdewin32"
-    return self.doPackaging( "kdewin32", "0.3.0-2", True )
+    return self.doPackaging( "kdewin32", "0.3.1-1", True )
 
 subclass().execute()
