@@ -20,7 +20,7 @@ import os
 
 def usage():
     print
-    print 'usage: emerge [-p|-q|-f][--fetch|--unpack|--compile|--install|--qmerge|--digest'
+    print 'usage: emerge [-p|-q|-f][--fetch|--unpack|--compile|--install|--qmerge'
     print '                   |--unmerge|--package|--full-package] packagename'
     print 'emerge.py is a script for easier building.'
     print
@@ -92,8 +92,6 @@ for i in sys.argv:
         buildaction = "install"
     elif ( i == "--qmerge" ):
         buildaction = "qmerge"
-    elif ( i == "--digest" ):
-        buildaction = "digest"
     elif ( i == "--manifest" ):
         buildaction = "manifest"        
     elif ( i == "--package" ):
@@ -195,10 +193,7 @@ if not stayQuiet:
 deplist.reverse()
 success = True
 
-if ( buildaction == "digest" ):
-    package = deplist[0]
-    ok = handlePackage( package[0], package[1], package[2], buildaction, opts )
-elif ( buildaction != "all" ):
+if ( buildaction != "all" ):
     # if a buildaction is given, then do not try to build dependencies
     # and do the action although the package might already be installed
     package = deplist[-1]
