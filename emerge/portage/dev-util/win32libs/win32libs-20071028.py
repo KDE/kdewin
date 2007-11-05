@@ -37,8 +37,8 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/jpeg-6.b-5-lib.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/libintl-0.14.4-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/libintl-0.14.4-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/libidn-1.1-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/libidn-1.1-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libidn-1.2-1-bin.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libidn-1.2-1-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.21-bin.zip
 http://82.149.170.66/kde-windows/win32libs/zip/single/libpng-1.2.21-lib.zip
