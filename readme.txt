@@ -3,6 +3,10 @@ kdewin32 is a supplementary library
 history
 -------
 
+version 0.3.1
+- add preprocess define KDEWIN32_VERSION
+- fix/add isnan, isinf, finite and signbit
+
 version 0.3.0
 - added tools png2ico and svg2ico for windows icons creating
 

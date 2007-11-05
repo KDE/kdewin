@@ -1,5 +1,5 @@
 set (NAME kdewin32)
-set (VERSION 0.3.0) # don't forget to update winposix_export.h!
+set (VERSION 0.3.1) # don't forget to update winposix_export.h!
 
 project(${NAME})
 
