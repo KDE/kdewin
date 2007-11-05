@@ -21,7 +21,7 @@ else:
     WGetExecutable = os.path.join( os.getenv( "KDEROOT" ), "gnuwin32", "bin", "wget.exe" )
 
 def stayQuiet():
-    quiet=os.getenv( "STAYQUIET" )
+    quiet=os.getenv( "EMERGE_STAYQUIET" )
     if ( quiet == "TRUE" ):
         return True
     else:
@@ -232,36 +232,6 @@ def svnFetch( repo, destdir, username = None, password = None ):
         return True
     else:
         return False
-
-### digest functions
-
-def digestFiles( downloaddir, filenames, packagedir ):
-    for filename in filenames:
-        if not stayQuiet():
-            print "digestinging this file:", filename
-        if ( not digestFile( downloaddir, filename, packagedir ) ):
-            return False
-
-    return True        
-
-
-def digestFile( downloaddir, filename, packagedir ):
-    #( shortname, ext ) = os.path.splitext( filename )
-    #if ( ext == ".zip" ):
-    #    return unZip( os.path.join( downloaddir, filename ), workdir )
-    #elif ( ext == ".gz" or ext == ".bz2" ):
-    #    ( myshortname, myext ) = os.path.splitext( shortname )
-    #    if ( myext == ".tar" ):
-    #        return unTar( os.path.join( downloaddir, filename ), workdir )
-    #    else:
-    #        print "error:", myext
-    #        return False
-    #else:
-    #    print "dont know how to unpack this file:", filename
-    #    return False
-    return True
-
-
 
 ### package dependencies functions
     

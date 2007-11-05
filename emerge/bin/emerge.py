@@ -28,6 +28,9 @@ def usage():
     print '-p               pretend to do everything - a dry run'
     print '-q               suppress all output'
     print '-f               force removal of files with unmerge'
+    print '--buildtype=[KdeBuildType] where KdeBuildType is one of the used BuildTypes'
+    print '                 This will automatically overrun all buildtype definitions'
+    print '                 made in the package\'s .py-file'
     print 'options:'
     print '--fetch          just fetch the packages'
     print '--unpack         unpack the packages and apply the patches if needed'
@@ -55,7 +58,7 @@ if len( sys.argv ) < 2:
     usage()
     exit( 1 )
 
-quiet=os.getenv( "STAYQUIET" )
+quiet=os.getenv( "EMERGE_STAYQUIET" )
 if ( quiet == "TRUE" ):
     stayQuiet = True
 else:
@@ -73,9 +76,12 @@ for i in sys.argv:
     elif ( i == "-f" ):
         opts.append( "--forced" )
     elif ( i.startswith( "--version=" ) ):
-        print "versioned", i
+        print "versioned", i.replace( "--version=", "" )
         srcversion = i.replace( "--version=", "" )
         opts.append( "--versioned" )
+    elif ( i.startswith( "--buildtype=" ) ):
+        print "chosen buildtype: ", i.replace( "--buildtype=", "" )
+        os.environ["EMERGE_BUILDTYPE"] = i.replace( "--buildtype=", "" )
     elif ( i == "--fetch" ):
         buildaction = "fetch"
     elif ( i == "--unpack" ):
@@ -102,15 +108,16 @@ for i in sys.argv:
     else:
         packagename = i
 if stayQuiet == True:
-    os.environ["STAYQUIET"]="TRUE"
+    os.environ["EMERGE_STAYQUIET"]="TRUE"
 else:
-    os.environ["STAYQUIET"]="FALSE"
+    os.environ["EMERGE_STAYQUIET"]="FALSE"
 import utils
 
 if not stayQuiet:
     print "buildaction:", buildaction
     print "doPretend:", doPretend
-    print "packagename", packagename
+    print "packagename:", packagename
+    print "buildType:", os.getenv("EMERGE_BUILDTYPE")
 
 # get KDEROOT from env
 KDEROOT = os.getenv( "KDEROOT" )

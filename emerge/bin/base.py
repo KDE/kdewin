@@ -31,7 +31,7 @@ if ( not DIRECTORYLAYOUT == "installer" ):
 # an optional dir to compile autmake based sources
 MSYSDIR = os.getenv( "MSYSDIR" )
 
-quiet=os.getenv( "STAYQUIET" )
+quiet=os.getenv( "EMERGE_STAYQUIET" )
 if ( quiet == "TRUE" ):
     stayQuiet = True
 else:
@@ -56,7 +56,7 @@ class baseclass:
         self.stayQuiet = True
         self.forced = False
         self.versioned = False
-        if not os.getenv( "STAYQUIET" ) == "TRUE":
+        if not os.getenv( "EMERGE_STAYQUIET" ) == "TRUE":
             self.stayQuiet = False
         if DIRECTORYLAYOUT == "installer":
             self.traditional = False
@@ -65,7 +65,12 @@ class baseclass:
         self.createCombinedPackage = False
         # Build type for kdeCompile() / kdeInstall() - packages
         # "" -> debug and release
-        self.buildType = None
+        Type=os.getenv( "EMERGE_BUILDTYPE" )
+        if ( not Type == None ):
+            print "BuildType: %s" % Type
+            self.buildType = Type
+        else:
+            self.buildType = None
 
         if COMPILER == "msvc2005":
             self.compiler = "msvc2005"
@@ -179,15 +184,6 @@ class baseclass:
         utils.manifestDir( os.path.join( self.workdir, self.instsrcdir, self.package ), self.imagedir, self.package, self.version )
         return True
         
-    def digest( self ):
-        if not self.stayQuiet:
-            print "base digest called"
-            print "packagedir: %s" % self.packagedir
-            print "files: %s" % self.filenames
-            print "downloaddir: %s" % self.downloaddir
-        utils.digestFiles( self.downloaddir, self.filenames, self.packagedir )
-        return True
-
     def make_package( self ):
         if not self.stayQuiet:
             print "currently only supported for some interal packages"

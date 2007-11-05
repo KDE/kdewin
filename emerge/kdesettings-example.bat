@@ -51,6 +51,21 @@ rem the value of directory_layout to 'installer', if you leave it unset or set i
 rem 'traditional' you get the category sublayout
 set directory_layout=installer
 
+rem You can set different behaviours for emerge's buildtypes
+rem standard are two buildtypes: debug and release
+rem which both get build if no EMERGE_BUILDTYPE is set
+rem there is a third buildtype called RelWithDebInfo
+rem you can override the buildtype at the commandline using the '--buildtype=[BuildType]' option
+rem the buildtype which is set here will not override the buildtype in a packages .py file
+rem uncomment the next line will result in different build behaviour.
+rem set EMERGE_BUILDTYPE=RelWithDebInfo
+
+
+rem If you don't want to have the output of emerge use the next setting
+rem be aware that there is no way to override this setting at the commandline
+rem possible states: TRUE or FALSE
+rem set EMERGE_STAYQUIET=FALSE
+
 rem No editing should be necessary below this line (in an ideal world)
 rem ##################################################################
 
