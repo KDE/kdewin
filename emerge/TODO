@@ -8,11 +8,20 @@ is built emerge tries to fetch the package, because it does not know,
 if the downloaded files are complete. with a digest file it would be possible
 to check if the files are already complete without an internet connection.
 for ideas and code how to do so, look at the gentoo portage system.
+(pretty much unclear to me)
 
+- implement "emerge --version=version":
+instead of using a different package name for each alpha, beta etc. use an option for this
 
+- implement a non-copy option:
+except for packaging, the copying of the sources is pretty useless - and even that can be changed.
+so implement an option to make emerge faster and less space consuming: don't copy the sources but 
+rely on the svn tree
 
-- check if libeay32.dll from openssl is needed. it collides with
-libeay32.dll from wget
+- implement a better option transmission between calling emerge script and executed package script
+- implement a function for making the settings readable by the app without the use environment vars
 
-
+- make up a package for the installer
+- as well with the installer:
+    can there be a custom app to translate .desktop files to .lnk files?
 

@@ -449,6 +449,11 @@ def copySrcDirToDestDir( srcdir, destdir ):
             if ( not os.path.exists( tmpdir ) ): os.makedirs( tmpdir )
             for file in files:
                 shutil.copy( os.path.join( root, file ), tmpdir )
+                
+def moveSrcDirToDestDir( srcdir, destdir ):
+    if not stayQuiet():
+        print "moveSrcDirToDestDir called. srcdir: %s, destdir: %s" % ( srcdir, destdir )
+    shutil.move( srcdir, destdir )
 
 def unmerge( rootdir, package, forced = False ):
     """ delete files according to the manifest files """
