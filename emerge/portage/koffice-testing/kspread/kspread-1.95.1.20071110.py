@@ -3,6 +3,7 @@ import os
 import utils
 
 DEPEND = """
+win32libs-sources/lcms-src
 kde/kdelibs
 kde/kdepimlibs
 """
@@ -20,6 +21,7 @@ class subclass(base.baseclass):
             utils.moveSrcDirToDestDir( srcdir, destdir )
         else:
             utils.copySrcDirToDestDir( srcdir, destdir )
+        return unp
 
 
     def kdeDefaultDefines( self ):
