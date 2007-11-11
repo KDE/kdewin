@@ -18,8 +18,10 @@ add_library(bzip2 SHARED ${bzip2_lib_SRCS})
 set_target_properties(bzip2 PROPERTIES PREFIX "")
 
 add_executable(bzip2recover bzip2recover.c)
+add_executable(bzip2_bin bzip2.c)
 target_link_libraries(bzip2recover bzip2)
-
+target_link_libraries(bzip2_bin bzip2)
+set_target_properties(bzip2_bin PROPERTIES OUTPUT_NAME bzip2)
 set(bzip2_scripts
     bzdiff
     bzgrep
@@ -37,6 +39,7 @@ FILE(GLOB man1 ${bzip2_SOURCE_DIR}/*.1)
 
 install_targets(/lib bzip2)
 install_targets(/bin bzip2recover)
+install_targets(/bin bzip2_bin)
 install(FILES ${bzip2_scripts} DESTINATION bin)
 install(FILES ${man1}          DESTINATION man/man1)
 install(FILES ${bzip2_docs}    DESTINATION doc)
