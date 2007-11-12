@@ -23,6 +23,6 @@ class subclass(base.baseclass):
     if self.traditional:
         self.instdestdir = "kde"
     self.instsrcdir = "soprano"
-    return self.doPackaging( "soprano", "1.9.7-1", True )
+    return self.doPackaging( "soprano", "1.97.2-1", True )
 
 subclass().execute()

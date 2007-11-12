@@ -6,7 +6,7 @@ from utils import die
 
 PACKAGE_NAME         = "libbzip2"
 PACKAGE_VER          = "1.0.4"
-PACKAGE_FULL_VER     = "1.0.4-5"
+PACKAGE_FULL_VER     = "1.0.4-6"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 PACKAGE_DLL_NAME     = "bzip2"
 
