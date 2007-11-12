@@ -47,6 +47,7 @@ class subclass(base.baseclass):
         src = os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_DLL_NAME + ".dll" )
         dst = os.path.join( self.imagedir, self.instdestdir, "bin", "lib" + PACKAGE_NAME + ".dll" )
         shutil.copyfile( src, dst )
+        os.remove(os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_NAME + "-config" ) )
 
     def make_package( self ):
         dst = os.path.join( self.imagedir, self.instdestdir, "lib" )
@@ -54,6 +55,7 @@ class subclass(base.baseclass):
         src = os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_DLL_NAME + ".dll" )
         dst = os.path.join( self.imagedir, self.instdestdir, "bin", "lib" + PACKAGE_NAME + ".dll" )
         shutil.copyfile( src, dst )
+        os.remove(os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_NAME + "-config" ) )
 
         self.stripLibs( PACKAGE_DLL_NAME )
         self.createImportLibs( "lib" + PACKAGE_NAME )
