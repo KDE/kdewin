@@ -48,6 +48,7 @@ class subclass(base.baseclass):
         dst = os.path.join( self.imagedir, self.instdestdir, "bin", "lib" + PACKAGE_NAME + ".dll" )
         shutil.copyfile( src, dst )
         os.remove(os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_NAME + "-config" ) )
+        return True
 
     def make_package( self ):
         dst = os.path.join( self.imagedir, self.instdestdir, "lib" )
