@@ -1,0 +1,5 @@
+packages todo's:
+freetype: build on a different system (msvc) -> working on mingw
+fontconfig: "
+poppler: wait for pino to make up the cmake system for a poppler release
+gsl: make the build ourselves and system independent

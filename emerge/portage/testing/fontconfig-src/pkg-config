@@ -1,0 +1,3 @@
+#!/bin/sh
+#pkg-config wrapper
+echo $# $0 $1
