@@ -13,7 +13,7 @@ http://poppler.freedesktop.org/""" + PACKAGE_FULL_NAME + """.tar.gz
 """
 
 DEPEND = """
-gnuwin32/diffutils
+gnuwin32/patch
 testing/freetype-src
 testing/fontconfig-src
 """
