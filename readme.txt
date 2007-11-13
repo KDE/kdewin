@@ -3,6 +3,9 @@ kdewin32 is a supplementary library
 history
 -------
 
+version 0.3.2
+- add expm1, erf and erfc for msvc
+
 version 0.3.1
 - add preprocess define KDEWIN32_VERSION
 - fix/add isnan, isinf, finite and signbit

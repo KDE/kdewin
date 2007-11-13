@@ -74,9 +74,9 @@ KDEWIN32_EXPORT __inline int signbit(double num) { return _copysign(1.0, num) < 
 // long double tanl (long double)
 
 /* 7.12.5.1 */
-// double __cdecl acosh (double)
-// float __cdecl acoshf (float)
-// long double __cdecl acoshl (long double)
+// double acosh (double)
+// float acoshf (float)
+// long double acoshl (long double)
 
 /* 7.12.5.2 */
 // double asinh (double)
@@ -85,7 +85,7 @@ KDEWIN32_EXPORT __inline int signbit(double num) { return _copysign(1.0, num) < 
 
 /* 7.12.5.3 */
 // double atanh (double)
-// float atanf  (float)
+// float atanf (float)
 // long double atanhl (long double)
 
 /* Exponentials and logarithms  */
@@ -93,6 +93,11 @@ KDEWIN32_EXPORT __inline int signbit(double num) { return _copysign(1.0, num) < 
 // float expf (float)
 // double expf (double)
 // long double expl (long double)
+
+/* 7.12.6.3 The expm1 functions */
+// double expm1 (double)
+// float expm1f (float)
+// long double expm1l (long double)
 
 /* 7.12.6.7 */
 // float logf (float)
@@ -103,6 +108,16 @@ KDEWIN32_EXPORT __inline int signbit(double num) { return _copysign(1.0, num) < 
 // float log10f (float)
 // double log10l (double)
 // long double log10l (long double)
+
+/* 7.12.8.1 The erf functions  */
+// double erf (double)
+// float erff (float)
+// long double erfl (long double)
+
+/* 7.12.8.2 The erfc functions  */
+// double erfc (double)
+// float erfcf (float)
+// long double erfcl (long double)
 
 /* 7.12.8.3 The lgamma functions */
 // double lgamma (double)
@@ -173,6 +188,21 @@ WINPOSIX_EXPORT long double asinhl (long double);
 //WINPOSIX_EXPORT float asinhf (float);
 WINPOSIX_EXPORT double atanh (double);
 WINPOSIX_EXPORT long double atanhl (long double);
+
+/* 7.12.6.3 The expm1 functions */
+WINPOSIX_EXPORT double expm1(double);
+WINPOSIX_EXPORT float expm1f(float);
+WINPOSIX_EXPORT long double expm1l(long double);
+
+/* 7.12.8.1 The erf functions  */
+WINPOSIX_EXPORT double erf (double);
+WINPOSIX_EXPORT float erff (float);
+WINPOSIX_EXPORT long double erfl (long double);
+
+/* 7.12.8.2 The erfc functions  */
+WINPOSIX_EXPORT double erfc (double);
+WINPOSIX_EXPORT float erfcf (float);
+WINPOSIX_EXPORT long double erfcl (long double);
 
 /* 7.12.8.3 The lgamma functions */
 WINPOSIX_EXPORT float lgammaf (float);

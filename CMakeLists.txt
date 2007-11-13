@@ -83,6 +83,10 @@ if(MSVC)
       src/math/lgamma.c
       src/math/lgammaf.c
       src/math/math.c
+      src/math/expm1.c
+      src/math/erfl.c
+      src/math/s_erf.c
+      src/math/sf_erf.c
   )
 endif(MSVC)
 
