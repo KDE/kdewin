@@ -37,7 +37,7 @@ class subclass(base.baseclass):
 
     cmd = "cd %s && patch -p0 < %s" % \
           ( bzip2_dir, os.path.join( self.packagedir, "bzip.diff" ) )
-    os.system( cmd ) or die
+    os.system( cmd ) or die("patch")
 
     return True
 
