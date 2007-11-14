@@ -8,8 +8,8 @@ http://82.149.170.66/kde-windows/win32libs/zip/single/aspell-0.60.5-lib.zip
 
 http://82.149.170.66/kde-windows/win32libs/zip/single/boost-headers-1.34-lib.zip
 
-http://82.149.170.66/kde-windows/win32libs/zip/single/libbzip2-1.0.4-5-bin.zip
-http://82.149.170.66/kde-windows/win32libs/zip/single/libbzip2-1.0.4-5-lib.zip
+http://82.149.170.66/kde-windows/win32libs/zip/single/libbzip2-1.0.4-6-bin.tar.bz2
+http://82.149.170.66/kde-windows/win32libs/zip/single/libbzip2-1.0.4-6-lib.tar.bz2
 
 http://download.cegit.de/kde-windows/win32libs/zip/single/dbus-mingw-1.1.2.20070919-bin.zip
 http://download.cegit.de/kde-windows/win32libs/zip/single/dbus-mingw-1.1.2.20070919-lib.zip
