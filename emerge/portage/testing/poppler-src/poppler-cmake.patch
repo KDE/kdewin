@@ -1,6 +1,6 @@
 diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindCairo.cmake poppler-0.6.2/cmake/modules/FindCairo.cmake
 --- poppler-0.6.2-orig/cmake/modules/FindCairo.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/cmake/modules/FindCairo.cmake	2007-11-13 18:09:35.046875000 +0100
++++ poppler-0.6.2/cmake/modules/FindCairo.cmake	2007-11-06 15:35:56.000000000 +0100
 @@ -0,0 +1,29 @@
 +# - try to find Cairo
 +
@@ -33,7 +33,7 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindCairo.cmake poppler-0.6.2/cma
 +
 diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindFontconfig.cmake poppler-0.6.2/cmake/modules/FindFontconfig.cmake
 --- poppler-0.6.2-orig/cmake/modules/FindFontconfig.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/cmake/modules/FindFontconfig.cmake	2007-11-13 18:09:35.046875000 +0100
++++ poppler-0.6.2/cmake/modules/FindFontconfig.cmake	2007-09-08 09:56:36.000000000 +0200
 @@ -0,0 +1,47 @@
 +# - Try to find the  Fontconfig
 +# Once done this will define
@@ -84,8 +84,8 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindFontconfig.cmake poppler-0.6.
 +endif (FONTCONFIG_LIBRARIES AND FONTCONFIG_INCLUDE_DIR)
 diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindFreetype.cmake poppler-0.6.2/cmake/modules/FindFreetype.cmake
 --- poppler-0.6.2-orig/cmake/modules/FindFreetype.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/cmake/modules/FindFreetype.cmake	2007-11-13 18:09:35.125000000 +0100
-@@ -0,0 +1,72 @@
++++ poppler-0.6.2/cmake/modules/FindFreetype.cmake	2007-11-06 00:30:47.000000000 +0100
+@@ -0,0 +1,64 @@
 +# - Try to find the freetype library
 +# Once done this will define
 +#
@@ -136,15 +136,7 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindFreetype.cmake poppler-0.6.2/
 +
 +    set( FREETYPE_LIBRARIES ${FREETYPE_LIBRARIES} CACHE INTERNAL "The libraries for freetype" )
 +
-+  else(FREETYPECONFIG_EXECUTABLE)
-+	find_path (FREETYPE_INCLUDE_DIR freetype/freetype.h
-+        ${CMAKE_INCLUDE_PATH}/freetype2
-+	)
-+    find_library(FREETYPE_LIBRARIES freetype)
-+    if(FREETYPE_INCLUDE_DIR AND FREETYPE_LIBRARIES)
-+        set(FREETYPE_FOUND TRUE)
-+    endif(FREETYPE_INCLUDE_DIR AND FREETYPE_LIBRARIES)
-+endif(FREETYPECONFIG_EXECUTABLE)
++  endif(FREETYPECONFIG_EXECUTABLE)
 +
 +
 +  IF (FREETYPE_FOUND)
@@ -160,7 +152,7 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindFreetype.cmake poppler-0.6.2/
 +endif (FREETYPE_LIBRARIES AND FREETYPE_INCLUDE_DIR)
 diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindGTK.cmake poppler-0.6.2/cmake/modules/FindGTK.cmake
 --- poppler-0.6.2-orig/cmake/modules/FindGTK.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/cmake/modules/FindGTK.cmake	2007-11-13 18:09:35.156250000 +0100
++++ poppler-0.6.2/cmake/modules/FindGTK.cmake	2007-11-06 15:55:22.000000000 +0100
 @@ -0,0 +1,54 @@
 +# - try to find GTK (and glib)
 +
@@ -218,7 +210,7 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindGTK.cmake poppler-0.6.2/cmake
 +
 diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindPackageHandleStandardArgs.cmake poppler-0.6.2/cmake/modules/FindPackageHandleStandardArgs.cmake
 --- poppler-0.6.2-orig/cmake/modules/FindPackageHandleStandardArgs.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/cmake/modules/FindPackageHandleStandardArgs.cmake	2007-11-13 18:09:35.156250000 +0100
++++ poppler-0.6.2/cmake/modules/FindPackageHandleStandardArgs.cmake	2007-11-06 12:44:40.000000000 +0100
 @@ -0,0 +1,58 @@
 +# FIND_PACKAGE_HANDLE_STANDARD_ARGS(NAME (DEFAULT_MSG|"Custom failure message") VAR1 ... )
 +#    This macro is intended to be used in FindXXX.cmake modules files.
@@ -280,7 +272,7 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindPackageHandleStandardArgs.cma
 +ENDMACRO(FIND_PACKAGE_HANDLE_STANDARD_ARGS)
 diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindQt3.cmake poppler-0.6.2/cmake/modules/FindQt3.cmake
 --- poppler-0.6.2-orig/cmake/modules/FindQt3.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/cmake/modules/FindQt3.cmake	2007-11-13 18:09:35.156250000 +0100
++++ poppler-0.6.2/cmake/modules/FindQt3.cmake	2007-11-06 18:30:16.000000000 +0100
 @@ -0,0 +1,319 @@
 +# - Locate Qt include paths and libraries
 +# This module defines:
@@ -603,7 +595,7 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindQt3.cmake poppler-0.6.2/cmake
 +  ) 
 diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindQt4.cmake poppler-0.6.2/cmake/modules/FindQt4.cmake
 --- poppler-0.6.2-orig/cmake/modules/FindQt4.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/cmake/modules/FindQt4.cmake	2007-11-13 18:09:35.187500000 +0100
++++ poppler-0.6.2/cmake/modules/FindQt4.cmake	2007-11-06 18:30:27.000000000 +0100
 @@ -0,0 +1,1258 @@
 +# - Find QT 4
 +# This module can be used to find Qt4.
@@ -1865,7 +1857,7 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/FindQt4.cmake poppler-0.6.2/cmake
 +
 diff -N -r -u poppler-0.6.2-orig/cmake/modules/MacroBoolTo01.cmake poppler-0.6.2/cmake/modules/MacroBoolTo01.cmake
 --- poppler-0.6.2-orig/cmake/modules/MacroBoolTo01.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/cmake/modules/MacroBoolTo01.cmake	2007-11-13 18:09:35.187500000 +0100
++++ poppler-0.6.2/cmake/modules/MacroBoolTo01.cmake	2007-09-08 02:06:20.000000000 +0200
 @@ -0,0 +1,20 @@
 +# MACRO_BOOL_TO_01( VAR RESULT0 ... RESULTN )
 +# This macro evaluates its first argument
@@ -1889,7 +1881,7 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/MacroBoolTo01.cmake poppler-0.6.2
 +ENDMACRO(MACRO_BOOL_TO_01)
 diff -N -r -u poppler-0.6.2-orig/cmake/modules/MacroOptionalFindPackage.cmake poppler-0.6.2/cmake/modules/MacroOptionalFindPackage.cmake
 --- poppler-0.6.2-orig/cmake/modules/MacroOptionalFindPackage.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/cmake/modules/MacroOptionalFindPackage.cmake	2007-11-13 18:09:35.203125000 +0100
++++ poppler-0.6.2/cmake/modules/MacroOptionalFindPackage.cmake	2007-09-08 09:44:40.000000000 +0200
 @@ -0,0 +1,28 @@
 +# - MACRO_OPTIONAL_FIND_PACKAGE() combines FIND_PACKAGE() with an OPTION()
 +# MACRO_OPTIONAL_FIND_PACKAGE( <name> [QUIT] )
@@ -1921,7 +1913,7 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/MacroOptionalFindPackage.cmake po
 +
 diff -N -r -u poppler-0.6.2-orig/cmake/modules/MacroPushRequiredVars.cmake poppler-0.6.2/cmake/modules/MacroPushRequiredVars.cmake
 --- poppler-0.6.2-orig/cmake/modules/MacroPushRequiredVars.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/cmake/modules/MacroPushRequiredVars.cmake	2007-11-13 18:09:35.203125000 +0100
++++ poppler-0.6.2/cmake/modules/MacroPushRequiredVars.cmake	2007-09-08 01:55:22.000000000 +0200
 @@ -0,0 +1,47 @@
 +# this module defines two macros:
 +# MACRO_PUSH_REQUIRED_VARS()
@@ -1972,15 +1964,15 @@ diff -N -r -u poppler-0.6.2-orig/cmake/modules/MacroPushRequiredVars.cmake poppl
 +
 diff -N -r -u poppler-0.6.2-orig/CMakeLists.txt poppler-0.6.2/CMakeLists.txt
 --- poppler-0.6.2-orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/CMakeLists.txt	2007-11-13 18:09:35.203125000 +0100
-@@ -0,0 +1,360 @@
++++ poppler-0.6.2/CMakeLists.txt	2007-11-14 22:03:36.546875000 +0100
+@@ -0,0 +1,363 @@
 +project(poppler)
 +
 +set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 +
 +include(MacroOptionalFindPackage)
 +
-+set(POPPLER_VERSION "0.6.1")
++set(POPPLER_VERSION "0.6.2")
 +
 +# command line switches
 +option(ENABLE_XPDF_HEADERS "Install unsupported xpdf headers." OFF)
@@ -1995,8 +1987,8 @@ diff -N -r -u poppler-0.6.2-orig/CMakeLists.txt poppler-0.6.2/CMakeLists.txt
 +set(QT4_MIN_VERSION "4.1.0")
 +set(CAIRO_VERSION "1.4")
 +
-+find_package(Freetype REQUIRED)
-+find_package(Fontconfig REQUIRED)
++find_package(Freetype)
++find_package(Fontconfig)
 +macro_optional_find_package(JPEG)
 +macro_optional_find_package(Qt3)
 +macro_optional_find_package(Qt4)
@@ -2170,6 +2162,9 @@ diff -N -r -u poppler-0.6.2-orig/CMakeLists.txt poppler-0.6.2/CMakeLists.txt
 +if (ENABLE_ABIWORD)
 +  target_link_libraries(poppler ${LIBXML2_LIBRARIES})
 +endif (ENABLE_ABIWORD)
++if (WIN32)
++  target_link_libraries(poppler gdi32)
++endif (WIN32)
 +install(TARGETS poppler DESTINATION lib)
 +
 +if (ENABLE_XPDF_HEADERS)
@@ -2336,11 +2331,9 @@ diff -N -r -u poppler-0.6.2-orig/CMakeLists.txt poppler-0.6.2/CMakeLists.txt
 +show_end_message("command line utils" ENABLE_UTILS)
 diff -N -r -u poppler-0.6.2-orig/config.h.cmake poppler-0.6.2/config.h.cmake
 --- poppler-0.6.2-orig/config.h.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/config.h.cmake	2007-11-13 18:09:35.218750000 +0100
-@@ -0,0 +1,152 @@
++++ poppler-0.6.2/config.h.cmake	2007-11-06 15:34:36.000000000 +0100
+@@ -0,0 +1,149 @@
 +/* config.h.  Generated from config.h.cmake by cmake.  */
-+#ifndef __config_h
-+#define __config_h
 +
 +/* Use libjpeg instead of builtin jpeg decoder. */
 +#cmakedefine ENABLE_LIBJPEG 1
@@ -2489,11 +2482,9 @@ diff -N -r -u poppler-0.6.2-orig/config.h.cmake poppler-0.6.2/config.h.cmake
 +
 +/* Define for large files, on AIX-style hosts. */
 +/* #undef _LARGE_FILES */
-+#endif
-\ No newline at end of file
 diff -N -r -u poppler-0.6.2-orig/ConfigureChecks.cmake poppler-0.6.2/ConfigureChecks.cmake
 --- poppler-0.6.2-orig/ConfigureChecks.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/ConfigureChecks.cmake	2007-11-13 18:09:35.281250000 +0100
++++ poppler-0.6.2/ConfigureChecks.cmake	2007-11-14 21:57:21.250000000 +0100
 @@ -0,0 +1,57 @@
 +include(CheckIncludeFile)
 +include(CheckIncludeFiles)
@@ -2554,7 +2545,7 @@ diff -N -r -u poppler-0.6.2-orig/ConfigureChecks.cmake poppler-0.6.2/ConfigureCh
 +set(TEXTOUT_WORD_LIST ON)
 diff -N -r -u poppler-0.6.2-orig/glib/CMakeLists.txt poppler-0.6.2/glib/CMakeLists.txt
 --- poppler-0.6.2-orig/glib/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/glib/CMakeLists.txt	2007-11-13 18:09:35.296875000 +0100
++++ poppler-0.6.2/glib/CMakeLists.txt	2007-11-06 15:55:40.000000000 +0100
 @@ -0,0 +1,107 @@
 +add_definitions(-DG_LOG_DOMAIN=\\"Poppler\\" ${GLIB2_CFLAGS})
 +
@@ -2665,7 +2656,7 @@ diff -N -r -u poppler-0.6.2-orig/glib/CMakeLists.txt poppler-0.6.2/glib/CMakeLis
 +
 diff -N -r -u poppler-0.6.2-orig/glib/demo/CMakeLists.txt poppler-0.6.2/glib/demo/CMakeLists.txt
 --- poppler-0.6.2-orig/glib/demo/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/glib/demo/CMakeLists.txt	2007-11-13 18:09:35.296875000 +0100
++++ poppler-0.6.2/glib/demo/CMakeLists.txt	2007-11-06 15:59:07.000000000 +0100
 @@ -0,0 +1,20 @@
 +
 +if (BUILD_GTK_TEST)
@@ -2689,7 +2680,7 @@ diff -N -r -u poppler-0.6.2-orig/glib/demo/CMakeLists.txt poppler-0.6.2/glib/dem
 +endif (BUILD_GTK_TEST)
 diff -N -r -u poppler-0.6.2-orig/glib/poppler-features.h.cmake poppler-0.6.2/glib/poppler-features.h.cmake
 --- poppler-0.6.2-orig/glib/poppler-features.h.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/glib/poppler-features.h.cmake	2007-11-13 18:09:35.296875000 +0100
++++ poppler-0.6.2/glib/poppler-features.h.cmake	2007-11-06 14:32:22.000000000 +0100
 @@ -0,0 +1,24 @@
 +/* poppler-features.h: glib interface to poppler
 + * Copyright (C) 2006, Red Hat, Inc.
@@ -2717,7 +2708,7 @@ diff -N -r -u poppler-0.6.2-orig/glib/poppler-features.h.cmake poppler-0.6.2/gli
 +#endif /* __POPPLER_FEATURES_H__ */
 diff -N -r -u poppler-0.6.2-orig/poppler-config.h.cmake poppler-0.6.2/poppler-config.h.cmake
 --- poppler-0.6.2-orig/poppler-config.h.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/poppler-config.h.cmake	2007-11-13 18:09:35.515625000 +0100
++++ poppler-0.6.2/poppler-config.h.cmake	2007-09-08 02:18:04.000000000 +0200
 @@ -0,0 +1,160 @@
 +//================================================= -*- mode: c++ -*- ====
 +//
@@ -2881,7 +2872,7 @@ diff -N -r -u poppler-0.6.2-orig/poppler-config.h.cmake poppler-0.6.2/poppler-co
 +#endif /* POPPLER_CONFIG_H */
 diff -N -r -u poppler-0.6.2-orig/poppler-qt.pc.cmake poppler-0.6.2/poppler-qt.pc.cmake
 --- poppler-0.6.2-orig/poppler-qt.pc.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/poppler-qt.pc.cmake	2007-11-13 18:09:35.515625000 +0100
++++ poppler-0.6.2/poppler-qt.pc.cmake	2007-11-06 20:07:20.000000000 +0100
 @@ -0,0 +1,12 @@
 +prefix=@CMAKE_INSTALL_PREFIX@
 +exec_prefix=${prefix}
@@ -2897,7 +2888,7 @@ diff -N -r -u poppler-0.6.2-orig/poppler-qt.pc.cmake poppler-0.6.2/poppler-qt.pc
 +Cflags: -I${includedir}/poppler/qt3
 diff -N -r -u poppler-0.6.2-orig/poppler-qt4.pc.cmake poppler-0.6.2/poppler-qt4.pc.cmake
 --- poppler-0.6.2-orig/poppler-qt4.pc.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/poppler-qt4.pc.cmake	2007-11-13 18:09:35.515625000 +0100
++++ poppler-0.6.2/poppler-qt4.pc.cmake	2007-11-06 20:08:03.000000000 +0100
 @@ -0,0 +1,12 @@
 +prefix=@CMAKE_INSTALL_PREFIX@
 +exec_prefix=${prefix}
@@ -2913,7 +2904,7 @@ diff -N -r -u poppler-0.6.2-orig/poppler-qt4.pc.cmake poppler-0.6.2/poppler-qt4.
 +Cflags: -I${includedir}/poppler/qt4
 diff -N -r -u poppler-0.6.2-orig/poppler-splash.pc.cmake poppler-0.6.2/poppler-splash.pc.cmake
 --- poppler-0.6.2-orig/poppler-splash.pc.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/poppler-splash.pc.cmake	2007-11-13 18:09:35.531250000 +0100
++++ poppler-0.6.2/poppler-splash.pc.cmake	2007-11-06 20:08:18.000000000 +0100
 @@ -0,0 +1,9 @@
 +prefix=@CMAKE_INSTALL_PREFIX@
 +exec_prefix=${prefix}
@@ -2926,7 +2917,7 @@ diff -N -r -u poppler-0.6.2-orig/poppler-splash.pc.cmake poppler-0.6.2/poppler-s
 +Requires: poppler = @POPPLER_VERSION@
 diff -N -r -u poppler-0.6.2-orig/poppler.pc.cmake poppler-0.6.2/poppler.pc.cmake
 --- poppler-0.6.2-orig/poppler.pc.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/poppler.pc.cmake	2007-11-13 18:09:35.578125000 +0100
++++ poppler-0.6.2/poppler.pc.cmake	2007-11-06 20:06:24.000000000 +0100
 @@ -0,0 +1,11 @@
 +prefix=@CMAKE_INSTALL_PREFIX@
 +exec_prefix=${prefix}
@@ -2941,7 +2932,7 @@ diff -N -r -u poppler-0.6.2-orig/poppler.pc.cmake poppler-0.6.2/poppler.pc.cmake
 +Cflags: -I${includedir}/poppler
 diff -N -r -u poppler-0.6.2-orig/qt/CMakeLists.txt poppler-0.6.2/qt/CMakeLists.txt
 --- poppler-0.6.2-orig/qt/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/qt/CMakeLists.txt	2007-11-13 18:09:35.781250000 +0100
++++ poppler-0.6.2/qt/CMakeLists.txt	2007-09-08 11:10:01.000000000 +0200
 @@ -0,0 +1,33 @@
 +add_definitions(${QT3_DEFINITIONS})
 +
@@ -2978,13 +2969,13 @@ diff -N -r -u poppler-0.6.2-orig/qt/CMakeLists.txt poppler-0.6.2/qt/CMakeLists.t
 +
 diff -N -r -u poppler-0.6.2-orig/qt4/CMakeLists.txt poppler-0.6.2/qt4/CMakeLists.txt
 --- poppler-0.6.2-orig/qt4/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/qt4/CMakeLists.txt	2007-11-13 18:09:35.796875000 +0100
++++ poppler-0.6.2/qt4/CMakeLists.txt	2007-09-08 10:57:42.000000000 +0200
 @@ -0,0 +1,2 @@
 +add_subdirectory(src)
 +add_subdirectory(tests)
 diff -N -r -u poppler-0.6.2-orig/qt4/src/CMakeLists.txt poppler-0.6.2/qt4/src/CMakeLists.txt
 --- poppler-0.6.2-orig/qt4/src/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/qt4/src/CMakeLists.txt	2007-11-13 18:09:35.796875000 +0100
++++ poppler-0.6.2/qt4/src/CMakeLists.txt	2007-11-06 01:03:17.000000000 +0100
 @@ -0,0 +1,40 @@
 +add_definitions(${QT4_DEFINITIONS})
 +
@@ -3028,7 +3019,7 @@ diff -N -r -u poppler-0.6.2-orig/qt4/src/CMakeLists.txt poppler-0.6.2/qt4/src/CM
 +
 diff -N -r -u poppler-0.6.2-orig/qt4/tests/CMakeLists.txt poppler-0.6.2/qt4/tests/CMakeLists.txt
 --- poppler-0.6.2-orig/qt4/tests/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/qt4/tests/CMakeLists.txt	2007-11-13 18:09:35.875000000 +0100
++++ poppler-0.6.2/qt4/tests/CMakeLists.txt	2007-11-06 01:55:56.000000000 +0100
 @@ -0,0 +1,50 @@
 +add_definitions(${QT4_DEFINITIONS})
 +
@@ -3082,7 +3073,7 @@ diff -N -r -u poppler-0.6.2-orig/qt4/tests/CMakeLists.txt poppler-0.6.2/qt4/test
 +
 diff -N -r -u poppler-0.6.2-orig/test/CMakeLists.txt poppler-0.6.2/test/CMakeLists.txt
 --- poppler-0.6.2-orig/test/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/test/CMakeLists.txt	2007-11-13 18:09:35.890625000 +0100
++++ poppler-0.6.2/test/CMakeLists.txt	2007-11-06 16:10:16.000000000 +0100
 @@ -0,0 +1,48 @@
 +
 +if (BUILD_GTK_TEST)
@@ -3134,7 +3125,7 @@ diff -N -r -u poppler-0.6.2-orig/test/CMakeLists.txt poppler-0.6.2/test/CMakeLis
 +endif (BUILD_GTK_TEST)
 diff -N -r -u poppler-0.6.2-orig/utils/CMakeLists.txt poppler-0.6.2/utils/CMakeLists.txt
 --- poppler-0.6.2-orig/utils/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.2/utils/CMakeLists.txt	2007-11-13 18:09:35.890625000 +0100
++++ poppler-0.6.2/utils/CMakeLists.txt	2007-11-06 12:19:30.000000000 +0100
 @@ -0,0 +1,79 @@
 +
 +set(common
