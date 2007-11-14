@@ -28,10 +28,8 @@ class subclass(base.baseclass):
     def unpack( self ):
         if( not base.baseclass.unpack( self ) ):
             return False
-        fc_dir  = os.path.join( self.workdir, self.instsrcdir )
-
         cmd = "cd %s && patch -p0 < %s" % \
-              ( fc_dir, os.path.join( self.packagedir, "fontconfig-cmake.diff" ) )
+              ( self.workdir, os.path.join( self.packagedir, "fontconfig-cmake.diff" ) )
         self.system( cmd ) or die( "patch" )
 
         return True
