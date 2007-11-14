@@ -35,22 +35,22 @@ class subclass(base.baseclass):
 
         return True
 
-  def compile( self ):
-    return self.kdeCompile()
+    def compile( self ):
+        return self.kdeCompile()
 
-  def install( self ):
-    return self.kdeInstall()
+    def install( self ):
+        return self.kdeInstall()
 
-  def make_package( self ):
-    # auto-create both import libs with the help of pexports
-    self.stripLibs( PACKAGE_DLL_NAME )
+    def make_package( self ):
+        # auto-create both import libs with the help of pexports
+        self.stripLibs( PACKAGE_DLL_NAME )
 
-    # auto-create both import libs with the help of pexports
-    self.createImportLibs( PACKAGE_DLL_NAME )
+        # auto-create both import libs with the help of pexports
+        self.createImportLibs( PACKAGE_DLL_NAME )
 
-    # now do packaging with kdewin-packager
-    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
+        # now do packaging with kdewin-packager
+        self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
 
-    return True
+        return True
 
 subclass().execute()
