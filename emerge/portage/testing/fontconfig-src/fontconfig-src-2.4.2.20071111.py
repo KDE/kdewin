@@ -2,6 +2,7 @@ import base
 import os
 import utils
 import shutil
+from utils import die
 
 PACKAGE_NAME         = "fontconfig"
 PACKAGE_VER          = "2.4.2"
@@ -31,7 +32,7 @@ class subclass(base.baseclass):
 
         cmd = "cd %s && patch -p0 < %s" % \
               ( fc_dir, os.path.join( self.packagedir, "fontconfig-cmake.diff" ) )
-        os.system( cmd ) or die
+        self.system( cmd ) or die( "patch" )
 
         return True
 
