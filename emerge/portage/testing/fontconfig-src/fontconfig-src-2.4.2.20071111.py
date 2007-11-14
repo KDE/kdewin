@@ -24,51 +24,33 @@ class subclass(base.baseclass):
         self.instsrcdir = PACKAGE_FULL_NAME
         self.createCombinedPackage = True
 
-    def execute( self ):
-        base.baseclass.execute( self )
-        if self.compiler <> "mingw":
-            print "error: can only be build with MinGW right now."
-            exit( 1 )
-
     def unpack( self ):
         if( not base.baseclass.unpack( self ) ):
             return False
-        shutil.copyfile( os.path.join( self.packagedir, "pkg-config" ), os.path.join( self.workdir, self.instsrcdir, "pkg-config" ) )
-        return True
+        fc_dir  = os.path.join( self.workdir, self.instsrcdir )
 
-    def msysConfigureFlags ( self ):
-        includedir = os.path.join( self.rootdir, "include" )
-        libdir = os.path.join( self.rootdir, "lib" )
-        flags = "--enable-libxml2 LIBXML2_CFLAGS=-I" + utils.toMSysPath( includedir ) + " LIBXML2_LIBS='-L" + utils.toMSysPath( libdir ) + " -lxml2' --prefix=/ "
-        return flags
-
-    def compile( self ):
-        config = os.path.join( self.workdir, self.instsrcdir, "configure" )
-        build  = os.path.join( self.workdir, self.instsrcdir )
-
-        sh = os.path.join( self.msysdir, "bin", "sh.exe" )
-
-        cmd = "%s --login -c \"cd %s && %s %s && make -j2\"" % \
-              ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
-                self.msysConfigureFlags() )
-        if not self.stayQuiet:
-            print cmd
-        self.system( cmd )
-        return True
-
-    def install( self ):
-        return self.msysInstall( False )
-
-    def make_package( self ):
-        dst = os.path.join( self.imagedir, self.instdestdir, "lib" )
-        utils.cleanDirectory( dst )
-
-        self.stripLibs( "libfontconfig" )
-        self.createImportLibs( "libfontconfig" )
-        # now do packaging with kdewin-packager
-        # it's a in-source build, do not pack sources
-        self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, False )
+        cmd = "cd %s && patch -p0 < %s" % \
+              ( fc_dir, os.path.join( self.packagedir, "fontconfig-cmake.diff" ) )
+        os.system( cmd ) or die
 
         return True
+
+  def compile( self ):
+    return self.kdeCompile()
+
+  def install( self ):
+    return self.kdeInstall()
+
+  def make_package( self ):
+    # auto-create both import libs with the help of pexports
+    self.stripLibs( PACKAGE_DLL_NAME )
+
+    # auto-create both import libs with the help of pexports
+    self.createImportLibs( PACKAGE_DLL_NAME )
+
+    # now do packaging with kdewin-packager
+    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
+
+    return True
 
 subclass().execute()
