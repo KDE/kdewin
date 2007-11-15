@@ -20,14 +20,15 @@ import os
 
 def usage():
     print
-    print 'usage: emerge [-p|-q|-f][--fetch|--unpack|--compile|--install|--qmerge'
-    print '                   |--unmerge|--package|--full-package] packagename'
+    print 'usage: emerge [-f|-p|-q|-v][--fetch|--unpack|--compile|--install|--qmerge'
+    print '                         |--unmerge|--package|--full-package] packagename'
     print 'emerge.py is a script for easier building.'
     print
     print 'flags:'
     print '-p               pretend to do everything - a dry run'
     print '-q               suppress all output'
     print '-f               force removal of files with unmerge'
+    print '-v               print additional output'
     print '--buildtype=[KdeBuildType] where KdeBuildType is one of the used BuildTypes'
     print '                 This will automatically overrun all buildtype definitions'
     print '                 made in the package\'s .py-file'
@@ -53,6 +54,7 @@ doPretend = False
 stayQuiet = False
 offline = False
 opts = ""
+verbose = 0
 
 if len( sys.argv ) < 2:
     usage()
@@ -63,6 +65,10 @@ if ( quiet == "TRUE" ):
     stayQuiet = True
 else:
     stayQuiet = False
+verbose=os.getenv( "EMERGE_VERBOSE" )
+if verbose == None or not verbose.isdigit():
+    verbose = 0
+    os.environ["EMERGE_VERBOSE"]=""
 opts = list()
 for i in sys.argv:
 #    print "got this param: %s" % i
@@ -82,6 +88,9 @@ for i in sys.argv:
     elif ( i.startswith( "--buildtype=" ) ):
         print "chosen buildtype: ", i.replace( "--buildtype=", "" )
         os.environ["EMERGE_BUILDTYPE"] = i.replace( "--buildtype=", "" )
+    elif ( i == "-v" ):
+        verbose += 1
+        os.environ["EMERGE_VERBOSE"] = str(verbose)
     elif ( i == "--fetch" ):
         buildaction = "fetch"
     elif ( i == "--unpack" ):
@@ -111,19 +120,22 @@ else:
     os.environ["EMERGE_STAYQUIET"]="FALSE"
 import utils
 
+# get KDEROOT from env
+KDEROOT = os.getenv( "KDEROOT" )
+
 if not stayQuiet:
     print "buildaction:", buildaction
     print "doPretend:", doPretend
     print "packagename:", packagename
     print "buildType:", os.getenv("EMERGE_BUILDTYPE")
-
-# get KDEROOT from env
-KDEROOT = os.getenv( "KDEROOT" )
-if not stayQuiet:
     print "KDEROOT:", KDEROOT
+    
+if verbose:
+    print "verbose:", os.getenv("EMERGE_VERBOSE")
+    
 
-# FIXME: this shouldn't be hardcoded in here
-os.putenv( "PYTHONPATH", os.path.join( KDEROOT, "emerge", "bin" ) )
+# adding emerge/bin to find base.py and gnuwin32.py etc.
+os.environ["PYTHONPATH"] = os.getenv("PYTHONPATH") + ";" + os.path.join( os.getcwd(), os.path.dirname( sys.argv[0] ) )
 
 def doExec( category, package, version, action, opts ):
     if not stayQuiet:
@@ -187,7 +199,7 @@ def handlePackage( category, package, version, buildaction, opts ):
 
 deplist = []
 utils.solveDependencies( "", packagename, "", deplist )
-if not stayQuiet:
+if verbose:
     print "deplist:", deplist
 
 deplist.reverse()

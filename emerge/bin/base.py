@@ -455,7 +455,11 @@ class baseclass:
             builddir = "%s-%s" % ( builddir, buildType )
     
         os.chdir( os.path.join( self.workdir, builddir ) )
-        self.system( self.cmakeMakeProgramm )
+        cmd = self.cmakeMakeProgramm
+        # adding Targets later
+        if utils.verbose():
+            cmd += " VERBOSE=1"
+        self.system( cmd )
         return True
     
     def kdeCompile( self ):
@@ -585,9 +589,12 @@ class baseclass:
 
         sh = os.path.join( self.msysdir, "bin", "sh.exe" )
 
-        cmd = "%s --login -c \"cd %s && %s %s && make -j2\"" % \
+        cmd = "%s --login -c \"cd %s && %s %s && make -j2" % \
               ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
                 self.msysConfigureFlags() )
+        if utils.verbose():
+            cmd += " VERBOSE=1"
+        cmd +="\""
         if not self.stayQuiet:
             print cmd
         self.system( cmd )

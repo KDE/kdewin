@@ -66,6 +66,10 @@ rem be aware that there is no way to override this setting at the commandline
 rem possible states: TRUE or FALSE
 rem set EMERGE_STAYQUIET=FALSE
 
+rem If you want to have verbose output uncomment the following option and set it to any positive integer
+rem for verbose output and to 0 or disable it for normal output
+rem set EMERGE_VERBOSE=0
+
 rem No editing should be necessary below this line (in an ideal world)
 rem ##################################################################
 

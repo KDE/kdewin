@@ -27,6 +27,13 @@ def stayQuiet():
     else:
         return False
 
+def verbose():
+    verbose=os.getenv( "EMERGE_VERBOSE" )
+    if ( not verbose == None and verbose.isdigit() and int(verbose) > 0 ):
+        return True
+    else:
+        return False
+
 def getFiles( urls, destdir ):
     if not stayQuiet():
         print "getfiles called. urls:", urls
@@ -378,7 +385,7 @@ def getDependencies( category, package, version ):
     deplines = []
     inDepend = False
 
-    if not stayQuiet():
+    if verbose():
         print "solving package: %s-%s" % ( package, version )
     # FIXME make this more clever
     for line in lines.splitlines():
