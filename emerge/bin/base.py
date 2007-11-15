@@ -5,7 +5,7 @@ import shutil
 
 # for get functions etc...
 import utils
-from utils import die
+#from utils import die
 
 ROOTDIR=os.getenv( "KDEROOT" )
 COMPILER=os.getenv( "KDECOMPILER" )
@@ -454,14 +454,14 @@ class baseclass:
             buildtype = "-DCMAKE_BUILD_TYPE=%s" % buildType
             builddir = "%s-%s" % ( builddir, buildType )
     
-        os.chdir( builddir )
+        os.chdir( os.path.join( self.workdir, builddir ) )
         self.system( self.cmakeMakeProgramm )
         return True
     
     def kdeCompile( self ):
         """making all required stuff for compiling cmake based modules"""
         if( not self.buildType == None ) :
-            if( not (self.kdeConfigureInternal( self.buildType ) and self.kdeMakeInternal( self.buildType ) ) ):
+            if( not ( self.kdeConfigureInternal( self.buildType ) and self.kdeMakeInternal( self.buildType ) ) ):
                 return False
         else:
             if( not ( self.kdeConfigureInternal( "debug" ) and self.kdeMakeInternal( "debug" ) ) ):
