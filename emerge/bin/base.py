@@ -47,6 +47,36 @@ else:
 
     
 class baseclass:
+# methods of baseclass:
+# __init__                   constructor
+# execute                    called to run the derived class
+# fetch                      getting the package
+# unpack                     unpacking the source tarball
+# compile                    compiling the tarball
+# install                    installing the files into the normal
+# qmerge                     mergeing the local directory to the kderoot
+# unmerge                    unmergeing the local directory again
+# manifest                   getting the headers
+# make_package               overload this function to make the packages themselves
+# setDirectories
+# svnFetch                  getting sources from a custom repo url
+# __kdesinglecheckout
+# kdeSvnFetch
+# kdeSvnUnpack
+# kdeDefaultDefines
+# kdeCompileInternal
+# kdeCompile                 running for compilation from cmake
+# kdeInstallInternal
+# kdeInstall                 running for installation from cmake
+# doPackaging                
+# createImportLibs           creating import libs for mingw and msvc
+# stripLibs                  stripping libs
+# msysConfigureFlags         called by msysCompile: overload it to set 
+# msysCompile                running the msys sh and compiling autotool based stuff
+# msysInstall                install from msys sh
+# system                     instead of using the os.system command, please use this one - it makes later changes easier
+
+
     def __init__( self, SRC_URI ):
         #print "base init called"
         self.SRC_URI = SRC_URI
@@ -83,7 +113,6 @@ class baseclass:
     def execute( self ):
         if not self.stayQuiet:
             print "base exec called. args:", sys.argv
-        #print "fetch url:", self.SRC_URI
 
         command = sys.argv[ 1 ]
         options = ""
@@ -244,6 +273,7 @@ class baseclass:
         self.dbusdir = os.getenv( "DBUSDIR" )
 
     def svnFetch( self, repo ):
+        """getting sources from a custom svn repo"""
         if not self.stayQuiet:
             print "base svnFetch called"
         self.svndir = os.path.join( self.downloaddir, "svn-src", self.package )
@@ -255,12 +285,12 @@ class baseclass:
         utils.svnFetch( repo, self.svndir )
 
     def __kdesinglecheckout( self, repourl, ownpath, codir, doRecursive = False ):
-        # in ownpath try to checkout codir from repourl
-        # if codir exists and doRecursive is false, simply return,
-        # if codir does not exist, but ownpath/.svn exists,
-        # do a svn update codir
-        # else do svn co repourl/codir
-        # if doRecursive is false, add -N to the svn command
+        """in ownpath try to checkout codir from repourl 
+           if codir exists and doRecursive is false, simply return,
+           if codir does not exist, but ownpath/.svn exists,
+              do a svn update codir
+           else do svn co repourl/codir
+           if doRecursive is false, add -N to the svn command """
 
         if ( os.path.exists( os.path.join( ownpath, codir ) ) \
                              and not doRecursive ):
@@ -288,9 +318,9 @@ class baseclass:
         self.system( svncmd )
                 
     def kdeSvnFetch( self, svnpath, packagedir ):
-        # svnpath is the part of the repo url after /home/kde, for example
-        # "trunk/kdesupport/", which leads to the package itself,
-        # without the package
+        """svnpath is the part of the repo url after /home/kde, for example
+           "trunk/kdesupport/", which leads to the package itself,
+           without the package"""
         if not self.stayQuiet:
             print "base kdeSvnFetch called. svnpath: %s dir: %s" % \
                       ( svnpath, packagedir )
@@ -335,6 +365,7 @@ class baseclass:
         return True
 
     def kdeSvnUnpack( self, svnpath, packagedir ):
+        """fetching and copying the sources from svn"""
         self.kdeSvnFetch( svnpath, packagedir )
         
         if( not os.path.exists( self.workdir ) ):
