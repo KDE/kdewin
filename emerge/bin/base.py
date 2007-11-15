@@ -48,7 +48,7 @@ else:
     
 class baseclass:
 # methods of baseclass:
-# __init__                   constructor
+# __init__                   the baseclass constructor
 # execute                    called to run the derived class
 # fetch                      getting the package
 # unpack                     unpacking the source tarball
@@ -64,7 +64,8 @@ class baseclass:
 # kdeSvnFetch
 # kdeSvnUnpack
 # kdeDefaultDefines
-# kdeCompileInternal
+# kdeConfigureInternal
+# kdeMakeInternal
 # kdeCompile                 running for compilation from cmake
 # kdeInstallInternal
 # kdeInstall                 running for installation from cmake
@@ -78,6 +79,7 @@ class baseclass:
 
 
     def __init__( self, SRC_URI ):
+        """ the baseclass constructor """
         #print "base init called"
         self.SRC_URI = SRC_URI
         self.instsrcdir = ""
@@ -111,6 +113,7 @@ class baseclass:
             exit( 1 )
 
     def execute( self ):
+        """called to run the derived class"""
         if not self.stayQuiet:
             print "base exec called. args:", sys.argv
 
@@ -167,6 +170,7 @@ class baseclass:
             exit( 1 )
 
     def fetch( self ):
+        """getting normal tarballs from SRC_URI"""
         if not self.stayQuiet:
             print "base fetch called"
         if ( self.noFetch ):
@@ -176,16 +180,19 @@ class baseclass:
         return utils.getFiles( self.SRC_URI, self.downloaddir )
 
     def unpack( self ):
+        """unpacking all zipped(gz,zip,bz2) tarballs"""
         if not self.stayQuiet:
             print "base unpack called, files:", self.filenames
         return utils.unpackFiles( self.downloaddir, self.filenames, self.workdir )
 
     def compile( self ):
+        """overload this function according to the packages needs"""
         if not self.stayQuiet:
             print "base compile called, doing nothing..."
         return True
 
     def install( self ):
+        """installing binary tarballs"""
         if not self.stayQuiet:
             print "base install called"
         srcdir = os.path.join( self.workdir, self.instsrcdir )
@@ -194,6 +201,7 @@ class baseclass:
         return True
 
     def qmerge( self ):
+        """mergeing the imagedirectory into the filesystem"""
         if not self.stayQuiet:
             print "base qmerge called"
         utils.mergeImageDirToRootDir( self.imagedir, self.rootdir )
@@ -201,6 +209,7 @@ class baseclass:
         return True
 
     def unmerge( self ):
+        """unmergeing the files from the filesystem"""
         if not self.stayQuiet:
             print "base unmerge called"
         utils.unmerge( self.rootdir, self.package, self.forced )
@@ -208,17 +217,21 @@ class baseclass:
         return True
         
     def manifest( self ):
+        """installer compatibility: make the manifest files that make up the installers"""
+        """install database"""
         if not self.stayQuiet:
             print "base manifest called"
         utils.manifestDir( os.path.join( self.workdir, self.instsrcdir, self.package ), self.imagedir, self.package, self.version )
         return True
         
     def make_package( self ):
+        """overload this function with the package specific packaging instructions"""
         if not self.stayQuiet:
             print "currently only supported for some interal packages"
         return True
 
     def setDirectories( self ):
+        """setting all important stuff that isn't coped with in the c'tor"""
         if not self.stayQuiet:
             print "setdirectories called"
         #print "basename:", sys.argv[ 0 ]
@@ -285,12 +298,12 @@ class baseclass:
         utils.svnFetch( repo, self.svndir )
 
     def __kdesinglecheckout( self, repourl, ownpath, codir, doRecursive = False ):
-        """in ownpath try to checkout codir from repourl 
-           if codir exists and doRecursive is false, simply return,
-           if codir does not exist, but ownpath/.svn exists,
-              do a svn update codir
-           else do svn co repourl/codir
-           if doRecursive is false, add -N to the svn command """
+        """in ownpath try to checkout codir from repourl """
+        """if codir exists and doRecursive is false, simply return,"""
+        """if codir does not exist, but ownpath/.svn exists,"""
+        """   do a svn update codir"""
+        """else do svn co repourl/codir"""
+        """if doRecursive is false, add -N to the svn command """
 
         if ( os.path.exists( os.path.join( ownpath, codir ) ) \
                              and not doRecursive ):
@@ -318,9 +331,9 @@ class baseclass:
         self.system( svncmd )
                 
     def kdeSvnFetch( self, svnpath, packagedir ):
-        """svnpath is the part of the repo url after /home/kde, for example
-           "trunk/kdesupport/", which leads to the package itself,
-           without the package"""
+        """svnpath is the part of the repo url after /home/kde, for example"""
+        """"trunk/kdesupport/", which leads to the package itself,"""
+        """without the package"""
         if not self.stayQuiet:
             print "base kdeSvnFetch called. svnpath: %s dir: %s" % \
                       ( svnpath, packagedir )
@@ -378,6 +391,7 @@ class baseclass:
         return True
         
     def kdeDefaultDefines( self ):
+        """defining the default cmake cmd line"""
         #FIXME: can we define the paths externally???
         package_path = self.package
         if( not self.instsrcdir == "" ):
@@ -409,7 +423,8 @@ class baseclass:
         
         return options
 
-    def kdeCompileInternal( self, buildType ):
+    def kdeConfigureInternal( self, buildType ):
+        """Using cmake"""
         builddir = "%s-build-%s" % ( self.package, self.compiler )
 
         if( not buildType == None ):
@@ -429,21 +444,34 @@ class baseclass:
         if not self.stayQuiet:
             print command
         self.system( command )
-        self.system( self.cmakeMakeProgramm )
         return True
 
+    def kdeMakeInternal( self, buildType ):
+        """Using the *make program"""
+        builddir = "%s-build-%s" % ( self.package, self.compiler )
+
+        if( not buildType == None ):
+            buildtype = "-DCMAKE_BUILD_TYPE=%s" % buildType
+            builddir = "%s-%s" % ( builddir, buildType )
+    
+        os.chdir( builddir )
+        self.system( self.cmakeMakeProgramm )
+        return True
+    
     def kdeCompile( self ):
+        """making all required stuff for compiling cmake based modules"""
         if( not self.buildType == None ) :
-            if( not self.kdeCompileInternal( self.buildType ) ):
+            if( not (self.kdeConfigureInternal( self.buildType ) and self.kdeMakeInternal( self.buildType ) ) ):
                 return False
         else:
-            if( not self.kdeCompileInternal( "debug" ) ):
+            if( not ( self.kdeConfigureInternal( "debug" ) and self.kdeMakeInternal( "debug" ) ) ):
                 return False
-            if( not self.kdeCompileInternal( "release" ) ):
+            if( not ( self.kdeConfigureInternal( "release" ) and self.kdeMakeInternal( "release" ) ) ):
                 return False
         return True
 
     def kdeInstallInternal( self, buildType ):
+        """"""
         builddir = "%s-build-%s" % ( self.package, self.compiler )
 
         if( not buildType == None ):
@@ -459,6 +487,7 @@ class baseclass:
         return True
 
     def kdeInstall( self ):
+        """making all required stuff for installing cmake based modules"""
         if( not self.buildType == None ):
             if( not self.kdeInstallInternal( self.buildType ) ):
                 return False
@@ -471,6 +500,10 @@ class baseclass:
         return True
 
     def doPackaging( self, pkg_name, pkg_version, packSources = True ):
+        """packaging according to the gnuwin32 packaging rules"""
+        """this requires the kdewin-packager"""
+        
+        # FIXME: add a test for the installer later
         dstpath = os.path.join( self.rootdir, "tmp", self.PV )
         binpath = os.path.join( self.imagedir, self.instdestdir )
         tmp = os.path.join( binpath, "kde" )
@@ -497,6 +530,7 @@ class baseclass:
         return True
 
     def createImportLibs( self, pkg_name ):
+        """creating the import libraries for the other compiler(if ANSI-C libs)"""
         basepath = os.path.join( self.imagedir, self.instdestdir )
 
         dst = os.path.join( basepath, "lib" )
@@ -524,6 +558,7 @@ class baseclass:
         return True
 
     def stripLibs( self, pkg_name ):
+        """stripping libraries"""
         basepath = os.path.join( self.imagedir, self.instdestdir )
         dllpath = os.path.join( basepath, "bin", "%s.dll" % pkg_name )
 
@@ -532,12 +567,14 @@ class baseclass:
         return True
 
     def msysConfigureFlags ( self ):
+        """adding configure flags always used"""
         flags  = "--disable-nls "
         flags += "--disable-static "
         flags += "--prefix=/ "
         return flags
 
     def msysCompile( self, bOutOfSource = True ):
+        """run configure and make for Autotools based stuff"""
         config = os.path.join( self.workdir, self.instsrcdir, "configure" )
         build  = os.path.join( self.workdir )
         if( bOutOfSource ):
@@ -557,6 +594,7 @@ class baseclass:
         return True
 
     def msysInstall( self, bOutOfSource = True ):
+        """run make install for Autotools based stuff"""
         install = os.path.join( self.imagedir, self.instdestdir )
         build  = os.path.join( self.workdir )
         if( bOutOfSource ):
@@ -574,11 +612,10 @@ class baseclass:
         return True
 
     def system( self, command , infileName = None, outfileName = os.path.join( ROOTDIR, "out.log" ), errfileName = os.path.join( ROOTDIR, "out.log" ) ):
-        """ this function should be called instead of os.system it will return the errorstatus 
-            and take the name of a possible command file and the names of stdout and stderr
-            logfiles. it should be called  """
-        os.system( command ) and \
-            utils.die( "os.system ( %s ) failed" % command)
+        """this function should be called instead of os.system it will return the errorstatus"""
+        """and take the name of a possible command file and the names of stdout and stderr"""
+        """logfiles. it should be called  """
+        os.system( command ) and utils.die( "os.system ( %s ) failed" % command )
         return True
 
 # ############################################################################################
