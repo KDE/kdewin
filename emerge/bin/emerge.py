@@ -89,7 +89,7 @@ for i in sys.argv:
         print "chosen buildtype: ", i.replace( "--buildtype=", "" )
         os.environ["EMERGE_BUILDTYPE"] = i.replace( "--buildtype=", "" )
     elif ( i == "-v" ):
-        verbose += 1
+        verbose = int(verbose) + 1
         os.environ["EMERGE_VERBOSE"] = str(verbose)
     elif ( i == "--fetch" ):
         buildaction = "fetch"
