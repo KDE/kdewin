@@ -20,8 +20,9 @@ import os
 
 def usage():
     print
-    print 'usage: emerge [-f|-p|-q|-v][--fetch|--unpack|--compile|--install|--qmerge'
-    print '                         |--unmerge|--package|--full-package] packagename'
+    print 'usage: emerge [-f|-p|-q|-v][--fetch|--unpack|--compile|--install|'
+    print '                            --manifest|--qmerge|--unmerge|--package|'
+    print '                            --full-package] packagename'
     print 'emerge.py is a script for easier building.'
     print
     print 'flags:'
