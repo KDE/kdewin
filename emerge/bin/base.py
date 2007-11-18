@@ -138,6 +138,8 @@ class baseclass:
         if command == "fetch":        ok = self.fetch()
         elif command == "unpack":   ok = self.unpack()
         elif command == "compile":  ok = self.compile()
+        elif command == "configure":  ok = self.compile()
+        elif command == "make":  ok = self.compile()
         elif command == "install":
             # make sure the image dir is clean
             if ( os.path.exists( self.imagedir ) ):
@@ -425,7 +427,7 @@ class baseclass:
 
     def kdeConfigureInternal( self, buildType ):
         """Using cmake"""
-        builddir = "%s-build-%s" % ( self.package, self.compiler )
+        builddir = "%s" % ( self.compiler )
 
         if( not buildType == None ):
             buildtype = "-DCMAKE_BUILD_TYPE=%s" % buildType
@@ -448,7 +450,7 @@ class baseclass:
 
     def kdeMakeInternal( self, buildType ):
         """Using the *make program"""
-        builddir = "%s-build-%s" % ( self.package, self.compiler )
+        builddir = "%s" % ( self.compiler )
 
         if( not buildType == None ):
             buildtype = "-DCMAKE_BUILD_TYPE=%s" % buildType
@@ -476,7 +478,7 @@ class baseclass:
 
     def kdeInstallInternal( self, buildType ):
         """"""
-        builddir = "%s-build-%s" % ( self.package, self.compiler )
+        builddir = "%s" % ( self.compiler )
 
         if( not buildType == None ):
             builddir = "%s-%s" % ( builddir, buildType )
