@@ -8,24 +8,27 @@ virtual/base
 """
 
 class subclass(base.baseclass):
-  def __init__(self):
-    base.baseclass.__init__( self, "" )
-    # header-only package
-    self.createCombinedPackage = True
+    def __init__(self):
+        base.baseclass.__init__( self, "" )
+        # header-only package
+        self.createCombinedPackage = True
 
-  def unpack( self ):
-    return self.kdeSvnUnpack( "trunk/kdesupport", "eigen" )
+    def kdeSvnPath( self ):
+        return "trunk/kdesupport/eigen"
 
-  def compile( self ):
-    return self.kdeCompile()
+    def unpack( self ):
+        return self.kdeSvnUnpack( "trunk/kdesupport", "eigen" )
 
-  def install( self ):
-    return self.kdeInstall()
+    def compile( self ):
+        return self.kdeCompile()
 
-  def make_package( self ):
-    if self.traditional:
-        self.instdestdir = "kde"
-    self.instsrcdir = "eigen"
-    return self.doPackaging( "eigen", "20071019", True )
+    def install( self ):
+        return self.kdeInstall()
+
+    def make_package( self ):
+        if self.traditional:
+            self.instdestdir = "kde"
+            self.instsrcdir = "eigen"
+        return self.doPackaging( "eigen", "20071019", True )
 
 subclass().execute()
