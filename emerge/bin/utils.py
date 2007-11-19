@@ -453,9 +453,10 @@ def die( message ):
 
 def system( cmdstring ):
     if verbose() == 0:
-        sys.stderr = file('nul', 'w')
-        sys.stdout = file('nul', 'w')
-    p = subprocess.call( cmdstring, stdout=sys.stdout, stderr=sys.stderr )
+        sys.stderr = file('test.outlog', 'wb')
+        sys.stdout = sys.stderr
+    p = subprocess.call( cmdstring, shell=True, stdout=sys.stdout, stderr=sys.stderr )
+    print p
     return p
     
 def copySrcDirToDestDir( srcdir, destdir ):

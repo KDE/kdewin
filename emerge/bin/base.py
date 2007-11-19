@@ -395,16 +395,16 @@ class baseclass:
     def kdeDefaultDefines( self ):
         """defining the default cmake cmd line"""
         #FIXME: can we define the paths externally???
-        if utils.verbose() > 1:
+        if utils.verbose() > 1 and self.kdeSvnPath():
             print "noCopy: %s" % self.noCopy
             print "kdeSvnPath(): %s" % self.kdeSvnPath().replace("/", "\\")
         if not ( self.noCopy and self.kdeSvnPath() ) :
-            source_path = "..\\%s" % self.package
+            source_path = "..\\%s" % self.instsrcdir
         else:
             source_path = "%s" % os.path.join(self.kdesvndir, self.kdeSvnPath() ).replace("/", "\\")
-        if( not self.instsrcdir == "" ):
-            source_path = self.instsrcdir
-
+#        if( not self.instsrcdir == "" ):
+#            source_path = self.instsrcdir
+        print "source_path: ", source_path
         if self.traditional:
             options = "%s -DCMAKE_INSTALL_PREFIX=%s/kde " % \
                   ( source_path, self.rootdir.replace( "\\", "/" ) )
