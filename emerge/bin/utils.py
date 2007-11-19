@@ -391,7 +391,7 @@ def getDependencies( category, package, version ):
     deplines = []
     inDepend = False
 
-    if verbose() > 1:
+    if verbose() > 2:
         print "solving package: %s-%s" % ( package, version )
     # FIXME make this more clever
     for line in lines.splitlines():

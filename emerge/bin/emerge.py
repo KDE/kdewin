@@ -224,10 +224,13 @@ else:
     file = os.path.join( KDEROOT, "emerge", "portage", package[0], package[1], "%s-%s.py" % ( package[1], package[2] ) )
     if ( doPretend ):
         if ( utils.isInstalled( package[0], package[1], package[2] ) ):
-            #print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
-            pass
+            if utils.verbose() > 1 and package[1] == packagename:
+                print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
+            elif utils.verbose() > 2 and not package[1] == packagename:
+                print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
         else:
-            print "pretending %s/%s-%s" % ( package[0], package[1], package[2] )
+            if utils.verbose() > 0:
+                print "pretending %s/%s-%s" % ( package[0], package[1], package[2] )
     else:
         if ( not utils.isInstalled( package[0], package[1], package[2] ) ):
             ok = handlePackage( package[0], package[1], package[2], buildaction, opts )
@@ -235,4 +238,7 @@ else:
                 print "fatal error: package %s/%s-%s %s failed" % \
                     (package[0], package[1], package[2], buildaction)
         else:
-            print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
+            if utils.verbose() > 1 and package[1] == packagename:
+                print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
+            elif utils.verbose() > 2 and not package[1] == packagename:
+                print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
