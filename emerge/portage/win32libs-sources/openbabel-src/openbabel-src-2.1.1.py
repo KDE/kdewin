@@ -35,9 +35,8 @@ class subclass(base.baseclass):
             
         src = os.path.join( self.workdir, self.instsrcdir )
 
-        os.chdir( self.workdir )
-        cmd = "patch -p0 < %s" % \
-              ( os.path.join( self.packagedir , "openbabel-2.1.1-cmake.diff" ) )
+        cmd = "cd %s && patch -p0 < %s" % \
+              ( self.workdir, os.path.join( self.packagedir , "openbabel-2.1.1-cmake.diff" ) )
         if utils.verbose() > 0:
             print cmd
         utils.system( cmd ) or die( "patchin'" )
