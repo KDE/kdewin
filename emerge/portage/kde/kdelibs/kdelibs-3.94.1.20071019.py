@@ -16,6 +16,9 @@ class subclass(base.baseclass):
         self.buildType = "Debug"
         base.baseclass.__init__( self, "" )
 
+    def kdeSvnPath( self ):
+        return "trunk/KDE/kdelibs"
+        
     def unpack( self ):
         return self.kdeSvnUnpack( "trunk/KDE", "kdelibs" )
 

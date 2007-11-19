@@ -6,9 +6,12 @@ kde/kdepimlibs
 """
 
 class subclass(base.baseclass):
-    def __init__(self):
+    def __init__( self ):
         base.baseclass.__init__( self, "" )
 
+    def kdeSvnPath( self ):
+        return "trunk/KDE/kdebase"
+        
     def unpack( self ):
         return self.kdeSvnUnpack( "trunk/KDE", "kdebase" )
 

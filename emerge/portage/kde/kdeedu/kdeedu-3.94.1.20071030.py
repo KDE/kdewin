@@ -14,6 +14,9 @@ class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
 
+    def kdeSvnPath( self ):
+        return "trunk/KDE/kdeedu"
+        
     def unpack( self ):
         return self.kdeSvnUnpack( "trunk/KDE", "kdeedu" )
 

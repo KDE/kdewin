@@ -10,6 +10,9 @@ class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
 
+    def kdeSvnPath( self ):
+        return "trunk/KDE/kdegames"
+        
     def unpack( self ):
         self.kdeSvnUnpack( "trunk/KDE/", "kdegames" )
         
