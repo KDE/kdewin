@@ -17,7 +17,7 @@ class subclass(base.baseclass):
         return "trunk/kdesupport/gmm"
 
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/kdesupport", "gmm" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         return self.kdeCompile()

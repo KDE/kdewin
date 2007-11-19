@@ -13,7 +13,7 @@ class subclass(base.baseclass):
         return "trunk/KDE/kdepim"
         
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/KDE", "kdepim" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         return self.kdeCompile()

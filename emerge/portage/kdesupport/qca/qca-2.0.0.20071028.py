@@ -13,7 +13,7 @@ class subclass(base.baseclass):
         return "trunk/kdesupport/qca"
 
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/kdesupport", "qca" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         return self.kdeCompile()

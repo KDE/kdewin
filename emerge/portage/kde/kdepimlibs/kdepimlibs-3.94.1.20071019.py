@@ -14,7 +14,7 @@ class subclass(base.baseclass):
         return "trunk/KDE/kdepimlibs"
         
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/KDE", "kdepimlibs" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         # add env var so that boost headers are found

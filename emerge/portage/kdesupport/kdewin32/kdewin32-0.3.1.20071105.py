@@ -12,7 +12,7 @@ class subclass(base.baseclass):
         return "trunk/kdesupport/kdewin32"
 
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/kdesupport", "kdewin32" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         return self.kdeCompile()

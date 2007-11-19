@@ -18,7 +18,7 @@ class subclass(base.baseclass):
         return "trunk/KDE/kdeedu"
         
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/KDE", "kdeedu" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         return self.kdeCompile()

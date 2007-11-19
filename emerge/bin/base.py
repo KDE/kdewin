@@ -324,6 +324,7 @@ class baseclass:
         """svnpath is the part of the repo url after /home/kde, for example"""
         """"trunk/kdesupport/", which leads to the package itself,"""
         """without the package"""
+        
         if utils.verbose() > 1:
             print "base kdeSvnFetch called. svnpath: %s dir: %s" % ( svnpath, packagedir )
 
@@ -371,8 +372,14 @@ class baseclass:
         """this function should return the full path seen from /home/KDE/"""
         return False
         
-    def kdeSvnUnpack( self, svnpath, packagedir ):
+    def kdeSvnUnpack( self, svnpath=None, packagedir=None ):
         """fetching and copying the sources from svn"""
+        if svnpath == None and packagedir == None:
+            if self.kdeSvnPath():
+                svnpath = self.kdeSvnPath()[ :self.kdeSvnPath().rfind('/') ]
+                packagedir = self.kdeSvnPath()[ self.kdeSvnPath().rfind('/') + 1:]
+            else:
+                utils.die( "no svn repository information are available" )
         self.kdeSvnFetch( svnpath, packagedir )
         
         if not ( self.noCopy and self.kdeSvnPath() ):

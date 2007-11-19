@@ -20,7 +20,7 @@ class subclass(base.baseclass):
         return "trunk/KDE/kdelibs"
         
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/KDE", "kdelibs" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         self.kdeCustomDefines = "-DKDE4_BUILD_TESTS=OFF"

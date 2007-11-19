@@ -14,7 +14,7 @@ class subclass(base.baseclass):
         return "trunk/kdesupport/soprano"
 
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/kdesupport", "soprano" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         return self.kdeCompile()

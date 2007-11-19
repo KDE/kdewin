@@ -17,7 +17,7 @@ class subclass(base.baseclass):
         return "trunk/kdesupport/strigi"
 
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/kdesupport", "strigi" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         return self.kdeCompile()

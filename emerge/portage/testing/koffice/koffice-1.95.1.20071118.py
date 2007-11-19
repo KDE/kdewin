@@ -16,7 +16,7 @@ class subclass(base.baseclass):
         return "trunk/koffice"
 
     def unpack( self ):
-        unp = self.kdeSvnUnpack( "trunk", "koffice" )
+        unp = self.kdeSvnUnpack()
         # now copy the tree to workdir
         return unp
 

@@ -14,7 +14,7 @@ class subclass(base.baseclass):
         return "trunk/KDE/kdegames"
         
     def unpack( self ):
-        self.kdeSvnUnpack( "trunk/KDE/", "kdegames" )
+        self.kdeSvnUnpack()
         
         # for now disable libksirtet and ksirtet, they do not compile under mingw
         

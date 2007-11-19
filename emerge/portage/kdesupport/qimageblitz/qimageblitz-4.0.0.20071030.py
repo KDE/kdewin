@@ -13,7 +13,7 @@ class subclass(base.baseclass):
         return "trunk/kdesupport/qimageblitz"
 
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/kdesupport", "qimageblitz" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         return self.kdeCompile()

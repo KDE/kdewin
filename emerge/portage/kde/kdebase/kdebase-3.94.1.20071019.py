@@ -13,7 +13,7 @@ class subclass(base.baseclass):
         return "trunk/KDE/kdebase"
         
     def unpack( self ):
-        return self.kdeSvnUnpack( "trunk/KDE", "kdebase" )
+        return self.kdeSvnUnpack()
 
     def compile( self ):
         self.kdeCustomDefines = "-DKDE4_DISABLE_MULTIMEDIA=ON"
