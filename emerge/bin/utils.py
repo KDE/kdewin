@@ -3,11 +3,13 @@
 import httplib
 import ftplib
 import os
+import sys
 import urlparse
 import shutil
 import zipfile
 import tarfile
 import hashlib
+import subprocess
 
 import portage_versions
 
@@ -28,14 +30,14 @@ def stayQuiet():
         return False
 
 def verbose():
-    verbose=os.getenv( "EMERGE_VERBOSE" )
-    if ( not verbose == None and verbose.isdigit() and int(verbose) > 0 ):
-        return True
+    verb=os.getenv( "EMERGE_VERBOSE" )
+    if ( not verb == None and verb.isdigit() and int(verb) > 0 ):
+        return int( verb )
     else:
-        return False
+        return 0
 
 def getFiles( urls, destdir ):
-    if not stayQuiet():
+    if verbose() > 1:
         print "getfiles called. urls:", urls
     # make sure distfiles dir exists
     if ( not os.path.exists( destdir ) ):
@@ -49,10 +51,10 @@ def getFiles( urls, destdir ):
     return True
 
 def getFile( url, destdir ):
-    if not stayQuiet():
+    if verbose() > 1:
         print "getFile called. url:", url
     if url == "":
-        print "fetch error: no url given"
+        error( "fetch: no url given" )
         return False
 
 
@@ -64,7 +66,7 @@ def getFile( url, destdir ):
 
 
     filename = os.path.basename( path )
-    if not stayQuiet():
+    if verbose() > 0:
         print scheme
         print host
         print path
@@ -75,17 +77,18 @@ def getFile( url, destdir ):
     elif ( scheme == "ftp" ):
         return getFtpFile( host, path, destdir, filename )
     else:
-        print "getFile error: protocol not understood"
+        error( "getFile: protocol not understood" )
         return False
 
 def wgetFile( url, destdir ):
     compath = WGetExecutable
     command = "%s -c -t 1 -P %s %s" % ( compath, destdir, url )
-    if not stayQuiet():
+    if verbose() > 1:
         print "wgetfile called"
         print "executing this command:", command
-    ret = os.system( command )
-    if not stayQuiet():
+    # FIXME: there needs to be another function instead of os.system
+    ret = system( command )
+    if verbose() > 0:
         print "wget ret:", ret
     if ( ret == 0 ):
         return True
@@ -94,7 +97,7 @@ def wgetFile( url, destdir ):
     
 def getFtpFile( host, path, destdir, filename ):
     # FIXME check return values here (implement useful error handling)...
-    if not stayQuiet():
+    if verbose() > 1:
         print "FIXME getFtpFile called.", host, path
     
     outfile = open( os.path.join( destdir, filename ), "wb" )
@@ -107,13 +110,13 @@ def getFtpFile( host, path, destdir, filename ):
 
 def getHttpFile( host, path, destdir, filename ):
     # FIXME check return values here (implement useful error handling)...
-    if not stayQuiet():
+    if verbose() > 1:
         print "getHttpFile called.", host, path
     
     conn = httplib.HTTPConnection( host )
     conn.request( "GET", path )
     r1 = conn.getresponse()
-    if not stayQuiet():
+    if verbose() > 0:
         print r1.status, r1.reason
 
     data = r1.read()
@@ -131,7 +134,7 @@ def unpackFiles( downloaddir, filenames, workdir ):
     cleanDirectory( workdir )
 
     for filename in filenames:
-        if not stayQuiet():
+        if verbose() > 1:
             print "unpacking this file:", filename
         if ( not unpackFile( downloaddir, filename, workdir ) ):
             return False
@@ -148,18 +151,18 @@ def unpackFile( downloaddir, filename, workdir ):
         if ( myext == ".tar" ):
             return unTar( os.path.join( downloaddir, filename ), workdir )
         else:
-            print "error:", myext
+            error( "unpacking %s" % myext )
             return False
     else:
         if ( ext == ".exe" ):
-            print "unpack ignoring exe file"
+            warning( "unpack ignoring exe file" )
             return True
-        print "dont know how to unpack this file:", filename
+        error( "dont know how to unpack this file:", filename )
         return False
 
 
 def unTar( file, destdir ):
-    if not stayQuiet():
+    if verbose() > 1:
         print "unTar called. file: %s, destdir: %s" % ( file, destdir )
     ( shortname, ext ) = os.path.splitext( file )
 
@@ -178,7 +181,7 @@ def unTar( file, destdir ):
     return True
 
 def unZip( file, destdir ):
-    if not stayQuiet():
+    if verbose() > 1:
         print "unZip called:", file, destdir
 
     if not os.path.exists(destdir):
@@ -204,7 +207,7 @@ def unZip( file, destdir ):
 ### svn fetch/unpack functions
 
 def svnFetch( repo, destdir, username = None, password = None ):
-    if not stayQuiet():
+    if verbose() > 1:
         print "utils svnfetch", repo, destdir
     if ( not os.path.exists( destdir ) ):
         os.makedirs( destdir )
@@ -215,7 +218,7 @@ def svnFetch( repo, destdir, username = None, password = None ):
 
     dir = os.path.basename( repo.replace( "/", "\\" ) )
     path = os.path.join( destdir, dir )
-    if not stayQuiet():
+    if verbose() > 1:
         print "path: ", path 
     if ( not os.path.exists( path ) ):
         # not checked out yet
@@ -224,16 +227,16 @@ def svnFetch( repo, destdir, username = None, password = None ):
             command = command + " --username " + username
         if ( password != None ):
             command = command + " --password " + password
-        if not stayQuiet():
+        if verbose() > 1:
             print "executing this:", command
-        ret = os.system( command )
+        ret = system( command )
     else:
         # already checked out, so only update
         mode = "update"
         os.chdir( path )
-        if not stayQuiet():
+        if verbose() > 1:
             print "svn up cwd:", os.getcwd()
-        ret = os.system( "svn update" )
+        ret = system( "svn update" )
 
     if ( ret == 0 ):
         return True
@@ -243,9 +246,9 @@ def svnFetch( repo, destdir, username = None, password = None ):
 ### package dependencies functions
     
 def isInstalled( category, package, version ):
-    file = os.path.join( os.getenv( "KDEROOT" ), "etc", "portage", "installed" )
+    file = os.path.join( getEtcPortageDir(), "installed" )
     if ( not os.path.isfile( file ) ):
-        print "installed db file does not exist"
+        warning( "installed db file does not exist" )
         return False
 
     found = False
@@ -265,11 +268,11 @@ def isInstalled( category, package, version ):
     return found
     
 def addInstalled( category, package, version ):
-    if not stayQuiet():
+    if verbose() > 1:
         print "addInstalled called"
     # write a line to etc/portage/installed,
     # that contains category/package-version
-    path = os.path.join( os.getenv( "KDEROOT" ), "etc", "portage" )
+    path = os.path.join( getEtcPortageDir() )
     if ( not os.path.isdir( path ) ):
         os.makedirs( path )
     if( os.path.isfile( os.path.join( path, "installed" ) ) ):
@@ -278,17 +281,17 @@ def addInstalled( category, package, version ):
             # FIXME: this is not a good definition of a package entry
             if line.startswith( "%s/%s-" % ( category, package ) ):
                 if not stayQuiet():
-                    print "already installed"
+                    error( "already installed" )
                 return
     f = open( os.path.join( path, "installed" ), "ab" )
     f.write( "%s/%s-%s\r\n" % ( category, package, version ) )
     f.close()
 
 def remInstalled( category, package, version ):
-    if not stayQuiet():
+    if verbose() > 1:
         print "remInstalled called"
-    dbfile = os.path.join( os.getenv( "KDEROOT" ), "etc", "portage", "installed" )
-    tmpdbfile = os.path.join( os.getenv( "KDEROOT" ), "etc", "portage", "TMPinstalled" )
+    dbfile = os.path.join( getEtcPortageDir(), "installed" )
+    tmpdbfile = os.path.join( getEtcPortageDir(), "TMPinstalled" )
     if os.path.exists( dbfile ):
         file = open( dbfile, "rb" )
         tfile = open( tmpdbfile, "wb" )
@@ -301,7 +304,7 @@ def remInstalled( category, package, version ):
         os.rename( tmpdbfile, dbfile )
         
 def getCategoryPackageVersion( path ):
-    if not stayQuiet():
+    if verbose() > 1:
         print "getCategoryPackageVersion:", path
     ( head, file ) = os.path.split( path )
     ( head, package ) = os.path.split( head )
@@ -309,7 +312,7 @@ def getCategoryPackageVersion( path ):
 
     (foo, ext) = os.path.splitext( file )
     ( package, version, foo2 ) = portage_versions.pkgsplit(foo)
-    if not stayQuiet():
+    if verbose() > 1:
         print "category: %s, package: %s, version: %s" %( category, package, version )
     return [ category, package, version ]
 
@@ -317,6 +320,9 @@ def getPortageDir():
 #FIXME: make this configurable
     return os.path.join( os.getenv( "KDEROOT" ), "emerge", "portage" )
 
+def getEtcPortageDir():
+    return os.path.join( os.getenv( "KDEROOT" ), "etc", "portage" )
+    
 def getFilename( category, package, version ):
     file = os.path.join( getPortageDir(), category, package, "%s-%s.py" % ( package, version ) )
     return file
@@ -325,7 +331,7 @@ def getCategory( package ):
     """
     returns the category of this package
     """
-    if not stayQuiet():
+    if verbose() > 1:
         print "getCategory:", package
     basedir = getPortageDir()
 
@@ -336,7 +342,7 @@ def getCategory( package ):
             for pack in os.listdir( catpath ):
                 #print "    package:", pack
                 if ( pack == package ):
-                    if not stayQuiet():
+                    if verbose() > 1:
                         print "found:", cat, pack
                     return cat
 
@@ -345,8 +351,8 @@ def getNewestVersion( category, package ):
     returns the newest version of this category/package
     """
     if( category == None ):
-        print "Could not find package " + package
-        exit( 1 )
+        die("Could not find package %s" % package )
+        
 #    if not stayQuiet():
 #        print "getNewestVersion:", category, package
     packagepath = os.path.join( getPortageDir(), category, package )
@@ -385,7 +391,7 @@ def getDependencies( category, package, version ):
     deplines = []
     inDepend = False
 
-    if verbose():
+    if verbose() > 1:
         print "solving package: %s-%s" % ( package, version )
     # FIXME make this more clever
     for line in lines.splitlines():
@@ -430,13 +436,30 @@ def solveDependencies( category, package, version, deplist ):
     # for every dep call solvedeps
     #return deplist
 
-### helper functions    
+### helper functions 
+def warning( message ):
+    if verbose() > 0:
+        print "emerge warning: %s" % message
+    return True
+
+def error( message ):
+    if verbose() > 0:
+        print "emerge error: %s" % message
+    return False
+    
 def die( message ):
-    print "fatal error: %s" % message
+    print "emerge fatal error: %s" % message
     exit( 1 )
 
+def system( cmdstring ):
+    if verbose() == 0:
+        sys.stderr = file('nul', 'w')
+        sys.stdout = file('nul', 'w')
+    p = subprocess.call( cmdstring, stdout=sys.stdout, stderr=sys.stderr )
+    return p
+    
 def copySrcDirToDestDir( srcdir, destdir ):
-    if not stayQuiet():
+    if verbose() > 1:
         print "copySrcDirToDestDir called. srcdir: %s, destdir: %s" % ( srcdir, destdir )
 
     mysrcdir = srcdir
@@ -458,13 +481,13 @@ def copySrcDirToDestDir( srcdir, destdir ):
                 shutil.copy( os.path.join( root, file ), tmpdir )
                 
 def moveSrcDirToDestDir( srcdir, destdir ):
-    if not stayQuiet():
+    if verbose() > 1:
         print "moveSrcDirToDestDir called. srcdir: %s, destdir: %s" % ( srcdir, destdir )
     shutil.move( srcdir, destdir )
 
 def unmerge( rootdir, package, forced = False ):
     """ delete files according to the manifest files """
-    if not stayQuiet():
+    if verbose() > 1:
         print "unmerge called: %s" % ( package )
         
     if os.path.exists( os.path.join( rootdir, "manifest"  ) ):
@@ -482,30 +505,28 @@ def unmerge( rootdir, package, forced = False ):
                     if os.path.isfile( os.path.join( rootdir, os.path.normcase( a ) ) ):
                         hash = digestFile( os.path.join( rootdir, os.path.normcase( a ) ) )
                         if b == "" or hash == b:
-                            if not stayQuiet():
+                            if verbose() > 0:
                                 print "deleting file %s" % a
                             os.remove( os.path.join( rootdir, os.path.normcase( a ) ) )
                         else:
-                            if not stayQuiet():
-                                print "warning: file %s has different hash: %s %s" % ( os.path.normcase( a ), hash, b )
+                            warning( "file %s has different hash: %s %s, run with option --forced to delete it anyway" % ( os.path.normcase( a ), hash, b ) )
                             if forced:
                                 os.remove( os.path.join( rootdir, os.path.normcase( a ) ) )
                     else:
-                        if not stayQuiet():
-                            print "warning: file %s is not existing" % ( os.path.normcase( a ) )
+                        warning( "file %s is not existing" % ( os.path.normcase( a ) ) )
                 fptr.close()
                 os.remove( os.path.join( rootdir, "manifest", file ) )
     return
     
 def manifestDir( srcdir, imagedir, package, version ):
     """ make the manifest files for an imagedir like the kdewin-packager does """
-    if not stayQuiet():
+    if verbose() > 1:
         print "manifestDir called: %s %s" % ( srcdir, imagedir )
         
     if os.path.exists( os.path.join( imagedir, "manifest"  ) ):
         for file in os.listdir( os.path.join( imagedir, "manifest"  ) ):
             if file.startswith( package ):
-                print "warning: found package %s according to file '%s'." % ( package, file )
+                error( "found package %s according to file '%s'." % ( package, file ) )
                 return
 
     myimagedir = imagedir
@@ -533,7 +554,7 @@ def manifestDir( srcdir, imagedir, package, version ):
             dirType=6
         elif relativeRoot.startswith( "\\doc" ):
             dirType=7
-        elif relativeRoot.startswith( "\\man" ) and not relativeRoot.startswith("\\mani"):
+        elif relativeRoot.startswith( "\\man" ) and not relativeRoot.startswith("\\manifest"):
             dirType=8
         else:
             dirType=1
@@ -605,11 +626,11 @@ def moveEntries( srcdir, destdir ):
     #print "moveEntries:", srcdir, destdir
     for entry in os.listdir( srcdir ):
         #print "rootdir:", root
-        if not stayQuiet():
+        if verbose() > 1:
             print "entry:", entry
         src = os.path.join( srcdir, entry )
         dest = os.path.join( destdir, entry )
-        if not stayQuiet():
+        if verbose() > 1:
             print "src: %s dest: %s" %( src, dest )
         if( os.path.isfile( dest ) ):
           os.remove( dest )
@@ -638,7 +659,7 @@ def fixCmakeImageDir( imagedir, rootdir ):
     so when we want to be able to install imagedir into KDEROOT,
     we have to move things around...
     """
-    if not stayQuiet():
+    if verbose() > 1:
         print "fixImageDir:", imagedir, rootdir
     # imagedir = e:\foo\thirdroot\tmp\dbus-0\image
     # rootdir  = e:\foo\thirdroot
@@ -649,7 +670,7 @@ def fixCmakeImageDir( imagedir, rootdir ):
     if ( rootpath.startswith( "\\" ) ):
         rootpath = rootpath[1:]
     tmp = os.path.join( imagedir, rootpath )
-    if not stayQuiet():
+    if verbose() > 1:
         print "tmp:", tmp
     tmpdir = os.path.join( imagedir, "tMpDiR" )
 
@@ -685,10 +706,10 @@ def sedFile( directory, file, sedcommand ):
     os.rename( file, backup )
 
     command = "type %s | sed %s > %s" % ( backup, sedcommand, file )
-    if not stayQuiet():
+    if verbose() > 1:
         print "sedFile command:", command
 
-    os.system( command ) and die( "utils sedFile failed" )
+    system( command ) and die( "utils sedFile failed" )
 
 def digestFile( filepath ):
     """ md5-digests a file """

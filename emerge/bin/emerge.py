@@ -17,10 +17,11 @@
 
 import sys
 import os
+import utils
 
 def usage():
     print
-    print 'usage: emerge [-f|-p|-q|-v][--fetch|--unpack|--compile|--install|'
+    print 'usage: emerge [-f|-p|-q|-v|--offline][--fetch|--unpack|--compile|--install|'
     print '                            --manifest|--qmerge|--unmerge|--package|'
     print '                            --full-package] packagename'
     print 'emerge.py is a script for easier building.'
@@ -29,7 +30,8 @@ def usage():
     print '-p               pretend to do everything - a dry run'
     print '-q               suppress all output'
     print '-f               force removal of files with unmerge'
-    print '-v               print additional output'
+    print '-v               print additional output (increase the verbosity level)'
+    print '--offline        don\'t try to download anything'
     print '--buildtype=[KdeBuildType] where KdeBuildType is one of the used BuildTypes'
     print '                 This will automatically overrun all buildtype definitions'
     print '                 made in the package\'s .py-file'
@@ -55,22 +57,26 @@ doPretend = False
 stayQuiet = False
 offline = False
 opts = ""
-verbose = 0
 
 if len( sys.argv ) < 2:
     usage()
     exit( 1 )
 
-quiet=os.getenv( "EMERGE_STAYQUIET" )
-if ( quiet == "TRUE" ):
-    stayQuiet = True
+ncopy=os.getenv( "EMERGE_NOCOPY" )
+if ( ncopy == "True" ):
+    nocopy = True
 else:
-    stayQuiet = False
-verbose=os.getenv( "EMERGE_VERBOSE" )
-if verbose == None or not verbose.isdigit():
-    verbose = 0
-    os.environ["EMERGE_VERBOSE"]=""
+    nocopy = False
+
+verb = os.getenv( "EMERGE_VERBOSE" )
+if verb == None or not verb.isdigit():
+    verbose = 1
+    os.environ["EMERGE_VERBOSE"] = str( verbose )
+else:
+    verbose = int( verb )
+    
 opts = list()
+
 for i in sys.argv:
 #    print "got this param: %s" % i
     if ( i == "-p" ):
@@ -80,24 +86,29 @@ for i in sys.argv:
     elif ( i == "--offline" ):
         opts.append( "--offline" )
         offline = True
+        os.environ["EMERGE_OFFLINE"] = "True"
     elif ( i == "-f" ):
         opts.append( "--forced" )
     elif ( i.startswith( "--version=" ) ):
-        print "versioned", i.replace( "--version=", "" )
         srcversion = i.replace( "--version=", "" )
-        opts.append( "--versioned" )
     elif ( i.startswith( "--buildtype=" ) ):
-        print "chosen buildtype: ", i.replace( "--buildtype=", "" )
         os.environ["EMERGE_BUILDTYPE"] = i.replace( "--buildtype=", "" )
     elif ( i == "-v" ):
-        verbose = int(verbose) + 1
-        os.environ["EMERGE_VERBOSE"] = str(verbose)
+        verbose = verbose + 1
+        os.environ["EMERGE_VERBOSE"] = str( verbose )
+    elif ( i == "--nocopy" ):
+        nocopy = True
+        os.environ["EMERGE_NOCOPY"] = str( nocopy )
     elif ( i == "--fetch" ):
         buildaction = "fetch"
     elif ( i == "--unpack" ):
         buildaction = "unpack"
     elif ( i == "--compile" ):
         buildaction = "compile"
+    elif ( i == "--configure" ):
+        buildaction = "configure"
+    elif ( i == "--make" ):
+        buildaction = "make"
     elif ( i == "--install" ):
         buildaction = "install"
     elif ( i == "--qmerge" ):
@@ -116,10 +127,8 @@ for i in sys.argv:
     else:
         packagename = i
 if stayQuiet == True:
-    os.environ["EMERGE_STAYQUIET"]="TRUE"
-else:
-    os.environ["EMERGE_STAYQUIET"]="FALSE"
-import utils
+    verbose = 0
+    os.environ["EMERGE_VERBOSE"]=str( verbose )
 
 # get KDEROOT from env
 KDEROOT = os.getenv( "KDEROOT" )
@@ -128,25 +137,24 @@ if not stayQuiet:
     print "buildaction:", buildaction
     print "doPretend:", doPretend
     print "packagename:", packagename
-    print "buildType:", os.getenv("EMERGE_BUILDTYPE")
+    print "buildType:", os.getenv( "EMERGE_BUILDTYPE" )
     print "KDEROOT:", KDEROOT
     
 if verbose:
-    print "verbose:", os.getenv("EMERGE_VERBOSE")
+    print "verbose:", os.getenv( "EMERGE_VERBOSE" )
     
 
 # adding emerge/bin to find base.py and gnuwin32.py etc.
-os.environ["PYTHONPATH"] = os.getenv("PYTHONPATH") + ";" + os.path.join( os.getcwd(), os.path.dirname( sys.argv[0] ) )
+os.environ["PYTHONPATH"] = os.getenv( "PYTHONPATH" ) + ";" + os.path.join( os.getcwd(), os.path.dirname( sys.argv[0] ) )
 
 def doExec( category, package, version, action, opts ):
-    if not stayQuiet:
+    if utils.verbose() > 2:
         print "emerge doExec called opts:", opts
     file = os.path.join( utils.getPortageDir(), category, package, "%s-%s.py" % \
                          ( package, version ) )
     opts_string = ( "%s " * len(opts) ) % tuple( opts )
     commandstring = "python %s %s %s" % ( file, action, opts_string )
-    print commandstring
-    if not stayQuiet:
+    if utils.verbose() > 1:
         print "file:", file
         print "commandstring", commandstring
     if ( os.system( commandstring ) ):
@@ -154,24 +162,20 @@ def doExec( category, package, version, action, opts ):
     return True
 
 def handlePackage( category, package, version, buildaction, opts ):
-    if not stayQuiet:
+    if utils.verbose() > 1:
         print "emerge handlePackage called:", category, package, version, buildaction
-    success = True
     if ( buildaction == "all" or buildaction == "full-package" ):
-        if ( success ):
-            success = doExec( category, package, version, "fetch", opts )
-        if ( success ):
-            success = doExec( category, package, version, "unpack", opts )       
-        if ( success ):
-            success = doExec( category, package, version, "compile", opts )       
-        if ( success ):
-            success = doExec( category, package, version, "install", opts )       
-        if ( success and buildaction == "all" ):
-            success = doExec( category, package, version, "manifest", opts )
-        if ( success and buildaction == "all" ):
-            success = doExec( category, package, version, "qmerge", opts )
-        if( success and buildaction == "full-package" ):
-            success = doExec( category, package, version, "package", opts )
+        success = doExec( category, package, version, "fetch", opts )
+        success = success and doExec( category, package, version, "unpack", opts )       
+        success = success and doExec( category, package, version, "compile", opts )
+        success = success and doExec( category, package, version, "cleanimage", opts )
+        success = success and doExec( category, package, version, "install", opts )       
+        if ( buildaction == "all" ):
+            success = success and doExec( category, package, version, "manifest", opts )
+        if ( buildaction == "all" ):
+            success = success and doExec( category, package, version, "qmerge", opts )
+        if( buildaction == "full-package" ):
+            success = success and doExec( category, package, version, "package", opts )
 
     elif ( buildaction == "fetch" ):
         success = doExec( category, package, version, "fetch", opts )       
@@ -179,8 +183,13 @@ def handlePackage( category, package, version, buildaction, opts ):
         success = doExec( category, package, version, "unpack", opts )       
     elif ( buildaction == "compile" ):
         success = doExec( category, package, version, "compile", opts )       
+    elif ( buildaction == "configure" ):
+        success = doExec( category, package, version, "configure", opts )       
+    elif ( buildaction == "make" ):
+        success = doExec( category, package, version, "make", opts )       
     elif ( buildaction == "install" ):
-        success = doExec( category, package, version, "install", opts )       
+        success = doExec( category, package, version, "cleanimage", opts )       
+        success = success and doExec( category, package, version, "install", opts )       
     elif ( buildaction == "qmerge" ):
         success = doExec( category, package, version, "qmerge", opts )
     elif ( buildaction == "package" ):
@@ -190,8 +199,7 @@ def handlePackage( category, package, version, buildaction, opts ):
     elif ( buildaction == "unmerge" ):
         success = doExec( category, package, version, "unmerge", opts )
     else:
-        if not stayQuiet:
-            print "could not understand this buildaction: %s" % buildaction
+        utils.error( "could not understand this buildaction: %s" % buildaction )
         success = false
 
     return success
@@ -200,7 +208,7 @@ def handlePackage( category, package, version, buildaction, opts ):
 
 deplist = []
 utils.solveDependencies( "", packagename, "", deplist )
-if verbose:
+if verbose > 2:
     print "deplist:", deplist
 
 deplist.reverse()

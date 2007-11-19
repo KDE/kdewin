@@ -7,7 +7,7 @@ class gnuwin32class(base.baseclass):
     base.baseclass.__init__( self, SRC_URI )
 
   def install( self ):
-    if not self.stayQuiet:
+    if utils.verbose() > 1:
         print "gnuwin32 install called"
     if self.traditional:
         destdir = os.path.join( self.imagedir, "gnuwin32" )

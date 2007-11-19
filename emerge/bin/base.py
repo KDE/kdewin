@@ -31,12 +31,6 @@ if ( not DIRECTORYLAYOUT == "installer" ):
 # an optional dir to compile autmake based sources
 MSYSDIR = os.getenv( "MSYSDIR" )
 
-quiet=os.getenv( "EMERGE_STAYQUIET" )
-if ( quiet == "TRUE" ):
-    stayQuiet = True
-else:
-    stayQuiet = False
-    
 # ok, we have the following dirs:
 # ROOTDIR: the root where all this is below
 # DOWNLOADDIR: the dir under rootdir, where the downloaded files are put into
@@ -45,7 +39,7 @@ else:
 # IMAGEDIR: the directory, under which the compiled files are installed.
 #            here rootdir/tmp/packagename/image
 
-    
+
 class baseclass:
 # methods of baseclass:
 # __init__                   the baseclass constructor
@@ -81,25 +75,30 @@ class baseclass:
     def __init__( self, SRC_URI ):
         """ the baseclass constructor """
         #print "base init called"
-        self.SRC_URI = SRC_URI
-        self.instsrcdir = ""
-        self.instdestdir = ""
-        self.traditional = True
-        self.stayQuiet = True
-        self.forced = False
-        self.versioned = False
-        if not os.getenv( "EMERGE_STAYQUIET" ) == "TRUE":
-            self.stayQuiet = False
+        self.SRC_URI                = SRC_URI
+        self.instsrcdir             = ""
+        self.instdestdir            = ""
+        self.traditional            = True
+        self.noCopy                 = False
+        self.forced                 = False
+        self.versioned              = False
+        self.noFetch                = False
+        self.kdeCustomDefines       = ""
+        self.createCombinedPackage  = False
+        
+        if os.getenv( "EMERGE_OFFLINE" ) == "True":
+            self.noFetch = True
+        if os.getenv( "EMERGE_NOCOPY" ) == "True":
+            self.noCopy = True
         if DIRECTORYLAYOUT == "installer":
             self.traditional = False
 
-        self.kdeCustomDefines = ""
-        self.createCombinedPackage = False
         # Build type for kdeCompile() / kdeInstall() - packages
         # "" -> debug and release
         Type=os.getenv( "EMERGE_BUILDTYPE" )
         if ( not Type == None ):
-            print "BuildType: %s" % Type
+            if utils.verbose() > 1:
+                print "BuildType: %s" % Type
             self.buildType = Type
         else:
             self.buildType = None
@@ -109,17 +108,17 @@ class baseclass:
         elif COMPILER == "mingw":
             self.compiler = "mingw"
         else:
-            print "error: KDECOMPILER: %s not understood" % COMPILER
+            print "emerge error: KDECOMPILER: %s not understood" % COMPILER
             exit( 1 )
 
     def execute( self ):
         """called to run the derived class"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "base exec called. args:", sys.argv
 
         command = sys.argv[ 1 ]
         options = ""
-        if ( len( sys.argv)  > 2 ):
+        if ( len( sys.argv )  > 2 ):
             options = sys.argv[ 2: ]
         self.noFetch = False
         if ( "--offline" in options ):
@@ -128,74 +127,65 @@ class baseclass:
             self.forced = True
         if ( "--versioned" in options ):
             self.versioned = True
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "command:", command
             print "opts:", options
         
         self.setDirectories()
 
         ok = True
-        if command == "fetch":        ok = self.fetch()
+        if command == "fetch":          ok = self.fetch()
+        elif command == "cleanimage":   self.cleanup()
         elif command == "unpack":   ok = self.unpack()
         elif command == "compile":  ok = self.compile()
         elif command == "configure":  ok = self.compile()
         elif command == "make":  ok = self.compile()
-        elif command == "install":
-            # make sure the image dir is clean
-            if ( os.path.exists( self.imagedir ) ):
-                if not self.stayQuiet:
-                    print "cleaning image dir:", self.imagedir
-                utils.cleanDirectory( self.imagedir )
-            ok = self.install()
+        elif command == "install": ok = self.install()
         elif command == "qmerge":   ok = self.qmerge()
         elif command == "unmerge":   ok = self.unmerge()
         elif command == "manifest":   ok = self.manifest()
-        elif command == "merge":
-            ok = self.fetch()
-            if ( ok ):    ok = self.unpack()
-            if ( ok ):    ok = self.compile()
-            if ( os.path.exists( self.imagedir ) ):
-                print "cleaning image dir:", self.imagedir
-                utils.cleanDirectory( self.imagedir )
-            if ( ok ):    ok = self.install()
-            if ( ok ):    ok = self.qmerge()
-            if ( ok ):
-                print "merge success"
         elif command == "digest":   ok = self.digest()
         elif command == "package":  ok = self.make_package()
         else:
-            print "command %s not understood" % command
-            ok = False
+            ok = utils.error( "command %s not understood" % command )
 
         if ( not ok ):
-            print "an error happened"
-            exit( 1 )
+            utils.die( "command %s failed" % command )
 
+
+    def cleanup( self ):
+        """cleanup before install to imagedir"""
+        if ( os.path.exists( self.imagedir ) ):
+            if not utils.verbose() > 1:
+                print "cleaning image dir:", self.imagedir
+            utils.cleanDirectory( self.imagedir )
+    
     def fetch( self ):
         """getting normal tarballs from SRC_URI"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "base fetch called"
         if ( self.noFetch ):
-            print "skipping fetch (--offline)"
+            if utils.verbose() > 0:
+                print "skipping fetch (--offline)"
             return True
         
         return utils.getFiles( self.SRC_URI, self.downloaddir )
 
     def unpack( self ):
         """unpacking all zipped(gz,zip,bz2) tarballs"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "base unpack called, files:", self.filenames
         return utils.unpackFiles( self.downloaddir, self.filenames, self.workdir )
 
     def compile( self ):
         """overload this function according to the packages needs"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "base compile called, doing nothing..."
         return True
 
     def install( self ):
         """installing binary tarballs"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "base install called"
         srcdir = os.path.join( self.workdir, self.instsrcdir )
         destdir = os.path.join( self.imagedir, self.instdestdir )
@@ -204,7 +194,7 @@ class baseclass:
 
     def qmerge( self ):
         """mergeing the imagedirectory into the filesystem"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "base qmerge called"
         utils.mergeImageDirToRootDir( self.imagedir, self.rootdir )
         utils.addInstalled( self.category, self.package, self.version )
@@ -212,7 +202,7 @@ class baseclass:
 
     def unmerge( self ):
         """unmergeing the files from the filesystem"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "base unmerge called"
         utils.unmerge( self.rootdir, self.package, self.forced )
         utils.remInstalled( self.category, self.package, self.version )
@@ -221,20 +211,20 @@ class baseclass:
     def manifest( self ):
         """installer compatibility: make the manifest files that make up the installers"""
         """install database"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "base manifest called"
         utils.manifestDir( os.path.join( self.workdir, self.instsrcdir, self.package ), self.imagedir, self.package, self.version )
         return True
         
     def make_package( self ):
         """overload this function with the package specific packaging instructions"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "currently only supported for some interal packages"
         return True
 
     def setDirectories( self ):
         """setting all important stuff that isn't coped with in the c'tor"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "setdirectories called"
         #print "basename:", sys.argv[ 0 ]
         #print "src_uri", self.SRC_URI
@@ -253,12 +243,12 @@ class baseclass:
                        utils.getCategoryPackageVersion( sys.argv[ 0 ] )
 
         #self.progname = self.package        
-        if not self.stayQuiet:
+        if utils.verbose() > 0:
             print "setdir category: %s, package: %s, version: %s" %\
               ( self.category, self.package, self.version )
 
         self.cmakeInstallPrefix = ROOTDIR.replace( "\\", "/" )
-        if not self.stayQuiet:
+        if utils.verbose() > 0:
             print "cmakeInstallPrefix:", self.cmakeInstallPrefix
 
         if COMPILER == "msvc2005":
@@ -268,16 +258,14 @@ class baseclass:
             self.cmakeMakefileGenerator = "MinGW Makefiles"
             self.cmakeMakeProgramm = "mingw32-make"
         else:
-            print "error: KDECOMPILER: %s not understood" % COMPILER
-            exit( 1 )
+            utils.die( "KDECOMPILER: %s not understood" % COMPILER )
 
         self.rootdir     = ROOTDIR
         self.downloaddir = DOWNLOADDIR
         self.workdir     = os.path.join( ROOTDIR, "tmp", self.PV, "work" )
         self.imagedir    = os.path.join( ROOTDIR, "tmp", self.PV, "image-" + COMPILER )
 
-        self.packagedir = os.path.join( ROOTDIR, "emerge", \
-            "portage", self.category, self.package )
+        self.packagedir = os.path.join( ROOTDIR, "emerge", "portage", self.category, self.package )
         self.filesdir = os.path.join( self.packagedir, "files" )
         self.kdesvndir = KDESVNDIR
         self.kdesvnserver = KDESVNSERVER
@@ -289,11 +277,11 @@ class baseclass:
 
     def svnFetch( self, repo ):
         """getting sources from a custom svn repo"""
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "base svnFetch called"
         self.svndir = os.path.join( self.downloaddir, "svn-src", self.package )
         if ( self.noFetch ):
-            if not self.stayQuiet:
+            if utils.verbose() > 0:
                 print "skipping svn fetch/update (--offline)"
             return True
         
@@ -309,7 +297,7 @@ class baseclass:
 
         if ( os.path.exists( os.path.join( ownpath, codir ) ) \
                              and not doRecursive ):
-            if not self.stayQuiet:
+            if utils.verbose() > 0:
                 print "ksco exists:", ownpath, codir
             return
 
@@ -326,7 +314,7 @@ class baseclass:
             svncmd = "svn checkout %s %s" % \
                      ( recFlag, repourl + codir )
 
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "kdesinglecheckout:pwd ", ownpath
             print "kdesinglecheckout:   ", svncmd
         os.chdir( ownpath )
@@ -336,12 +324,11 @@ class baseclass:
         """svnpath is the part of the repo url after /home/kde, for example"""
         """"trunk/kdesupport/", which leads to the package itself,"""
         """without the package"""
-        if not self.stayQuiet:
-            print "base kdeSvnFetch called. svnpath: %s dir: %s" % \
-                      ( svnpath, packagedir )
+        if utils.verbose() > 1:
+            print "base kdeSvnFetch called. svnpath: %s dir: %s" % ( svnpath, packagedir )
 
         if ( self.noFetch ):
-            if not self.stayQuiet:
+            if utils.verbose() > 0:
                 print "skipping svn fetch/update (--offline)"
             return True
         
@@ -354,7 +341,7 @@ class baseclass:
         for tmpdir in svnpath.split( "/" ):
             if ( tmpdir == "" ):
                     continue
-            if not self.stayQuiet:
+            if utils.verbose() > 1:
                 print "  mydir: %s" % mydir
                 print "  dir to checkout: %s" % tmpdir
                 print "  repourl", repourl
@@ -363,7 +350,7 @@ class baseclass:
             mydir = os.path.join( mydir, tmpdir )
             repourl = repourl + tmpdir + "/"
                 
-            if not self.stayQuiet:
+            if utils.verbose() > 0:
                 print "dir in which to really checkout: %s" % mydir
                 print "dir to really checkout: %s" % packagedir
             self.__kdesinglecheckout( repourl, mydir, packagedir, True )
@@ -371,7 +358,7 @@ class baseclass:
         svndir = os.path.join( self.kdesvndir, svnpath ).replace( "/", "\\" )
         #repo = self.kdesvnserver + "/home/kde/" + svnpath + dir
         #utils.svnFetch( repo, svndir, self.kdesvnuser, self.kdesvnpass )
-        if not self.stayQuiet:
+        if utils.verbose() > 1:
             print "kdesvndir", self.kdesvndir
             print "svndir", svndir
             print "dir", dir
@@ -379,29 +366,41 @@ class baseclass:
         
         return True
 
+    def kdeSvnPath( self ):
+        """overload this function in kde packages to use the nocopy option"""
+        """this function should return the full path seen from /home/KDE/"""
+        return False
+        
     def kdeSvnUnpack( self, svnpath, packagedir ):
         """fetching and copying the sources from svn"""
         self.kdeSvnFetch( svnpath, packagedir )
         
-        if( not os.path.exists( self.workdir ) ):
-            os.makedirs( self. workdir )
-        
-        # now copy the tree to workdir
-        srcdir  = os.path.join( self.kdesvndir, svnpath, packagedir )
-        destdir = os.path.join( self.workdir, packagedir )
-        utils.copySrcDirToDestDir( srcdir, destdir )
+        if not ( self.noCopy and kdeSvnPath() ):
+            if( not os.path.exists( self.workdir ) ):
+                os.makedirs( self.workdir )
+            
+            # now copy the tree to workdir
+            srcdir  = os.path.join( self.kdesvndir, svnpath, packagedir )
+            destdir = os.path.join( self.workdir, packagedir )
+            utils.copySrcDirToDestDir( srcdir, destdir )
         return True
         
     def kdeDefaultDefines( self ):
         """defining the default cmake cmd line"""
         #FIXME: can we define the paths externally???
-        package_path = self.package
+        if utils.verbose() > 1:
+            print "noCopy: %s" % self.noCopy
+            print "kdeSvnPath(): %s" % self.kdeSvnPath().replace("/", "\\")
+        if not ( self.noCopy and self.kdeSvnPath() ) :
+            source_path = "..\\%s" % self.package
+        else:
+            source_path = "%s" % os.path.join(self.kdesvndir, self.kdeSvnPath() ).replace("/", "\\")
         if( not self.instsrcdir == "" ):
-            package_path = self.instsrcdir
+            source_path = self.instsrcdir
 
         if self.traditional:
-            options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s/kde " % \
-                  ( package_path, self.rootdir.replace( "\\", "/" ) )
+            options = "%s -DCMAKE_INSTALL_PREFIX=%s/kde " % \
+                  ( source_path, self.rootdir.replace( "\\", "/" ) )
 
             options = options + "-DCMAKE_INCLUDE_PATH=%s;%s " % \
                     ( os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" ), \
@@ -413,8 +412,8 @@ class baseclass:
                       os.path.join( self.rootdir, "kde", "lib" ).replace( "\\", "/" ) \
                     )
         else:
-            options = "..\\%s -DCMAKE_INSTALL_PREFIX=%s " % \
-                  ( package_path, self.rootdir.replace( "\\", "/" ) )
+            options = "%s -DCMAKE_INSTALL_PREFIX=%s " % \
+                  ( source_path, self.rootdir.replace( "\\", "/" ) )
             
             options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
                     os.path.join( self.rootdir, "include" ).replace( "\\", "/" )
@@ -443,8 +442,8 @@ class baseclass:
                 self.kdeCustomDefines, \
                 buildtype )
 
-        if not self.stayQuiet:
-            print command
+        if utils.verbose() > 0:
+            print "configuration command: %s" % command
         self.system( command )
         return True
 
@@ -459,7 +458,7 @@ class baseclass:
         os.chdir( os.path.join( self.workdir, builddir ) )
         cmd = self.cmakeMakeProgramm
         # adding Targets later
-        if utils.verbose():
+        if utils.verbose() > 1:
             cmd += " VERBOSE=1"
         self.system( cmd )
         return True
@@ -485,7 +484,7 @@ class baseclass:
 
         os.chdir( self.workdir )
         os.chdir( builddir )
-        if not self.stayQuiet:
+        if utils.verbose() > 0:
             print "builddir: " + builddir
 
         self.system( "%s DESTDIR=%s install" % \
@@ -594,11 +593,11 @@ class baseclass:
         cmd = "%s --login -c \"cd %s && %s %s && make -j2" % \
               ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
                 self.msysConfigureFlags() )
-        if utils.verbose():
+        if utils.verbose() > 1:
             cmd += " VERBOSE=1"
         cmd +="\""
-        if not self.stayQuiet:
-            print cmd
+        if utils.verbose() > 0:
+            print "msys compile: %s" % cmd
         self.system( cmd )
         return True
 
@@ -615,8 +614,8 @@ class baseclass:
 
         cmd = "%s --login -c \"cd %s && make -j2 install DESTDIR=%s\"" % \
               ( sh, utils.toMSysPath( build ), utils.toMSysPath( install ) )
-        if not self.stayQuiet:
-            print cmd
+        if utils.verbose() > 0:
+            print "msys install: %s" % cmd
         self.system( cmd )
         return True
 
@@ -624,14 +623,14 @@ class baseclass:
         """this function should be called instead of os.system it will return the errorstatus"""
         """and take the name of a possible command file and the names of stdout and stderr"""
         """logfiles. it should be called  """
-        os.system( command ) and utils.die( "os.system ( %s ) failed" % command )
+        utils.system( command ) and utils.die( "os.system ( %s ) failed" % command )
         return True
 
 # ############################################################################################
 # for testing purpose only:
 # ############################################################################################
 if '__main__' in globals().keys():
-    if not stayQuiet:    
+    if utils.verbose() > 0:    
         print "KDEROOT:     ", ROOTDIR
         print "KDECOMPILER: ", COMPILER
         print "DOWNLOADDIR: ", DOWNLOADDIR
