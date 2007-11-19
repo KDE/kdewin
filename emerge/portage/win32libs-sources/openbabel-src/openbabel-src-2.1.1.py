@@ -29,57 +29,26 @@ class subclass(base.baseclass):
         self.instsrcdir = PACKAGE_FULL_NAME
         self.createCombinedPackage = True
 
-    def execute( self ):
-        base.baseclass.execute( self )
-        if self.compiler <> "mingw":
-            print "error: can only be build with MinGW ."
-            exit( 1 )
-
     def unpack( self ):
         if( not base.baseclass.unpack( self ) ):
             return False
             
         src = os.path.join( self.workdir, self.instsrcdir )
 
-        cmd = "cd %s && patch -p0 < %s" % \
-              ( os.path.join( self.workdir, self.instsrcdir, "src" ), os.path.join( self.packagedir , "src.Makefile.in.diff" ) )
-        if not self.stayQuiet:
+        os.chdir( self.workdir )
+        cmd = "patch -p0 < %s" % \
+              ( os.path.join( self.packagedir , "openbabel-2.1.1-cmake.diff" ) )
+        if utils.verbose() > 0:
             print cmd
-        os.system( cmd ) or die
-        cmd = "cd %s && patch -p0 < %s" % \
-              ( os.path.join( self.workdir, self.instsrcdir, "src" ), os.path.join( self.packagedir , "src.config.h.in.diff" ) )
-        if not self.stayQuiet:
-            print cmd
-        os.system( cmd ) or die
-        cmd = "cd %s && patch -p0 < %s" % \
-              ( os.path.join( self.workdir, self.instsrcdir, "include", "openbabel" ), os.path.join( self.packagedir , "include.openbabel.obmolecformat.h.diff" ) )
-        if not self.stayQuiet:
-            print cmd
-        os.system( cmd ) or die
-        cmd = "cd %s && patch -p0 < %s" % \
-              ( os.path.join( self.workdir, self.instsrcdir, "tools" ), os.path.join( self.packagedir , "tools.Makefile.in.diff" ) )
-        if not self.stayQuiet:
-            print cmd
-        os.system( cmd ) or die
-        cmd = "cd %s && patch -p0 < %s" % \
-              ( os.path.join( self.workdir, self.instsrcdir, "tools" ), os.path.join( self.packagedir , "tools.babel.cpp.diff" ) )
-        if not self.stayQuiet:
-            print cmd
-        os.system( cmd ) or die
+        utils.system( cmd ) or die( "patchin'" )
         
         return True
 
-    def msysConfigureFlags ( self ):
-        flags = "--prefix=/ "
-        flags += "--with-zlib=" + utils.toMSysPath( self.rootdir ) + " "
-        flags += "CPPFLAGS=\"-I" + utils.toMSysPath( os.path.join( self.workdir, self.instsrcdir, "data" ) ) + "\" "
-        return flags
-
     def compile( self ):
-        return self.msysCompile()
+        return self.kdeCompile()
 
     def install( self ):
-        return self.msysInstall()
+        return self.kdeInstall()
 
     def make_package( self ):
         # now do packaging with kdewin-packager
