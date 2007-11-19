@@ -61,14 +61,14 @@ rem uncomment the next line will result in different build behaviour.
 rem set EMERGE_BUILDTYPE=RelWithDebInfo
 
 
-rem If you don't want to have the output of emerge use the next setting
-rem be aware that there is no way to override this setting at the commandline
-rem possible states: TRUE or FALSE
-rem set EMERGE_STAYQUIET=FALSE
-
 rem If you want to have verbose output uncomment the following option and set it to any positive integer
 rem for verbose output and to 0 or disable it for normal output
 rem set EMERGE_VERBOSE=0
+
+rem If you want to have shorter build times, and less disk usage, enable the next option
+rem for all kde svn based stuff it will not copy the svn sources again
+rem problem is that you cannot make packages when this option is set
+rem set EMERGE_NOCOPY=True
 
 rem No editing should be necessary below this line (in an ideal world)
 rem ##################################################################

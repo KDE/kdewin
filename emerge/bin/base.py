@@ -375,7 +375,7 @@ class baseclass:
         """fetching and copying the sources from svn"""
         self.kdeSvnFetch( svnpath, packagedir )
         
-        if not ( self.noCopy and kdeSvnPath() ):
+        if not ( self.noCopy and self.kdeSvnPath() ):
             if( not os.path.exists( self.workdir ) ):
                 os.makedirs( self.workdir )
             
