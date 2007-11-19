@@ -630,7 +630,7 @@ class baseclass:
         """this function should be called instead of os.system it will return the errorstatus"""
         """and take the name of a possible command file and the names of stdout and stderr"""
         """logfiles. it should be called  """
-        utils.system( command ) and utils.die( "os.system ( %s ) failed" % command )
+        utils.system( command ) or utils.die( "os.system ( %s ) failed" % command )
         return True
 
 # ############################################################################################

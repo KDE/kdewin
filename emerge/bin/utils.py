@@ -455,9 +455,9 @@ def system( cmdstring ):
     if verbose() == 0:
         sys.stderr = file('test.outlog', 'wb')
         sys.stdout = sys.stderr
-    p = subprocess.call( cmdstring, shell=True, stdout=sys.stdout, stderr=sys.stderr )
-    print p
-    return p
+    p = subprocess.Popen( cmdstring, shell=True, stdout=sys.stdout, stderr=sys.stderr )
+    ret = p.wait()
+    return ( ret == 0 )
     
 def copySrcDirToDestDir( srcdir, destdir ):
     if verbose() > 1:
@@ -710,7 +710,7 @@ def sedFile( directory, file, sedcommand ):
     if verbose() > 1:
         print "sedFile command:", command
 
-    system( command ) and die( "utils sedFile failed" )
+    system( command ) or die( "utils sedFile failed" )
 
 def digestFile( filepath ):
     """ md5-digests a file """

@@ -157,7 +157,7 @@ def doExec( category, package, version, action, opts ):
     if utils.verbose() > 1:
         print "file:", file
         print "commandstring", commandstring
-    utils.system( commandstring )
+    utils.system( commandstring ) or utils.die( "running %s" % commandstring )
     return True
 
 def handlePackage( category, package, version, buildaction, opts ):
