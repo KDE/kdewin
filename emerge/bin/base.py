@@ -382,9 +382,8 @@ class baseclass:
                 utils.die( "no svn repository information are available" )
         self.kdeSvnFetch( svnpath, packagedir )
         
-        if not ( self.noCopy and self.kdeSvnPath() ):
-            if( not os.path.exists( self.workdir ) ):
-                os.makedirs( self.workdir )
+        if( not os.path.exists( self.workdir ) ):
+            os.makedirs( self.workdir )
             
             # now copy the tree to workdir
             srcdir  = os.path.join( self.kdesvndir, svnpath, packagedir )
