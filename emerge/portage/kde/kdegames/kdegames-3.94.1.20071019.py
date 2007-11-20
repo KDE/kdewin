@@ -15,16 +15,6 @@ class subclass(base.baseclass):
         
     def unpack( self ):
         self.kdeSvnUnpack()
-        
-        # for now disable libksirtet and ksirtet, they do not compile under mingw
-        
-        sed = r"""-e "s/add_subdirectory(libksirtet)/#add_subdirectory(libksirtet)/" """ \
-              r"""-e "s/macro_optional_add_subdirectory(ksirtet)/#no ksirtet/" """ \
-              r"""-e "s/macro_optional_add_subdirectory(kblackbox)/#no kblackbox/" """
-    	  
-        utils.sedFile( os.path.join( self.workdir, self.package ),
-    	"CMakeLists.txt", sed )
-        
         return True
 
     def compile( self ):
