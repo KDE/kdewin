@@ -8,6 +8,7 @@ libs/qt
 class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "qimageblitz"
 
     def kdeSvnPath( self ):
         return "trunk/kdesupport/qimageblitz"
@@ -24,7 +25,6 @@ class subclass(base.baseclass):
     def make_package( self ):
         if self.traditional:
             self.instdestdir = "kde"
-            self.instsrcdir = "qimageblitz"
         return self.doPackaging( "qimageblitz", "4.0.0-3", True )
 
 subclass().execute()

@@ -12,6 +12,7 @@ class subclass(base.baseclass):
         base.baseclass.__init__( self, "" )
         # header-only package
         self.createCombinedPackage = True
+        self.instsrcdir = "gmm"
 
     def kdeSvnPath( self ):
         return "trunk/kdesupport/gmm"
@@ -29,7 +30,6 @@ class subclass(base.baseclass):
         # FIXME?
         if self.traditional:
             self.instdestdir = "kde"
-            self.instsrcdir = "gmm"
         return self.doPackaging( "gmm", "20071019", True )
 
 subclass().execute()

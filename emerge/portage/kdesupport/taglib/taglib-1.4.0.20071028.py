@@ -7,6 +7,7 @@ dev-util/win32libs
 class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "taglib"
 
     def kdeSvnPath( self ):
         return "trunk/kdesupport/taglib"
@@ -23,7 +24,6 @@ class subclass(base.baseclass):
     def make_package( self ):
         if self.traditional:
             self.instdestdir = "kde"
-            self.instsrcdir = "taglib"
         return self.doPackaging( "taglib", "1.4.0-3", True )
 
 subclass().execute()

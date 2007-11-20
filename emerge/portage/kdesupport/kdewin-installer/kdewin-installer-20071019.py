@@ -11,6 +11,7 @@ libs/qt
 class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "kdewin-installer"
 
     def kdeSvnPath( self ):
         return "trunk/kdesupport/kdewin-installer"
@@ -27,7 +28,6 @@ class subclass(base.baseclass):
     def make_package( self ):
         if self.traditional:
             self.instdestdir = "kde"
-            self.instsrcdir = "kdewin-installer"
         return self.doPackaging( "kdewin-installer", "20071019", True )
 
 subclass().execute()

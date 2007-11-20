@@ -12,6 +12,7 @@ class subclass(base.baseclass):
         base.baseclass.__init__( self, "" )
         # header-only package
         self.createCombinedPackage = True
+        self.instsrcdir = "eigen"
 
     def kdeSvnPath( self ):
         return "trunk/kdesupport/eigen"
@@ -28,7 +29,6 @@ class subclass(base.baseclass):
     def make_package( self ):
         if self.traditional:
             self.instdestdir = "kde"
-            self.instsrcdir = "eigen"
         return self.doPackaging( "eigen", "20071019", True )
 
 subclass().execute()
