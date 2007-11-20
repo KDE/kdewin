@@ -11,6 +11,7 @@ kdesupport/clucene-core
 
 class subclass(base.baseclass):
     def __init__(self):
+        self.instsrcdir = "strigi"
         base.baseclass.__init__( self, "" )
 
     def kdeSvnPath( self ):
@@ -28,7 +29,6 @@ class subclass(base.baseclass):
     def make_package( self ):
         if self.traditional:
             self.instdestdir = "kde"
-            self.instsrcdir = "strigi"
         return self.doPackaging( "strigi", "0.5.7-1", True )
 
 subclass().execute()
