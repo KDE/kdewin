@@ -11,8 +11,8 @@ kdesupport/clucene-core
 
 class subclass(base.baseclass):
     def __init__(self):
-        self.instsrcdir = "strigi"
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "strigi"
 
     def kdeSvnPath( self ):
         return "trunk/kdesupport/strigi"
