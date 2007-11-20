@@ -90,10 +90,7 @@ def wgetFile( url, destdir ):
     ret = system( command )
     if verbose() > 0:
         print "wget ret:", ret
-    if ( ret == 0 ):
-        return True
-    else:
-        return False
+    return ret
     
 def getFtpFile( host, path, destdir, filename ):
     # FIXME check return values here (implement useful error handling)...
