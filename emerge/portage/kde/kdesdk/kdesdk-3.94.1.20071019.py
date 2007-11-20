@@ -9,7 +9,11 @@ kde/kdelibs
 class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "kdesdk"
 
+    def kdeSvnPath( self ):
+        return "trunk/KDE/kdesdk"
+        
     def unpack( self ):
         return self.kdeSvnUnpack()
 
