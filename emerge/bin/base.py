@@ -385,6 +385,7 @@ class baseclass:
         if( not os.path.exists( self.workdir ) ):
             os.makedirs( self.workdir )
             
+        if not ( self.noCopy and self.kdeSvnPath() ):
             # now copy the tree to workdir
             srcdir  = os.path.join( self.kdesvndir, svnpath, packagedir )
             destdir = os.path.join( self.workdir, packagedir )
