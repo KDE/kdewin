@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <arpa/inet.h>
 #include <ws2tcpip.h>
+#include <windows.h>
 
 #ifdef __MINGW32__
 #define U_WORD(a,i) (a)->_S6_un._S6_u16[i]
@@ -39,9 +40,31 @@ static int fromHex(const char c)
 	return ret;
 }
 
-#if (NTDDI_VERSION < 0x06000000)
-const char *inet_ntop(int af, const void *src, char *dst, size_t cnt)
+typedef const char* (wsock_inet_ntop) (int af, const void *src, char *dst, size_t cnt);
+typedef int (wsock_inet_pton) (int af, const char * src, void * dst);
+static wsock_inet_ntop *s_wsock_inet_ntop = NULL;
+static wsock_inet_pton *s_wsock_inet_pton = NULL;
+static int s_wsock_initialized = 0;
+
+static void InitializeWinSock()
 {
+    HANDLE hMod;
+
+    if(s_wsock_initialized)
+        return;
+    s_wsock_initialized = 1;
+    hMod = LoadLibraryW(L"ws2_32.dll");
+    if(hMod) {
+        s_wsock_inet_ntop = (void*)GetProcAddress(hMod, "inet_ntop");
+        s_wsock_inet_pton = (void*)GetProcAddress(hMod, "inet_pton");
+    }
+}
+
+const char *kde_inet_ntop(int af, const void *src, char *dst, size_t cnt)
+{
+    InitializeWinSock();
+    if(s_wsock_inet_ntop)
+        return s_wsock_inet_ntop(af, src, dst, cnt);
 	switch (af) {
 	    case AF_INET: {
 			const struct in_addr *in = src;
@@ -83,8 +106,11 @@ const char *inet_ntop(int af, const void *src, char *dst, size_t cnt)
 	return NULL;
 }
 
-int inet_pton(int af, const char * src, void * dst)
+int kde_inet_pton(int af, const char * src, void * dst)
 {
+    InitializeWinSock();
+    if(s_wsock_inet_pton)
+        return s_wsock_inet_pton(af, src, dst);
 	switch (af) {
 	    case AF_INET: {
 			struct in_addr *in = dst;
@@ -120,7 +146,6 @@ int inet_pton(int af, const char * src, void * dst)
 	_set_errno( EAFNOSUPPORT );
 	return -1;
 }
-#endif // (NTDDI_VERSION < 0x06000000)
 
 KDEWIN32_EXPORT
 int inet_aton(const char *src, struct in_addr *addr)
