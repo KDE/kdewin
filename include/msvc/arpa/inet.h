@@ -24,6 +24,9 @@
 
 #include <netinet/in.h>
 
+// include to ensure we define inet_ntop/pton after PSDK declarations if present
+#include <ws2tcpip.h> 
+
 #ifdef __cplusplus
 extern "C"
 {

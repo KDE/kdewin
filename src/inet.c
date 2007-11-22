@@ -23,7 +23,6 @@
 #include <errno.h>
 #include <stdio.h>
 #include <arpa/inet.h>
-#include <ws2tcpip.h>
 #include <windows.h>
 
 #ifdef __MINGW32__
@@ -40,8 +39,9 @@ static int fromHex(const char c)
 	return ret;
 }
 
-typedef const char* (wsock_inet_ntop) (int af, const void *src, char *dst, size_t cnt);
+typedef const char* (wsock_inet_ntop) (int af, void *src, char *dst, size_t cnt);
 typedef int (wsock_inet_pton) (int af, const char * src, void * dst);
+
 static wsock_inet_ntop *s_wsock_inet_ntop = NULL;
 static wsock_inet_pton *s_wsock_inet_pton = NULL;
 static int s_wsock_initialized = 0;
@@ -64,7 +64,7 @@ const char *kde_inet_ntop(int af, const void *src, char *dst, size_t cnt)
 {
     InitializeWinSock();
     if(s_wsock_inet_ntop)
-        return s_wsock_inet_ntop(af, src, dst, cnt);
+        return s_wsock_inet_ntop(af, (void*)src, dst, cnt);
 	switch (af) {
 	    case AF_INET: {
 			const struct in_addr *in = src;
