@@ -22,6 +22,7 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include <ws2tcpip.h> 
 #include <arpa/inet.h>
 #include <windows.h>
 
