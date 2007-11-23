@@ -87,6 +87,7 @@ if(MSVC)
       src/math/erfl.c
       src/math/s_erf.c
       src/math/sf_erf.c
+      src/math/e_remainder.c
   )
 endif(MSVC)
 

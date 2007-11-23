@@ -58,6 +58,8 @@ KDEWIN32_EXPORT __inline int isinf(double num) { return !_finite(num) && !_isnan
 KDEWIN32_EXPORT __inline int finite(double num) { return _finite(num); }
 KDEWIN32_EXPORT __inline int signbit(double num) { return _copysign(1.0, num) < 0; }
 
+WINPOSIX_EXPORT double remainder(double x, double y);
+
 // some functions which aren't available with msvc
 
 /* 7.12.4 Trigonometric functions: Double in C89 */
