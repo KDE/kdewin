@@ -6,8 +6,8 @@ import utils
 from utils import die
 
 PACKAGE_NAME         = "libnova"
-PACKAGE_VER          = "1.12.1"
-PACKAGE_FULL_VER     = "1.12.1"
+PACKAGE_VER          = "0.12.1"
+PACKAGE_FULL_VER     = "0.12.1"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_FULL_VER )
 
 SRC_URI= """
