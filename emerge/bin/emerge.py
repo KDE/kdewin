@@ -133,7 +133,7 @@ if stayQuiet == True:
 # get KDEROOT from env
 KDEROOT = os.getenv( "KDEROOT" )
 
-if not stayQuiet:
+if utils.verbose() >= 1:
     print "buildaction:", buildaction
     print "doPretend:", doPretend
     print "packagename:", packagename

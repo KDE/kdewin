@@ -40,7 +40,7 @@ class subclass(base.baseclass):
         """"""
         cmd = "cd %s && bjam --toolset=%s --prefix=%s --with-python --layout=system" % ( os.path.join( self.workdir, self.instsrcdir ),
         self.toolset, os.path.join( self.workdir, self.imagedir ))
-        if not self.stayQuiet:
+        if utils.verbose() >= 1:
             print cmd
         os.system( cmd ) and die( "compile failed because of this cobbled stuff: %s" % ( cmd ) )
         return True
@@ -49,7 +49,7 @@ class subclass(base.baseclass):
         """"""
         cmd = "cd %s && bjam --toolset=%s --prefix=%s --with-python --layout=system install" % ( os.path.join( self.workdir, self.instsrcdir ),
         self.toolset, os.path.join( self.workdir, self.imagedir ))
-        if not self.stayQuiet:
+        if utils.verbose() >= 1:
             print cmd
         os.system( cmd ) and die( "compile failed because of this cobbled stuff: %s" % ( cmd ) )
 
@@ -65,7 +65,7 @@ class subclass(base.baseclass):
         
         # copy runtime libraries to the bin folder
         cmd = "cd %s && mkdir bin && copy lib\\*.dll bin" % ( os.path.join( self.workdir, self.imagedir ) )
-        if not self.stayQuiet:
+        if utils.verbose() >= 1:
             print cmd
         os.system( cmd ) and die( "compile failed because of this cobbled stuff: %s" % ( cmd ) )
         return True

@@ -44,13 +44,13 @@ class subclass(base.baseclass):
 
         cmd = "cd %s && patch -p0 < %s" % \
               ( os.path.join( self.workdir, self.instsrcdir ), os.path.join( self.packagedir , "configure.diff" ) )
-        if not self.stayQuiet:
+        if utils.verbose() >= 1:
             print cmd
         os.system( cmd ) or die
 
         cmd = "cd %s && patch -p0 < %s" % \
               ( os.path.join( self.workdir, self.instsrcdir ), os.path.join( self.packagedir , "Makefile.in.diff" ) )
-        if not self.stayQuiet:
+        if utils.verbose() >= 1:
             print cmd
         os.system( cmd ) or die
         

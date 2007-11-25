@@ -43,7 +43,7 @@ class subclass(base.baseclass):
 
         cmd = "cd %s && patch -p0 < %s" % \
               ( self.workdir, os.path.join( self.packagedir , "libnova.diff" ) )
-        if not self.stayQuiet:
+        if utils.verbose() >= 1:
             print cmd
         os.system( cmd ) or die
 

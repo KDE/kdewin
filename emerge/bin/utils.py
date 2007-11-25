@@ -22,13 +22,6 @@ if (os.getenv( "directory_layout" ) == "installer" ):
 else:
     WGetExecutable = os.path.join( os.getenv( "KDEROOT" ), "gnuwin32", "bin", "wget.exe" )
 
-def stayQuiet():
-    quiet=os.getenv( "EMERGE_STAYQUIET" )
-    if ( quiet == "TRUE" ):
-        return True
-    else:
-        return False
-
 def verbose():
     verb=os.getenv( "EMERGE_VERBOSE" )
     if ( not verb == None and verb.isdigit() and int(verb) > 0 ):
@@ -277,8 +270,7 @@ def addInstalled( category, package, version ):
         for line in f:
             # FIXME: this is not a good definition of a package entry
             if line.startswith( "%s/%s-" % ( category, package ) ):
-                if not stayQuiet():
-                    error( "already installed" )
+                error( "already installed" )
                 return
     f = open( os.path.join( path, "installed" ), "ab" )
     f.write( "%s/%s-%s\r\n" % ( category, package, version ) )
@@ -350,7 +342,7 @@ def getNewestVersion( category, package ):
     if( category == None ):
         die("Could not find package %s" % package )
         
-#    if not stayQuiet():
+#    if utils.verbose() >= 1:
 #        print "getNewestVersion:", category, package
     packagepath = os.path.join( getPortageDir(), category, package )
 
@@ -399,7 +391,7 @@ def getDependencies( category, package, version ):
         if ( line.startswith( "DEPEND" ) ):
             inDepend = True
 
-#    if not stayQuiet() and len( deplines ) > 0:
+#    if utils.verbose() >= 1 and len( deplines ) > 0:
 #        print "deplines:", deplines
 
     deps = []
@@ -424,7 +416,7 @@ def solveDependencies( category, package, version, deplist ):
     deplist.append( [ category, package, version ] )
 
     mydeps = getDependencies( category, package, version )
-#    if not stayQuiet():
+#    if utils.verbose() >= 1:
 #        print "mydeps:", mydeps
     for dep in mydeps:
         solveDependencies( dep[0], dep[1], dep[2], deplist )
@@ -580,7 +572,7 @@ def manifestDir( srcdir, imagedir, package, version ):
         libmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-lib.mft" % ( package, version )), 'wb' )
     if len(docList) > 0:
         docmanifest = open( os.path.join( imagedir, "manifest", "%s-%s-doc.mft" % ( package, version )), 'wb' )
-#    if not stayQuiet():
+#    if utils.verbose() >= 1:
 #        print "bin: ", binList
 #        print "lib: ", libList
 #        print "doc: ", docList

@@ -34,7 +34,7 @@ class subclass(base.baseclass):
 
         cmd = "cd %s && patch -p0 < %s" % \
               ( self.workdir, os.path.join( self.packagedir , "poppler-cmake.patch" ) )
-        if not self.stayQuiet:
+        if utils.verbose() >= 1:
             print cmd
         self.system( cmd ) or die( "patch" )
 
