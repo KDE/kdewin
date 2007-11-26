@@ -1,7 +1,6 @@
 import base
 import os
 import shutil
-import re
 import utils
 from utils import die
 
@@ -46,11 +45,18 @@ class subclass(base.baseclass):
         if utils.verbose() >= 1:
             print cmd
         os.system( cmd ) or die
-
+        shutil.move( os.path.join( self.workdir, PACKAGE_FULL_NAME ), os.path.join( self.workdir, PACKAGE_NAME ) )
         return True
 
     def msysConfigureFlags ( self ):
-        flags = "--prefix=/ -I"
+        if self.traditional:
+            kdewin_include_path = utils.toMSysPath( os.path.join( self.rootdir, "kde", "include" ) )
+            kdewin_lib_path = utils.toMSysPath( os.path.join( self.rootdir, "kde", "lib" ) )
+        else:
+            kdewin_include_path = utils.toMSysPath( os.path.join( self.rootdir, "include" ) )
+            kdewin_lib_path = utils.toMSysPath( os.path.join( self.rootdir, "lib" ) )
+        
+        flags = "--prefix=/ CFLAGS=-I" + kdewin_include_path + " LDFLAGS=-L" + kdewin_lib_path + "\\ -lkdewin32"
         return flags
 
     def compile( self ):
