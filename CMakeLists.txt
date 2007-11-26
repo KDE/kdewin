@@ -44,6 +44,7 @@ endif(MINGW)
 file(GLOB _win_headers     include/*.h)
 file(GLOB _arpa_headers    include/${_incDirPrefix}/arpa/*.h)
 file(GLOB _asm_headers     include/${_incDirPrefix}/asm/*.h)
+file(GLOB _gl_headers      include/${_incDirPrefix}/GL/*.h)
 file(GLOB _net_headers     include/${_incDirPrefix}/net/*.h)
 file(GLOB _netinet_headers include/${_incDirPrefix}/netinet/*.h)
 file(GLOB _sys_headers     include/${_incDirPrefix}/sys/*.h)
@@ -95,6 +96,7 @@ set(CMAKE_DEBUG_POSTFIX "d")
 add_library(kdewin32 SHARED ${win_LIB_SRCS}
                             ${_arpa_headers}
                             ${_asm_headers}
+							${_gl_headers}
                             ${_machine_headers}
                             ${_netinet_headers}
                             ${_net_headers}
@@ -121,6 +123,7 @@ install_targets(/lib kdewin32 )
 
 install_files(/include/${_incDirPrefix}/arpa FILES ${_arpa_headers} )
 install_files(/include/${_incDirPrefix}/asm FILES ${_asm_headers} )
+install_files(/include/${_incDirPrefix}/GL FILES ${_gl_headers} )
 install_files(/include/${_incDirPrefix}/machine FILES ${_machine_headers} )
 install_files(/include/${_incDirPrefix}/netinet FILES ${_netinet_headers} )
 install_files(/include/${_incDirPrefix}/net FILES ${_net_headers} )
