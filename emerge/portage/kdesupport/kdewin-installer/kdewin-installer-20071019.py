@@ -2,6 +2,7 @@ import base
 import utils
 from utils import die
 import os
+import sys
 
 DEPEND = """
 virtual/base

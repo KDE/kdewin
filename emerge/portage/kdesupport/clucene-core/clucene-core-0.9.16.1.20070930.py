@@ -2,6 +2,7 @@ import base
 import utils
 import shutil
 import os
+import sys
 
 SRC_URI= """
 http://garr.dl.sourceforge.net/sourceforge/clucene/clucene-core-0.9.16a.tar.bz2

@@ -1,4 +1,6 @@
 import base
+import os
+import sys
 
 DEPEND = """
 virtual/base
