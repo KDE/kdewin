@@ -30,4 +30,4 @@ set PATH=%KDEROOT%\lib;%PATH%
 @rem to find FindKDEInternal.cmake from kdepimlibs etc...
 set KDEDIRS=%KDEROOT%\kde
 
-cmd /K "cd %KDEROOT%"
+cmd /K /e:on "cd %KDEROOT%"
