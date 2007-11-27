@@ -25,6 +25,8 @@ class subclass(base.baseclass):
     def make_package( self ):
         if self.traditional:
             self.instdestdir = "kde"
-        return self.doPackaging( "qca", "2.0.0-4", True )
+            return self.doPackaging( "qca", "2.0.0-4", True )
+        else:
+            return self.doPackaging( "qca", os.path.basename(sys.argv[0]).replace("qca-", "").replace(".py", ""), True )
 
 subclass().execute()

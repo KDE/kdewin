@@ -29,6 +29,8 @@ class subclass(base.baseclass):
     def make_package( self ):
         if self.traditional:
             self.instdestdir = "kde"
-        return self.doPackaging( "strigi", "0.5.7-1", True )
+            return self.doPackaging( "strigi", "0.5.7-1", True )
+        else:
+            return self.doPackaging( "strigi", os.path.basename(sys.argv[0]).replace("strigi-", "").replace(".py", ""), True )
 
 subclass().execute()

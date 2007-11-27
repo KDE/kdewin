@@ -29,6 +29,6 @@ class subclass(base.baseclass):
     def make_package( self ):
         if self.traditional:
             self.instdestdir = "kde"
-        return self.doPackaging( "eigen", "20071019", True )
+        return self.doPackaging( "eigen", os.path.basename(sys.argv[0]).replace("eigen-", "").replace(".py", ""), True )        
 
 subclass().execute()

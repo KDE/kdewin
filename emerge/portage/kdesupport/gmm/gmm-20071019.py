@@ -30,6 +30,6 @@ class subclass(base.baseclass):
         # FIXME?
         if self.traditional:
             self.instdestdir = "kde"
-        return self.doPackaging( "gmm", "20071019", True )
+        return self.doPackaging( "gmm", os.path.basename(sys.argv[0]).replace("gmm-", "").replace(".py", ""), True )        
 
 subclass().execute()
