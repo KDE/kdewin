@@ -165,6 +165,7 @@ int inet_aton(const char *src, struct in_addr *addr)
 	return 1;
 }
 
+#if __MINGW32__ || (NTDDI_VERSION < NTDDI_LONGHORN)
 // backward compatibility functions to prevent symbol not found runtime errors with older kde releases
 #undef kde_inet_pton
 #undef inet_pton
@@ -179,3 +180,4 @@ KDEWIN32_EXPORT const char *inet_ntop(int af, const void *src, char *dst, size_t
 {
     return kde_inet_ntop(af, src, dst, cnt);
 }
+#endif
