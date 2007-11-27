@@ -45,7 +45,7 @@ class subclass(base.baseclass):
         self.instsrcdir = "clucene"
         return self.doPackaging( "clucene", "0.9.16a-1", True )
     else:
-        self.instsrcdir = "clucene-core"
+        self.instsrcdir = "clucene-core-0.9.16a"
         return self.doPackaging( "clucene-core", os.path.basename(sys.argv[0]).replace("clucene-core-", "").replace(".py", ""), True )
     
 
