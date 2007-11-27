@@ -22,6 +22,9 @@
 
 #include <errno.h>
 #include <stdio.h>
+#ifdef _MSC_VER
+#include <winsock2.h> 
+#endif
 #include <ws2tcpip.h> 
 #include <arpa/inet.h>
 #include <windows.h>
@@ -160,4 +163,19 @@ int inet_aton(const char *src, struct in_addr *addr)
 	}	
 	addr->s_addr = ret;
 	return 1;
+}
+
+// backward compatibility functions to prevent symbol not found runtime errors with older kde releases
+#undef kde_inet_pton
+#undef inet_pton
+KDEWIN32_EXPORT int inet_pton(int af, const char * src, void * dst)
+{
+    return kde_inet_pton(af,src,dst);
+}
+
+#undef kde_inet_ntop
+#undef inet_ntop
+KDEWIN32_EXPORT const char *inet_ntop(int af, const void *src, char *dst, size_t cnt)
+{
+    return kde_inet_ntop(af, src, dst, cnt);
 }
