@@ -1,33 +1,32 @@
 import base
 import utils
 import os
+import sys
 
 DEPEND = """
-kde/kdelibs
+kde/kdebase
 """
 
 class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "kdegraphics"
+        if self.traditional:
+            self.instdestdir = "kde"
 
     def kdeSvnPath( self ):
-        return "trunk/KDE/kdepimlibs"
-        
+        return "trunk/KDE/kdegraphics"
+
     def unpack( self ):
         return self.kdeSvnUnpack()
 
     def compile( self ):
-        # add env var so that boost headers are found
-        path = os.path.join( self.rootdir, "win32libs" )
-        os.putenv( "BOOST_ROOT", path )
-
         return self.kdeCompile()
 
     def install( self ):
         return self.kdeInstall()
 
     def make_package( self ):
-        return self.doPackaging( "kdepimlibs", "3.94-1", True )
-
+        return self.doPackaging( "kdegraphics", os.path.basename(sys.argv[0]).replace("kdegraphics-", "").replace(".py", ""), True )
 
 subclass().execute()

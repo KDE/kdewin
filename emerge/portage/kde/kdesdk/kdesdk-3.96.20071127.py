@@ -1,9 +1,10 @@
 import base
 import utils
 import os
+import sys
 
 DEPEND = """
-kde/kdelibs
+kde/kdebase
 """
 
 class subclass(base.baseclass):
@@ -24,6 +25,6 @@ class subclass(base.baseclass):
         return self.kdeInstall()
 
     def make_package( self ):
-        return self.doPackaging( "kdesdk", "3.94-1", True )
+        return self.doPackaging( "kdesdk", os.path.basename(sys.argv[0]).replace("kdesdk-", "").replace(".py", ""), True )
 
 subclass().execute()

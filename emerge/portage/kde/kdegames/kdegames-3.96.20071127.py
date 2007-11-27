@@ -1,29 +1,31 @@
 import base
+import utils
+import os
+import sys
 
 DEPEND = """
-kde/kdelibs
-kde/kdepimlibs
+kde/kdebase
 """
 
 class subclass(base.baseclass):
-    def __init__( self ):
+    def __init__(self):
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "kdegames"
 
     def kdeSvnPath( self ):
-        return "trunk/KDE/kdebase"
+        return "trunk/KDE/kdegames"
         
     def unpack( self ):
-        return self.kdeSvnUnpack()
+        self.kdeSvnUnpack()
+        return True
 
     def compile( self ):
-        self.kdeCustomDefines = "-DKDE4_DISABLE_MULTIMEDIA=ON"
         return self.kdeCompile()
-
+    
     def install( self ):
         return self.kdeInstall()
 
     def make_package( self ):
-        return self.doPackaging( "kdebase", "3.94-1", True )
+        return self.doPackaging( "kdegames", os.path.basename(sys.argv[0]).replace("kdegames-", "").replace(".py", ""), True )
 
-		
 subclass().execute()

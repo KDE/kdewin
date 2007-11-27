@@ -1,6 +1,7 @@
 import base
 import utils
 import os
+import sys
 
 DEPEND = """
 virtual/base
@@ -15,6 +16,7 @@ class subclass(base.baseclass):
     def __init__(self):
         self.buildType = "Debug"
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "kdelibs"
 
     def kdeSvnPath( self ):
         return "trunk/KDE/kdelibs"
@@ -30,6 +32,6 @@ class subclass(base.baseclass):
         return self.kdeInstall()
 
     def make_package( self ):
-        return self.doPackaging( "kdelibs", "3.94-1", True )
+        return self.doPackaging( "kdelibs", os.path.basename(sys.argv[0]).replace("kdelibs-", "").replace(".py", ""), True )
 
 subclass().execute()

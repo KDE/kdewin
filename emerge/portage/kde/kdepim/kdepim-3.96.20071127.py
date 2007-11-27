@@ -1,19 +1,19 @@
 import base
-import utils
 import os
+import sys
 
 DEPEND = """
 kde/kdebase
+kde/kdepimlibs
 """
 
 class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
-        self.instsrcdir = "kdetoys"
-        self.instdestdir = "kde"
+        self.instsrcdir = "kdepim"
 
     def kdeSvnPath( self ):
-        return "trunk/KDE/kdetoys"
+        return "trunk/KDE/kdepim"
         
     def unpack( self ):
         return self.kdeSvnUnpack()
@@ -25,6 +25,6 @@ class subclass(base.baseclass):
         return self.kdeInstall()
 
     def make_package( self ):
-        return self.doPackaging( "kdetoys", "3.94-1", True )
-
+        return self.doPackaging( "kdepim", os.path.basename(sys.argv[0]).replace("kdepim-", "").replace(".py", ""), True )
+		
 subclass().execute()

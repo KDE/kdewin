@@ -1,6 +1,7 @@
 import base
 import utils
 import os
+import sys
 
 DEPEND = """
 kde/kdebase
@@ -9,13 +10,12 @@ kde/kdebase
 class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
-        self.instsrcdir = "kdegraphics"
-        if self.traditional:
-            self.instdestdir = "kde"
+        self.instsrcdir = "kdetoys"
+        self.instdestdir = "kde"
 
     def kdeSvnPath( self ):
-        return "trunk/KDE/kdegraphics"
-
+        return "trunk/KDE/kdetoys"
+        
     def unpack( self ):
         return self.kdeSvnUnpack()
 
@@ -26,6 +26,6 @@ class subclass(base.baseclass):
         return self.kdeInstall()
 
     def make_package( self ):
-        return self.doPackaging( "kdegraphics", "3.94-1", True )
+        return self.doPackaging( "kdetoys", os.path.basename(sys.argv[0]).replace("kdetoys-", "").replace(".py", ""), True )
 
 subclass().execute()
