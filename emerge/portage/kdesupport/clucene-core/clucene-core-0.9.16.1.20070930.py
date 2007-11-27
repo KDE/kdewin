@@ -40,11 +40,12 @@ class subclass(base.baseclass):
 
   def make_package( self ):
     # FIXME?
-    self.instsrcdir = "clucene"
     if self.traditional:
         self.instdestdir = "kde"
+        self.instsrcdir = "clucene"
         return self.doPackaging( "clucene", "0.9.16a-1", True )
     else:
+        self.instsrcdir = "clucene-core"
         return self.doPackaging( "clucene-core", os.path.basename(sys.argv[0]).replace("clucene-core-", "").replace(".py", ""), True )
     
 
