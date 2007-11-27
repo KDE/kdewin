@@ -99,6 +99,12 @@ for i in sys.argv:
     elif ( i == "--nocopy" ):
         nocopy = True
         os.environ["EMERGE_NOCOPY"] = str( nocopy )
+    elif ( i == "--version-dir" ):
+        buildaction = "version-dir"
+        stayQuiet = True
+    elif ( i == "--version-package" ):
+        buildaction = "version-package"
+        stayQuiet = True
     elif ( i == "--fetch" ):
         buildaction = "fetch"
     elif ( i == "--unpack" ):
@@ -197,9 +203,14 @@ def handlePackage( category, package, version, buildaction, opts ):
         success = doExec( category, package, version, "manifest", opts )
     elif ( buildaction == "unmerge" ):
         success = doExec( category, package, version, "unmerge", opts )
+    elif ( buildaction == "version-dir" ):
+        print "%s-%s" % ( package, version )
+        success = True
+    elif ( buildaction == "version-package" ):
+        print "%s-%s-%s" % ( package, os.getenv( "KDECOMPILER" ), version )
+        success = True
     else:
-        utils.error( "could not understand this buildaction: %s" % buildaction )
-        success = false
+        success = utils.error( "could not understand this buildaction: %s" % buildaction )
 
     return success
     
