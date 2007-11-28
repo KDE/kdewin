@@ -270,7 +270,7 @@ def addInstalled( category, package, version ):
         for line in f:
             # FIXME: this is not a good definition of a package entry
             if line.startswith( "%s/%s-" % ( category, package ) ):
-                error( "already installed" )
+                warning( "already installed" )
                 return
     f = open( os.path.join( path, "installed" ), "ab" )
     f.write( "%s/%s-%s\r\n" % ( category, package, version ) )
