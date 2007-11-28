@@ -523,7 +523,7 @@ class baseclass:
         if( os.path.exists( tmp ) ):
             binpath = tmp
 
-        if ( packSources ):
+        if ( packSources and not ( self.noCopy and self.kdeSvnPath() ) ):
             srcpath = os.path.join( self.workdir, self.instsrcdir )
             cmd = "-name %s -root %s -srcroot %s -version %s -destdir %s" % \
                   ( pkg_name, binpath, srcpath, pkg_version, dstpath )
