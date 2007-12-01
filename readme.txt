@@ -1,7 +1,9 @@
-kdewin32 is a supplementary library 
+kdewin32 is a supplementary library and supplementary tools 
 
 history
 -------
+version 0.3.3
+- add create_hash_table tool
 
 version 0.3.2
 - add expm1, erf and erfc for msvc

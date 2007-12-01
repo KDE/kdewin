@@ -21,7 +21,7 @@ if(NOT MSVC)
 endif(NOT MSVC)
 
 add_subdirectory(3rdparty)
-add_subdirectory(tools/svg2ico)
+add_subdirectory(tools)
 add_subdirectory(tests)
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
@@ -139,9 +139,9 @@ addExplorerWrapper(${NAME})
 # kdewin package support 
 install_files(/share/apps/cmake/modules FILES cmake/modules/FindKDEWIN_Packager.cmake)
 if (KDEWIN_PACKAGER_FOUND)
-    KDEWIN_PACKAGER(kdewin32 ${VERSION} "KDEWIN32 supplementary library" "-srcexclude \"emerge unused\"")
+    KDEWIN_PACKAGER(${NAME} ${VERSION} "${NAME} supplementary library" "-srcexclude \"emerge unused\"")
 endif (KDEWIN_PACKAGER_FOUND)
 
 if (WINSCP_FOUND)
-    KDEWIN_UPLOAD("kdewin32-*-${VERSION}*.zip" kde-windows download.cegit.de /home/kde-windows/kde-windows/kdesupport/single/)
+    KDEWIN_UPLOAD("${NAME}-*-${VERSION}*.zip" kde-windows download.cegit.de /home/kde-windows/kde-windows/kdesupport/single/)
 endif (WINSCP_FOUND)

@@ -1,0 +1,2 @@
+add_subdirectory(create_hash_table)
+add_subdirectory(svg2ico)
