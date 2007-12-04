@@ -4,6 +4,7 @@ import base
 
 DEPEND = """
 virtual/base
+libs/qt
 """
 
 class subclass(base.baseclass):
