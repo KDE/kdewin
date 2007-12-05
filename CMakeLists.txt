@@ -49,6 +49,8 @@ file(GLOB _net_headers     include/${_incDirPrefix}/net/*.h)
 file(GLOB _netinet_headers include/${_incDirPrefix}/netinet/*.h)
 file(GLOB _sys_headers     include/${_incDirPrefix}/sys/*.h)
 file(GLOB _headers         include/${_incDirPrefix}/*.h)
+file(GLOB _directx_headers include/directx/*.h)
+file(GLOB _directx_idls    include/directx/*.idl)
 
 add_definitions(-DUNICODE -DWIN32_LEAN_AND_MEAN )
 
@@ -132,6 +134,10 @@ install_files(/include/${_incDirPrefix} FILES ${_headers} )
 install_files(/include FILES ${_win_headers} )
 install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
 
+# make directx available to mingw (msvc gets it from the psdk)
+if(MINGW)
+install_files(/include/directx FILES ${_directx_headers} ${_directx_idls} )
+endif(MINGW)
 
 include(Win32Macros)
 addExplorerWrapper(${NAME})
