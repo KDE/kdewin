@@ -23,8 +23,9 @@ http://heanet.dl.sourceforge.net/sourceforge/mingw/gdb-6.3-2.tar.bz2
 """
 
 class subclass(base.baseclass):
-  def __init__( self ):
-    base.baseclass.__init__( self, SRC_URI )
-    self.instdestdir = "mingw"
+    def __init__( self ):
+        base.baseclass.__init__( self, SRC_URI )
+        if self.traditional:
+            self.instdestdir = "mingw"
 
 subclass().execute()
