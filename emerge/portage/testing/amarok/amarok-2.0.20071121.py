@@ -9,6 +9,7 @@ testing/ruby
 class subclass(base.baseclass):
     def __init__( self ):
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "amarok"
 
     def kdeSvnPath( self ):
         return "trunk/extragear/multimedia/amarok"
