@@ -5,8 +5,8 @@ from utils import die
 import os
 
 PACKAGE_NAME         = "qt"
-PACKAGE_VER          = "4.3.2"
-PACKAGE_FULL_VER     = "4.3.2-2"
+PACKAGE_VER          = "4.3.3"
+PACKAGE_FULL_VER     = "4.3.3-1"
 PACKAGE_FULL_NAME    = "%s-win-opensource-src-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 
 DEPEND = """
@@ -53,21 +53,8 @@ class subclass(base.baseclass):
 
     # help qt a little bit :)
     cmd = "cd %s && patch -p0 < %s" % \
-          ( qtsrcdir, os.path.join( self.packagedir, "qt-4.3.2.diff" ) )
+          ( qtsrcdir, os.path.join( self.packagedir, "qt-4.3.3.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
-    # and once more... :)  (Issue N180186)
-    cmd = "cd %s && patch -p0 < %s" % \
-          ( qtsrcdir, os.path.join( self.packagedir, "qmake-mingw.diff" ) )
-    os.system( cmd ) and die( "qt unpack failed" )
-    # the third one (Issue N180187)
-    cmd = "cd %s && patch -p0 < %s" % \
-          ( qtsrcdir, os.path.join( self.packagedir, "qdbus-win32-install.diff" ) )
-    os.system( cmd ) and die( "qt unpack failed" )
-    # more libs to install (Issue N180864)
-    cmd = "cd %s && patch -p0 < %s" % \
-          ( qtsrcdir, os.path.join( self.packagedir, "qt_install_toollibs.diff" ) )
-    os.system( cmd ) and die( "qt unpack failed" )
-
     return True
 
   def compile( self ):
