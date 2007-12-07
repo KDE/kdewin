@@ -516,7 +516,7 @@ def manifestDir( srcdir, imagedir, package, version ):
     if os.path.exists( os.path.join( imagedir, "manifest"  ) ):
         for file in os.listdir( os.path.join( imagedir, "manifest"  ) ):
             if file.startswith( package ):
-                error( "found package %s according to file '%s'." % ( package, file ) )
+                warning( "found package %s according to file '%s', .mft files will not be generated." % ( package, file ) )
                 return
 
     myimagedir = imagedir
