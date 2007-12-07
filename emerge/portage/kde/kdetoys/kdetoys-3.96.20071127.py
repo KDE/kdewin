@@ -11,8 +11,7 @@ class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
         self.instsrcdir = "kdetoys"
-        self.instdestdir = "kde"
-
+        
     def kdeSvnPath( self ):
         return "trunk/KDE/kdetoys"
         

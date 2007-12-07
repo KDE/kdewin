@@ -10,6 +10,7 @@ kde/kdebase
 class subclass(base.baseclass):
     def __init__( self ):
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "keduca"
 
     def kdeSvnPath( self ):
         return "trunk/playground/edu/keduca"

@@ -11,6 +11,7 @@ kde/kdepimlibs
 class subclass(base.baseclass):
     def __init__( self ):
         base.baseclass.__init__( self, "" )
+        self.instsrcdir = "koffice"
 
     def kdeSvnPath( self ):
         return "trunk/koffice"
