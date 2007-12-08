@@ -55,4 +55,33 @@
 #define _CRT_NONSTDC_NO_DEPRECATE
 #endif
 
-#endif	// WINPOSX_IEXPORT_H
+#ifndef WARNING
+#ifdef _MSC_VER
+/** msvc-only: WARNING preprocessor directive
+ Reserved: preprocessor needs two indirections to replace __LINE__ with
+ actual string.
+*/
+# define _MSG0(msg) #msg
+
+/** 
+ msvc-only: preprocessor needs two indirections to replace __LINE__ or __FILE__
+ with actual string. */
+# define _MSG1(msg) _MSG0(msg)
+
+/**
+ msvc-only: creates message prolog with the name of the source file
+ and the line number where a preprocessor message has been inserted.
+
+ Example:
+    \code
+     #pragma WARNING(Your message)
+    \endcode
+ Output:
+    mycode.cpp(111) : Your message
+*/
+# define _MSGLINENO __FILE__ "(" _MSG1(__LINE__) ") : warning: "
+# define WARNING(msg) message(_MSGLINENO #msg)
+#endif /*_MSC_VER*/
+#endif /*WARNING*/
+
+#endif	// WINPOSIX_EXPORT_H
