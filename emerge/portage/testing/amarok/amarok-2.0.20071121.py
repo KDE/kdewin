@@ -3,6 +3,7 @@ import base
 DEPEND = """
 kdesupport/taglib
 kde/kdelibs
+kde/kdebase
 testing/ruby
 """
 
