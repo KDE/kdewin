@@ -4,8 +4,8 @@ import shutil
 import utils
 
 PACKAGE_NAME         = "libpng"
-PACKAGE_VER          = "1.2.21"
-PACKAGE_FULL_VER     = "1.2.21"
+PACKAGE_VER          = "1.2.23"
+PACKAGE_FULL_VER     = "1.2.23"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER)
 PACKAGE_DLL_NAME     = "libpng12"
 
