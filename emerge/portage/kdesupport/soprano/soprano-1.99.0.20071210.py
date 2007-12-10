@@ -29,7 +29,7 @@ class subclass(base.baseclass):
     def make_package( self ):
         if self.traditional:
             self.instdestdir = "kde"
-            return self.doPackaging( "soprano", "1.97.2-1", True )
+            return self.doPackaging( "soprano", "1.99.0-1", True )
         else:
             return self.doPackaging( "soprano", os.path.basename(sys.argv[0]).replace("soprano-", "").replace(".py", ""), True )
 
