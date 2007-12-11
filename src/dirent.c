@@ -140,7 +140,7 @@ KDEWIN32_EXPORT struct dirent * readdir(DIR *dp)
 KDEWIN32_EXPORT int closedir(DIR *dp)
 {
     if (!dp) return 0;
-    if (dp->handle != INVALID_HANDLE_VALUE) _findclose(dp->handle);
+    if ((HANDLE)dp->handle != INVALID_HANDLE_VALUE) _findclose(dp->handle);
     if (dp->dir) free(dp->dir);
     if (dp) free(dp);
 
