@@ -7,7 +7,6 @@ rem here you set the compiler to be used:
 rem mingw : use the mingw gcc compiler (recommended)
 rem msvc2005: use the microsoft visual studio 2005 c-compiler
 rem
-rem NOTE: Only mingw is currently supported by the emerge scripts
 set KDECOMPILER=mingw
 
 rem here you should set the path to your python installation
