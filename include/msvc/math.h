@@ -230,6 +230,8 @@ KDEWIN32_EXPORT __inline float logf(float x) {return ((float)log((double)x)); }
 KDEWIN32_EXPORT __inline float powf(float x, float y) {return ((float)pow((double)x, (double)y)); }
 /* 7.12.6.8 */
 WINPOSIX_EXPORT __inline float log10f (float x) {return ((float)log10((double)x));}
+/* 7.12.7.2 */
+WINPOSIX_EXPORT __inline float fabsf (float x) {return ((float)fabs((double)x));}
 #endif
 
 /* 7.12.9.3 */
