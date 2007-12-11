@@ -139,7 +139,7 @@ sb5  =  2.5530502930e+03, /* 0x451f90ce */
 sb6  =  4.7452853394e+02, /* 0x43ed43a7 */
 sb7  = -2.2440952301e+01; /* 0xc1b38712 */
 
-#ifdef __STDC__
+#if defined __STDC__ || defined _MSC_VER
 	float erff(float x) 
 #else
 	float erff(x) 
@@ -197,7 +197,7 @@ sb7  = -2.2440952301e+01; /* 0xc1b38712 */
 	if(hx>=0) return one-r/x; else return  r/x-one;
 }
 
-#ifdef __STDC__
+#if defined __STDC__ || defined _MSC_VER
 	float erfcf(float x) 
 #else
 	float erfcf(x) 
