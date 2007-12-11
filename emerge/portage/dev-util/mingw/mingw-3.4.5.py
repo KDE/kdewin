@@ -19,7 +19,7 @@ http://heanet.dl.sourceforge.net/sourceforge/mingw/gcc-g++-3.4.5-20060117-1.tar.
 http://heanet.dl.sourceforge.net/sourceforge/mingw/mingw32-make-3.81-2.tar.gz
 http://heanet.dl.sourceforge.net/sourceforge/mingw/mingw-runtime-3.12.tar.gz
 http://heanet.dl.sourceforge.net/sourceforge/mingw/w32api-3.9.tar.gz
-http://heanet.dl.sourceforge.net/sourceforge/mingw/gdb-6.3-2.tar.bz2
+http://heanet.dl.sourceforge.net/sourceforge/mingw/gdb-6.7.50.20071127-mingw.tar.bz2
 """
 
 class subclass(base.baseclass):
