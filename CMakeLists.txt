@@ -98,7 +98,7 @@ set(CMAKE_DEBUG_POSTFIX "d")
 add_library(kdewin32 SHARED ${win_LIB_SRCS}
                             ${_arpa_headers}
                             ${_asm_headers}
-							${_gl_headers}
+                            ${_gl_headers}
                             ${_machine_headers}
                             ${_netinet_headers}
                             ${_net_headers}
