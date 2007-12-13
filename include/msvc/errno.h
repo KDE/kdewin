@@ -30,4 +30,12 @@ KDEWIN32_EXPORT int __cdecl _set_errno(int value);
 #define _KDEWIN_DONT_IMPLEMENT_SET_ERRNO
 #endif
 
+#ifndef ENOFILE
+#define ENOFILE ENOENT
+#endif
+
+#ifndef ENOTSUP
+#define ENOTSUP ENOSYS
+#endif
+
 #endif
