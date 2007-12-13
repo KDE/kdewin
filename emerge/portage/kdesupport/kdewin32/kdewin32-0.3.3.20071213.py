@@ -27,7 +27,7 @@ class subclass(base.baseclass):
     def make_package( self ):
         if self.traditional:
             self.instdestdir = "kde"
-            return self.doPackaging( "kdewin32", "0.3.1-1", True )
+            return self.doPackaging( "kdewin32", "0.3.3-1", True )
         else:
             return self.doPackaging( "kdewin32", os.path.basename(sys.argv[0]).replace("kdewin32-", "").replace(".py", ""), True )
 subclass().execute()
