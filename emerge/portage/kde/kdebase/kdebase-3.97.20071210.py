@@ -19,7 +19,9 @@ class subclass(base.baseclass):
         return self.kdeSvnUnpack()
 
     def compile( self ):
-        self.kdeCustomDefines = "-DKDE4_DISABLE_MULTIMEDIA=ON"
+        # phonon backend not yet compiling in mingw
+        if self.compiler == "mingw":
+            self.kdeCustomDefines = "-DKDE4_DISABLE_MULTIMEDIA=ON"
         return self.kdeCompile()
 
     def install( self ):
