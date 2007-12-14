@@ -1,6 +1,7 @@
 import base
 import utils
-
+from utils import die
+import os
 
 """
 from trolltech mingw package:
@@ -27,6 +28,14 @@ class subclass(base.baseclass):
     def __init__( self ):
         base.baseclass.__init__( self, SRC_URI )
         self.instdestdir = "mingw"
+	
+    def unpack( self ):
+        base.baseclass.unpack( self )
+        srcdir = self.workdir
+        cmd = "cd %s && patch -p1 < %s" % \
+          ( srcdir, os.path.join( self.packagedir, "vmr9.diff" ) )
+        os.system( cmd ) and die( "qt unpack failed" )
+        return True		
     
 
 subclass().execute()
