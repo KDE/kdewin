@@ -7524,6 +7524,18 @@ void            __RPC_USER HWND_UserFree     (unsigned long *, HWND *);
 
 /* End additional prototypes */
 
+/* manual addition, needed for direct show 9 */
+typedef enum {
+    DeinterlaceTech_Unknown             = 0x0000,
+    DeinterlaceTech_BOBLineReplicate    = 0x0001,
+    DeinterlaceTech_BOBVerticalStretch  = 0x0002,
+    DeinterlaceTech_MedianFiltering     = 0x0004,
+    DeinterlaceTech_EdgeFiltering       = 0x0010,
+    DeinterlaceTech_FieldAdaptive       = 0x0020,
+    DeinterlaceTech_PixelAdaptive       = 0x0040,
+    DeinterlaceTech_MotionVectorSteered = 0x0080
+} VMRDeinterlaceTech;
+
 #ifdef __cplusplus
 }
 #endif
