@@ -33,8 +33,8 @@ class subclass(base.baseclass):
     utils.copySrcDirToDestDir( srcdir, destdir )
 
     os.chdir( self.workdir )
-    os.system( "cd %s && patch -p0 < %s" % ( self.workdir, os.path.join( self.packagedir, "libassuan.diff" ) ) )
-    os.system( "cd %s && patch -p0 < %s" % ( self.workdir, os.path.join( self.packagedir, "libassuan-cmake.diff" ) ) )
+    self.system( "cd %s && patch -p0 < %s" % ( self.workdir, os.path.join( self.packagedir, "libassuan.diff" ) ) )
+    self.system( "cd %s && patch -p0 < %s" % ( self.workdir, os.path.join( self.packagedir, "libassuan-cmake.diff" ) ) )
 #    os.system( "patch -p0 < libassuan_cmake.diff" )
 
     return True
