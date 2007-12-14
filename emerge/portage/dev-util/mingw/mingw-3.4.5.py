@@ -1,4 +1,5 @@
 import base
+import utils
 
 
 """
@@ -17,15 +18,15 @@ http://heanet.dl.sourceforge.net/sourceforge/mingw/binutils-2.17.50-20060824-1.t
 http://heanet.dl.sourceforge.net/sourceforge/mingw/gcc-core-3.4.5-20060117-1.tar.gz
 http://heanet.dl.sourceforge.net/sourceforge/mingw/gcc-g++-3.4.5-20060117-1.tar.gz
 http://heanet.dl.sourceforge.net/sourceforge/mingw/mingw32-make-3.81-2.tar.gz
-http://heanet.dl.sourceforge.net/sourceforge/mingw/mingw-runtime-3.12.tar.gz
-http://heanet.dl.sourceforge.net/sourceforge/mingw/w32api-3.9.tar.gz
+http://heanet.dl.sourceforge.net/sourceforge/mingw/mingw-runtime-3.13.tar.gz
+http://heanet.dl.sourceforge.net/sourceforge/mingw/w32api-3.10.tar.gz
 http://heanet.dl.sourceforge.net/sourceforge/mingw/gdb-6.7.50.20071127-mingw.tar.bz2
 """
 
 class subclass(base.baseclass):
     def __init__( self ):
         base.baseclass.__init__( self, SRC_URI )
-#        if self.traditional:
         self.instdestdir = "mingw"
+    
 
 subclass().execute()
