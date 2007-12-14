@@ -9,6 +9,7 @@ PACKAGE_NAME = "libassuan"
 PACKAGE_FULL_VER = "20071214"
 DEPENDS = """
 virtual/base
+kde/kdelibs
 """
 
 class subclass(base.baseclass):
@@ -31,8 +32,10 @@ class subclass(base.baseclass):
     destdir = os.path.join( self.workdir, "libassuan" )
     utils.copySrcDirToDestDir( srcdir, destdir )
 
-    os.chdir( destdir )
-    os.system( "patch -p0 < libassuan.diff" )
+    os.chdir( self.workdir )
+    os.system( "cd %s && patch -p0 < %s" % ( self.workdir, os.path.join( self.packagedir, "libassuan.diff" ) ) )
+    os.system( "cd %s && patch -p0 < %s" % ( self.workdir, os.path.join( self.packagedir, "libassuan-cmake.diff" ) ) )
+#    os.system( "patch -p0 < libassuan_cmake.diff" )
 
     return True
 

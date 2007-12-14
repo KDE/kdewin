@@ -1,0 +1,105 @@
+diff -N -u -r libassuan/CMakeLists.txt libassuan2/CMakeLists.txt
+--- libassuan/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ libassuan2/CMakeLists.txt	2007-12-14 13:59:08.000000000 +0100
+@@ -0,0 +1,69 @@
++project( libassuan )
++
++find_package(KDE4 REQUIRED)
++
++if (WIN32)
++# overriding LIB_INSTALL_DIR specific for win32 to archieve 
++# propper installation of shared library targets will also be 
++# used in install(FILES ...) which fails with error
++# 'INSTALL FILES given unknown argument "RUNTIME".'
++# There must be a way to only patch install(TARGETS) 
++#    set (LIB_INSTALL_DIR lib)
++  add_definitions(-DHAVE_W32_SYSTEM)
++
++  if(MINGW)
++   include_directories(${KDEWIN32_INCLUDE_DIR}/mingw )
++  else()
++   include_directories(${KDEWIN32_INCLUDE_DIR}/msvc )
++  endif(MINGW)
++
++  add_definitions(-DWIN32_LEAN_AND_MEAN)
++
++endif (WIN32)
++
++INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/libassuan" 
++  "${CMAKE_SOURCE_DIR}/libassuan/src" "${CMAKE_INSTALL_PREFIX}/include" )
++configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
++add_definitions(-DHAVE_CONFIG_H)
++
++ADD_CUSTOM_COMMAND(
++  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/assuan-errors.c
++  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/assuan.h
++  COMMAND sh ARGS ${CMAKE_CURRENT_SOURCE_DIR}/src/mkerrors < ${CMAKE_CURRENT_SOURCE_DIR}/src/assuan.h > ${CMAKE_CURRENT_BINARY_DIR}/assuan-errors.c
++)
++
++set(assuan_LIB_SRCS 
++  src/assuan.h
++  src/assuan-defs.h
++  src/assuan-util.c
++  src/assuan-buffer.c
++  src/assuan-handler.c
++  src/assuan-inquire.c
++  src/assuan-listen.c
++  src/assuan-connect.c
++  src/assuan-client.c
++  src/assuan-pipe-server.c
++  src/assuan-socket-server.c
++  src/assuan-pipe-connect.c
++  src/assuan-socket-connect.c
++  src/assuan-uds.c
++  src/assuan-io.c
++#  src/assuan-io-pth.c
++  src/assuan-logging.c
++  src/assuan-socket.c
++  ${CMAKE_CURRENT_BINARY_DIR}/assuan-errors.c
++)
++
++if (WIN32)
++  set(assuan_LIB_SRCS ${assuan_LIB_SRCS} src/stpcpy.c src/memrchr.c src/isascii.c src/putc_unlocked.c)
++endif (WIN32)
++
++INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src) 
++
++#####add_definitions(-D_ASSUAN_IN_GPGME_BUILD_ASSUAN)
++
++ADD_LIBRARY( assuan ${assuan_LIB_SRCS} )
++TARGET_LINK_LIBRARIES( assuan )
++install(TARGETS assuan DESTINATION ${LIB_INSTALL_DIR} )
++install( FILES src/assuan.h DESTINATION ${INCLUDE_INSTALL_DIR} )
++install( FILES src/libassuan.m4 DESTINATION share/aclocal )
+diff -N -u -r libassuan/config.h.cmake libassuan2/config.h.cmake
+--- libassuan/config.h.cmake	1970-01-01 01:00:00.000000000 +0100
++++ libassuan2/config.h.cmake	2007-12-13 14:23:08.000000000 +0100
+@@ -0,0 +1,28 @@
++/* This file is part of the KDE libraries
++   Copyright (c) 2007 The KDE Project
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Library General Public
++   License version 2 as published by the Free Software Foundation.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Library General Public License for more details.
++
++   You should have received a copy of the GNU Library General Public License
++   along with this library; see the file COPYING.LIB.  If not, write to
++   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++   Boston, MA 02110-1301, USA.
++*/
++
++#ifndef LIBASSUAN_CONFIG_H
++#define LIBASSUAN_CONFIG_H
++
++/* Separators as used in $PATH.  */
++#if defined _WIN32 || defined _WIN64
++# define HAVE_DOSISH_SYSTEM
++#else
++#endif
++
++#endif
