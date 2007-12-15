@@ -1,0 +1,234 @@
+/* This file is part of the KDE project
+   Copyright (C) 2007 Shane King
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+import "unknwn.idl";
+
+cpp_quote("DEFINE_GUID(CLSID_VideoMixingRenderer9,  0x51b4abf3, 0x748f, 0x4e3b, 0xa2, 0x76, 0xc8, 0x28, 0x33, 0x0e, 0x92, 0x6a);")
+
+typedef enum {
+  VMR9Mode_Windowed  = 0x00000001,
+  VMR9Mode_Windowless  = 0x00000002,
+  VMR9Mode_Renderless  = 0x00000004,
+  VMR9Mode_Mask  = 0x00000007,
+} VMR9Mode;
+
+typedef enum {
+    ProcAmpControl9_Brightness = 0x00000001,
+    ProcAmpControl9_Contrast   = 0x00000002,
+    ProcAmpControl9_Hue        = 0x00000004,
+    ProcAmpControl9_Saturation = 0x00000008,
+    ProcAmpControl9_Mask       = 0x0000000F
+} VMR9ProcAmpControlFlags;
+
+typedef struct {
+  float  left;
+  float  top;
+  float  right;
+  float  bottom;
+} VMR9NormalizedRect;
+
+typedef struct _VMR9ProcAmpControl
+{
+    DWORD  dwSize;
+    DWORD  dwFlags;
+    float  Contrast;
+    float  Brightness;
+    float  Hue;
+    float  Saturation;
+} VMR9ProcAmpControl;
+
+typedef struct _VMR9ProcAmpControlRange
+{
+    DWORD                    dwSize;
+    VMR9ProcAmpControlFlags  dwProperty; 
+    float                    MinValue;
+    float                    MaxValue;
+    float                    DefaultValue;
+    float                    StepSize;
+} VMR9ProcAmpControlRange;
+
+[
+    object,
+    uuid(8f537d09-f85e-4414-b23b-502e54c79927)
+]
+interface IVMRWindowlessControl9 : IUnknown
+{
+    HRESULT GetNativeVideoSize(
+      LONG*  lpWidth,
+      LONG*  lpHeight,
+      LONG*  lpARWidth,
+      LONG*  lpARHeight
+    );
+
+    HRESULT GetMinIdealVideoSize(
+      LONG*  lpWidth,
+      LONG*  lpHeight
+    );
+
+    HRESULT GetMaxIdealVideoSize(
+      LONG*  lpWidth,
+      LONG*  lpHeight
+    );
+
+    HRESULT SetVideoPosition(
+      const LPRECT  lpSRCRect,
+      const LPRECT  lpDSTRect
+    );
+
+    HRESULT GetVideoPosition(
+      LPRECT  lpSRCRect,
+      LPRECT  lpDSTRect
+    );
+
+    HRESULT GetAspectRatioMode(
+      DWORD*  lpAspectRatioMode
+    );
+
+    HRESULT SetAspectRatioMode(
+      DWORD  AspectRatioMode
+    );
+
+    HRESULT SetVideoClippingWindow(
+      HWND  hwnd
+    );
+
+    HRESULT RepaintVideo(
+      HWND  hwnd,
+      HDC  hdc
+    );
+
+    HRESULT DisplayModeChanged();
+
+    HRESULT GetCurrentImage(
+      BYTE**  lpDib
+    );
+
+    HRESULT SetBorderColor(
+      COLORREF  Clr
+    );
+
+    HRESULT GetBorderColor(
+      COLORREF*  lpClr
+    );
+}
+
+interface IVMRImageCompositor9;
+
+[
+    object,
+    uuid(5a804648-4f66-4867-9c43-4f5c822cf1b8)
+]
+interface IVMRFilterConfig9 : IUnknown
+{
+    HRESULT SetImageCompositor(
+      IVMRImageCompositor9*  lpVMRImgCompositor
+    );
+
+    HRESULT SetNumberOfStreams(
+      DWORD  dwMaxStreams
+    );
+
+    HRESULT GetNumberOfStreams(
+      DWORD*  pdwMaxStreams
+    );
+
+    HRESULT SetRenderingPrefs(
+      DWORD  dwRenderFlags
+    );
+
+    HRESULT GetRenderingPrefs(
+      DWORD*  pdwRenderFlags
+    );
+
+    HRESULT SetRenderingMode(
+      DWORD  Mode
+    );
+
+    HRESULT GetRenderingMode(
+      DWORD*  pMode
+    );
+}
+
+[
+    object,
+    uuid(1a777eaa-47c8-4930-b2c9-8fee1c1b0f3b)
+]
+interface IVMRMixerControl9 : IUnknown
+{
+    HRESULT SetAlpha(
+      DWORD  dwStreamID,
+      float  Alpha
+    );
+
+    HRESULT GetAlpha(
+      DWORD  dwStreamID,
+      float*  pAlpha
+    );
+
+    HRESULT SetZOrder(
+      DWORD  dwStreamID,
+      DWORD  dwZ
+    );
+
+    HRESULT GetZOrder(
+      DWORD  dwStreamID,
+      DWORD*  pZ
+    );
+
+    HRESULT SetOutputRect(
+      DWORD  dwStreamID,
+      const VMR9NormalizedRect*  pRect
+    );
+
+    HRESULT GetOutputRect(
+      DWORD  dwStreamID,
+      VMR9NormalizedRect*  pRect
+    );
+
+    HRESULT SetBackgroundClr(
+      COLORREF  ClrBkg
+    );
+
+    HRESULT GetBackgroundClr(
+      COLORREF*  lpClrBkg
+    );
+
+    HRESULT SetMixingPrefs(
+      DWORD  dwMixerPrefs
+    );
+
+    HRESULT GetMixingPrefs(
+      DWORD*  pdwMixerPrefs
+    );
+
+    HRESULT SetProcAmpControl(
+      DWORD  dwStreamID,
+      VMR9ProcAmpControl*  lpClrControl
+    );
+
+    HRESULT GetProcAmpControl(
+      DWORD  dwStreamID,
+      VMR9ProcAmpControl*  lpClrControl
+    );
+
+    HRESULT GetProcAmpControlRange(
+      DWORD  dwStreamID,
+      VMR9ProcAmpControlRange*  lpClrControl
+    );
+}

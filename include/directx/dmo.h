@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2002 Robert Shearman
+ * Copyright (C) 2002 Alexandre Julliard
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,14 +16,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-import "objidl.idl";
+#ifndef __DMO_H__
+#define __DMO_H__
 
-#include <devenum.idl>
+#include <mediaerr.h>
 
-#include <axcore.idl>
+#ifdef FIX_LOCK_NAME
+#define Lock DMOLock
+#endif
+#include <mediaobj.h>
+#ifdef FIX_LOCK_NAME
+#undef Lock
+#endif
+#include <dmoreg.h>
+#include <dmort.h>
 
-#include <axextend.idl>
-
-#include <dyngraph.idl>
-
-#include <vmrender.idl>
+#endif  /* __DMO_H__ */

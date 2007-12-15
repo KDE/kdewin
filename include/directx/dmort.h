@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2002 Robert Shearman
+ * Copyright (C) 2002 Alexandre Julliard
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,14 +16,22 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-import "objidl.idl";
+#ifndef __DMORT_H__
+#define __DMORT_H__
 
-#include <devenum.idl>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#include <axcore.idl>
+HRESULT WINAPI MoCopyMediaType(DMO_MEDIA_TYPE*,const DMO_MEDIA_TYPE*);
+HRESULT WINAPI MoCreateMediaType(DMO_MEDIA_TYPE**,DWORD);
+HRESULT WINAPI MoDeleteMediaType(DMO_MEDIA_TYPE*);
+HRESULT WINAPI MoDuplicateMediaType(DMO_MEDIA_TYPE**,const DMO_MEDIA_TYPE*);
+HRESULT WINAPI MoFreeMediaType(DMO_MEDIA_TYPE*);
+HRESULT WINAPI MoInitMediaType(DMO_MEDIA_TYPE*,DWORD);
 
-#include <axextend.idl>
+#ifdef __cplusplus
+}
+#endif
 
-#include <dyngraph.idl>
-
-#include <vmrender.idl>
+#endif /* __DMORT_H__ */
