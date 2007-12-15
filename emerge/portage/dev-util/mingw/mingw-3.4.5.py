@@ -34,7 +34,7 @@ class subclass(base.baseclass):
         srcdir = self.workdir
         cmd = "cd %s && patch -p1 < %s" % \
           ( srcdir, os.path.join( self.packagedir, "vmr9.diff" ) )
-        os.system( cmd ) and die( "qt unpack failed" )
+        os.system( cmd ) and die( "mingw unpack failed" )
         return True		
     
 
