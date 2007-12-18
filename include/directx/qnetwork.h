@@ -305,6 +305,205 @@ void __RPC_STUB IAMMediaContent_get_MoreInfoText_Stub(
 
 #endif  /* __IAMMediaContent_INTERFACE_DEFINED__ */
 
+#ifndef __IAMNetworkStatus_FWD_DEFINED__
+#define __IAMNetworkStatus_FWD_DEFINED__
+typedef interface IAMNetworkStatus IAMNetworkStatus;
+#endif
+
+/*****************************************************************************
+ * IAMNetworkStatus interface
+ */
+#ifndef __IAMNetworkStatus_INTERFACE_DEFINED__
+#define __IAMNetworkStatus_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IAMNetworkStatus, 0xfa2aa8f3, 0x8b62, 0x11d0, 0xa5,0x20, 0x00,0x00,0x00,0x00,0x00,0x00);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+interface IAMNetworkStatus : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_ReceivedPackets(
+        long *pReceivedPackets) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_RecoveredPackets(
+        long *pRecoveredPackets) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_LostPackets(
+        long *pLostPackets) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_ReceptionQuality(
+        long *pReceptionQuality) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_BufferingCount(
+        long *pBufferingCount) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_IsBroadcast(
+        VARIANT_BOOL *pIsBroadcast) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_BufferingProgress(
+        long *pBufferingProgress) = 0;
+
+};
+#else
+typedef struct IAMNetworkStatusVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAMNetworkStatus* This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAMNetworkStatus* This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAMNetworkStatus* This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        IAMNetworkStatus* This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        IAMNetworkStatus* This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        IAMNetworkStatus* This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        IAMNetworkStatus* This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** IAMNetworkStatus methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_ReceivedPackets)(
+        IAMNetworkStatus* This,
+        long *pReceivedPackets);
+
+    HRESULT (STDMETHODCALLTYPE *get_RecoveredPackets)(
+        IAMNetworkStatus* This,
+        long *pRecoveredPackets);
+
+    HRESULT (STDMETHODCALLTYPE *get_LostPackets)(
+        IAMNetworkStatus* This,
+        long *pLostPackets);
+
+    HRESULT (STDMETHODCALLTYPE *get_ReceptionQuality)(
+        IAMNetworkStatus* This,
+        long *pReceptionQuality);
+
+    HRESULT (STDMETHODCALLTYPE *get_BufferingCount)(
+        IAMNetworkStatus* This,
+        long *pBufferingCount);
+
+    HRESULT (STDMETHODCALLTYPE *get_IsBroadcast)(
+        IAMNetworkStatus* This,
+        VARIANT_BOOL *pIsBroadcast);
+
+    HRESULT (STDMETHODCALLTYPE *get_BufferingProgress)(
+        IAMNetworkStatus* This,
+        long *pBufferingProgress);
+
+    END_INTERFACE
+} IAMNetworkStatusVtbl;
+interface IAMNetworkStatus {
+    CONST_VTBL IAMNetworkStatusVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+/*** IUnknown methods ***/
+#define IAMNetworkStatus_QueryInterface(p,a,b) (p)->lpVtbl->QueryInterface(p,a,b)
+#define IAMNetworkStatus_AddRef(p) (p)->lpVtbl->AddRef(p)
+#define IAMNetworkStatus_Release(p) (p)->lpVtbl->Release(p)
+/*** IDispatch methods ***/
+#define IAMNetworkStatus_GetTypeInfoCount(p,a) (p)->lpVtbl->GetTypeInfoCount(p,a)
+#define IAMNetworkStatus_GetTypeInfo(p,a,b,c) (p)->lpVtbl->GetTypeInfo(p,a,b,c)
+#define IAMNetworkStatus_GetIDsOfNames(p,a,b,c,d,e) (p)->lpVtbl->GetIDsOfNames(p,a,b,c,d,e)
+#define IAMNetworkStatus_Invoke(p,a,b,c,d,e,f,g,h) (p)->lpVtbl->Invoke(p,a,b,c,d,e,f,g,h)
+/*** IAMNetworkStatus methods ***/
+#define IAMNetworkStatus_get_ReceivedPackets(p,a) (p)->lpVtbl->get_ReceivedPackets(p,a)
+#define IAMNetworkStatus_get_RecoveredPackets(p,a) (p)->lpVtbl->get_RecoveredPackets(p,a)
+#define IAMNetworkStatus_get_LostPackets(p,a) (p)->lpVtbl->get_LostPackets(p,a)
+#define IAMNetworkStatus_get_ReceptionQuality(p,a) (p)->lpVtbl->get_ReceptionQuality(p,a)
+#define IAMNetworkStatus_get_BufferingCount(p,a) (p)->lpVtbl->get_BufferingCount(p,a)
+#define IAMNetworkStatus_get_IsBroadcast(p,a) (p)->lpVtbl->get_IsBroadcast(p,a)
+#define IAMNetworkStatus_get_BufferingProgress(p,a) (p)->lpVtbl->get_BufferingProgress(p,a)
+#endif
+
+#endif
+
+HRESULT CALLBACK IAMNetworkStatus_get_ReceivedPackets_Proxy(
+    IAMNetworkStatus* This,
+    long *pReceivedPackets);
+void __RPC_STUB IAMNetworkStatus_get_ReceivedPackets_Stub(
+    IRpcStubBuffer* This,
+    IRpcChannelBuffer* pRpcChannelBuffer,
+    PRPC_MESSAGE pRpcMessage,
+    DWORD* pdwStubPhase);
+HRESULT CALLBACK IAMNetworkStatus_get_RecoveredPackets_Proxy(
+    IAMNetworkStatus* This,
+    long *pRecoveredPackets);
+void __RPC_STUB IAMNetworkStatus_get_RecoveredPackets_Stub(
+    IRpcStubBuffer* This,
+    IRpcChannelBuffer* pRpcChannelBuffer,
+    PRPC_MESSAGE pRpcMessage,
+    DWORD* pdwStubPhase);
+HRESULT CALLBACK IAMNetworkStatus_get_LostPackets_Proxy(
+    IAMNetworkStatus* This,
+    long *pLostPackets);
+void __RPC_STUB IAMNetworkStatus_get_LostPackets_Stub(
+    IRpcStubBuffer* This,
+    IRpcChannelBuffer* pRpcChannelBuffer,
+    PRPC_MESSAGE pRpcMessage,
+    DWORD* pdwStubPhase);
+HRESULT CALLBACK IAMNetworkStatus_get_ReceptionQuality_Proxy(
+    IAMNetworkStatus* This,
+    long *pReceptionQuality);
+void __RPC_STUB IAMNetworkStatus_get_ReceptionQuality_Stub(
+    IRpcStubBuffer* This,
+    IRpcChannelBuffer* pRpcChannelBuffer,
+    PRPC_MESSAGE pRpcMessage,
+    DWORD* pdwStubPhase);
+HRESULT CALLBACK IAMNetworkStatus_get_BufferingCount_Proxy(
+    IAMNetworkStatus* This,
+    long *pBufferingCount);
+void __RPC_STUB IAMNetworkStatus_get_BufferingCount_Stub(
+    IRpcStubBuffer* This,
+    IRpcChannelBuffer* pRpcChannelBuffer,
+    PRPC_MESSAGE pRpcMessage,
+    DWORD* pdwStubPhase);
+HRESULT CALLBACK IAMNetworkStatus_get_IsBroadcast_Proxy(
+    IAMNetworkStatus* This,
+    VARIANT_BOOL *pIsBroadcast);
+void __RPC_STUB IAMNetworkStatus_get_IsBroadcast_Stub(
+    IRpcStubBuffer* This,
+    IRpcChannelBuffer* pRpcChannelBuffer,
+    PRPC_MESSAGE pRpcMessage,
+    DWORD* pdwStubPhase);
+HRESULT CALLBACK IAMNetworkStatus_get_BufferingProgress_Proxy(
+    IAMNetworkStatus* This,
+    long *pBufferingProgress);
+void __RPC_STUB IAMNetworkStatus_get_BufferingProgress_Stub(
+    IRpcStubBuffer* This,
+    IRpcChannelBuffer* pRpcChannelBuffer,
+    PRPC_MESSAGE pRpcMessage,
+    DWORD* pdwStubPhase);
+
+#endif  /* __IAMNetworkStatus_INTERFACE_DEFINED__ */
+
 /* Begin additional prototypes for all interfaces */
 
 ULONG           __RPC_USER BSTR_UserSize     (ULONG *, ULONG, BSTR *);

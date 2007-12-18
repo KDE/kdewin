@@ -41,3 +41,19 @@ interface IAMMediaContent : IDispatch
     [propget] HRESULT MoreInfoBannerURL(BSTR *pbstrMoreInfoBannerURL);
     [propget] HRESULT MoreInfoText(BSTR *pbstrMoreInfoText);
 }
+
+[
+    object,
+    uuid(fa2aa8f3-8b62-11d0-a520-000000000000)
+]
+interface IAMNetworkStatus : IDispatch
+{
+    [propget] HRESULT ReceivedPackets(long *pReceivedPackets);
+    [propget] HRESULT RecoveredPackets(long *pRecoveredPackets);
+    [propget] HRESULT LostPackets(long *pLostPackets);
+    [propget] HRESULT ReceptionQuality(long *pReceptionQuality);
+    [propget] HRESULT BufferingCount(long *pBufferingCount);
+    [propget] HRESULT IsBroadcast(VARIANT_BOOL *pIsBroadcast);
+    [propget] HRESULT BufferingProgress(long *pBufferingProgress);
+}
+
