@@ -4,12 +4,12 @@ import utils
 from utils import die
 
 PACKAGE_NAME         = "poppler"
-PACKAGE_VER          = "0.6.2"
-PACKAGE_FULL_VER     = "0.6.2"
+PACKAGE_VER          = "0.6.3"
+PACKAGE_FULL_VER     = "0.6.3"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 PACKAGE_DLL_NAME     = "poppler"
 
-SRC_URI = """http://poppler.freedesktop.org/poppler-0.6.2.tar.gz"""
+SRC_URI = """http://poppler.freedesktop.org/poppler-0.6.3.tar.gz"""
 
 DEPEND = """
 gnuwin32/patch
