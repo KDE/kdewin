@@ -1,5 +1,6 @@
 import base
 import os
+import sys
 
 DEPEND = """
 kdesupport/taglib
