@@ -21,6 +21,8 @@ class subclass(base.baseclass):
         return self.kdeSvnUnpack()
 
     def compile( self ):
+        if self.compiler == "mingw":
+            self.kdeCustomDefines = "-DBUILD_kolourpaint=OFF"
         return self.kdeCompile()
 
     def install( self ):
