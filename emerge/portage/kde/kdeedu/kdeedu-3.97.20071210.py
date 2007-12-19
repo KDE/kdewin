@@ -24,6 +24,7 @@ class subclass(base.baseclass):
         return self.kdeSvnUnpack()
 
     def compile( self ):
+        self.kdeCustomDefines = "-DBUILD_doc=OFF"
         return self.kdeCompile()
 
     def install( self ):
