@@ -351,10 +351,10 @@ class baseclass:
             mydir = os.path.join( mydir, tmpdir )
             repourl = repourl + tmpdir + "/"
                 
-            if utils.verbose() > 0:
-                print "dir in which to really checkout: %s" % mydir
-                print "dir to really checkout: %s" % packagedir
-            self.__kdesinglecheckout( repourl, mydir, packagedir, True )
+        if utils.verbose() > 0:
+            print "dir in which to really checkout: %s" % mydir
+            print "dir to really checkout: %s" % packagedir
+        self.__kdesinglecheckout( repourl, mydir, packagedir, True )
 
         svndir = os.path.join( self.kdesvndir, svnpath ).replace( "/", "\\" )
         #repo = self.kdesvnserver + "/home/kde/" + svnpath + dir
