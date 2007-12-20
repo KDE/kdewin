@@ -2083,8 +2083,8 @@ diff -N -u -r poppler-0.6.32/cmake/modules/PopplerMacros.cmake poppler-0.6.3/cma
 +
 diff -N -u -r poppler-0.6.32/CMakeLists.txt poppler-0.6.3/CMakeLists.txt
 --- poppler-0.6.32/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.3/CMakeLists.txt	2007-12-19 14:36:11.000000000 +0100
-@@ -0,0 +1,372 @@
++++ poppler-0.6.3/CMakeLists.txt	2007-12-19 17:33:57.906250000 +0100
+@@ -0,0 +1,371 @@
 +project(poppler)
 +
 +set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
@@ -2308,8 +2308,7 @@ diff -N -u -r poppler-0.6.32/CMakeLists.txt poppler-0.6.3/CMakeLists.txt
 +add_library(poppler SHARED ${poppler_SRCS})
 +set_target_properties(poppler PROPERTIES VERSION 2.0.0 SOVERSION 2)
 +target_link_libraries(poppler ${poppler_LIBS})
-+install(TARGETS poppler DESTINATION lib)
-+
++install(TARGETS poppler RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 +if(ENABLE_XPDF_HEADERS)
 +  install(FILES
 +    goo/GooHash.h
@@ -3124,7 +3123,7 @@ diff -N -u -r poppler-0.6.32/qt4/CMakeLists.txt poppler-0.6.3/qt4/CMakeLists.txt
 +add_subdirectory(tests)
 diff -N -u -r poppler-0.6.32/qt4/src/CMakeLists.txt poppler-0.6.3/qt4/src/CMakeLists.txt
 --- poppler-0.6.32/qt4/src/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.3/qt4/src/CMakeLists.txt	2007-11-10 14:02:51.000000000 +0100
++++ poppler-0.6.3/qt4/src/CMakeLists.txt	2007-12-19 17:33:11.937500000 +0100
 @@ -0,0 +1,40 @@
 +add_definitions(${QT4_DEFINITIONS})
 +
@@ -3156,7 +3155,7 @@ diff -N -u -r poppler-0.6.32/qt4/src/CMakeLists.txt poppler-0.6.3/qt4/src/CMakeL
 +add_library(poppler-qt4 SHARED ${poppler_qt4_SRCS})
 +set_target_properties(poppler-qt4 PROPERTIES VERSION 2.0.0 SOVERSION 2)
 +target_link_libraries(poppler-qt4 poppler ${QT4_QTCORE_LIBRARY} ${QT4_QTGUI_LIBRARY} ${QT4_QTXML_LIBRARY})
-+install(TARGETS poppler-qt4 DESTINATION lib)
++install(TARGETS poppler-qt4 RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 +
 +install(FILES
 +  poppler-qt4.h
@@ -3255,8 +3254,8 @@ diff -N -u -r poppler-0.6.32/test/CMakeLists.txt poppler-0.6.3/test/CMakeLists.t
 +endif (GTK_FOUND)
 diff -N -u -r poppler-0.6.32/utils/CMakeLists.txt poppler-0.6.3/utils/CMakeLists.txt
 --- poppler-0.6.32/utils/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ poppler-0.6.3/utils/CMakeLists.txt	2007-12-19 14:24:30.000000000 +0100
-@@ -0,0 +1,79 @@
++++ poppler-0.6.3/utils/CMakeLists.txt	2007-12-19 17:31:53.093750000 +0100
+@@ -0,0 +1,87 @@
 +
 +set(common_srcs
 +  parseargs.c
@@ -3275,6 +3274,7 @@ diff -N -u -r poppler-0.6.32/utils/CMakeLists.txt poppler-0.6.3/utils/CMakeLists
 +  )
 +  add_executable(pdftoppm ${pdftoppm_SOURCES})
 +  target_link_libraries(pdftoppm ${common_libs})
++  install(TARGETS pdftoppm DESTINATION bin)
 +endif (ENABLE_SPLASH)
 +
 +# pdffonts
@@ -3283,6 +3283,7 @@ diff -N -u -r poppler-0.6.32/utils/CMakeLists.txt poppler-0.6.3/utils/CMakeLists
 +)
 +add_executable(pdffonts ${pdffonts_SOURCES})
 +target_link_libraries(pdffonts ${common_libs})
++  install(TARGETS pdffonts DESTINATION bin)
 +
 +# pdfimages
 +set(pdfimages_SOURCES ${common_srcs}
@@ -3292,6 +3293,7 @@ diff -N -u -r poppler-0.6.32/utils/CMakeLists.txt poppler-0.6.3/utils/CMakeLists
 +)
 +add_executable(pdfimages ${pdfimages_SOURCES})
 +target_link_libraries(pdfimages ${common_libs})
++install(TARGETS pdfimages DESTINATION bin)
 +
 +# pdfinfo
 +set(pdfinfo_SOURCES ${common_srcs}
@@ -3299,6 +3301,7 @@ diff -N -u -r poppler-0.6.32/utils/CMakeLists.txt poppler-0.6.3/utils/CMakeLists
 +)
 +add_executable(pdfinfo ${pdfinfo_SOURCES})
 +target_link_libraries(pdfinfo ${common_libs})
++install(TARGETS pdfinfo DESTINATION bin)
 +
 +# pdftops
 +set(pdftops_SOURCES ${common_srcs}
@@ -3306,6 +3309,7 @@ diff -N -u -r poppler-0.6.32/utils/CMakeLists.txt poppler-0.6.3/utils/CMakeLists
 +)
 +add_executable(pdftops ${pdftops_SOURCES})
 +target_link_libraries(pdftops ${common_libs})
++install(TARGETS pdftops DESTINATION bin)
 +
 +# pdftotext
 +set(pdftotext_SOURCES ${common_srcs}
@@ -3313,6 +3317,7 @@ diff -N -u -r poppler-0.6.32/utils/CMakeLists.txt poppler-0.6.3/utils/CMakeLists
 +)
 +add_executable(pdftotext ${pdftotext_SOURCES})
 +target_link_libraries(pdftotext ${common_libs})
++install(TARGETS pdftotext DESTINATION bin)
 +
 +# pdftohtml
 +set(pdftohtml_SOURCES ${common_srcs}
@@ -3326,6 +3331,7 @@ diff -N -u -r poppler-0.6.32/utils/CMakeLists.txt poppler-0.6.3/utils/CMakeLists
 +)
 +add_executable(pdftohtml ${pdftohtml_SOURCES})
 +target_link_libraries(pdftohtml ${common_libs})
++install(TARGETS pdftohtml DESTINATION bin)
 +
 +if (ENABLE_ABIWORD)
 +  # pdftoabw
@@ -3334,5 +3340,6 @@ diff -N -u -r poppler-0.6.32/utils/CMakeLists.txt poppler-0.6.3/utils/CMakeLists
 +  )
 +  add_executable(pdftoabw ${pdftoabw_SOURCES})
 +  target_link_libraries(pdftoabw ${common_libs})
++  install(TARGETS pdftoabw DESTINATION bin)
 +endif (ENABLE_ABIWORD)
 +
