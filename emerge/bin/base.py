@@ -80,6 +80,7 @@ class baseclass:
         self.instdestdir            = ""
         self.traditional            = True
         self.noCopy                 = False
+        self.buildTests             = False
         self.forced                 = False
         self.versioned              = False
         self.noFetch                = False
@@ -90,6 +91,8 @@ class baseclass:
             self.noFetch = True
         if os.getenv( "EMERGE_NOCOPY" ) == "True":
             self.noCopy = True
+        if os.getenv( "EMERGE_BUILDTESTS" ) == "True":
+            self.buildTests = True
         if DIRECTORYLAYOUT == "installer":
             self.traditional = False
 
@@ -362,7 +365,6 @@ class baseclass:
         if utils.verbose() > 1:
             print "kdesvndir", self.kdesvndir
             print "svndir", svndir
-            print "dir", dir
         self.svndir = os.path.join( svndir, packagedir )
         
         return True
@@ -428,6 +430,8 @@ class baseclass:
             options = options + "-DCMAKE_LIBRARY_PATH=%s " % \
                     os.path.join( self.rootdir, "lib" ).replace( "\\", "/" )
 
+        if self.buildTests:
+            options = options + " -DKDE4_BUILD_TESTS=1"
         
         return options
 

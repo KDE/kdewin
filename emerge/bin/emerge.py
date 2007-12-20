@@ -55,6 +55,7 @@ buildaction = "all"
 
 doPretend = False
 stayQuiet = False
+buildTests = False
 offline = False
 opts = ""
 
@@ -67,6 +68,12 @@ if ( ncopy == "True" ):
     nocopy = True
 else:
     nocopy = False
+
+bTests=os.getenv( "EMERGE_BUILDTESTS" )
+if ( bTests == "True" ):
+    buildTests = True
+else:
+    buildTests = False
 
 verb = os.getenv( "EMERGE_VERBOSE" )
 if verb == None or not verb.isdigit():
@@ -83,6 +90,9 @@ for i in sys.argv:
         doPretend = True
     elif ( i == "-q" ):
         stayQuiet = True
+    elif ( i == "-t" ):
+        buildTests = True
+        os.environ["EMERGE_BUILDTESTS"] = "True"
     elif ( i == "--offline" ):
         opts.append( "--offline" )
         offline = True
@@ -144,10 +154,9 @@ if utils.verbose() >= 1:
     print "doPretend:", doPretend
     print "packagename:", packagename
     print "buildType:", os.getenv( "EMERGE_BUILDTYPE" )
-    print "KDEROOT:", KDEROOT
-    
-if verbose:
+    print "buildTests:", os.getenv( "EMERGE_BUILDTESTS" )
     print "verbose:", os.getenv( "EMERGE_VERBOSE" )
+    print "KDEROOT:", KDEROOT
     
 
 # adding emerge/bin to find base.py and gnuwin32.py etc.

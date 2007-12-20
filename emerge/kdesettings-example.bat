@@ -69,6 +69,10 @@ rem for all kde svn based stuff it will not copy the svn sources again
 rem problem is that you cannot make packages when this option is set
 rem set EMERGE_NOCOPY=True
 
+rem If you want to build all packages with buildTests, enable the next option
+rem this applies only to the cmake based packages
+rem set EMERGE_BUILDTESTS=True
+
 rem No editing should be necessary below this line (in an ideal world)
 rem ##################################################################
 
