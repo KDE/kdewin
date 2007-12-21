@@ -1,6 +1,4 @@
 
-find_package(Qt4 REQUIRED)
-
 add_definitions(${QT_DEFINITIONS} )
 
 include_directories(

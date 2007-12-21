@@ -1,5 +1,4 @@
 
-find_package(Qt4)
 find_package(ZLIB)
 
 add_definitions(${QT_DEFINITIONS} )
