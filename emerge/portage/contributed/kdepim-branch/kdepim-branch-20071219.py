@@ -4,7 +4,7 @@ import utils
 
 DEPEND = """
 kde/kdelibs
-testing/kdepimlibs-branch
+contributed/kdepimlibs-branch
 kde/kdebase
 """
 
