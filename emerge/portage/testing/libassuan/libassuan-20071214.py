@@ -13,44 +13,45 @@ kde/kdelibs
 """
 
 class subclass(base.baseclass):
-  def __init__(self):
-    base.baseclass.__init__( self, "" )
+    def __init__(self):
+        base.baseclass.__init__( self, "" )
 #    self.instdestdir = "kde"
     # cmake scripts are not in src root...
-    self.instsrcdir = "libassuan"
+        self.instsrcdir = "libassuan"
 
-  def unpack( self ):
-    print "dbus unpack called"
-    # do the svn fetch/update
-    repo = "svn://cvs.gnupg.org/libassuan/trunk"
-    self.svnFetch( repo )
+    def unpack( self ):
+        if utils.verbose() >= 1
+            print "libassuan unpack called"
+        # do the svn fetch/update
+        repo = "svn://cvs.gnupg.org/libassuan/trunk"
+        self.svnFetch( repo )
 
-    utils.cleanDirectory( self.workdir )
+        utils.cleanDirectory( self.workdir )
 
-    # now copy the tree below destdir/trunk to workdir
-    srcdir = os.path.join( self.svndir, "trunk" )
-    destdir = os.path.join( self.workdir, "libassuan" )
-    utils.copySrcDirToDestDir( srcdir, destdir )
+        # now copy the tree below destdir/trunk to workdir
+        srcdir = os.path.join( self.svndir, "trunk" )
+        destdir = os.path.join( self.workdir, "libassuan" )
+        utils.copySrcDirToDestDir( srcdir, destdir )
 
-    os.chdir( self.workdir )
-    self.system( "cd %s && patch -p0 < %s" % ( self.workdir, os.path.join( self.packagedir, "libassuan.diff" ) ) )
-    self.system( "cd %s && patch -p0 < %s" % ( self.workdir, os.path.join( self.packagedir, "libassuan-cmake.diff" ) ) )
+        os.chdir( self.workdir )
+        self.system( "cd %s && patch -p0 < %s" % ( self.workdir, os.path.join( self.packagedir, "libassuan.diff" ) ) )
+        self.system( "cd %s && patch -p0 < %s" % ( self.workdir, os.path.join( self.packagedir, "libassuan-cmake.diff" ) ) )
 #    os.system( "patch -p0 < libassuan_cmake.diff" )
 
-    return True
+        return True
 
 
-  def compile( self ):
-    return self.kdeCompile()
+    def compile( self ):
+        return self.kdeCompile()
 
-  def install( self ):
-    return self.kdeInstall()
+    def install( self ):
+        return self.kdeInstall()
 
-  def make_package( self ):
+    def make_package( self ):
 
     # now do packaging with kdewin-packager
-    self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
+        self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
 
-    return True
+        return True
 
 subclass().execute()
