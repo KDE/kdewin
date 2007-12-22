@@ -14,7 +14,8 @@ virtual/base
 class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
-    self.instdestdir = "kde"
+    if self.traditional:
+        self.instdestdir = "kde"
     # cmake scripts are not in src root...
     self.instsrcdir = os.path.join( "dbus", "cmake" )
 
