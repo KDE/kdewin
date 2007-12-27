@@ -4,7 +4,7 @@ import os
 import sys
 
 DEPEND = """
-kde/kdevplatform
+testing/kdevplatform
 """
 
 class subclass(base.baseclass):
