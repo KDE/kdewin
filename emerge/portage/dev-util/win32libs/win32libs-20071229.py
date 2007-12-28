@@ -11,10 +11,10 @@ http://82.149.170.66/kde-windows/win32libs/single/boost-headers-1.34-lib.zip
 http://82.149.170.66/kde-windows/win32libs/single/libbzip2-1.0.4-6-bin.tar.bz2
 http://82.149.170.66/kde-windows/win32libs/single/libbzip2-1.0.4-6-lib.tar.bz2
 
-http://download.cegit.de/kde-windows/win32libs/single/dbus-mingw-1.1.2.20070919-bin.zip
-http://download.cegit.de/kde-windows/win32libs/single/dbus-mingw-1.1.2.20070919-lib.zip
-http://download.cegit.de/kde-windows/win32libs/single/dbus-msvc-1.1.2.20071005-bin.zip
-http://download.cegit.de/kde-windows/win32libs/single/dbus-msvc-1.1.2.20071005-lib.zip
+http://download.cegit.de/kde-windows/win32libs/single/dbus-mingw-1.1.2.20071228-bin.tar.bz2
+http://download.cegit.de/kde-windows/win32libs/single/dbus-mingw-1.1.2.20071228-lib.tar.bz2
+http://download.cegit.de/kde-windows/win32libs/single/dbus-msvc-1.1.2.20071228-bin.tar.bz2
+http://download.cegit.de/kde-windows/win32libs/single/dbus-msvc-1.1.2.20071228-lib.tar.bz2
 
 http://82.149.170.66/kde-windows/win32libs/single/expat-2.0.1-bin.zip
 http://82.149.170.66/kde-windows/win32libs/single/expat-2.0.1-lib.zip
