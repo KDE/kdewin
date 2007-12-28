@@ -6,7 +6,7 @@ from utils import die
 
 
 PACKAGE_NAME = "dbus"
-PACKAGE_FULL_VER = "1.1.2.20071005"
+PACKAGE_FULL_VER = "1.1.2.20071228"
 DEPENDS = """
 virtual/base
 """
