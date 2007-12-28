@@ -55,11 +55,15 @@ class subclass(base.baseclass):
     cmd = "cd %s && patch -p0 < %s" % \
           ( qtsrcdir, os.path.join( self.packagedir, "qt-4.3.3.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
+    
+    # disable debug build of qdbus tools to avoid linking problems (reported on kde-windows)
+    cmd = "cd %s && patch -p0 < %s" % \
+          ( qtsrcdir, os.path.join( self.packagedir, "qdbus.diff" ) )
+    os.system( cmd ) and die( "qt unpack failed" )
+
     return True
 
   def compile( self ):
-    # time for qt4.3.2 ...
-
     qtsrcdir = os.path.join( self.workdir, self.instsrcdir )
     os.chdir( qtsrcdir )
 
