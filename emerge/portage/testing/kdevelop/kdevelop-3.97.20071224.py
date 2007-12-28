@@ -5,6 +5,7 @@ import sys
 
 DEPEND = """
 testing/kdevplatform
+kde/kdebase
 """
 
 class subclass(base.baseclass):

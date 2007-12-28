@@ -4,7 +4,7 @@ import os
 import sys
 
 DEPEND = """
-kde/kdebase
+kde/kdelibs
 """
 
 class subclass(base.baseclass):
