@@ -493,6 +493,7 @@ int main(int argc, char* argv[])
       };
       createRcFile = true;
       rcFileName = argv[i];
+      i++;
     }
     
     if (outfileName==NULL) { outfileName=argv[i]; continue; };
