@@ -25,7 +25,7 @@ class subclass(base.baseclass):
 
     # hopefully only one...
     for filename in self.filenames:
-        os.system( os.path.join( self.downloaddir, filename ) + " /DIR=\"" + self.workdir + "\" /SILENT")
+        self.system( os.path.join( self.downloaddir, filename ) + " /DIR=\"" + self.workdir + "\" /SILENT")
 
     return True
 
