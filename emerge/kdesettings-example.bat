@@ -76,7 +76,7 @@ rem set EMERGE_BUILDTESTS=True
 rem No editing should be necessary below this line (in an ideal world)
 rem ##################################################################
 
-set PATH=%PATH%;%PYTHONPATH%
+set PATH=%PYTHONPATH%;%PATH%
 
 echo kdesettings.bat executed
 echo KDEROOT     : %KDEROOT%
