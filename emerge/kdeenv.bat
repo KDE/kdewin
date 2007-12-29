@@ -22,12 +22,10 @@ set PATH=%KDEROOT%\qt\lib;%PATH%
 set PATH=%KDEROOT%\dbus\bin;%PATH%
 set PATH=%KDEROOT%\perl\bin;%PATH%
 set PATH=%KDEROOT%\strigi\bin;%PATH%
-set PATH=%KDEROOT%\kde\bin;%PATH%
-set PATH=%KDEROOT%\kde\lib;%PATH%
 set PATH=%KDEROOT%\bin;%PATH%
 set PATH=%KDEROOT%\lib;%PATH%
 @
 @rem to find FindKDEInternal.cmake from kdepimlibs etc...
-set KDEDIRS=%KDEROOT%\kde
+set KDEDIRS=%KDEROOT%
 
 cmd /e:on /K "cd %KDEROOT%"
