@@ -77,21 +77,6 @@ rem No editing should be necessary below this line (in an ideal world)
 rem ##################################################################
 
 set PATH=%PATH%;%PYTHONPATH%
-if %directory_layout% equ installer (
-set PATH=%KDEROOT%\bin;%PATH%
-set PATH=%KDEROOT%\lib;%PATH%
-set PATH=%KDEROOT%\emerge\bin;%PATH%
-) else (
-set PATH=%PATH%;%KDEROOT%\mingw\bin
-set PATH=%PATH%;%KDEROOT%\gnuwin32\bin
-set PATH=%PATH%;%KDEROOT%\qt\bin
-set PATH=%PATH%;%KDEROOT%\qt\lib
-set PATH=%PATH%;%KDEROOT%\cmake\bin
-set PATH=%PATH%;%KDEROOT%\win32libs\bin
-set PATH=%PATH%;%KDEROOT%\kde\bin
-set PATH=%PATH%;%KDEROOT%\kde\lib
-set PATH=%PATH%;%KDEROOT%\dbus\bin
-)
 
 echo kdesettings.bat executed
 echo KDEROOT     : %KDEROOT%

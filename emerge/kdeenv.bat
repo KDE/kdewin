@@ -8,26 +8,31 @@ rem    and adapt it to your needs (see that file for more info)
 
 call ..\etc\kdesettings.bat
 
+@echo on
+set PATH=%PATH%;%KDEROOT%\emerge\bin
+if /i %KDECOMPILER% == mingw (
+    set PATH=%PATH%;%KDEROOT%\mingw\bin
+)
 
-set PATH=%KDEROOT%\emerge\bin;%PATH%
-set PATH=%KDEROOT%\gnuwin32\bin;%PATH%
-set PATH=%KDEROOT%\mingw\bin;%PATH%
-set PATH=%KDEROOT%\cmake\bin;%PATH%
-set PATH=%KDEROOT%\subversion\bin;%PATH%
-set PATH=%KDEROOT%\win32libs\bin;%PATH%
-set PATH=%KDEROOT%\kdewin32\bin;%PATH%
-set PATH=%KDEROOT%\mc;%PATH%
-set PATH=%KDEROOT%\qt\bin;%PATH%
-set PATH=%KDEROOT%\qt\lib;%PATH%
-set PATH=%KDEROOT%\dbus\bin;%PATH%
-set PATH=%KDEROOT%\perl\bin;%PATH%
-set PATH=%KDEROOT%\strigi\bin;%PATH%
-set PATH=%KDEROOT%\kde\bin;%PATH%
-set PATH=%KDEROOT%\kde\lib;%PATH%
-set PATH=%KDEROOT%\bin;%PATH%
-set PATH=%KDEROOT%\lib;%PATH%
-@
-@rem to find FindKDEInternal.cmake from kdepimlibs etc...
-set KDEDIRS=%KDEROOT%
+if /i %directory_layout% == installer (
+    set PATH=%KDEROOT%\bin;%PATH%
+    set PATH=%KDEROOT%\lib;%PATH%
+    set KDEDIRS=%KDEROOT%
+) else (
+    set PATH=%PATH%;%KDEROOT%\gnuwin32\bin
+    set PATH=%PATH%;%KDEROOT%\subversion\bin
+    set PATH=%PATH%;%KDEROOT%\qt\bin
+    set PATH=%PATH%;%KDEROOT%\qt\lib
+    set PATH=%PATH%;%KDEROOT%\cmake\bin
+    set PATH=%PATH%;%KDEROOT%\kdewin32\bin
+    set PATH=%PATH%;%KDEROOT%\win32libs\bin
+    set PATH=%PATH%;%KDEROOT%\kde\bin
+    set PATH=%PATH%;%KDEROOT%\kde\lib
+    set PATH=%PATH%;%KDEROOT%\dbus\bin
+    set PATH=%PATH%;%KDEROOT%\mc
+    set PATH=%PATH%;%KDEROOT%\perl\bin
+    set PATH=%PATH%;%KDEROOT%\strigi\bin
+    set KDEDIRS=%KDEROOT%\kde
+)
 
 cmd /e:on /K "cd %KDEROOT%"
