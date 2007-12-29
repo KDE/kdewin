@@ -2,6 +2,9 @@ kdewin32 is a supplementary library and supplementary tools
 
 history
 -------
+version 0.3.4
+- add png2ico can now create rc file
+
 version 0.3.3
 - add create_hash_table tool
 
