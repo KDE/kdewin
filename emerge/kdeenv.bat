@@ -8,7 +8,6 @@ rem    and adapt it to your needs (see that file for more info)
 
 call ..\etc\kdesettings.bat
 
-@echo on
 set PATH=%PATH%;%KDEROOT%\emerge\bin
 if /i %KDECOMPILER% == mingw (
     set PATH=%PATH%;%KDEROOT%\mingw\bin
