@@ -459,6 +459,8 @@ int main(int argc, char* argv[])
   
   static int numColors=256; //static to get rid of longjmp() clobber warning
   static const char* outfileName=NULL;
+  bool createRcFile = false;
+  static const char* rcFileName=NULL;
   
   //i is static because used in a setjmp() block
   for (static int i=1; i<argc; ++i)
@@ -480,7 +482,19 @@ int main(int argc, char* argv[])
       };
       numColors=num;
       continue;
-    };
+    }
+    else if (strcmp(argv[i],"--rcfile")==0)
+    {
+      ++i;
+      if (i>=argc)
+      {
+        fprintf(stderr,"no filename given for rcfile\n");
+        exit(1);
+      };
+      createRcFile = true;
+      rcFileName = argv[i];
+      i++;
+    }
     
     if (outfileName==NULL) { outfileName=argv[i]; continue; };
     
@@ -656,6 +670,15 @@ int main(int argc, char* argv[])
     png_destroy_info_struct(it->png_ptr, &it->end_info);
     png_destroy_read_struct(&it->png_ptr, 0, 0);
   }
+
+  // create .rc - file 
+  if (createRcFile) {
+      FILE* rcfile=fopen(rcFileName,"wb");
+      if (rcfile==NULL) {perror(rcFileName); exit(1);};
+      fprintf(rcfile,"IDI_ICON1        ICON        DISCARDABLE    \"%s\"\n",outfileName);
+      fclose(rcfile);
+  }
+  return 0;
 };
 
 
