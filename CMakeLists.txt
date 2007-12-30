@@ -45,8 +45,8 @@ add_subdirectory(tests)
 configure_file(${CMAKE_SOURCE_DIR}/include/winposix_export.h.cmake ${CMAKE_BINARY_DIR}/include/winposix_export.h)
 
 # find the headers
-file(GLOB _win_headers     include/*.h)
-file(GLOB _win_headers     ${CMAKE_BINARY_DIR}/include/*.h)
+file(GLOB _source_headers  include/*.h)
+file(GLOB _bin_headers     ${CMAKE_BINARY_DIR}/include/*.h)
 file(GLOB _arpa_headers    include/${_incDirPrefix}/arpa/*.h)
 file(GLOB _asm_headers     include/${_incDirPrefix}/asm/*.h)
 file(GLOB _gl_headers      include/${_incDirPrefix}/GL/*.h)
@@ -109,7 +109,8 @@ add_library(kdewin32 SHARED ${win_LIB_SRCS}
                             ${_net_headers}
                             ${_sys_headers}
                             ${_headers}
-                            ${_win_headers}
+                            ${_bin_headers}
+                            ${_source_headers}
                             )
 target_link_libraries(kdewin32 advapi32 shell32 ws2_32 )
 set_target_properties(kdewin32 PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN32_LIB )
@@ -136,7 +137,8 @@ install_files(/include/${_incDirPrefix}/netinet FILES ${_netinet_headers} )
 install_files(/include/${_incDirPrefix}/net FILES ${_net_headers} )
 install_files(/include/${_incDirPrefix}/sys FILES ${_sys_headers} )
 install_files(/include/${_incDirPrefix} FILES ${_headers} )
-install_files(/include FILES ${_win_headers} )
+install_files(/include FILES ${_bin_headers} )
+install_files(/include FILES ${_source_headers} )
 install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
 
 # make directx available to mingw (msvc gets it from the psdk)
