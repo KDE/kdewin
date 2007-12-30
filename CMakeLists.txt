@@ -42,6 +42,7 @@ endif(NOT MSVC)
 add_subdirectory(3rdparty)
 add_subdirectory(tools)
 add_subdirectory(tests)
+configure_file(${CMAKE_SOURCE_DIR}/include/winposix_export.h.cmake ${CMAKE_BINARY_DIR}/include/winposix_export.h)
 
 # find the headers
 file(GLOB _win_headers     include/*.h)
@@ -137,7 +138,6 @@ install_files(/include/${_incDirPrefix}/sys FILES ${_sys_headers} )
 install_files(/include/${_incDirPrefix} FILES ${_headers} )
 install_files(/include FILES ${_win_headers} )
 install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
-configure_file(${CMAKE_SOURCE_DIR}/include/winposix_export.h.cmake ${CMAKE_BINARY_DIR}/include/winposix_export.h)
 
 # make directx available to mingw (msvc gets it from the psdk)
 if(MINGW)
