@@ -15,7 +15,7 @@ call ..\etc\kdesettings.bat
 
 set PATH=%KDEROOT%\emerge\bin;%PATH%
 
-if %KDECOMPILER% == mingw ( set PATH=%KDEROOT%\mingw\bin;%PATH% )
+if %KDECOMPILER% == mingw ( call :path-mingw )
 
 if %directory_layout% == installer ( 
     call :path-installer
@@ -51,4 +51,8 @@ goto :eof
     set PATH=%KDEROOT%\kde\lib;%PATH%
     set PATH=%KDEROOT%\qt\lib;%PATH%
     set KDEDIRS=%KDEROOT%\emerge
+    goto :eof
+    
+:path-mingw
+    set PATH=%KDEROOT%\mingw\bin;%PATH%
     goto :eof
