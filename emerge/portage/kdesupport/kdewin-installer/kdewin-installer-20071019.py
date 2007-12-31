@@ -13,6 +13,7 @@ class subclass(base.baseclass):
     def __init__(self):
         base.baseclass.__init__( self, "" )
         self.instsrcdir = "kdewin-installer"
+        self.buildType = "Release"
 
     def kdeSvnPath( self ):
         return "trunk/kdesupport/kdewin-installer"
