@@ -147,7 +147,6 @@ class baseclass:
         elif command == "qmerge":   ok = self.qmerge()
         elif command == "unmerge":   ok = self.unmerge()
         elif command == "manifest":   ok = self.manifest()
-        elif command == "digest":   ok = self.digest()
         elif command == "package":  ok = self.make_package()
         else:
             ok = utils.error( "command %s not understood" % command )
