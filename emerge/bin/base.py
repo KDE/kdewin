@@ -531,6 +531,10 @@ class baseclass:
             srcpath = os.path.join( self.workdir, self.instsrcdir )
             cmd = "-name %s -root %s -srcroot %s -version %s -destdir %s" % \
                   ( pkg_name, binpath, srcpath, pkg_version, dstpath )
+        elif self.noCopy and self.kdeSvnPath():
+            srcpath = os.path.join(self.kdesvndir, self.kdeSvnPath() ).replace("/", "\\")
+            cmd = "-name %s -root %s -srcroot %s -version %s -destdir %s" % \
+                  ( pkg_name, binpath, srcpath, pkg_version, dstpath )
         else:
             cmd = "-name %s -root %s -version %s -destdir %s" % \
                   ( pkg_name, binpath, pkg_version, dstpath )
