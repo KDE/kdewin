@@ -52,10 +52,10 @@ class subclass(base.baseclass):
 
     def make_package( self ):
         # auto-create both import libs with the help of pexports
-        self.stripLibs( PACKAGE_DLL_NAME )
+        #self.stripLibs( PACKAGE_DLL_NAME )
 
         # auto-create both import libs with the help of pexports
-        self.createImportLibs( PACKAGE_DLL_NAME )
+        #self.createImportLibs( PACKAGE_DLL_NAME )
 
         # now do packaging with kdewin-packager
         self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
