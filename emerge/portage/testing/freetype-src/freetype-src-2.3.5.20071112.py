@@ -47,7 +47,8 @@ class subclass(base.baseclass):
         src = os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_DLL_NAME + ".dll" )
         dst = os.path.join( self.imagedir, self.instdestdir, "bin", "lib" + PACKAGE_NAME + ".dll" )
         shutil.copyfile( src, dst )
-        os.remove(os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_NAME + "-config" ) )
+        if os.path.exists( os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_NAME + "-config" ) ):
+            os.remove(os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_NAME + "-config" ) )
         return True
 
     def make_package( self ):
@@ -56,10 +57,11 @@ class subclass(base.baseclass):
         src = os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_DLL_NAME + ".dll" )
         dst = os.path.join( self.imagedir, self.instdestdir, "bin", "lib" + PACKAGE_NAME + ".dll" )
         shutil.copyfile( src, dst )
-        os.remove(os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_NAME + "-config" ) )
+        if os.path.exists( os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_NAME + "-config" ) ):
+            os.remove( os.path.join( self.imagedir, self.instdestdir, "bin", PACKAGE_NAME + "-config" ) )
 
-        self.stripLibs( PACKAGE_DLL_NAME )
-        self.createImportLibs( "lib" + PACKAGE_NAME )
+        #self.stripLibs( PACKAGE_DLL_NAME )
+        #self.createImportLibs( "lib" + PACKAGE_NAME )
         # now do packaging with kdewin-packager
         # it's a in-source build, do not pack sources
         self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, False )
