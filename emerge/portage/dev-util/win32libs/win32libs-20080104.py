@@ -63,7 +63,7 @@ http://82.149.170.66/kde-windows/win32libs/single/pcre-mingw-7.0-2-lib.zip
 http://82.149.170.66/kde-windows/win32libs/single/redland-1.0.3-5-bin.zip
 http://82.149.170.66/kde-windows/win32libs/single/redland-1.0.3-5-lib.zip
 
-http://download.cegit.de/kde-windows/win32libs/single/shared-mime-info-0.22-bin.zip
+http://download.cegit.de/kde-windows/win32libs/single/shared-mime-info-0.23-bin.zip
 
 http://82.149.170.66/kde-windows/win32libs/single/tiff-3.8.2-2-bin.zip
 http://82.149.170.66/kde-windows/win32libs/single/tiff-3.8.2-2-lib.zip

@@ -6,8 +6,8 @@ import re
 from utils import die
 
 PACKAGE_NAME         = "shared-mime-info"
-PACKAGE_VER          = "0.22"
-PACKAGE_FULL_VER     = "0.22"
+PACKAGE_VER          = "0.23"
+PACKAGE_FULL_VER     = "0.23"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 
 SRC_URI= """
