@@ -11,7 +11,7 @@ PACKAGE_FULL_VER     = "0.22"
 PACKAGE_FULL_NAME    = "%s-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 
 SRC_URI= """
-http://freedesktop.org/~hadess/""" + PACKAGE_FULL_NAME + """.tar.bz2
+http://people.freedesktop.org/~hadess/""" + PACKAGE_FULL_NAME + """.tar.bz2
 ftp://ftp.gtk.org/pub/glib/2.14/glib-2.14.1.tar.bz2
 """
 
