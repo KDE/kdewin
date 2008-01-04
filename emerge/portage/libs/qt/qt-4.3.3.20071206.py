@@ -6,7 +6,7 @@ import os
 
 PACKAGE_NAME         = "qt"
 PACKAGE_VER          = "4.3.3"
-PACKAGE_FULL_VER     = "4.3.3-1"
+PACKAGE_FULL_VER     = "4.3.3-2"
 PACKAGE_FULL_NAME    = "%s-win-opensource-src-%s" % ( PACKAGE_NAME, PACKAGE_VER )
 
 DEPEND = """
@@ -59,6 +59,11 @@ class subclass(base.baseclass):
     # disable debug build of qdbus tools to avoid linking problems (reported on kde-windows)
     cmd = "cd %s && patch -p0 < %s" % \
           ( qtsrcdir, os.path.join( self.packagedir, "qdbus.diff" ) )
+    os.system( cmd ) and die( "qt unpack failed" )
+
+    # install qtestlib into /bin
+    cmd = "cd %s && patch -p0 < %s" % \
+          ( qtsrcdir, os.path.join( self.packagedir, "qtestlib.diff" ) )
     os.system( cmd ) and die( "qt unpack failed" )
 
     return True

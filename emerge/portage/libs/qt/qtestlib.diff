@@ -1,0 +1,14 @@
+--- tools\qtestlib\src\src.pro.orig	2008-01-04 17:55:38.503750000 +0100
++++ tools\qtestlib\src\src.pro	2008-01-04 17:55:47.972500000 +0100
+@@ -74,6 +74,11 @@
+ target.path=$$[QT_INSTALL_LIBS]
+ INSTALLS        += target
+ 
++win32 {
++    dlltarget.path=$$[QT_INSTALL_BINS]
++    INSTALLS += dlltarget
++}
++
+ qt_install_headers {
+     qtestlib_headers.files = $$SYNCQT.HEADER_FILES $$SYNCQT.HEADER_CLASSES
+     qtestlib_headers.path = $$[QT_INSTALL_HEADERS]/QtTest
