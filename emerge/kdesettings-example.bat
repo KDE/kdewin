@@ -1,7 +1,7 @@
 @echo off
 rem here you set the base directory under which the whole kde
 rem system will live
-set KDEROOT=e:\mingwroot
+set KDEROOT=e:\kderoot
 
 rem here you set the compiler to be used:
 rem mingw : use the mingw gcc compiler (recommended)
@@ -18,12 +18,12 @@ set PYTHONPATH=e:\python25
 
 rem here you set set the path to msys if you want to compile
 rem automake-based projects (only needed for some internal packages)
-set MSYSDIR=c:\msys\1.0
+set MSYSDIR=e:\kderoot\msys
 
 rem here you can set the download directory to another dir
 rem if you want, so you can share the same download dir between
 rem mingw and msvc
-set DOWNLOADDIR=e:\distfiles
+set DOWNLOADDIR=e:\kdedownload
 
 rem here you can tell emerge in which dir you want to save the
 rem svn checkout of kde sources, and you can optionally
@@ -62,12 +62,12 @@ rem set EMERGE_BUILDTYPE=RelWithDebInfo
 
 rem If you want to have verbose output uncomment the following option and set it to any positive integer
 rem for verbose output and to 0 or disable it for normal output
-rem set EMERGE_VERBOSE=0
+set EMERGE_VERBOSE=1
 
 rem If you want to have shorter build times, and less disk usage, enable the next option
 rem for all kde svn based stuff it will not copy the svn sources again
 rem problem is that you cannot make packages when this option is set
-rem set EMERGE_NOCOPY=True
+set EMERGE_NOCOPY=True
 
 rem If you want to build all packages with buildTests, enable the next option
 rem this applies only to the cmake based packages
