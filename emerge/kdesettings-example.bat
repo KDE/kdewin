@@ -57,7 +57,7 @@ rem there is a third buildtype called RelWithDebInfo
 rem you can override the buildtype at the commandline using the '--buildtype=[BuildType]' option
 rem the buildtype which is set here will not override the buildtype in a packages .py file
 rem uncomment the next line will result in different build behaviour.
-rem set EMERGE_BUILDTYPE=RelWithDebInfo
+set EMERGE_BUILDTYPE=RelWithDebInfo
 
 
 rem If you want to have verbose output uncomment the following option and set it to any positive integer
