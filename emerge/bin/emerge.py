@@ -1,7 +1,7 @@
 # this will emerge some programs...
 
-# call this with "emerge.py <packagename> <action>"
-# where packagename is the program you want to install
+# call this with "emerge.py <packageName> <action>"
+# where packageName is the program you want to install
 # and action is the action you want to do, see base.py
 #
 # copyright:
@@ -9,7 +9,7 @@
 # Patrick Spendrin <ps_ml [AT] gmx [DOT] de>
 
 # syntax:
-# emerge <options> <action> <packagename>
+# emerge <options> <action> <packageName>
 #
 # action can be:
 # --fetch, --unpack, --compile, --install, --qmerge
@@ -25,7 +25,7 @@ def usage():
     print
     print 'usage: emerge [-f|-p|-q|-v|--offline][--fetch|--unpack|--compile|--install|'
     print '                            --manifest|--qmerge|--unmerge|--package|'
-    print '                            --full-package] packagename'
+    print '                            --full-package] packageName'
     print 'emerge.py is a script for easier building.'
     print
     print 'flags:'
@@ -53,8 +53,53 @@ def usage():
     print 'send bugs and feature requests to kde-windows@kde.org'
     print
 
-buildaction = "all"
+def doExec( category, package, version, action, opts ):
+    if utils.verbose() > 2:
+        print "emerge doExec called opts:", opts
+    file = os.path.join( utils.getPortageDir(), category, package, "%s-%s.py" % \
+                         ( package, version ) )
+    opts_string = ( "%s " * len( opts ) ) % tuple( opts )
+    commandstring = "python %s %s %s" % ( file, action, opts_string )
+    if utils.verbose() > 1:
+        print "file:", file
+        print "commandstring", commandstring
+    utils.system( commandstring ) or utils.die( "running %s" % commandstring )
+    return True
 
+def handlePackage( category, package, version, buildAction, opts ):
+    if utils.verbose() > 1:
+        print "emerge handlePackage called:", category, package, version, buildAction
+    if ( buildAction == "all" or buildAction == "full-package" ):
+        success = doExec( category, package, version, "fetch", opts )
+        success = success and doExec( category, package, version, "unpack", opts )
+        success = success and doExec( category, package, version, "compile", opts )
+        success = success and doExec( category, package, version, "cleanimage", opts )
+        success = success and doExec( category, package, version, "install", opts )
+        if ( buildAction == "all" ):
+            success = success and doExec( category, package, version, "manifest", opts )
+        if ( buildAction == "all" ):
+            success = success and doExec( category, package, version, "qmerge", opts )
+        if( buildAction == "full-package" ):
+            success = success and doExec( category, package, version, "package", opts )
+
+    elif ( buildAction in ["fetch", "unpack", "compile", "configure", "make", "qmerge", "package", "manifest", "unmerge"] ):
+        success = doExec( category, package, version, buildAction, opts )
+    elif ( buildAction == "install" ):
+        success = doExec( category, package, version, "cleanimage", opts )
+        success = success and doExec( category, package, version, "install", opts )
+    elif ( buildAction == "version-dir" ):
+        print "%s-%s" % ( package, version )
+        success = True
+    elif ( buildAction == "version-package" ):
+        print "%s-%s-%s" % ( package, os.getenv( "KDECOMPILER" ), version )
+        success = True
+    else:
+        success = utils.error( "could not understand this buildAction: %s" % buildAction )
+
+    return success
+
+buildAction = "all"
+packageName = None
 doPretend = False
 stayQuiet = False
 buildTests = False
@@ -86,8 +131,8 @@ else:
     
 opts = list()
 
+sys.argv.pop( 0 )
 for i in sys.argv:
-#    print "got this param: %s" % i
     if ( i == "-p" ):
         doPretend = True
     elif ( i == "-q" ):
@@ -112,38 +157,20 @@ for i in sys.argv:
         nocopy = True
         os.environ["EMERGE_NOCOPY"] = str( nocopy )
     elif ( i == "--version-dir" ):
-        buildaction = "version-dir"
+        buildAction = "version-dir"
         stayQuiet = True
     elif ( i == "--version-package" ):
-        buildaction = "version-package"
+        buildAction = "version-package"
         stayQuiet = True
-    elif ( i == "--fetch" ):
-        buildaction = "fetch"
-    elif ( i == "--unpack" ):
-        buildaction = "unpack"
-    elif ( i == "--compile" ):
-        buildaction = "compile"
-    elif ( i == "--configure" ):
-        buildaction = "configure"
-    elif ( i == "--make" ):
-        buildaction = "make"
-    elif ( i == "--install" ):
-        buildaction = "install"
-    elif ( i == "--qmerge" ):
-        buildaction = "qmerge"
-    elif ( i == "--manifest" ):
-        buildaction = "manifest"        
-    elif ( i == "--package" ):
-        buildaction = "package"
-    elif ( i == "--unmerge" ):
-        buildaction = "unmerge"
-    elif ( i == "--full-package" ):
-        buildaction = "full-package"
+    elif ( i in ["--fetch", "--unpack", "--compile", "--configure", "--make",
+                 "--install", "--qmerge", "--manifest", "--package", "--unmerge",
+                 "--full-package"] ):
+        buildAction = i[2:]
     elif ( i.startswith( "-" ) ):
         usage()
         exit ( 1 )
     else:
-        packagename = i
+        packageName = i
 if stayQuiet == True:
     verbose = 0
     os.environ["EMERGE_VERBOSE"]=str( verbose )
@@ -152,9 +179,9 @@ if stayQuiet == True:
 KDEROOT = os.getenv( "KDEROOT" )
 
 if utils.verbose() >= 1:
-    print "buildaction:", buildaction
+    print "buildAction:", buildAction
     print "doPretend:", doPretend
-    print "packagename:", packagename
+    print "packageName:", packageName
     print "buildType:", os.getenv( "EMERGE_BUILDTYPE" )
     print "buildTests:", os.getenv( "EMERGE_BUILDTESTS" )
     print "verbose:", os.getenv( "EMERGE_VERBOSE" )
@@ -164,102 +191,42 @@ if utils.verbose() >= 1:
 # adding emerge/bin to find base.py and gnuwin32.py etc.
 os.environ["PYTHONPATH"] = os.getenv( "PYTHONPATH" ) + ";" + os.path.join( os.getcwd(), os.path.dirname( sys.argv[0] ) )
 
-def doExec( category, package, version, action, opts ):
-    if utils.verbose() > 2:
-        print "emerge doExec called opts:", opts
-    file = os.path.join( utils.getPortageDir(), category, package, "%s-%s.py" % \
-                         ( package, version ) )
-    opts_string = ( "%s " * len(opts) ) % tuple( opts )
-    commandstring = "python %s %s %s" % ( file, action, opts_string )
-    if utils.verbose() > 1:
-        print "file:", file
-        print "commandstring", commandstring
-    utils.system( commandstring ) or utils.die( "running %s" % commandstring )
-    return True
-
-def handlePackage( category, package, version, buildaction, opts ):
-    if utils.verbose() > 1:
-        print "emerge handlePackage called:", category, package, version, buildaction
-    if ( buildaction == "all" or buildaction == "full-package" ):
-        success = doExec( category, package, version, "fetch", opts )
-        success = success and doExec( category, package, version, "unpack", opts )       
-        success = success and doExec( category, package, version, "compile", opts )
-        success = success and doExec( category, package, version, "cleanimage", opts )
-        success = success and doExec( category, package, version, "install", opts )       
-        if ( buildaction == "all" ):
-            success = success and doExec( category, package, version, "manifest", opts )
-        if ( buildaction == "all" ):
-            success = success and doExec( category, package, version, "qmerge", opts )
-        if( buildaction == "full-package" ):
-            success = success and doExec( category, package, version, "package", opts )
-
-    elif ( buildaction == "fetch" ):
-        success = doExec( category, package, version, "fetch", opts )       
-    elif ( buildaction == "unpack" ):
-        success = doExec( category, package, version, "unpack", opts )       
-    elif ( buildaction == "compile" ):
-        success = doExec( category, package, version, "compile", opts )       
-    elif ( buildaction == "configure" ):
-        success = doExec( category, package, version, "configure", opts )       
-    elif ( buildaction == "make" ):
-        success = doExec( category, package, version, "make", opts )       
-    elif ( buildaction == "install" ):
-        success = doExec( category, package, version, "cleanimage", opts )       
-        success = success and doExec( category, package, version, "install", opts )       
-    elif ( buildaction == "qmerge" ):
-        success = doExec( category, package, version, "qmerge", opts )
-    elif ( buildaction == "package" ):
-        success = doExec( category, package, version, "package", opts )
-    elif ( buildaction == "manifest" ):
-        success = doExec( category, package, version, "manifest", opts )
-    elif ( buildaction == "unmerge" ):
-        success = doExec( category, package, version, "unmerge", opts )
-    elif ( buildaction == "version-dir" ):
-        print "%s-%s" % ( package, version )
-        success = True
-    elif ( buildaction == "version-package" ):
-        print "%s-%s-%s" % ( package, os.getenv( "KDECOMPILER" ), version )
-        success = True
-    else:
-        success = utils.error( "could not understand this buildaction: %s" % buildaction )
-
-    return success
     
 
 
 deplist = []
-utils.solveDependencies( "", packagename, "", deplist )
-if verbose > 2:
+utils.solveDependencies( "", packageName, "", deplist )
+if utils.verbose() > 2:
     print "deplist:", deplist
 
 deplist.reverse()
 success = True
 
-if ( buildaction != "all" ):
-    # if a buildaction is given, then do not try to build dependencies
-    # and do the action although the package might already be installed
+if ( buildAction != "all" ):
+    """if a buildAction is given, then do not try to build dependencies"""
+    """and do the action although the package might already be installed"""
     package = deplist[-1]
-    ok = handlePackage( package[0], package[1], package[2], buildaction, opts )
+    ok = handlePackage( package[0], package[1], package[2], buildAction, opts )
 else:
   for package in deplist:
     file = os.path.join( KDEROOT, "emerge", "portage", package[0], package[1], "%s-%s.py" % ( package[1], package[2] ) )
     if ( doPretend ):
         if ( utils.isInstalled( package[0], package[1], package[2] ) ):
-            if utils.verbose() > 1 and package[1] == packagename:
+            if utils.verbose() > 1 and package[1] == packageName:
                 print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
-            elif utils.verbose() > 2 and not package[1] == packagename:
+            elif utils.verbose() > 2 and not package[1] == packageName:
                 print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
         else:
             if utils.verbose() > 0:
                 print "pretending %s/%s-%s" % ( package[0], package[1], package[2] )
     else:
         if ( not utils.isInstalled( package[0], package[1], package[2] ) ):
-            ok = handlePackage( package[0], package[1], package[2], buildaction, opts )
+            ok = handlePackage( package[0], package[1], package[2], buildAction, opts )
             if ( not ok ):
                 print "fatal error: package %s/%s-%s %s failed" % \
-                    (package[0], package[1], package[2], buildaction)
+                    (package[0], package[1], package[2], buildAction)
         else:
-            if utils.verbose() > 1 and package[1] == packagename:
+            if utils.verbose() > 1 and package[1] == packageName:
                 print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
-            elif utils.verbose() > 2 and not package[1] == packagename:
+            elif utils.verbose() > 2 and not package[1] == packageName:
                 print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
