@@ -29,8 +29,8 @@ goto :eof
 :: its subfolder bin contains all the executables and should contain all dynamic libraries
 :: putting the lib directory into the path shouldn't be needed, it is included though for convenience
 :path-installer
-    set PATH=%KDEROOT%\lib;%PATH%   
-    set PATH=%KDEROOT%\bin;%PATH%   
+    set PATH=%KDEROOT%\lib;%PATH%
+    set PATH=%KDEROOT%\bin;%PATH%
     set KDEDIRS=%KDEROOT%
     goto :eof
 
