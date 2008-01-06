@@ -131,7 +131,7 @@ else:
     
 opts = list()
 
-sys.argv.pop( 0 )
+executableName = sys.argv.pop( 0 )
 for i in sys.argv:
     if ( i == "-p" ):
         doPretend = True
@@ -189,10 +189,7 @@ if utils.verbose() >= 1:
     
 
 # adding emerge/bin to find base.py and gnuwin32.py etc.
-os.environ["PYTHONPATH"] = os.getenv( "PYTHONPATH" ) + ";" + os.path.join( os.getcwd(), os.path.dirname( sys.argv[0] ) )
-
-    
-
+os.environ["PYTHONPATH"] = os.getenv( "PYTHONPATH" ) + ";" + os.path.join( os.getcwd(), os.path.dirname( executableName ) )
 
 deplist = []
 utils.solveDependencies( "", packageName, "", deplist )
