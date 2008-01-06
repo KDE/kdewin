@@ -1,3 +1,9 @@
+# this package contains the base class for all packages
+
+# copyright:
+# Holger Schroeder <holger [AT] holgis [DOT] net>
+# Patrick Spendrin <ps_ml [AT] gmx [DOT] de>
+
 import sys
 import os
 

@@ -1,5 +1,10 @@
 # this file contains some helper functions for emerge
 
+# copyright:
+# Holger Schroeder <holger [AT] holgis [DOT] net>
+# Patrick Spendrin <ps_ml [AT] gmx [DOT] de>
+
+
 import httplib
 import ftplib
 import os

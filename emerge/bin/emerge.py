@@ -4,7 +4,9 @@
 # where packagename is the program you want to install
 # and action is the action you want to do, see base.py
 #
-# Holger Schroeder <holger@holgis.net>
+# copyright:
+# Holger Schroeder <holger [AT] holgis [DOT] net>
+# Patrick Spendrin <ps_ml [AT] gmx [DOT] de>
 
 # syntax:
 # emerge <options> <action> <packagename>
