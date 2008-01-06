@@ -50,6 +50,7 @@ file(GLOB _bin_headers     ${CMAKE_BINARY_DIR}/include/*.h)
 file(GLOB _arpa_headers    include/${_incDirPrefix}/arpa/*.h)
 file(GLOB _asm_headers     include/${_incDirPrefix}/asm/*.h)
 file(GLOB _gl_headers      include/${_incDirPrefix}/GL/*.h)
+file(GLOB _machine_headers include/${_incDirPrefix}/machine/*.h)
 file(GLOB _net_headers     include/${_incDirPrefix}/net/*.h)
 file(GLOB _netinet_headers include/${_incDirPrefix}/netinet/*.h)
 file(GLOB _sys_headers     include/${_incDirPrefix}/sys/*.h)
@@ -105,8 +106,8 @@ add_library(kdewin32 SHARED ${win_LIB_SRCS}
                             ${_asm_headers}
                             ${_gl_headers}
                             ${_machine_headers}
-                            ${_netinet_headers}
                             ${_net_headers}
+                            ${_netinet_headers}
                             ${_sys_headers}
                             ${_headers}
                             ${_bin_headers}
@@ -129,22 +130,22 @@ endif(MSVC)
 
 install_targets(/lib kdewin32 )
 
-install_files(/include/${_incDirPrefix}/arpa FILES ${_arpa_headers} )
-install_files(/include/${_incDirPrefix}/asm FILES ${_asm_headers} )
-install_files(/include/${_incDirPrefix}/GL FILES ${_gl_headers} )
+install_files(/include/${_incDirPrefix}/arpa    FILES ${_arpa_headers} )
+install_files(/include/${_incDirPrefix}/asm     FILES ${_asm_headers} )
 install_files(/include/${_incDirPrefix}/machine FILES ${_machine_headers} )
-install_files(/include/${_incDirPrefix}/netinet FILES ${_netinet_headers} )
-install_files(/include/${_incDirPrefix}/net FILES ${_net_headers} )
-install_files(/include/${_incDirPrefix}/sys FILES ${_sys_headers} )
-install_files(/include/${_incDirPrefix} FILES ${_headers} )
-install_files(/include FILES ${_bin_headers} )
-install_files(/include FILES ${_source_headers} )
-install_files(/doc/${NAME}-${VERSION} FILES readme.txt )
-
-# make directx available to mingw (msvc gets it from the psdk)
+install_files(/include/${_incDirPrefix}/sys     FILES ${_sys_headers} )
+install_files(/include/${_incDirPrefix}         FILES ${_headers} )
+install_files(/include                          FILES ${_bin_headers} )
+install_files(/include                          FILES ${_source_headers} )
+install_files(/doc/${NAME}-${VERSION}           FILES readme.txt )
 if(MINGW)
-install_files(/include/directx FILES ${_directx_headers} ${_directx_idls} )
+  install_files(/include/${_incDirPrefix}/directx FILES ${_directx_headers} ${_directx_idls} )
+  install_files(/include/${_incDirPrefix}/net     FILES ${_net_headers} )
 endif(MINGW)
+if(MSVC)
+  install_files(/include/${_incDirPrefix}/GL      FILES ${_gl_headers} )
+  install_files(/include/${_incDirPrefix}/netinet FILES ${_netinet_headers} )
+endif(MSVC)
 
 include(Win32Macros)
 addExplorerWrapper(${NAME})
