@@ -479,9 +479,9 @@ class baseclass:
             if( not ( self.kdeConfigureInternal( self.buildType ) and self.kdeMakeInternal( self.buildType ) ) ):
                 return False
         else:
-            if( not ( self.kdeConfigureInternal( "debug" ) and self.kdeMakeInternal( "debug" ) ) ):
+            if( not ( self.kdeConfigureInternal( "Debug" ) and self.kdeMakeInternal( "Debug" ) ) ):
                 return False
-            if( not ( self.kdeConfigureInternal( "release" ) and self.kdeMakeInternal( "release" ) ) ):
+            if( not ( self.kdeConfigureInternal( "Release" ) and self.kdeMakeInternal( "Release" ) ) ):
                 return False
         return True
 
