@@ -437,6 +437,9 @@ class baseclass:
 
         if self.buildTests:
             options = options + " -DKDE4_BUILD_TESTS=1"
+
+        options = options + "-DKDEWIN_DIR:PATH=%s" % \
+               os.path.join( self.rootdir ).replace( "\\", "/" )
         
         return options
 
