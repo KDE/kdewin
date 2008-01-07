@@ -190,6 +190,24 @@ if utils.verbose() >= 1:
     print "verbose:", os.getenv( "EMERGE_VERBOSE" )
     print "KDEROOT:", KDEROOT
     
+if not os.getenv( "CMAKE_INCLUDE_PATH" ) == None:
+    print
+    utils.warning( "CMAKE_INCLUDE_PATH found as environment variable. you cannot override emerge"\
+                   " with this - unsetting CMAKE_INCLUDE_PATH locally" )
+    os.environ["CMAKE_INCLUDE_PATH"]=""
+
+if not os.getenv( "CMAKE_LIBRARY_PATH" ) == None:
+    print
+    utils.warning( "CMAKE_LIBRARY_PATH found as environment variable. you cannot override emerge"\
+                   " with this - unsetting CMAKE_LIBRARY_PATH locally" )
+    os.environ["CMAKE_LIBRARY_PATH"]=""
+
+if not os.getenv( "CMAKE_FIND_PREFIX" ) == None:
+    print
+    utils.warning( "CMAKE_FIND_PREFIX found as environment variable. you cannot override emerge"\
+                   " with this - unsetting CMAKE_FIND_PREFIX locally" )
+    os.environ["CMAKE_FIND_PREFIX"]=""
+    
 
 # adding emerge/bin to find base.py and gnuwin32.py etc.
 os.environ["PYTHONPATH"] = os.getenv( "PYTHONPATH" ) + ";" +\
