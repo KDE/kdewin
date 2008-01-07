@@ -125,7 +125,6 @@ def getHttpFile( host, path, destdir, filename ):
 ### unpack functions
 
 def unpackFiles( downloaddir, filenames, workdir ):
-    # make sure that the workdir exists and is empty
     cleanDirectory( workdir )
 
     for filename in filenames:
@@ -134,8 +133,7 @@ def unpackFiles( downloaddir, filenames, workdir ):
         if ( not unpackFile( downloaddir, filename, workdir ) ):
             return False
 
-    return True        
-
+    return True
 
 def unpackFile( downloaddir, filename, workdir ):
     ( shortname, ext ) = os.path.splitext( filename )
@@ -154,7 +152,6 @@ def unpackFile( downloaddir, filename, workdir ):
             return True
         error( "dont know how to unpack this file:", filename )
         return False
-
 
 def unTar( file, destdir ):
     if verbose() > 1:
@@ -241,19 +238,19 @@ def svnFetch( repo, destdir, username = None, password = None ):
 ### package dependencies functions
     
 def isInstalled( category, package, version ):
-    file = os.path.join( getEtcPortageDir(), "installed" )
-    if ( not os.path.isfile( file ) ):
+    fileName = os.path.join( getEtcPortageDir(), "installed" )
+    if ( not os.path.isfile( fileName ) ):
         warning( "installed db file does not exist" )
         return False
 
     found = False
-    f = open( file, "rb" )
+    f = open( fileName, "rb" )
     for line in f.read().splitlines():
         if ( line == "%s/%s-%s" % ( category, package, version ) ):
             found = True
             break
-
     f.close()
+
     if ( not found ):
         """ try to detect packages from the installer """
         releasepack = os.path.join( os.getenv( "KDEROOT" ), "manifest", package + "-" + version + "-bin.mft" )
@@ -311,7 +308,6 @@ def getCategoryPackageVersion( path ):
     return [ category, package, version ]
 
 def getPortageDir():
-#FIXME: make this configurable
     return os.path.join( os.getenv( "KDEROOT" ), "emerge", "portage" )
 
 def getEtcPortageDir():
@@ -406,7 +402,6 @@ def getDependencies( category, package, version ):
         deps.append( [ category, package, version ] )
     return deps
 
-
 def solveDependencies( category, package, version, deplist ):
     if ( category == "" ):
         category = getCategory( package )
@@ -414,7 +409,6 @@ def solveDependencies( category, package, version, deplist ):
     if ( version == "" ):
         version = getNewestVersion( category, package )
 
-    # FIXME: if you ever happen to find any errors with the dependencies, try to delete the next two lines
     if [ category, package, version ] in deplist:
         deplist.remove( [ category, package, version ] )
         
@@ -430,7 +424,41 @@ def solveDependencies( category, package, version, deplist ):
     # for every dep call solvedeps
     #return deplist
 
-### helper functions 
+def getInstallables():
+    """get all the packages that are within the portage directory"""
+    instList = list()
+    catdirs = os.listdir( getPortageDir() )
+    if '.svn' in catdirs:
+        catdirs.remove( '.svn' )
+    for category in catdirs:
+        pakdirs = os.listdir( os.path.join( getPortageDir(), category ) )
+        if '.svn' in pakdirs:
+            pakdirs.remove( '.svn' )
+        for package in pakdirs:
+            if os.path.isdir( os.path.join( getPortageDir(), category, package ) ):
+                scriptdirs = os.listdir( os.path.join( getPortageDir(), category, package ) )
+                for script in scriptdirs:
+                    if script.endswith( '.py' ):
+                        version = script.replace('.py', '').replace(package + '-', '')
+                        instList.append([category, package, version])
+    return instList
+
+def printInstallables():
+    catlen = 25
+    packlen = 25
+    for category, package, version in getInstallables():
+        print category + " " * ( catlen - len( category ) ) + package + " " * ( packlen - len( package ) ) + version
+
+def printInstalled():
+    """get all the packages that are already installed"""
+    catlen = 25
+    packlen = 25
+    installed = getInstallables()
+    for category, package, version in installed:
+        if not isInstalled( category, package, version ):
+            installed.remove( [ category, package, version ] )
+        print category + " " * ( catlen - len( category ) ) + package + " " * ( packlen - len( package ) ) + version
+
 def warning( message ):
     if verbose() > 0:
         print "emerge warning: %s" % message
@@ -611,14 +639,10 @@ def manifestDir( srcdir, imagedir, package, version ):
     if len(docList) > 0:
         docversion.write( "%s %s Documentation\n%s:" % ( package, version, package ) )
     
-    
-    
 def mergeImageDirToRootDir( imagedir, rootdir ):
-    #print "mergeImageDirToRootDir called. id: %s, root: %s" % ( imagedir, rootdir )
     copySrcDirToDestDir( imagedir, rootdir )
 
 def moveEntries( srcdir, destdir ):
-    #print "moveEntries:", srcdir, destdir
     for entry in os.listdir( srcdir ):
         #print "rootdir:", root
         if verbose() > 1:
@@ -634,9 +658,7 @@ def moveEntries( srcdir, destdir ):
         os.rename( src, dest )
     
 def moveImageDirContents( imagedir, relSrcDir, relDestDir ):
-    #print "moveImageDirContents:", imagedir, relSrcDir, relDestDir
-
-    srcdir = os.path.join( imagedir, relSrcDir )    
+    srcdir = os.path.join( imagedir, relSrcDir )
     destdir = os.path.join( imagedir, relDestDir )    
 
     if ( not os.path.isdir( destdir ) ):
@@ -645,7 +667,6 @@ def moveImageDirContents( imagedir, relSrcDir, relDestDir ):
     moveEntries( srcdir, destdir )
     os.chdir( imagedir )    
     os.removedirs( relSrcDir )
-
 
 def fixCmakeImageDir( imagedir, rootdir ):
     """
@@ -680,7 +701,6 @@ def fixCmakeImageDir( imagedir, rootdir ):
     os.rmdir( tmpdir )
 
 def cleanDirectory( dir ):
-    #print "cleanDirectory called. dir:", dir
     if ( os.path.exists( dir ) ):
         for root, dirs, files in os.walk( dir, topdown=False):
             for name in files:
@@ -689,7 +709,6 @@ def cleanDirectory( dir ):
                 os.rmdir(os.path.join(root, name))
     else:
       os.makedirs( dir )
-
 
 def sedFile( directory, file, sedcommand ):
     """ runs the given sed command on the given file """

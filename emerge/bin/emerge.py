@@ -56,12 +56,12 @@ def usage():
 def doExec( category, package, version, action, opts ):
     if utils.verbose() > 2:
         print "emerge doExec called opts:", opts
-    file = os.path.join( utils.getPortageDir(), category, package, "%s-%s.py" % \
+    fileName = os.path.join( utils.getPortageDir(), category, package, "%s-%s.py" % \
                          ( package, version ) )
     opts_string = ( "%s " * len( opts ) ) % tuple( opts )
-    commandstring = "python %s %s %s" % ( file, action, opts_string )
+    commandstring = "python %s %s %s" % ( fileName, action, opts_string )
     if utils.verbose() > 1:
-        print "file:", file
+        print "file:", fileName
         print "commandstring", commandstring
     utils.system( commandstring ) or utils.die( "running %s" % commandstring )
     return True
@@ -92,6 +92,12 @@ def handlePackage( category, package, version, buildAction, opts ):
         success = True
     elif ( buildAction == "version-package" ):
         print "%s-%s-%s" % ( package, os.getenv( "KDECOMPILER" ), version )
+        success = True
+    elif ( buildAction == "installable" ):
+        utils.printInstallables()
+        success = True
+    elif ( buildAction == "print-installed" ):
+        utils.printInstalled()
         success = True
     else:
         success = utils.error( "could not understand this buildAction: %s" % buildAction )
@@ -156,11 +162,8 @@ for i in sys.argv:
     elif ( i == "--nocopy" ):
         nocopy = True
         os.environ["EMERGE_NOCOPY"] = str( nocopy )
-    elif ( i == "--version-dir" ):
-        buildAction = "version-dir"
-        stayQuiet = True
-    elif ( i == "--version-package" ):
-        buildAction = "version-package"
+    elif ( i in ["--version-dir", "--version-package", "--installable", "--print-installed"] ):
+        buildAction = i[2:]
         stayQuiet = True
     elif ( i in ["--fetch", "--unpack", "--compile", "--configure", "--make",
                  "--install", "--qmerge", "--manifest", "--package", "--unmerge",
@@ -189,41 +192,44 @@ if utils.verbose() >= 1:
     
 
 # adding emerge/bin to find base.py and gnuwin32.py etc.
-os.environ["PYTHONPATH"] = os.getenv( "PYTHONPATH" ) + ";" + os.path.join( os.getcwd(), os.path.dirname( executableName ) )
+os.environ["PYTHONPATH"] = os.getenv( "PYTHONPATH" ) + ";" +\
+                           os.path.join( os.getcwd(), os.path.dirname( executableName ) )
 
 deplist = []
-utils.solveDependencies( "", packageName, "", deplist )
+if packageName:
+    utils.solveDependencies( "", packageName, "", deplist )
+    
 if utils.verbose() > 2:
     print "deplist:", deplist
 
 deplist.reverse()
 success = True
 
+# package[0] -> category
+# package[1] -> package
+# package[2] -> version
+
 if ( buildAction != "all" ):
     """if a buildAction is given, then do not try to build dependencies"""
     """and do the action although the package might already be installed"""
-    package = deplist[-1]
+    if packageName:
+        package = deplist[-1]
+    else:
+        package = [ None, None, None ]
     ok = handlePackage( package[0], package[1], package[2], buildAction, opts )
 else:
-  for package in deplist:
-    file = os.path.join( KDEROOT, "emerge", "portage", package[0], package[1], "%s-%s.py" % ( package[1], package[2] ) )
-    if ( doPretend ):
+    for package in deplist:
         if ( utils.isInstalled( package[0], package[1], package[2] ) ):
             if utils.verbose() > 1 and package[1] == packageName:
-                print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
+                utils.warning( "already installed %s/%s-%s" % ( package[0], package[1], package[2] ) )
             elif utils.verbose() > 2 and not package[1] == packageName:
-                print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
+                utils.warning( "already installed %s/%s-%s" % ( package[0], package[1], package[2] ) )
         else:
-            if utils.verbose() > 0:
-                print "pretending %s/%s-%s" % ( package[0], package[1], package[2] )
-    else:
-        if ( not utils.isInstalled( package[0], package[1], package[2] ) ):
-            ok = handlePackage( package[0], package[1], package[2], buildAction, opts )
-            if ( not ok ):
-                print "fatal error: package %s/%s-%s %s failed" % \
-                    (package[0], package[1], package[2], buildAction)
-        else:
-            if utils.verbose() > 1 and package[1] == packageName:
-                print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
-            elif utils.verbose() > 2 and not package[1] == packageName:
-                print "already installed %s/%s-%s" % ( package[0], package[1], package[2] )
+            if ( doPretend ):
+                if utils.verbose() > 0:
+                    utils.warning( "pretending %s/%s-%s" % ( package[0], package[1], package[2] ) )
+            else:
+                if not handlePackage( package[0], package[1], package[2], buildAction, opts ):
+                    utils.error( "fatal error: package %s/%s-%s %s failed" % \
+                        (package[0], package[1], package[2], buildAction) )
+    
