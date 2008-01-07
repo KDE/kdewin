@@ -210,8 +210,7 @@ if not os.getenv( "CMAKE_FIND_PREFIX" ) == None:
     
 
 # adding emerge/bin to find base.py and gnuwin32.py etc.
-os.environ["PYTHONPATH"] = os.getenv( "PYTHONPATH" ) + ";" +\
-                           os.path.join( os.getcwd(), os.path.dirname( executableName ) )
+sys.path.append( os.path.join( os.getcwd(), os.path.dirname( executableName ) ) )
 
 deplist = []
 if packageName:
