@@ -122,7 +122,7 @@ class baseclass:
 
     def execute( self ):
         """called to run the derived class"""
-        if globals()['__name__'] == '__main__':
+        if __name__ == '__main__':
             """this will be executed from the package if the package is started on its own"""
             """it shouldn't be called if the package is imported as a python module"""
             if utils.verbose() > 1:
