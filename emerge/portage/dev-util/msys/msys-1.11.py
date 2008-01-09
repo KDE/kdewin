@@ -12,4 +12,5 @@ class subclass(base.baseclass):
         base.baseclass.__init__( self, SRC_URI )
         self.instdestdir = "msys"
 	
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

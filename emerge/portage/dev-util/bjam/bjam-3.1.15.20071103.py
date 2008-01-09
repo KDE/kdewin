@@ -28,4 +28,5 @@ class subclass(base.baseclass):
             self.instdestdir = ""
         return self.doPackaging( PACKAGE_NAME, PACKAGE_VER, True )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

@@ -91,4 +91,5 @@ class subclass(base.baseclass):
     utils.copySrcDirToDestDir( srcdir, destdir )
     return True
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

@@ -20,5 +20,6 @@ class subclass(gnuwin32.gnuwin32class):
     
     return True
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()
 

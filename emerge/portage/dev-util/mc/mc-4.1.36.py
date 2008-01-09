@@ -20,4 +20,5 @@ class subclass(base.baseclass):
 	os.path.join( self.workdir, "mcc.exe" ) )
     return True
     
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

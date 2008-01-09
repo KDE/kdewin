@@ -9,4 +9,5 @@ class subclass(base.baseclass):
     if self.traditional:
         self.instdestdir = "perl"
 		
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

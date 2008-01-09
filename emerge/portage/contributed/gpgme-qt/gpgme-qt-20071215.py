@@ -52,5 +52,6 @@ class subclass(base.baseclass):
     self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
 
     return True
-
-subclass().execute()
+    
+if __name__ == '__main__':
+    subclass().execute()

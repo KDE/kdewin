@@ -8,4 +8,5 @@ class subclass(gnuwin32.gnuwin32class):
   def __init__(self):
     gnuwin32.gnuwin32class.__init__( self, SRC_URI )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()
