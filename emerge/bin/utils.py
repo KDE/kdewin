@@ -15,6 +15,8 @@ import zipfile
 import tarfile
 import hashlib
 import subprocess
+import __builtin__
+import imp
 
 import portage_versions
 
@@ -26,6 +28,15 @@ if (os.getenv( "directory_layout" ) == "installer" ):
     WGetExecutable = os.path.join( os.getenv( "KDEROOT" ), "bin", "wget.exe" )
 else:
     WGetExecutable = os.path.join( os.getenv( "KDEROOT" ), "gnuwin32", "bin", "wget.exe" )
+
+def __import__( module ):
+    if not os.path.isfile( module ):
+        return __builtin__.__import__( module )
+    else:
+        sys.path.append( os.path.dirname( module ) )
+        fileHdl=open( module )
+        modulename=os.path.basename( module ).replace('.py', '')
+        return imp.load_module( modulename.replace('.', '_'), fileHdl, module, imp.get_suffixes()[1] )
 
 def verbose():
     verb=os.getenv( "EMERGE_VERBOSE" )
