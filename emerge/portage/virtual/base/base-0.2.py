@@ -14,4 +14,5 @@ class subclass(base.baseclass):
   def __init__(self):
     base.baseclass.__init__( self, "" )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

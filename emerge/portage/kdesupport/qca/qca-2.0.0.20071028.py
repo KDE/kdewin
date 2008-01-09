@@ -31,4 +31,5 @@ class subclass(base.baseclass):
         else:
             return self.doPackaging( "qca", os.path.basename(sys.argv[0]).replace("qca-", "").replace(".py", ""), True )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

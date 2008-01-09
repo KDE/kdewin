@@ -35,4 +35,5 @@ class subclass(base.baseclass):
         else:
             return self.doPackaging( "strigi", os.path.basename(sys.argv[0]).replace("strigi-", "").replace(".py", ""), True )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

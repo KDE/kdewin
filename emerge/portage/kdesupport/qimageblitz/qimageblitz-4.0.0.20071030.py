@@ -31,4 +31,5 @@ class subclass(base.baseclass):
         else:
             return self.doPackaging( "qimageblitz", os.path.basename(sys.argv[0]).replace("qimageblitz-", "").replace(".py", ""), True )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

@@ -33,4 +33,5 @@ class subclass(base.baseclass):
             self.instdestdir = "kde"
         return self.doPackaging( "gmm", os.path.basename(sys.argv[0]).replace("gmm-", "").replace(".py", ""), True )        
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

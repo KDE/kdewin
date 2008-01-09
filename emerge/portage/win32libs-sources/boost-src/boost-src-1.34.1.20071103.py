@@ -73,4 +73,5 @@ class subclass(base.baseclass):
     def make_package( self ):
         return self.doPackaging( PACKAGE_NAME, PACKAGE_FULL_VER, True )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

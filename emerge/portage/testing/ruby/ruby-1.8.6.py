@@ -17,4 +17,5 @@ class subclass(base.baseclass):
       os.remove( os.path.join( self.workdir, self.instsrcdir, "MANIFEST" ) )
     return res
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

@@ -32,4 +32,5 @@ class subclass(base.baseclass):
             self.instdestdir = "kde"
         return self.doPackaging( "eigen", os.path.basename(sys.argv[0]).replace("eigen-", "").replace(".py", ""), True )        
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

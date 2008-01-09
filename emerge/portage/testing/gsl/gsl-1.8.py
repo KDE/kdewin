@@ -13,4 +13,5 @@ class subclass(base.baseclass):
     else:
         self.instdestdir = ""
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

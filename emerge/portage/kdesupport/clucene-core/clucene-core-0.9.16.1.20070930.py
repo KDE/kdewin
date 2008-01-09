@@ -49,4 +49,5 @@ class subclass(base.baseclass):
         return self.doPackaging( "clucene-core", os.path.basename(sys.argv[0]).replace("clucene-core-", "").replace(".py", ""), True )
     
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

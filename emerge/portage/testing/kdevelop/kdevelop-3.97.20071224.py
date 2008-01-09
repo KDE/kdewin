@@ -28,4 +28,5 @@ class subclass(base.baseclass):
     def make_package( self ):
         return self.doPackaging( "kdevelop", os.path.basename(sys.argv[0]).replace("kdevelop-", "").replace(".py", ""), True )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

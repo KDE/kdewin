@@ -34,4 +34,5 @@ class subclass(base.baseclass):
     def make_package( self ):
         return self.doPackaging( "keduca", "20070412", True )
 		
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

@@ -30,4 +30,5 @@ class subclass(base.baseclass):
         else:
             return self.doPackaging( "taglib", os.path.basename(sys.argv[0]).replace("taglib-", "").replace(".py", ""), True )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

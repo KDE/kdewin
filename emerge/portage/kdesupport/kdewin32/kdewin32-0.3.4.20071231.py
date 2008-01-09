@@ -30,4 +30,5 @@ class subclass(base.baseclass):
             return self.doPackaging( "kdewin32", "0.3.4-1", True )
         else:
             return self.doPackaging( "kdewin32", os.path.basename(sys.argv[0]).replace("kdewin32-", "").replace(".py", ""), True )
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

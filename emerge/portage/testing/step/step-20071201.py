@@ -33,4 +33,5 @@ class subclass(base.baseclass):
     def make_package( self ):
         return self.doPackaging( "step", "20070112", True )
 		
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()
