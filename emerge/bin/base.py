@@ -122,46 +122,46 @@ class baseclass:
 
     def execute( self ):
         """called to run the derived class"""
-        if __name__ == '__main__':
-            """this will be executed from the package if the package is started on its own"""
-            """it shouldn't be called if the package is imported as a python module"""
-            if utils.verbose() > 1:
-                print "base exec called. args:", sys.argv
+#        if __name__ == '__main__':
+        """this will be executed from the package if the package is started on its own"""
+        """it shouldn't be called if the package is imported as a python module"""
+        if utils.verbose() > 1:
+            print "base exec called. args:", sys.argv
 
-            command = sys.argv[ 1 ]
-            options = ""
-            if ( len( sys.argv )  > 2 ):
-                options = sys.argv[ 2: ]
-            self.noFetch = False
-            if ( "--offline" in options ):
-                self.noFetch  = True
-            if ( "--forced" in options ):
-                self.forced = True
-            if ( "--versioned" in options ):
-                self.versioned = True
-            if utils.verbose() > 1:
-                print "command:", command
-                print "opts:", options
+        command = sys.argv[ 1 ]
+        options = ""
+        if ( len( sys.argv )  > 2 ):
+            options = sys.argv[ 2: ]
+        self.noFetch = False
+        if ( "--offline" in options ):
+            self.noFetch  = True
+        if ( "--forced" in options ):
+            self.forced = True
+        if ( "--versioned" in options ):
+            self.versioned = True
+        if utils.verbose() > 1:
+            print "command:", command
+            print "opts:", options
 
-            self.setDirectories()
+        self.setDirectories()
 
-            ok = True
-            if command == "fetch":          ok = self.fetch()
-            elif command == "cleanimage":   self.cleanup()
-            elif command == "unpack":   ok = self.unpack()
-            elif command == "compile":  ok = self.compile()
-            elif command == "configure":  ok = self.compile()
-            elif command == "make":  ok = self.compile()
-            elif command == "install": ok = self.install()
-            elif command == "qmerge":   ok = self.qmerge()
-            elif command == "unmerge":   ok = self.unmerge()
-            elif command == "manifest":   ok = self.manifest()
-            elif command == "package":  ok = self.make_package()
-            else:
-                ok = utils.error( "command %s not understood" % command )
+        ok = True
+        if command == "fetch":          ok = self.fetch()
+        elif command == "cleanimage":   self.cleanup()
+        elif command == "unpack":   ok = self.unpack()
+        elif command == "compile":  ok = self.compile()
+        elif command == "configure":  ok = self.compile()
+        elif command == "make":  ok = self.compile()
+        elif command == "install": ok = self.install()
+        elif command == "qmerge":   ok = self.qmerge()
+        elif command == "unmerge":   ok = self.unmerge()
+        elif command == "manifest":   ok = self.manifest()
+        elif command == "package":  ok = self.make_package()
+        else:
+            ok = utils.error( "command %s not understood" % command )
 
-            if ( not ok ):
-                utils.die( "command %s failed" % command )
+        if ( not ok ):
+            utils.die( "command %s failed" % command )
 
     def cleanup( self ):
         """cleanup before install to imagedir"""
