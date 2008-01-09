@@ -31,4 +31,5 @@ class subclass(base.baseclass):
     return self.doPackaging( "kdelibs", "3.94-2", True )
 
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

@@ -34,4 +34,5 @@ class subclass(base.baseclass):
     def make_package( self ):
         return self.doPackaging( "kdelibs", os.path.basename(sys.argv[0]).replace("kdelibs-", "").replace(".py", ""), True )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

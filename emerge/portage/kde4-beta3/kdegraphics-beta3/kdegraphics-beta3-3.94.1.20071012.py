@@ -25,4 +25,5 @@ class subclass(base.baseclass):
   def make_package( self ):
     return self.doPackaging( "kdegraphics", "3.94-2", True )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

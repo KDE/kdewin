@@ -34,4 +34,5 @@ class subclass(base.baseclass):
     def make_package( self ):
         return self.doPackaging( "kdenetwork", os.path.basename(sys.argv[0]).replace("kdenetwork-", "").replace(".py", ""), True )
 
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()

@@ -27,4 +27,5 @@ class subclass(base.baseclass):
     def make_package( self ):
         return self.doPackaging( "kdepim", os.path.basename(sys.argv[0]).replace("kdepim-", "").replace(".py", ""), True )
 		
-subclass().execute()
+if __name__ == '__main__':
+    subclass().execute()
