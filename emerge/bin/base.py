@@ -36,9 +36,6 @@ if ( not DIRECTORYLAYOUT == "installer" ):
     """ installer layout has no category subfolder """
     DIRECTORYLAYOUT = "traditional"
 
-# an optional dir to compile autmake based sources
-MSYSDIR = os.getenv( "MSYSDIR" )
-
 # ok, we have the following dirs:
 # ROOTDIR: the root where all this is below
 # DOWNLOADDIR: the dir under rootdir, where the downloaded files are put into
@@ -284,12 +281,11 @@ class baseclass:
         self.kdesvnserver = KDESVNSERVER
         self.kdesvnuser = KDESVNUSERNAME
         self.kdesvnpass = KDESVNPASSWORD
-        self.msysdir = MSYSDIR
         
         self.strigidir = os.getenv( "STRIGI_HOME" )
         self.dbusdir = os.getenv( "DBUSDIR" )
 
-        self.msys.setDirectories( [ self.imagedir, self.workdir, self.instsrcdir, self.instdestdir ], MSYSDIR )
+        self.msys.setDirectories( [ self.imagedir, self.workdir, self.instsrcdir, self.instdestdir ] )
 
     def svnFetch( self, repo ):
         """getting sources from a custom svn repo"""
