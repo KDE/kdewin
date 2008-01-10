@@ -454,6 +454,17 @@ def getInstallables():
                         instList.append([category, package, version])
     return instList
 
+def printTargets( category, package, version ):
+    """ """
+    if verbose() > 1:
+        print "importing file %s" % os.path.join( getPortageDir(), category, package, "%s-%s.py" % ( package, version ) )
+    mod=__import__( os.path.join( getPortageDir(), category, package, "%s-%s.py" % ( package, version ) ) )
+    packageInfo = mod.subinfo()
+    for i in packageInfo.svnTargets.keys():
+        print i
+    for i in packageInfo.Targets.keys():
+        print i
+    
 def printInstallables():
     catlen = 25
     packlen = 25

@@ -93,11 +93,14 @@ def handlePackage( category, package, version, buildAction, opts ):
     elif ( buildAction == "version-package" ):
         print "%s-%s-%s" % ( package, os.getenv( "KDECOMPILER" ), version )
         success = True
-    elif ( buildAction == "installable" ):
+    elif ( buildAction == "print-installable" ):
         utils.printInstallables()
         success = True
     elif ( buildAction == "print-installed" ):
         utils.printInstalled()
+        success = True
+    elif ( buildAction == "print-targets" ):
+        utils.printTargets( category, package, version )
         success = True
     else:
         success = utils.error( "could not understand this buildAction: %s" % buildAction )
@@ -108,8 +111,6 @@ buildAction = "all"
 packageName = None
 doPretend = False
 stayQuiet = False
-buildTests = False
-offline = False
 opts = ""
 
 if len( sys.argv ) < 2:
@@ -121,12 +122,6 @@ if ( ncopy == "True" ):
     nocopy = True
 else:
     nocopy = False
-
-bTests=os.getenv( "EMERGE_BUILDTESTS" )
-if ( bTests == "True" ):
-    buildTests = True
-else:
-    buildTests = False
 
 verb = os.getenv( "EMERGE_VERBOSE" )
 if verb == None or not verb.isdigit():
@@ -144,25 +139,22 @@ for i in sys.argv:
     elif ( i == "-q" ):
         stayQuiet = True
     elif ( i == "-t" ):
-        buildTests = True
         os.environ["EMERGE_BUILDTESTS"] = "True"
     elif ( i == "--offline" ):
         opts.append( "--offline" )
-        offline = True
         os.environ["EMERGE_OFFLINE"] = "True"
     elif ( i == "-f" ):
-        opts.append( "--forced" )
+        os.environ["EMERGE_FORCED"] = "True"
     elif ( i.startswith( "--version=" ) ):
-        srcversion = i.replace( "--version=", "" )
+        os.environ["EMERGE_VERSION"]   = i.replace( "--version=", "" )
     elif ( i.startswith( "--buildtype=" ) ):
         os.environ["EMERGE_BUILDTYPE"] = i.replace( "--buildtype=", "" )
     elif ( i == "-v" ):
         verbose = verbose + 1
         os.environ["EMERGE_VERBOSE"] = str( verbose )
     elif ( i == "--nocopy" ):
-        nocopy = True
-        os.environ["EMERGE_NOCOPY"] = str( nocopy )
-    elif ( i in ["--version-dir", "--version-package", "--installable", "--print-installed"] ):
+        os.environ["EMERGE_NOCOPY"] = str( True )
+    elif ( i in ["--version-dir", "--version-package", "--print-installable", "--print-installed", "--print-targets"] ):
         buildAction = i[2:]
         stayQuiet = True
     elif ( i in ["--fetch", "--unpack", "--compile", "--configure", "--make",
@@ -176,7 +168,7 @@ for i in sys.argv:
         packageName = i
 if stayQuiet == True:
     verbose = 0
-    os.environ["EMERGE_VERBOSE"]=str( verbose )
+    os.environ["EMERGE_VERBOSE"] = str( verbose )
 
 # get KDEROOT from env
 KDEROOT = os.getenv( "KDEROOT" )

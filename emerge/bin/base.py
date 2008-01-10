@@ -97,6 +97,8 @@ class baseclass:
             self.noFetch = True
         if os.getenv( "EMERGE_NOCOPY" ) == "True":
             self.noCopy = True
+        if os.getenv( "EMERGE_FORCED" ) == "True":
+            self.forced = True
         if os.getenv( "EMERGE_BUILDTESTS" ) == "True":
             self.buildTests = True
         if DIRECTORYLAYOUT == "installer":
@@ -131,13 +133,6 @@ class baseclass:
         options = ""
         if ( len( sys.argv )  > 2 ):
             options = sys.argv[ 2: ]
-        self.noFetch = False
-        if ( "--offline" in options ):
-            self.noFetch  = True
-        if ( "--forced" in options ):
-            self.forced = True
-        if ( "--versioned" in options ):
-            self.versioned = True
         if utils.verbose() > 1:
             print "command:", command
             print "opts:", options
@@ -281,7 +276,7 @@ class baseclass:
         self.kdesvnserver = KDESVNSERVER
         self.kdesvnuser = KDESVNUSERNAME
         self.kdesvnpass = KDESVNPASSWORD
-        
+       
         self.strigidir = os.getenv( "STRIGI_HOME" )
         self.dbusdir = os.getenv( "DBUSDIR" )
 
