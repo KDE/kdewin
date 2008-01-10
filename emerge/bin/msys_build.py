@@ -3,14 +3,13 @@ import os
 import utils
 
 class msys_interface:
-    def setDirectories(self, [imagedir, workdir, instsrcdir, instdestdir]):
+    def setDirectories(self, [rootdir, imagedir, workdir, instsrcdir, instdestdir]):
+        self.rootdir = rootdir
         self.imagedir = imagedir
         self.workdir = workdir
         self.instsrcdir = instsrcdir
         self.instdestdir = instdestdir
         self.msysdir = os.getenv( "MSYSDIR" )
-
-
 
     def __toMSysPath( self, path ):
         path = path.replace( '\\', '/' )
@@ -45,7 +44,7 @@ class msys_interface:
         cmd +="\""
         if utils.verbose() > 0:
             print "msys compile: %s" % cmd
-        utils.system( cmd ) or utils.die("msys compile failed.")
+        utils.system( cmd ) or utils.die( "msys compile failed. cmd: %s" % cmd )
         return True
 
     def msysInstall( self, bOutOfSource = True ):
@@ -63,5 +62,5 @@ class msys_interface:
               ( sh, self.__toMSysPath( build ), self.__toMSysPath( install ) )
         if utils.verbose() > 0:
             print "msys install: %s" % cmd
-        utils.system( cmd ) or utils.die("msys install failed.")
+        utils.system( cmd ) or utils.die( "msys install failed. cmd: %s" % cmd )
         return True

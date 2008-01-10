@@ -13,6 +13,8 @@ import shutil
 import utils
 # for the msys interface
 import msys_build
+# for the kde interface
+import kde_build
 #from utils import die
 
 ROOTDIR=os.getenv( "KDEROOT" )
@@ -280,7 +282,8 @@ class baseclass:
         self.strigidir = os.getenv( "STRIGI_HOME" )
         self.dbusdir = os.getenv( "DBUSDIR" )
 
-        self.msys.setDirectories( [ self.imagedir, self.workdir, self.instsrcdir, self.instdestdir ] )
+        self.msys.setDirectories( [ self.rootdir, self.imagedir, self.workdir, self.instsrcdir, self.instdestdir ] )
+        self.kde.setDirectories( [ self.rootdir, self.imagedir, self.workdir, self.instsrcdir, self.instdestdir ] )
 
     def svnFetch( self, repo ):
         """getting sources from a custom svn repo"""
@@ -295,232 +298,34 @@ class baseclass:
         utils.svnFetch( repo, self.svndir )
 
     def __kdesinglecheckout( self, repourl, ownpath, codir, doRecursive = False ):
-        """in ownpath try to checkout codir from repourl """
-        """if codir exists and doRecursive is false, simply return,"""
-        """if codir does not exist, but ownpath/.svn exists,"""
-        """   do a svn update codir"""
-        """else do svn co repourl/codir"""
-        """if doRecursive is false, add -N to the svn command """
-
-        if ( os.path.exists( os.path.join( ownpath, codir ) ) \
-                             and not doRecursive ):
-            if utils.verbose() > 0:
-                print "ksco exists:", ownpath, codir
-            return
-
-        if ( doRecursive ):
-                recFlag = ""
-        else:
-                recFlag = "-N"
-
-        if ( os.path.exists( os.path.join( ownpath, ".svn" ) ) ):
-            # svn up
-            svncmd = "svn update %s %s" % ( recFlag, codir)
-        else:
-            #svn co
-            svncmd = "svn checkout %s %s" % \
-                     ( recFlag, repourl + codir )
-
-        if utils.verbose() > 1:
-            print "kdesinglecheckout:pwd ", ownpath
-            print "kdesinglecheckout:   ", svncmd
-        os.chdir( ownpath )
-        self.system( svncmd )
+        self.kde.kdesinglecheckout( repourl, ownpath, codir, doRecursive )
                 
     def kdeSvnFetch( self, svnpath, packagedir ):
-        """svnpath is the part of the repo url after /home/kde, for example"""
-        """"trunk/kdesupport/", which leads to the package itself,"""
-        """without the package"""
-        
-        if utils.verbose() > 1:
-            print "base kdeSvnFetch called. svnpath: %s dir: %s" % ( svnpath, packagedir )
-
-        if ( self.noFetch ):
-            if utils.verbose() > 0:
-                print "skipping svn fetch/update (--offline)"
-            return True
-        
-        mydir = self.kdesvndir
-        if ( not os.path.exists( mydir ) ):
-                os.mkdir( mydir )
-
-        repourl = self.kdesvnserver + "/home/kde/"
-
-        for tmpdir in svnpath.split( "/" ):
-            if ( tmpdir == "" ):
-                    continue
-            if utils.verbose() > 1:
-                print "  mydir: %s" % mydir
-                print "  dir to checkout: %s" % tmpdir
-                print "  repourl", repourl
-
-            self.__kdesinglecheckout( repourl, mydir, tmpdir, False )
-            mydir = os.path.join( mydir, tmpdir )
-            repourl = repourl + tmpdir + "/"
-                
-        if utils.verbose() > 0:
-            print "dir in which to really checkout: %s" % mydir
-            print "dir to really checkout: %s" % packagedir
-        self.__kdesinglecheckout( repourl, mydir, packagedir, True )
-
-        svndir = os.path.join( self.kdesvndir, svnpath ).replace( "/", "\\" )
-        #repo = self.kdesvnserver + "/home/kde/" + svnpath + dir
-        #utils.svnFetch( repo, svndir, self.kdesvnuser, self.kdesvnpass )
-        if utils.verbose() > 1:
-            print "kdesvndir", self.kdesvndir
-            print "svndir", svndir
-        self.svndir = os.path.join( svndir, packagedir )
-        
-        return True
+        return self.kde.kdeSvnFetch( svnpath, packagedir )
 
     def kdeSvnPath( self ):
-        """overload this function in kde packages to use the nocopy option"""
-        """this function should return the full path seen from /home/KDE/"""
-        return False
+        return self.kde.kdeSvnPath()
         
     def kdeSvnUnpack( self, svnpath=None, packagedir=None ):
-        """fetching and copying the sources from svn"""
-        if svnpath == None and packagedir == None:
-            if self.kdeSvnPath():
-                svnpath = self.kdeSvnPath()[ :self.kdeSvnPath().rfind('/') ]
-                packagedir = self.kdeSvnPath()[ self.kdeSvnPath().rfind('/') + 1:]
-            else:
-                utils.die( "no svn repository information are available" )
-        self.kdeSvnFetch( svnpath, packagedir )
-        
-        if( not os.path.exists( self.workdir ) ):
-            os.makedirs( self.workdir )
-            
-        if not ( self.noCopy and self.kdeSvnPath() ):
-            # now copy the tree to workdir
-            srcdir  = os.path.join( self.kdesvndir, svnpath, packagedir )
-            destdir = os.path.join( self.workdir, packagedir )
-            utils.copySrcDirToDestDir( srcdir, destdir )
-        return True
+        return self.kde.kdeSvnUnpack( svnpath, packagedir )
         
     def kdeDefaultDefines( self ):
-        """defining the default cmake cmd line"""
-        #FIXME: can we define the paths externally???
-        if utils.verbose() > 1 and self.kdeSvnPath():
-            print "noCopy: %s" % self.noCopy
-            print "kdeSvnPath(): %s" % self.kdeSvnPath().replace("/", "\\")
-        if not ( self.noCopy and self.kdeSvnPath() ) :
-            source_path = "..\\%s" % self.instsrcdir
-        else:
-            source_path = "%s" % os.path.join(self.kdesvndir, self.kdeSvnPath() ).replace("/", "\\")
-#        if( not self.instsrcdir == "" ):
-#            source_path = self.instsrcdir
-        print "source_path: ", source_path
-        if self.traditional:
-            options = "%s -DCMAKE_INSTALL_PREFIX=%s/kde " % \
-                  ( source_path, self.rootdir.replace( "\\", "/" ) )
-
-            options = options + "-DCMAKE_INCLUDE_PATH=%s;%s " % \
-                    ( os.path.join( self.rootdir, "win32libs", "include" ).replace( "\\", "/" ), \
-                      os.path.join( self.rootdir, "kde", "include" ).replace( "\\", "/" ) \
-                    )
-
-            options = options + "-DCMAKE_LIBRARY_PATH=%s;%s " % \
-                    ( os.path.join( self.rootdir, "win32libs", "lib" ).replace( "\\", "/" ), \
-                      os.path.join( self.rootdir, "kde", "lib" ).replace( "\\", "/" ) \
-                    )
-        else:
-            options = "%s -DCMAKE_INSTALL_PREFIX=%s " % \
-                  ( source_path, self.rootdir.replace( "\\", "/" ) )
-            
-            options = options + "-DCMAKE_INCLUDE_PATH=%s " % \
-                    os.path.join( self.rootdir, "include" ).replace( "\\", "/" )
-            
-            options = options + "-DCMAKE_LIBRARY_PATH=%s " % \
-                    os.path.join( self.rootdir, "lib" ).replace( "\\", "/" )
-
-        if self.buildTests:
-            options = options + " -DKDE4_BUILD_TESTS=1"
-
-        options = options + "-DKDEWIN_DIR:PATH=%s" % \
-               os.path.join( self.rootdir ).replace( "\\", "/" )
-        
-        return options
+        return self.kde.kdeDefaultDefines()
 
     def kdeConfigureInternal( self, buildType ):
-        """Using cmake"""
-        builddir = "%s" % ( self.compiler )
-
-        if( not buildType == None ):
-            buildtype = "-DCMAKE_BUILD_TYPE=%s" % buildType
-            builddir = "%s-%s" % ( builddir, buildType )
-    
-        os.chdir( self.workdir )
-        utils.cleanDirectory( builddir )
-        os.chdir( builddir )
-
-        command = r"""cmake -G "%s" %s %s %s""" % \
-              ( self.cmakeMakefileGenerator, \
-                self.kdeDefaultDefines(), \
-                self.kdeCustomDefines, \
-                buildtype )
-
-        if utils.verbose() > 0:
-            print "configuration command: %s" % command
-        self.system( command )
-        return True
+        return self.kde.kdeConfigureInternal( buildType, self.kdeCustomDefines )
 
     def kdeMakeInternal( self, buildType ):
-        """Using the *make program"""
-        builddir = "%s" % ( self.compiler )
-
-        if( not buildType == None ):
-            buildtype = "-DCMAKE_BUILD_TYPE=%s" % buildType
-            builddir = "%s-%s" % ( builddir, buildType )
+        return self.kde.kdeMakeInternal( buildType )
     
-        os.chdir( os.path.join( self.workdir, builddir ) )
-        cmd = self.cmakeMakeProgramm
-        # adding Targets later
-        if utils.verbose() > 1:
-            cmd += " VERBOSE=1"
-        self.system( cmd )
-        return True
-    
-    def kdeCompile( self ):
-        """making all required stuff for compiling cmake based modules"""
-        if( not self.buildType == None ) :
-            if( not ( self.kdeConfigureInternal( self.buildType ) and self.kdeMakeInternal( self.buildType ) ) ):
-                return False
-        else:
-            if( not ( self.kdeConfigureInternal( "Debug" ) and self.kdeMakeInternal( "Debug" ) ) ):
-                return False
-            if( not ( self.kdeConfigureInternal( "Release" ) and self.kdeMakeInternal( "Release" ) ) ):
-                return False
-        return True
-
     def kdeInstallInternal( self, buildType ):
-        """"""
-        builddir = "%s" % ( self.compiler )
+        return self.kde.kdeInstallInternal( buildType )
 
-        if( not buildType == None ):
-            builddir = "%s-%s" % ( builddir, buildType )
-
-        os.chdir( self.workdir )
-        os.chdir( builddir )
-        if utils.verbose() > 0:
-            print "builddir: " + builddir
-
-        self.system( "%s DESTDIR=%s install" % \
-                   ( self.cmakeMakeProgramm , self.imagedir ) )
-        return True
+    def kdeCompile( self ):
+        return self.kde.kdeCompile()
 
     def kdeInstall( self ):
-        """making all required stuff for installing cmake based modules"""
-        if( not self.buildType == None ):
-            if( not self.kdeInstallInternal( self.buildType ) ):
-                return False
-        else:
-            if( not self.kdeInstallInternal( "debug" ) ):
-                return False
-            if( not self.kdeInstallInternal( "release" ) ):
-                return False
-        utils.fixCmakeImageDir( self.imagedir, self.rootdir )
-        return True
+        return self.kde.kdeInstall()
 
     def doPackaging( self, pkg_name, pkg_version, packSources = True ):
         """packaging according to the gnuwin32 packaging rules"""
@@ -534,12 +339,12 @@ class baseclass:
         if( os.path.exists( tmp ) ):
             binpath = tmp
 
-        if ( packSources and not ( self.noCopy and self.kdeSvnPath() ) ):
+        if ( packSources and not ( self.noCopy and self.kde.kdeSvnPath() ) ):
             srcpath = os.path.join( self.workdir, self.instsrcdir )
             cmd = "-name %s -root %s -srcroot %s -version %s -destdir %s" % \
                   ( pkg_name, binpath, srcpath, pkg_version, dstpath )
-        elif self.noCopy and self.kdeSvnPath():
-            srcpath = os.path.join(self.kdesvndir, self.kdeSvnPath() ).replace("/", "\\")
+        elif self.noCopy and self.kde.kdeSvnPath():
+            srcpath = os.path.join(self.kde.kdesvndir, self.kde.kdeSvnPath() ).replace( "/", "\\" )
             cmd = "-name %s -root %s -srcroot %s -version %s -destdir %s" % \
                   ( pkg_name, binpath, srcpath, pkg_version, dstpath )
         else:
@@ -553,7 +358,7 @@ class baseclass:
             else:
               cmd = cmd + " -type msvc "
 
-        self.system( cmd )
+        utils.system( cmd ) or utils.die("while packaging. cmd: %s" % cmd)
         return True
 
     def createImportLibs( self, pkg_name ):
@@ -594,15 +399,12 @@ class baseclass:
         return True
 
     def msysConfigureFlags( self ):
-        """adding configure flags always used"""
         return self.msys.msysConfigureFlags()
 
     def msysCompile( self, bOutOfSource = True ):
-        """run configure and make for Autotools based stuff"""
         return self.msys.msysCompile( bOutOfSource )
 
     def msysInstall( self, bOutOfSource = True ):
-        """run make install for Autotools based stuff"""
         return self.msys.msysInstall( bOutOfSource )
 
     def system( self, command , infileName = None, outfileName = os.path.join( ROOTDIR, "out.log" ), errfileName = os.path.join( ROOTDIR, "out.log" ) ):
