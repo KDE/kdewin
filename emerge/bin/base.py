@@ -11,6 +11,8 @@ import shutil
 
 # for get functions etc...
 import utils
+# for the msys interface
+import msys_build
 #from utils import die
 
 ROOTDIR=os.getenv( "KDEROOT" )
@@ -80,7 +82,6 @@ class baseclass:
 
     def __init__( self, SRC_URI ):
         """ the baseclass constructor """
-        #print "base init called"
         self.SRC_URI                = SRC_URI
         self.instsrcdir             = ""
         self.instdestdir            = ""
@@ -92,6 +93,8 @@ class baseclass:
         self.noFetch                = False
         self.kdeCustomDefines       = ""
         self.createCombinedPackage  = False
+
+        self.msys = msys_interface()
         
         if os.getenv( "EMERGE_OFFLINE" ) == "True":
             self.noFetch = True
@@ -122,7 +125,6 @@ class baseclass:
 
     def execute( self ):
         """called to run the derived class"""
-#        if __name__ == '__main__':
         """this will be executed from the package if the package is started on its own"""
         """it shouldn't be called if the package is imported as a python module"""
         if utils.verbose() > 1:
@@ -234,6 +236,7 @@ class baseclass:
 
     def setDirectories( self ):
         """setting all important stuff that isn't coped with in the c'tor"""
+        """parts will probably go to infoclass"""
         if utils.verbose() > 1:
             print "setdirectories called"
         #print "basename:", sys.argv[ 0 ]
@@ -282,8 +285,11 @@ class baseclass:
         self.kdesvnuser = KDESVNUSERNAME
         self.kdesvnpass = KDESVNPASSWORD
         self.msysdir = MSYSDIR
+        
         self.strigidir = os.getenv( "STRIGI_HOME" )
         self.dbusdir = os.getenv( "DBUSDIR" )
+
+        self.msys.setDirectories( [ self.imagedir, self.workdir, self.instsrcdir, self.instdestdir ], MSYSDIR )
 
     def svnFetch( self, repo ):
         """getting sources from a custom svn repo"""
@@ -596,53 +602,17 @@ class baseclass:
         self.system( cmd )
         return True
 
-    def msysConfigureFlags ( self ):
+    def msysConfigureFlags( self ):
         """adding configure flags always used"""
-        flags  = "--disable-nls "
-        flags += "--disable-static "
-        flags += "--prefix=/ "
-        return flags
+        return self.msys.msysConfigureFlags()
 
     def msysCompile( self, bOutOfSource = True ):
         """run configure and make for Autotools based stuff"""
-        config = os.path.join( self.workdir, self.instsrcdir, "configure" )
-        build  = os.path.join( self.workdir )
-        if( bOutOfSource ):
-           build  = os.path.join( build, self.instsrcdir + "-build" )
-           utils.cleanDirectory( build )
-        else:
-           build  = os.path.join( build, self.instsrcdir )
-
-        sh = os.path.join( self.msysdir, "bin", "sh.exe" )
-
-        cmd = "%s --login -c \"cd %s && %s %s && make -j2" % \
-              ( sh, utils.toMSysPath( build ), utils.toMSysPath( config ), \
-                self.msysConfigureFlags() )
-        if utils.verbose() > 1:
-            cmd += " VERBOSE=1"
-        cmd +="\""
-        if utils.verbose() > 0:
-            print "msys compile: %s" % cmd
-        self.system( cmd )
-        return True
+        return self.msys.msysCompile( bOutOfSource )
 
     def msysInstall( self, bOutOfSource = True ):
         """run make install for Autotools based stuff"""
-        install = os.path.join( self.imagedir, self.instdestdir )
-        build  = os.path.join( self.workdir )
-        if( bOutOfSource ):
-           build  = os.path.join( build, self.instsrcdir + "-build" )
-        else:
-           build  = os.path.join( build, self.instsrcdir )
-
-        sh = os.path.join( self.msysdir, "bin", "sh.exe" )
-
-        cmd = "%s --login -c \"cd %s && make -j2 install DESTDIR=%s\"" % \
-              ( sh, utils.toMSysPath( build ), utils.toMSysPath( install ) )
-        if utils.verbose() > 0:
-            print "msys install: %s" % cmd
-        self.system( cmd )
-        return True
+        return self.msys.msysInstall( bOutOfSource )
 
     def system( self, command , infileName = None, outfileName = os.path.join( ROOTDIR, "out.log" ), errfileName = os.path.join( ROOTDIR, "out.log" ) ):
         """this function should be called instead of os.system it will return the errorstatus"""
@@ -654,7 +624,7 @@ class baseclass:
 # ############################################################################################
 # for testing purpose only:
 # ############################################################################################
-if '__main__' in globals().keys():
+if __name__ == '__main__':
     if utils.verbose() > 0:    
         print "KDEROOT:     ", ROOTDIR
         print "KDECOMPILER: ", COMPILER
