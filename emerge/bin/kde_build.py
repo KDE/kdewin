@@ -1,4 +1,6 @@
 # definitions for the kde build system (cmake and svn)
+import os
+import utils
 
 COMPILER            = os.getenv( "KDECOMPILER" )
 KDESVNUSERNAME      = os.getenv( "KDESVNUSERNAME" )

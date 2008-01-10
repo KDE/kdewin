@@ -61,21 +61,9 @@ class baseclass:
 # make_package               overload this function to make the packages themselves
 # setDirectories
 # svnFetch                  getting sources from a custom repo url
-# __kdesinglecheckout
-# kdeSvnFetch
-# kdeSvnUnpack
-# kdeDefaultDefines
-# kdeConfigureInternal
-# kdeMakeInternal
-# kdeCompile                 running for compilation from cmake
-# kdeInstallInternal
-# kdeInstall                 running for installation from cmake
-# doPackaging                
+# doPackaging
 # createImportLibs           creating import libs for mingw and msvc
 # stripLibs                  stripping libs
-# msysConfigureFlags         called by msysCompile: overload it to set 
-# msysCompile                running the msys sh and compiling autotool based stuff
-# msysInstall                install from msys sh
 # system                     instead of using the os.system command, please use this one - it makes later changes easier
 
 
