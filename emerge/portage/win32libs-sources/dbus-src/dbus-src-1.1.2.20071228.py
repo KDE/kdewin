@@ -18,6 +18,9 @@ class subclass(base.baseclass):
         self.instdestdir = "kde"
     # cmake scripts are not in src root...
     self.instsrcdir = os.path.join( "dbus", "cmake" )
+    
+  def kdeSvnPath( self ):
+    return False
 
   def unpack( self ):
     print "dbus unpack called"
