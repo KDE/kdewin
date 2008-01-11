@@ -39,6 +39,9 @@ class subclass(base.baseclass):
         options = options + "-DBUILD_doc=OFF "
         return options
 
+    def kdeSvnPath( self ):
+        return False
+        
     def compile( self ):
         return self.kdeCompile()
 

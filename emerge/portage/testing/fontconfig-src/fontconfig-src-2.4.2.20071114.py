@@ -34,6 +34,9 @@ class subclass(base.baseclass):
 
         return True
 
+    def kdeSvnPath( self ):
+        return False
+    
     def compile( self ):
         return self.kdeCompile()
 

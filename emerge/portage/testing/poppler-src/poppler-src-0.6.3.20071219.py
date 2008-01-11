@@ -50,6 +50,9 @@ class subclass(base.baseclass):
     def install( self ):
         return self.kdeInstall()
 
+    def kdeSvnPath( self ):
+        return False
+        
     def make_package( self ):
         # auto-create both import libs with the help of pexports
         #self.stripLibs( PACKAGE_DLL_NAME )
