@@ -3,7 +3,7 @@ import os
 import utils
 
 class msys_interface:
-    def setDirectories(self, [rootdir, imagedir, workdir, instsrcdir, instdestdir]):
+    def setDirectories(self, rootdir, imagedir, workdir, instsrcdir, instdestdir):
         self.rootdir = rootdir
         self.imagedir = imagedir
         self.workdir = workdir
@@ -14,7 +14,7 @@ class msys_interface:
     def __toMSysPath( self, path ):
         path = path.replace( '\\', '/' )
         if ( path[1] == ':' ):
-        path = '/' + path[0].lower() + '/' + path[3:]
+            path = '/' + path[0].lower() + '/' + path[3:]
         return path
 
     def msysConfigureFlags ( self ):

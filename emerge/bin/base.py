@@ -81,7 +81,8 @@ class baseclass:
         self.kdeCustomDefines       = ""
         self.createCombinedPackage  = False
 
-        self.msys = msys_interface()
+        self.msys = msys_build.msys_interface()
+        self.kde  = kde_build.kde_interface( self )
         
         if os.getenv( "EMERGE_OFFLINE" ) == "True":
             self.noFetch = True
@@ -270,8 +271,8 @@ class baseclass:
         self.strigidir = os.getenv( "STRIGI_HOME" )
         self.dbusdir = os.getenv( "DBUSDIR" )
 
-        self.msys.setDirectories( [ self.rootdir, self.imagedir, self.workdir, self.instsrcdir, self.instdestdir ] )
-        self.kde.setDirectories( [ self.rootdir, self.imagedir, self.workdir, self.instsrcdir, self.instdestdir ] )
+        self.msys.setDirectories( self.rootdir, self.imagedir, self.workdir, self.instsrcdir, self.instdestdir )
+        self.kde.setDirectories( self.rootdir, self.imagedir, self.workdir, self.instsrcdir, self.instdestdir )
 
     def svnFetch( self, repo ):
         """getting sources from a custom svn repo"""
@@ -284,6 +285,9 @@ class baseclass:
             return True
         
         utils.svnFetch( repo, self.svndir )
+
+    def kdeGet( self ):
+        return self.kdeSvnPath()
 
     def __kdesinglecheckout( self, repourl, ownpath, codir, doRecursive = False ):
         self.kde.kdesinglecheckout( repourl, ownpath, codir, doRecursive )
@@ -310,7 +314,7 @@ class baseclass:
         return self.kde.kdeInstallInternal( buildType )
 
     def kdeCompile( self ):
-        return self.kde.kdeCompile()
+        return self.kde.kdeCompile( self.kdeCustomDefines )
 
     def kdeInstall( self ):
         return self.kde.kdeInstall()

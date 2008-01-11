@@ -2,6 +2,8 @@
 import os
 import utils
 
+import base
+
 COMPILER            = os.getenv( "KDECOMPILER" )
 KDESVNUSERNAME      = os.getenv( "KDESVNUSERNAME" )
 KDESVNPASSWORD      = os.getenv( "KDESVNPASSWORD" )
@@ -16,7 +18,10 @@ if ( BUILDTYPE not in ["Debug", "Release", "DebWithRelInfo", "MinSizeRel"] ):
     BUILDTYPE=None
 
 class kde_interface:
-    def setDirectories(self, [rootdir, imagedir, workdir, instsrcdir, instdestdir]):
+    def __init__( self, baseobject ):
+        self.base = baseobject
+
+    def setDirectories(self, rootdir, imagedir, workdir, instsrcdir, instdestdir):
         if COMPILER   == "msvc2005":
             self.cmakeMakefileGenerator = "NMake Makefiles"
             self.cmakeMakeProgramm      = "nmake"
@@ -34,6 +39,7 @@ class kde_interface:
         self.buildTests     = False
         self.noCopy         = False
         self.noFetch        = False
+        self.traditional    = True
 
         self.rootdir        = rootdir
         self.workdir        = workdir
@@ -47,6 +53,8 @@ class kde_interface:
             self.noCopy     = True
         if os.getenv( "EMERGE_BUILDTESTS" ) == "True":
             self.buildTests = True
+        if os.getenv( "directory_layout" ) == "installer":
+            self.traditional = False
 
         self.kdesvndir      = KDESVNDIR
         self.kdesvnserver   = KDESVNSERVER
@@ -133,7 +141,7 @@ class kde_interface:
     def kdeSvnPath( self ):
         """overload this function in kde packages to use the nocopy option"""
         """this function should return the full path seen from /home/KDE/"""
-        return False
+        return self.base.kdeGet()
 
     def kdeSvnUnpack( self, svnpath=None, packagedir=None ):
         """fetching and copying the sources from svn"""
@@ -252,15 +260,15 @@ class kde_interface:
         self.system( "%s DESTDIR=%s install" % ( self.cmakeMakeProgramm , self.imagedir ) )
         return True
 
-    def kdeCompile( self ):
+    def kdeCompile( self, kdeCustomDefines ):
         """making all required stuff for compiling cmake based modules"""
         if( not self.buildType == None ) :
-            if( not ( self.kdeConfigureInternal( self.buildType ) and self.kdeMakeInternal( self.buildType ) ) ):
+            if( not ( self.kdeConfigureInternal( self.buildType, kdeCustomDefines ) and self.kdeMakeInternal( self.buildType ) ) ):
                 return False
         else:
-            if( not ( self.kdeConfigureInternal( "Debug" ) and self.kdeMakeInternal( "Debug" ) ) ):
+            if( not ( self.kdeConfigureInternal( "Debug", kdeCustomDefines ) and self.kdeMakeInternal( "Debug" ) ) ):
                 return False
-            if( not ( self.kdeConfigureInternal( "Release" ) and self.kdeMakeInternal( "Release" ) ) ):
+            if( not ( self.kdeConfigureInternal( "Release", kdeCustomDefines ) and self.kdeMakeInternal( "Release" ) ) ):
                 return False
         return True
 
