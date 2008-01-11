@@ -13,8 +13,8 @@ if ( KDESVNDIR    == None ):
     KDESVNDIR       = os.path.join( DOWNLOADDIR, "svn-src", "kde" )
 if ( KDESVNSERVER == None ):
     KDESVNSERVER    = "svn://anonsvn.kde.org"
-BUILDTYPE=os.getenv( "EMERGE_BUILDTYPE" )
-if ( BUILDTYPE not in ["Debug", "Release", "DebWithRelInfo", "MinSizeRel"] ):
+BUILDTYPE           = os.getenv( "EMERGE_BUILDTYPE" )
+if ( BUILDTYPE not in ["Debug", "Release", "RelWithDebInfo", "MinSizeRel"] ):
     BUILDTYPE=None
 
 class kde_interface:
@@ -199,7 +199,7 @@ class kde_interface:
                     os.path.join( self.rootdir, "lib" ).replace( "\\", "/" )
 
         if self.buildTests:
-            options = options + " -DKDE4_BUILD_TESTS=1"
+            options = options + " -DKDE4_BUILD_TESTS=1 "
 
         options = options + "-DKDEWIN_DIR:PATH=%s" % \
                os.path.join( self.rootdir ).replace( "\\", "/" )
@@ -257,7 +257,7 @@ class kde_interface:
         if utils.verbose() > 0:
             print "builddir: " + builddir
 
-        self.system( "%s DESTDIR=%s install" % ( self.cmakeMakeProgramm , self.imagedir ) )
+        utils.system( "%s DESTDIR=%s install" % ( self.cmakeMakeProgramm , self.imagedir ) ) or die( "while installing. cmd: %s" % "%s DESTDIR=%s install" % ( self.cmakeMakeProgramm , self.imagedir ) )
         return True
 
     def kdeCompile( self, kdeCustomDefines ):
