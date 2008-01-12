@@ -3,20 +3,16 @@ import os
 import sys
 
 DEPEND = """
-kdesupport/taglib
 kde/kdelibs
-kde/kdebase
-testing/ruby
-testing/phonon
 """
 
 class subclass(base.baseclass):
     def __init__( self ):
         base.baseclass.__init__( self, "" )
-        self.instsrcdir = "amarok"
+        self.instsrcdir = "phonon"
 
     def kdeSvnPath( self ):
-        return "trunk/extragear/multimedia/amarok"
+        return "trunk/kdereview"
         
     def unpack( self ):
         return self.kdeSvnUnpack()
@@ -28,7 +24,7 @@ class subclass(base.baseclass):
         return self.kdeInstall()
 
     def make_package( self ):
-        return self.doPackaging( "amarok", os.path.basename(sys.argv[0]).replace("amarok-", "").replace(".py", ""), True )
+        return self.doPackaging( "phonon", os.path.basename(sys.argv[0]).replace("phonon-", "").replace(".py", ""), True )
 
 if __name__ == '__main__':		
     subclass().execute()
