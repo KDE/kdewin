@@ -61,6 +61,8 @@ file(GLOB _directx_idls    include/directx/*.idl)
 add_definitions(-DUNICODE -DWIN32_LEAN_AND_MEAN )
 
 set(win_LIB_SRCS
+   src/bind/inet_ntop.c
+   src/bind/inet_pton.c
    src/dirent.c
    src/errno.c
    src/fcntl.c
