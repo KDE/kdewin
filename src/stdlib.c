@@ -93,3 +93,9 @@ KDEWIN32_EXPORT double drand48(void)
 {
 	return 1.0*rand()/(RAND_MAX+1.0);
 }
+
+KDEWIN32_EXPORT int rand_r(unsigned *seed)
+{
+    srand(seed);
+    return rand();
+}

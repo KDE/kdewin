@@ -47,6 +47,8 @@ KDEWIN32_EXPORT void srandom(unsigned int seed);
 
 KDEWIN32_EXPORT double drand48(void);
 
+KDEWIN32_EXPORT int rand_r(unsigned *seed);
+
 KDEWIN32_EXPORT char* realpath(const char *path,char *resolved_path);
 
 // from kdecore/fakes.c

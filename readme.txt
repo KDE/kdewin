@@ -2,6 +2,9 @@ kdewin32 is a supplementary library and supplementary tools
 
 history
 -------
+version 0.3.5
+- add rand_r for kgoldrunner
+
 version 0.3.4
 - add png2ico can now create rc file
 
