@@ -498,6 +498,7 @@ int truncate(const char *path, off_t length)
 }
 
 #ifndef __MINGW32__
+// TODO (js) consider using _chsize_s
 int ftruncate(int fd, off_t length)
 {
   return _chsize (fd, length);
