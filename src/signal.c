@@ -1,6 +1,6 @@
 /*
    This file is part of the KDE libraries
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2008 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,3 +57,14 @@ KDEWIN32_EXPORT pid_t waitpid(pid_t p, int *a, int b)
   return -1;
 }
 
+KDEWIN32_EXPORT sighandler_t kdewin32_signal(int signum, sighandler_t handler)
+{
+  if (signum==SIGABRT
+    || signum==SIGFPE
+    || signum==SIGILL
+    || signum==SIGINT
+    || signum==SIGSEGV
+    || signum==SIGTERM)
+    return signal(signum, handler);
+  return SIG_ERR;
+}

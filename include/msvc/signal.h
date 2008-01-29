@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2008 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,7 +65,33 @@ extern "C" {
 #define	SIGUSR1 30	/* user defined signal 1 */
 #define	SIGUSR2 31	/* user defined signal 2 */
 
+/**
+ Sends signal to a process. 
+ */
 KDEWIN32_EXPORT int kill(pid_t pid, int sig);
+
+/** A typedef for signal handler
+ */
+typedef void (*sighandler_t)(int);
+
+/**
+ Sets interrupt signal handling. 
+ This is a wrapper of signal() function from the Windows CRT module
+ provided for portability. Should be used as KDE_signal() in KDE code.
+
+ instead of raising error (asseriting), for UNIX compatibility,
+ it does nothing (but stil returns SIG_ERR) for the types other than
+ SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM.
+
+ Most notable examples of unsupported signal types are SIGKILL, SIGHUP and SIGBUS.
+
+ @see http://msdn2.microsoft.com/en-us/library/xdkz3x12(VS.80).aspx for list 
+ of supported signals.
+ 
+ @return the previous handler associated with the given signal. 
+ Returns SIG_ERR on error, in which case errno is set to EINVAL. 
+*/
+KDEWIN32_EXPORT sighandler_t kdewin32_signal(int signum, sighandler_t handler);
 
 #ifdef  __cplusplus
 }
