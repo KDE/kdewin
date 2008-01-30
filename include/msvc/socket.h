@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_SOCKET_H
+#if !defined KDEWIN_SOCKET_H && !defined KDEWIN_SYS_SOCKET_H && !defined _WINSOCK2API_ 
 #define KDEWIN_SOCKET_H
 
 // include everywhere
