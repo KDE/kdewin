@@ -114,7 +114,6 @@ KDEWIN32_EXPORT void sleep(unsigned int sec);
 KDEWIN32_EXPORT int setreuid(uid_t ruid, uid_t euid);
 
 KDEWIN32_EXPORT int mkstemps(char* _template, int suffix_len);
-#define HAVE_MKSTEMPS
 
 KDEWIN32_EXPORT int initgroups(const char *name, int basegid);
 
@@ -123,10 +122,8 @@ KDEWIN32_EXPORT int initgroups(const char *name, int basegid);
 KDEWIN32_EXPORT int seteuid(uid_t euid);
 
 KDEWIN32_EXPORT int mkstemp (char* _template);
-#define HAVE_MKSTEMP
 
 KDEWIN32_EXPORT char* mkdtemp (char* _template);
-#define HAVE_MKDTEMP
 
 KDEWIN32_EXPORT int revoke(const char *tty);
 
