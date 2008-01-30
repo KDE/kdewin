@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEIWN_STDINT_H
-#define KDEIWN_STDINT_H
+#ifndef KDEWIN_STDINT_H
+#define KDEWIN_STDINT_H
 
 // include everywhere
 #include <sys/types.h>
