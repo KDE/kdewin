@@ -36,6 +36,7 @@ extern "C" {
 #endif
 
 KDEWIN32_EXPORT int gettimeofday(struct timeval *__p, void *__t);
+#define HAVE_GETTIMEOFDAY
 
 //errno==EACCES on read-only devices
 KDEWIN32_EXPORT int utimes(const char *filename, const struct timeval times[2]);

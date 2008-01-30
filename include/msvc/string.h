@@ -28,9 +28,11 @@
 
 #ifndef strncasecmp
 #define strncasecmp strnicmp
+#define HAVE_STRNCASECMP
 #endif
 #ifndef strcasecmp
 #define strcasecmp stricmp
+#define HAVE_STRCASECMP
 #endif
 
 #ifdef __cplusplus
@@ -38,12 +40,16 @@ extern "C" {
 #endif
 
 KDEWIN32_EXPORT char* strndup(const char *src, size_t n);
+#define HAVE_STRNDUP
 
 KDEWIN32_EXPORT unsigned long strlcpy(char *dst, const char *src, unsigned long siz);
+#define HAVE_STRLCPY
 
 KDEWIN32_EXPORT unsigned long strlcat(char *dst, const char *src, unsigned long siz);
+#define HAVE_STRLCAT
 
 KDEWIN32_EXPORT char *strcasestr(const char *big, const char *little);
+#define HAVE_STRCASESTR
 
 #ifdef __cplusplus
 }
