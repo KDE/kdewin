@@ -32,7 +32,7 @@
 #endif
 
 #include <strmif.h>
-/*#include <amvideo.h>*/
+#include <amvideo.h>
 /*#include <amaudio.h>*/
 #include <control.h>
 /*#include <evcode.h>*/
