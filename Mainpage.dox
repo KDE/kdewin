@@ -1,0 +1,12 @@
+/** @mainpage The KDEWin32 API Reference
+
+KDEWin32 is a supplementary library for Microsoft Windows. 
+It is aimed at maintaining compatibility with POSIX standards KDE depends on.
+
+KDEWin32 is a part of the <a href="http://windows.kde.org/">KDE on Windows</a> project.
+
+*/
+// DOXYGEN_VERSION=4.0
+// DOXYGEN_NAME=kdewin32
+// DOXYGEN_ENABLE=YES
+// DOXYGEN_SET_RECURSIVE = YES
