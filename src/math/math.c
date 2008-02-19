@@ -22,18 +22,17 @@
 #define __DOUBLE_SNAN_REP { 0, 0, 0, 0xfff0 }  /* { 1, 0, 0, 0x7ff0 }  */
 #define __DOUBLE_DENORM_REP {1, 0, 0, 0}
 
-union _ieee_rep
-{
+union _ieee_rep {
   unsigned short rep[6];
   float float_val;
   double double_val;
   long double ldouble_val;
 } ;
 
-KDEWIN32_EXPORT union _ieee_rep __QNANF = { __FLOAT_QNAN_REP };   
-KDEWIN32_EXPORT union _ieee_rep __SNANF = { __FLOAT_SNAN_REP };   
-KDEWIN32_EXPORT union _ieee_rep __INFF = { __FLOAT_INF_REP };   
-KDEWIN32_EXPORT union _ieee_rep __DENORMF = { __FLOAT_DENORM_REP };   
+KDEWIN32_EXPORT union _ieee_rep __QNANF = { __FLOAT_QNAN_REP };
+KDEWIN32_EXPORT union _ieee_rep __SNANF = { __FLOAT_SNAN_REP };
+KDEWIN32_EXPORT union _ieee_rep __INFF = { __FLOAT_INF_REP };
+KDEWIN32_EXPORT union _ieee_rep __DENORMF = { __FLOAT_DENORM_REP };
 
 KDEWIN32_EXPORT union _ieee_rep __QNAN = { __DOUBLE_QNAN_REP };
 KDEWIN32_EXPORT union _ieee_rep __SNAN  = { __DOUBLE_SNAN_REP };
@@ -49,76 +48,82 @@ KDEWIN32_EXPORT union _ieee_rep __DENORML = { __DOUBLE_DENORM_REP };
 
 /* 7.12.5.1 */
 // acosh(x) = log (x + sqrt(x * x - 1))
-KDEWIN32_EXPORT float acoshf (float x)
+KDEWIN32_EXPORT float acoshf ( float x )
 {
-  if (_isnan ( x ) ) 
-    return x;
-  if (x < 1.0f) {
-      errno = EDOM;
-      return __QNAN.float_val;
+  if ( _isnan ( x ) || x < 1.0f ) {
+    errno = EDOM;
+    return __QNAN.float_val;
   }
-  return( log( x + sqrt( x * x - 1 ) ) );
+  return ( log ( x + sqrt ( x * x - 1.0f ) ) );
 }
 
-KDEWIN32_EXPORT double acosh (double x)
+KDEWIN32_EXPORT double acosh ( double x )
 {
-  if (_isnan (x)) 
-    return x;
-  if (x < 1.0f) {
-      errno = EDOM;
-      return __QNAN.float_val;
+  if ( _isnan ( x ) || x < 1.0 ) {
+    errno = EDOM;
+    return __QNAN.double_val;
   }
-  return( log( x + sqrt( x * x - 1 ) ) );
+  return ( log ( x + sqrt ( x * x - 1.0 ) ) );
 }
 
-KDEWIN32_EXPORT long double acoshl (long double x)
+KDEWIN32_EXPORT long double acoshl ( long double x )
 {
-  return acosh( (double) x );
+  return acosh ( ( double ) x );
 }
 
 /* 7.12.5.2 */
-static double log1p( double x )
+// asinh(x) = ln (x + sqrt(x * x + 1))
+KDEWIN32_EXPORT float asinhf ( float x )
 {
-  return ( log ( 1 + x ) );
-}
-// asinh(x) = copysign(log(fabs(x) + sqrt(x * x + 1.0)), x)
-KDEWIN32_EXPORT float asinhf (float x)
-{
-  float z;
-  if (!_finite (x))
-    return x;
-  z = fabs (x);
+  if ( _isnan ( x ) ) {
+    errno = EDOM;
+    return __QNAN.float_val;
+  }
 
-  z = log1p (z + z * z / (sqrt (z * z + 1.0) + 1.0));
+  x = logf ( x + sqrt ( x * x + 1.0f ) );
 
-  return ( x > 0.0 ? z : -z);
+  return x;
 }
 
-KDEWIN32_EXPORT double asinh (double x)
+KDEWIN32_EXPORT double asinh ( double x )
 {
-  double z;
-  if (!_finite (x))
-    return x;
-  z = fabs (x);
+  if ( _isnan ( x ) ) {
+    errno = EDOM;
+    return __QNAN.double_val;
+  }
 
-  z = log1p (z + z * z / (sqrt (z * z + 1.0) + 1.0));
+  x = log ( x + sqrt ( x * x + 1.0f ) );
 
-  return ( x > 0.0 ? z : -z);
+  return x;
 }
 
-KDEWIN32_EXPORT long double asinhl (long double x)
+KDEWIN32_EXPORT long double asinhl ( long double x )
 {
-  return asinh( (double) x );
+  return asinh ( ( double ) x );
 }
 
 /* 7.12.5.3 */
+// atanh(x) = 0.5 * log( (1+x) / (1-x) )
 //WINPOSIX_EXPORT float asinhf (float)
-KDEWIN32_EXPORT double atanh (double x)
+KDEWIN32_EXPORT double atanhf ( float x )
 {
-  return asinhf( x );
+  if ( _isnan ( x ) || fabsf ( x ) >= 1.0f ) {
+    errno = EDOM;
+    return __QNAN.float_val;
+  }
+  return log ( ( 1.0f + x ) / ( 1.0f - x ) ) / 2.0f;
 }
 
-KDEWIN32_EXPORT long double atanhl (long double x)
+KDEWIN32_EXPORT double atanh ( double x )
 {
-  return asinhf( x );
+  if ( _isnan ( x ) || fabsf ( x ) >= 1.0 ) {
+    errno = EDOM;
+    return __QNAN.double_val;
+  }
+  return log ( ( 1.0 + x ) / ( 1.0 - x ) ) / 2.0;
+}
+
+KDEWIN32_EXPORT long double atanhl ( long double x )
+{
+  return atanh ( ( double ) x );
 }

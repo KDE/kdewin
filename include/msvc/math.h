@@ -187,7 +187,7 @@ WINPOSIX_EXPORT double asinh (double);
 WINPOSIX_EXPORT long double asinhl (long double);
 
 /* 7.12.5.3 */
-//WINPOSIX_EXPORT float asinhf (float);
+WINPOSIX_EXPORT float atanhf (float);
 WINPOSIX_EXPORT double atanh (double);
 WINPOSIX_EXPORT long double atanhl (long double);
 
