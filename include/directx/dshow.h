@@ -35,7 +35,7 @@
 #include <amvideo.h>
 /*#include <amaudio.h>*/
 #include <control.h>
-/*#include <evcode.h>*/
+#include <evcode.h>
 #include <uuids.h>
 #include <errors.h>
 #include <audevcod.h>
