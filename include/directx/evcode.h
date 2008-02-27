@@ -35,6 +35,7 @@
 #define EC_QUALITY_CHANGE                   0x0B
 #define EC_SHUTTING_DOWN                    0x0C
 #define EC_CLOCK_CHANGED                    0x0D
+#define EC_PAUSED                           0x0E
 #define EC_OPENING_FILE                     0x10
 #define EC_BUFFERING_DATA                   0x11
 #define EC_FULLSCREEN_LOST                  0x12
@@ -50,5 +51,29 @@
 #define EC_END_OF_SEGMENT                   0x1C
 #define EC_SEGMENT_STARTED                  0x1D
 #define EC_LENGTH_CHANGED                   0x1E
+#define EC_DEVICE_LOST                      0x1F
+#define EC_SAMPLE_NEEDED                    0x20
+#define EC_PROCESSING_LATENCY               0x21
+#define EC_SAMPLE_LATENCY                   0x22
+#define EC_SCRUB_TIME                       0x23
+#define EC_STEP_COMPLETE                    0x24
+
+#define EC_TIMECODE_AVAILABLE               0x30
+#define EC_EXTDEVICE_MODE_CHANGE            0x31
+#define EC_STATE_CHANGE                     0x32
+
+#define EC_GRAPH_CHANGED                    0x50
+#define EC_CLOCK_UNSET                      0x51
+#define EC_VMR_RENDERDEVICE_SET             0x53
+#define EC_VMR_SURFACE_FLIPPED              0x54
+#define EC_VMR_RECONNECTION_FAILED          0x55
+#define EC_PREPROCESS_COMPLETE              0x56
+#define EC_CODECAPI_EVENT                   0x57
+
+#define EC_WMT_INDEX_EVENT                  0x251
+#define EC_WMT_EVENT                        0x252
+
+#define EC_BUILT                            0x300
+#define EC_UNBUILT                          0x301
 
 #endif /* __WINE_EVCODE_H */
