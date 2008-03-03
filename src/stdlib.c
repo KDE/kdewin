@@ -96,6 +96,6 @@ KDEWIN32_EXPORT double drand48(void)
 
 KDEWIN32_EXPORT int rand_r(unsigned *seed)
 {
-    srand(seed);
+    srand(*seed);
     return rand();
 }
