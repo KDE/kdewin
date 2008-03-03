@@ -2,6 +2,12 @@ kdewin32 is a supplementary library and supplementary tools
 
 history
 -------
+version 0.3.6
+- add a new png2ico which uses QtIcoHandler from Qt4.4 to write .ico files
+- add directx headers for mingw
+- add kdewin32_signal()
+- add inet_ntop/pton from bind 9.4.2
+
 version 0.3.5
 - add rand_r for kgoldrunner
 
