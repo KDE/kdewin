@@ -19,28 +19,80 @@
 
 #include <winposix_export.h>
 #include <windows.h>
+#include <tlhelp32.h>
 
 #include <sys/types.h>
 #include <errno.h>
 #include <signal.h>
 
+/* used in kill() */
+int handle_kill_result(HANDLE h)
+{
+  if (GetLastError() == ERROR_ACCESS_DENIED)
+    errno = EPERM;
+  else if (GetLastError() == ERROR_NO_MORE_FILES)
+    errno = ESRCH;
+  else
+    errno = EINVAL;
+  CloseHandle(h);
+  return -1;
+}
+
 KDEWIN32_EXPORT int kill(pid_t pid, int sig)
 {
   HANDLE h;
-  if( sig != 0 && sig != EINVAL || pid == 0 ) {
+  HANDLE h_thread;
+  DWORD thread_id;
+  PROCESSENTRY32 pe32;
+  if (pid <= 0 || sig < 0) {
     errno = EINVAL;
     return -1;
   }
-  h = OpenProcess(PROCESS_TERMINATE, FALSE, (DWORD)pid);
-  if( h ) {
-    if( sig == SIGKILL ) {
-      TerminateProcess(h, sig);
+  if (sig == 0) { /* we just wanted to know if the process exists  */
+    h = CreateToolhelp32Snapshot(0, pid);
+    if (h == INVALID_HANDLE_VALUE) {
+      errno = ESRCH;
+      return -1;
     }
+    pe32.dwSize = sizeof(PROCESSENTRY32);
+    if (!Process32First( h, &pe32 ))
+      return handle_kill_result(h);
     CloseHandle(h);
     return 0;
   }
-  errno = ESRCH;
-  return -1;
+  h = OpenProcess(
+    sig == 0 ? PROCESS_QUERY_INFORMATION|PROCESS_VM_READ : PROCESS_ALL_ACCESS, 
+    FALSE, (DWORD)pid);
+  if (!h) {
+    CloseHandle(h);
+    errno = ESRCH;
+    return -1;
+  }
+  switch (sig) {
+  case SIGINT:
+    if (!GenerateConsoleCtrlEvent(CTRL_C_EVENT, (DWORD)pid))
+      return handle_kill_result(h);
+    break;
+  case SIGQUIT:
+    if (!GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, (DWORD)pid))
+      return handle_kill_result(h);
+    break;
+  case SIGKILL:
+    if (!TerminateProcess(h, sig))
+      return handle_kill_result(h);
+    break;
+  default:
+    h_thread = CreateRemoteThread(
+      h, NULL, 0,
+      (LPTHREAD_START_ROUTINE)(GetProcAddress(GetModuleHandleA("KERNEL32.DLL"), "ExitProcess")),
+      0, 0, &thread_id);
+    if (h_thread)
+      WaitForSingleObject(h_thread, 5);
+    else
+      return handle_kill_result(h);
+  }
+  CloseHandle(h);
+  return 0;
 }
 
 KDEWIN32_EXPORT pid_t waitpid(pid_t p, int *a, int b)
