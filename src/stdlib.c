@@ -39,7 +39,7 @@ KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
 #endif
     char dummy[1];
 
-    if (!overwrite && GetEnvironmentVariableA(name, dummy, 0) > 0) return 0;
+    if (!overwrite && getenv(name)) return 0; 
 
 #ifdef KDEWIN32_USE_ENV_S
     return _putenv_s(name, value);
