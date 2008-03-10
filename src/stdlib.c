@@ -25,13 +25,26 @@
 #include <stdio.h>
 #include <string.h>
 
+#if defined(_MSC_VER) && _MSC_VER >= 1400
+// use secure functions declared in msvc >= 2005
+#define KDEWIN32_USE_ENV_S
+#endif
+
 // from kdecore/fakes.c
 KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
 {
+#ifndef KDEWIN32_USE_ENV_S
     int i, iRet;
     char * a;
+#endif
+    char dummy[1];
 
-    if (!overwrite && getenv(name)) return 0;
+    if (!overwrite && GetEnvironmentVariableA(name, dummy, 0) > 0) return 0;
+
+#ifdef KDEWIN32_USE_ENV_S
+    return _putenv_s(name, value);
+#else 
+    if (!name) return -1;
 
     i = strlen(name) + strlen(value) + 2;
     a = (char*)malloc(i);
@@ -44,38 +57,20 @@ KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
     iRet = putenv(a);
     free(a);
     return iRet;
+#endif
 }
 
 
 // from kdecore/fakes.c
 KDEWIN32_EXPORT void unsetenv (const char *name)
 {
-  size_t len;
-  char **ep;
-
   if (name == NULL || *name == '\0' || strchr (name, '=') != NULL)
     {
       errno = EINVAL;
       return;
     }
 
-  len = strlen (name);
-
-  ep = environ;
-  while (*ep != NULL)
-    if (!strncmp (*ep, name, len) && (*ep)[len] == '=')
-      {
-	/* Found it.  Remove this pointer by moving later ones back.  */
-	char **dp = ep;
-
-	do
-	  dp[0] = dp[1];
-	while (*dp++);
-	/* Continue the loop in case NAME appears again.  */
-      }
-    else
-      ++ep;
-
+  setenv(name, 0, 1);
 }
 
 KDEWIN32_EXPORT long int random()
