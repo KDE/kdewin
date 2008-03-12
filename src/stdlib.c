@@ -30,6 +30,41 @@
 #define KDEWIN32_USE_ENV_S
 #endif
 
+static void putenvMsvcrt(const char *name, const char *value)
+{
+    typedef int (*msvc6putenv)(const char *envstring);
+    static msvc6putenv s_msvcrtputenv = 0;
+    static int alreadyResolved = 0;
+    int i;
+    char * a;
+
+    if( !alreadyResolved ) {
+#ifdef _MSC_VER
+        HANDLE hModule = LoadLibraryA("msvcrt");
+#else
+        // this doesn't work when msvcr80 isn't already loaded,
+        // but then we don't need it anyway
+        HANDLE hModule = LoadLibraryA("msvcr80");
+#endif
+        if( hModule )
+            s_msvcrtputenv = (msvc6putenv)GetProcAddress(hModule, "_putenv");
+        alreadyResolved = 1;
+    }
+    if( !s_msvcrtputenv )
+        return;
+
+    i = strlen(name) + strlen(value) + 2;
+    a = (char*)malloc(i);
+    if (!a) return;
+
+    strcpy(a, name);
+    strcat(a, "=");
+    strcat(a, value);
+
+    s_msvcrtputenv(a);
+    free(a);
+}
+
 // from kdecore/fakes.c
 KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
 {
@@ -39,7 +74,11 @@ KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
 #endif
     char dummy[1];
 
-    if (!overwrite && getenv(name)) return 0; 
+    if (!overwrite && getenv(name)) return 0;
+
+    // make sure to set the env var in all our possible runtime environments
+    putenvMsvcrt(name, value);
+    //SetEnvironmentVariableA(name, value);     // unsure if we need it...
 
 #ifdef KDEWIN32_USE_ENV_S
     return _putenv_s(name, value);

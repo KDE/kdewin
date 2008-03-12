@@ -10,6 +10,14 @@ int main(int c, char **argv)
 {
     struct timeval  tv, tt;
     long long int t1, t2;
+/* misissue for setenv() test
+    char szBuf[30];
+    char *lpBuf;
+
+    setenv("test", "1", 0);
+    GetEnvironmentVariableA("test", szBuf, 20);
+    lpBuf = getenv("test");
+*/
     gettimeofday(&tv, NULL);
     t1 = ((long long int)tv.tv_sec) * 1000000LL + tv.tv_usec;
 		if (verbose) {
