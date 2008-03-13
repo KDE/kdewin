@@ -111,6 +111,11 @@ WINPOSIX_EXPORT double remainder(double x, double y);
 // double log10l (double)
 // long double log10l (long double)
 
+/* 7.12.6.9 */
+// double log1p(double)
+// float log1pf(float)
+// long double log1pl(long double)
+
 /* 7.12.8.1 The erf functions  */
 // double erf (double)
 // float erff (float)
@@ -195,6 +200,11 @@ WINPOSIX_EXPORT long double atanhl (long double);
 WINPOSIX_EXPORT double expm1(double);
 WINPOSIX_EXPORT float expm1f(float);
 WINPOSIX_EXPORT long double expm1l(long double);
+
+/* 7.12.6.9 */
+WINPOSIX_EXPORT double log1p(double);
+WINPOSIX_EXPORT float log1pf(float);
+WINPOSIX_EXPORT long double log1pl(long double);
 
 /* 7.12.8.1 The erf functions  */
 WINPOSIX_EXPORT double erf (double);

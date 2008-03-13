@@ -18,15 +18,18 @@
 #include <math.h> /* expl() */
 #include "cephes_mconf.h"
 
+static const double dbLOGE2L = 6.9314718055994530941723E-1L;
+static const float fLOGE2L = 6.9314718055994530941723E-1L;
+
 double expm1 (double x)
 {
   if (fabsf(x) < LOGE2L)
     {
-      x *= LOG2EL;
-    	__asm {
+      __asm {
+        fld x
+        fmul dbLOGE2L
         f2xm1
       }
-      return x;
     }
   else
     return exp(x) - 1.0;
@@ -36,11 +39,11 @@ float expm1f (float x)
 {
   if (fabsf(x) < LOGE2L)
     {
-      x *= LOG2EL;
-    	__asm {
+      __asm {
+        fld x
+        fmul fLOGE2L
         f2xm1
       }
-      return x;
     }
   else
     return expf(x) - 1.0F;
@@ -48,14 +51,5 @@ float expm1f (float x)
 
 long double expm1l (long double x)
 {
-  if (fabsf(x) < LOGE2L)
-    {
-      x *= LOG2EL;
-    	__asm {
-        f2xm1
-      }
-      return x;
-    }
-  else
-    return expl(x) - 1.0;
+  return expm1((double)x);
 }

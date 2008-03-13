@@ -127,3 +127,98 @@ KDEWIN32_EXPORT long double atanhl ( long double x )
 {
   return atanh ( ( double ) x );
 }
+
+/* Public domain, from mingwex library, adjusted to compile with msvc */
+KDEWIN32_EXPORT double log1p(double x)
+{
+    static const double limit = 0.29;
+    static const double one = 1.0;
+
+    __asm {
+        fldln2
+        fld x
+        fxam
+        fnstsw ax
+        fld st
+        sahf
+        jc lbl3     /* in case x is NaN or ±Inf */
+    }
+
+lbl4:
+    __asm {
+        fabs
+        fcomp limit
+        fnstsw ax
+        sahf
+        jc lbl2
+        fadd one
+        fyl2x
+        jmp ende
+    }
+
+lbl2:
+    __asm {
+        fyl2xp1
+        jmp ende
+    }
+
+lbl3:
+    __asm {
+        jp lbl4     /* in case x is ±Inf */
+        fstp st(1)
+        fstp st(1)
+    }
+
+ende:
+    return;
+}
+
+KDEWIN32_EXPORT void log1pf(float x)
+{
+    static const float limit = 0.29;
+    static const float one = 1.0;
+
+    __asm {
+        fldln2
+        fld x
+        fxam
+        fnstsw ax
+        fld st
+        sahf
+        jc lbl3     /* in case x is NaN or ±Inf */
+    }
+
+lbl4:
+    __asm {
+        fabs
+        fcomp limit
+        fnstsw ax
+        sahf
+        jc lbl2
+        fadd one
+        fyl2x
+        jmp ende
+    }
+
+lbl2:
+    __asm {
+        fyl2xp1
+        jmp ende
+    }
+
+lbl3:
+    __asm {
+        jp lbl4     /* in case x is ±Inf */
+        fstp st(1)
+        fstp st(1)
+    }
+
+ende:
+    return;
+}
+
+KDEWIN32_EXPORT long double log1pl(long double x)
+{
+    return log1p((double)x);
+}
+
