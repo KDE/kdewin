@@ -11,7 +11,7 @@ endif (NOT WIN32)
 
 find_package(WIN32LIBS)
 find_package(KDEWIN_Packager)
-find_package(WinScp)
+find_package(WinSCP)
 
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
