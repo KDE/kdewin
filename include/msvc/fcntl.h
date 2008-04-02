@@ -90,7 +90,7 @@ extern "C" {
 # define	F_UNLKSYS	4	/* remove remote locks for a given system */
 #endif	/* !_POSIX_SOURCE */
 
-int KDEWIN32_EXPORT __cdecl fcntl (int fd, int cmd,...);
+/* not implemented: int KDEWIN32_EXPORT __cdecl fcntl (int fd, int cmd,...); */
 
 #ifdef __cplusplus
 }

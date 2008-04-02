@@ -65,7 +65,7 @@ set(win_LIB_SRCS
    src/bind/inet_pton.c
    src/dirent.c
    src/errno.c
-   src/fcntl.c
+#not implemented: src/fcntl.c
    src/fsync.c
    src/getenv.c
    src/grp.c
