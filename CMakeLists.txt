@@ -86,6 +86,7 @@ set(win_LIB_SRCS
    src/uname.c
    src/unistd.c
 #   src/io.c
+   src/dummy.c
    )
 if(MSVC)
   set(win_LIB_SRCS ${win_LIB_SRCS}

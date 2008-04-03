@@ -148,13 +148,3 @@ KDEWIN32_EXPORT int closedir(DIR *dp)
 }
 
 #endif // #ifndef __MINGW32__
-
-
-/* TODO?
-KDEWIN32_EXPORT struct dirent* readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
-{
-	//todo: remove this when readdir_r.c will be ported
-	result = 0;
-	return 0;
-}
-*/
