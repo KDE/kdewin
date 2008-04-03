@@ -42,9 +42,11 @@ static void putenvMsvcrt(const char *name, const char *value)
 #ifdef _MSC_VER
         HANDLE hModule = LoadLibraryA("msvcrt");
 #else
-        // this doesn't work when msvcr80 isn't already loaded,
-        // but then we don't need it anyway
-        HANDLE hModule = LoadLibraryA("msvcr80");
+        // it doesn't work when msvcr80 isn't loaded - we end up in an error
+        // message due to crappy manifest things :(
+        // maybe someone has an idea how to fix this.
+        //HANDLE hModule = LoadLibraryA("msvcr80");
+        HANDLE hModule = NULL;
 #endif
         if( hModule )
             s_msvcrtputenv = (msvc6putenv)GetProcAddress(hModule, "_putenv");
