@@ -25,6 +25,8 @@
 /* regular header from msvc includes */
 #include <../include/sys/types.h>
 
+#include <BaseTsd.h>
+
 typedef unsigned int useconds_t;
 typedef unsigned int uid_t;
 typedef unsigned int gid_t;
@@ -39,7 +41,7 @@ typedef unsigned int size_t;
 
 #ifndef _SSIZE_T_DEFINED
 #define _SSIZE_T_DEFINED
-typedef size_t ssize_t;
+typedef SSIZE_T ssize_t;
 #endif
 
 #ifndef _SOCKLEN_T_DEFINED
