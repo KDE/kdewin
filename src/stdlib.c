@@ -74,7 +74,6 @@ KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
     int i, iRet;
     char * a;
 #endif
-    char dummy[1];
 
     if (!overwrite && getenv(name)) return 0;
 
