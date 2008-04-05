@@ -105,7 +105,7 @@ void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offse
         return MAP_FAILED;
     }
     // we don't support this atm
-    if ( prot == MAP_FIXED ) {
+    if ( flags == MAP_FIXED ) {
         _set_errno( ENOTSUP );
         return MAP_FAILED;
     }
