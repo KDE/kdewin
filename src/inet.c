@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Peter Kümmel <syntheticpp@gmx.net>
+   Copyright (C) 2006 Peter Kuemmel <syntheticpp@gmx.net>
    Copyright (C) 2006 Christian Ehrlicher <ch.ehrlicher@gmx.de>
 
    This program is free software; you can redistribute it and/or

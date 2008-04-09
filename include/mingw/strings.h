@@ -1,6 +1,5 @@
-/*
-   This file is part of the KDE libraries
-   Copyright (C) 2006 Peter Kümmel <syntheticpp@gmx.net>
+/* This file is part of the KDE libraries
+   Copyright (C) 2006 Peter Kuemmel <syntheticpp@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
