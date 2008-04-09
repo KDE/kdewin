@@ -26,6 +26,3 @@ else(EXTERNAL_LIBPNG)
     set (PNG_LIBRARIES png12_static ${ZLIB_LIBRARY})
 endif(EXTERNAL_LIBPNG)
 
-# now using png2ico from ../tools
-#add_subdirectory(png2ico)
-
