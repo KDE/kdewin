@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Peter Kümmel
-   Copyright (C) 2006 Christian Ehrlicher (Ch.Ehrlicher@gmx.de)
+   Copyright (C) 2006 Peter Kümmel <syntheticpp@gmx.net>
+   Copyright (C) 2006 Christian Ehrlicher <ch.ehrlicher@gmx.de>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

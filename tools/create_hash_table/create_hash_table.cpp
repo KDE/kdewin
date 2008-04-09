@@ -96,7 +96,7 @@ bool processLine(QTextStream &out, QString &line)
     else if (a[0] == "@end") {
         QMap<int, Entry>::iterator i = map.begin();
         for(;i != map.end();i++) {
-            if (i.value().name != "")
+            if (!i.value().name.isEmpty())
                 out << (quietMode ? "" : QString("/* %1 %2 */").arg(i.key()).arg(i.value().hash))
                     << "  { \"" << i.value().name << "\", " 
                     << i.value().token << ", "
@@ -127,7 +127,7 @@ bool processLine(QTextStream &out, QString &line)
     }
     else {
         int key = Lookup::hash(a[0]) % hashTable.hashSize; 
-        if (map[key].name == "") {
+        if (map[key].name.isEmpty()) {
             map[key].name = a[0];
             map[key].token = a[1];
             map[key].hash = key;

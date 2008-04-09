@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Ralf Habacker
+   Copyright (C) 2006 Ralf Habacker <ralf.habacker@freenet.de>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

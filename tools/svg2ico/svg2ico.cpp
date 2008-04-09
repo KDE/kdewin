@@ -69,7 +69,7 @@ bool svg2png(const QString &inFile, const QString &outFile, int width, int heigh
     if (svgFile.endsWith(".svgz")) {
         QFileInfo iif(inFile);
         QFileInfo of(outFile);
-        tmpFile = of.absolutePath()+"/"+iif.baseName()+".svg";
+        tmpFile = of.absolutePath()+'/'+iif.baseName()+".svg";
         bool ret = unzipGZipFile(svgFile.toAscii().data(),tmpFile.toAscii().data());
         if (verbose || !ret)
             qDebug() << "uncompressing" << svgFile << "to" << tmpFile << ":" << (ret ? "okay" : "error");
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     if(argc < 3) {
         qDebug() << "Usage : svg2ico <options> <svgfilename> <icofilename>";
         qDebug() << "options: --verbose print execution details";
-        qDebug() << "         --debug   print debugging informations e.g. do not delete temporary files";
+        qDebug() << "         --debug   print debugging information e.g. do not delete temporary files";
         return -1;
     }
     int i = 1;

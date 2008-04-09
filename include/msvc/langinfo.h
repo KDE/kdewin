@@ -1,5 +1,5 @@
-#ifndef _LANGINFO_H
-#define _LANGINFO_H
+#ifndef KDEWIN_LANGINFO_H
+#define KDEWIN_LANGINFO_H
 
 #ifdef __cplusplus
 extern "C" {

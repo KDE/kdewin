@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_SYS_DIRENT_H
-#define KDEWIN_SYS_DIRENT_H
+#ifndef KDEWIN_DIRENT_H
+#define KDEWIN_DIRENT_H
 
 // include everywhere
 #include <sys/types.h>
@@ -109,4 +109,4 @@ int alphasort (const struct dirent **__a, const struct dirent **__b);
 }
 #endif
 
-#endif  // KDEWIN_SYS_DIRENT_H
+#endif  // KDEWIN_DIRENT_H

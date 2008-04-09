@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Peter Kümmel
+   Copyright (C) 2006 Peter Kümmel <syntheticpp@gmx.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_SYS_DIRENT_H
-#define KDEWIN_SYS_DIRENT_H
+#ifndef KDEWIN_DIRENT_H
+#define KDEWIN_DIRENT_H
 
 // include everywhere
 #include <sys/types.h>
@@ -38,4 +38,4 @@ extern "C" {
 }
 #endif
 
-#endif  // KDEWIN_SYS_DIRENT_H
+#endif  // KDEWIN_DIRENT_H

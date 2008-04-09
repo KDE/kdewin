@@ -1,5 +1,5 @@
-#ifndef _NL_TYPES_H
-#define _NL_TYPES_H
+#ifndef KDEWIN_NL_TYPES_H
+#define KDEWIN_NL_TYPES_H
 
 typedef enum {
   CODESET,
@@ -31,4 +31,4 @@ typedef void* nl_catd;
 
 enum { NL_SETD=0, NL_CAT_LOCALE=1 };
 
-#endif
+#endif  // KDEWIN_NL_TYPES_H

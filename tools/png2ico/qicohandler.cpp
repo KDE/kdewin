@@ -387,11 +387,11 @@ bool ICOReader::readBMPHeader(ICONDIRENTRY & iconEntry, BMP_INFOHDR * header)
 		else					// # colors used
 		    icoAttrib.ncolors = header->biClrUsed ? header->biClrUsed : 1 << icoAttrib.nbits;
                 //qDebug() << "Bits:" << icoAttrib.nbits << "Depth:" << icoAttrib.depth << "Ncols:" << icoAttrib.ncolors;
-		return TRUE;
+		return true;
 	    }
 	}
     }
-    return FALSE;
+    return false;
 }
 
 void ICOReader::findColorInfo(QImage & image)
