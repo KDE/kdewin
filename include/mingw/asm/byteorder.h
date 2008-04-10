@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _BYTEORDER_H
-#define _BYTEORDER_H
+#ifndef KDEWIN_ASM_BYTEORDER_H
+#define KDEWIN_ASM_BYTEORDER_H
 
 #undef INCL_WINSOCK_API_PROTOTYPES
 #define INCL_WINSOCK_API_PROTOTYPES 1 //for ntohl(), etc.
@@ -101,4 +101,4 @@ __ntohs(unsigned short int x)
 }
 #endif
 
-#endif
+#endif  // KDEWIN_ASM_BYTEORDER_H

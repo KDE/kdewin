@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_BYTEORDER_H
-#define KDEWIN_BYTEORDER_H
+#ifndef KDEWIN_ASM_BYTEORDER_H
+#define KDEWIN_ASM_BYTEORDER_H
 
 // include everywhere
 #include <sys/types.h>
@@ -119,4 +119,4 @@ __ntohs(unsigned short int x)
 }
 #endif
 
-#endif	// KDEWIN_BYTEORDER_H
+#endif	// KDEWIN_ASM_BYTEORDER_H

@@ -8,8 +8,8 @@
  * chmod functions.
  *
  */
-#ifndef KDE_STAT_H_
-#define KDE_STAT_H_
+#ifndef KDEWIN_SYS_STAT_H
+#define KDEWIN_SYS_STAT_H
 
 #include <sys/types.h>
 #include <../include/sys/stat.h>
@@ -47,4 +47,4 @@ KDEWIN32_EXPORT int fchmod(int __fd, mode_t __mode);
 }
 #endif
 
-#endif
+#endif  // KDEWIN_SYS_STAT_H

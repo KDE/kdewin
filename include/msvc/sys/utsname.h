@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _SYS_UTSNAME_H
-#define _SYS_UTSNAME_H
+#ifndef KDEWIN_SYS_UTSNAME_H
+#define KDEWIN_SYS_UTSNAME_H
 
 #include <winposix_export.h>
 
@@ -41,4 +41,4 @@ KDEWIN32_EXPORT int uname (struct utsname *);
 }
 #endif
 
-#endif
+#endif  // KDEWIN_SYS_UTSNAME_H

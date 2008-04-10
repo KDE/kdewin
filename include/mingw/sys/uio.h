@@ -17,4 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef KDEWIN_SYS_UIO_H
+#define KDEWIN_SYS_UIO_H
+
 /* dummy */
+
+#endif  // KDEWIN_SYS_UIO_H

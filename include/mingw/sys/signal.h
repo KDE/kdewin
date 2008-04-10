@@ -17,4 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef KDEWIN_SYS_SIGNAL_H
+#define KDEWIN_SYS_SIGNAL_H
+
 #include "../signal.h"
+
+#endif  // KDEWIN_SYS_SIGNAL_H

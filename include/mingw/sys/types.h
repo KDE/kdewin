@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDE_SYS_TYPES_H_
-#define KDE_SYS_TYPES_H_
+#ifndef KDEWIN_SYS_TYPES_H
+#define KDEWIN_SYS_TYPES_H
 
 #include <../include/sys/types.h>
 
@@ -33,5 +33,5 @@ typedef unsigned int nlink_t;
 
 #include <winposix_export.h>
 
-#endif 
+#endif  // KDEWIN_SYS_TYPES_H
 

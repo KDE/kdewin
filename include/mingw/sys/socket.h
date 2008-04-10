@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _SYS_SOCKET_H
-#define _SYS_SOCKET_H
+#ifndef KDEWIN_SYS_SOCKET_H
+#define KDEWIN_SYS_SOCKET_H
 
 #include <sys/time.h>
 
@@ -76,4 +76,4 @@ inline void kde_close(int fd, char *a, int b)
 */ 
 
 
-#endif /* _SYS_SOCKET_H */
+#endif  // KDEWIN_SYS_SOCKET_H

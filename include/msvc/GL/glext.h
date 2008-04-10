@@ -1,5 +1,4 @@
-/*
-   This file is part of the KDE libraries
+/* This file is part of the KDE libraries
    Copyright (C) 2007 Shane King (kde@dontletsstart.com)
 
    This program is free software; you can redistribute it and/or
@@ -18,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_GLEXT_H
-#define KDEWIN_GLEXT_H
+#ifndef KDEWIN_GL_GLEXT_H
+#define KDEWIN_GL_GLEXT_H
 
 /* 
 MSVC doesn't provide glext.h
@@ -28,4 +27,4 @@ Some KDE apps require bits of it, eg ones that use anti-aliased Open GL
 
 #define GL_MULTISAMPLE 0x809D
 
-#endif /* KDEWIN_GLEXT_H */
+#endif  // KDEWIN_GL_GLEXT_H

@@ -16,4 +16,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-// emtpy file
+#ifndef KDEWIN_SYS_IOCTL_H
+#define KDEWIN_SYS_IOCTL_H
+
+/* empty file */
+
+#endif  // KDEWIN_SYS_IOCTL_H

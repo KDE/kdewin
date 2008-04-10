@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _SYS_UN_H
-#define _SYS_UN_H
+#ifndef KDEWIN_SYS_UN_H
+#define KDEWIN_SYS_UN_H
 
 /* POSIX requires only at least 100 bytes */
 #define UNIX_PATH_LEN   108
@@ -32,4 +32,4 @@ struct sockaddr_un {
 #define SUN_LEN(p) ((size_t)(((struct sockaddr_un *) NULL)->sun_path) \
 		   + strlen ((p)->sun_path))
 
-#endif
+#endif  // KDEWIN_SYS_UN_H

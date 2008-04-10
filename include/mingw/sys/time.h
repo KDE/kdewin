@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDE_SYS_TIME_H_
-#define KDE_SYS_TIME_H_
+#ifndef KDEWIN_SYS_TIME_H
+#define KDEWIN_SYS_TIME_H
 
 #include <sys/types.h>
 #include <../include/sys/time.h>
@@ -86,4 +86,4 @@ KDEWIN32_EXPORT int settimeofday(const struct timeval *, const struct timezone *
 }
 #endif
 
-#endif //KDE_SYS_TIME_H_
+#endif  // KDEWIN_SYS_TIME_H
