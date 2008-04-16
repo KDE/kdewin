@@ -2,8 +2,8 @@
    Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
     Declarations based on original syslog.h,
-    Copyright (c) 1982, 1986, 1988, 1993
-    The Regents of the University of California.  All rights reserved. 
+    Copyright 1982, 1986, 1988, 1993 The Regents of the University of California.
+    All rights reserved. 
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
