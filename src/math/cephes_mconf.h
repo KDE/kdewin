@@ -1,3 +1,6 @@
+#ifndef CEPHES_MCONF_H
+#define CEPHES_MCONF_H
+
 #include <math.h>
 #include <errno.h>
 
@@ -412,3 +415,5 @@ while( --i );
 
 return( ans );
 }
+
+#endif  // CEPHES_MCONF_H
