@@ -25,5 +25,3 @@ import "objidl.idl";
 #include <axextend.idl>
 
 #include <dyngraph.idl>
-
-#include <vmrender.idl>
