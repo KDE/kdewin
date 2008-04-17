@@ -1,1 +1,3 @@
 SKIP /3rdparty/
+SKIP /examples/
+SKIP /tools/
