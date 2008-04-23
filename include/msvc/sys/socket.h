@@ -165,6 +165,11 @@ struct msghdr
 #define EADDRNOTAVAIL WSAEADDRNOTAVAIL
 #define EPROTONOSUPPORT WSAEPROTONOSUPPORT
 
+#ifdef ioctl
+#undef ioctl
+#endif
+#define ioctl(a,b,c) ioctlsocket(a,b,(u_long*)c)
+
 #ifdef __cplusplus
 };
 #endif
