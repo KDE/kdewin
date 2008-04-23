@@ -1,3 +1,4 @@
 SKIP /3rdparty/
 SKIP /examples/
 SKIP /tools/
+SKIP /include/directx/
