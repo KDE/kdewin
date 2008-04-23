@@ -2,3 +2,5 @@ SKIP /3rdparty/
 SKIP /examples/
 SKIP /tools/
 SKIP /include/directx/
+SKIP /src/bind/
+SKIP /src/math/
