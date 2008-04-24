@@ -50,10 +50,11 @@
 #define EADDRNOTAVAIL WSAEADDRNOTAVAIL
 #define EPROTONOSUPPORT WSAEPROTONOSUPPORT
 
+/* better do this at the app level
 #include <sys/ioctl.h>
 #undef ioctl
 #define ioctl(a,b,c) ioctlsocket(a,b,(u_long*)c)
-
+*/
 /*
  does not work yet, replaces to many close functions()
 #include <io.h>
