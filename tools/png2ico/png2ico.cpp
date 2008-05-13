@@ -31,7 +31,7 @@
 
 static void usage ( const QString &errMsg )
 {
-  QString appname = qApp->arguments() [0];
+  QString appname = QCoreApplication::instance()->arguments() [0];
   fprintf ( stderr, "%s\n", qPrintable ( errMsg ) );
   fprintf ( stdout, "%s version 0.1\n", qPrintable ( appname ) );
   fprintf ( stdout, "USAGE: %s icofile [--rcfile rcfile] pngfile1 [pngfile2 ...]\n", qPrintable ( appname ) );
