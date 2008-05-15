@@ -55,13 +55,14 @@ static void putenvMsvcrt(const char *name, const char *value)
     if( !s_msvcrtputenv )
         return;
 
-    i = strlen(name) + strlen(value) + 2;
+    i = strlen(name) + (value ? strlen(value) : 0) + 2;
     a = (char*)malloc(i);
     if (!a) return;
 
     strcpy(a, name);
     strcat(a, "=");
-    strcat(a, value);
+    if (value)
+      strcat(a, value);
 
     s_msvcrtputenv(a);
     free(a);
@@ -82,17 +83,18 @@ KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
     //SetEnvironmentVariableA(name, value);     // unsure if we need it...
 
 #ifdef KDEWIN32_USE_ENV_S
-    return _putenv_s(name, value);
+    return _putenv_s(name, value ? value : "");
 #else 
     if (!name) return -1;
 
-    i = strlen(name) + strlen(value) + 2;
+    i = strlen(name) + (value ? strlen(value) : 0) + 2;
     a = (char*)malloc(i);
     if (!a) return 1;
 
     strcpy(a, name);
     strcat(a, "=");
-    strcat(a, value);
+    if (value)
+      strcat(a, value);
 
     iRet = putenv(a);
     free(a);
@@ -110,7 +112,7 @@ KDEWIN32_EXPORT void unsetenv (const char *name)
       return;
     }
 
-  setenv(name, 0, 1);
+  setenv(name, "", 1);
 }
 
 KDEWIN32_EXPORT long int random()
