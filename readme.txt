@@ -2,6 +2,11 @@ kdewin32 is a supplementary library and supplementary tools
 
 history
 -------
+version 0.3.7
+- add log1p for msvc (needed for koffice)
+- some fixes
+- update licensing informations to make ebn happy
+
 version 0.3.6
 - add a new png2ico which uses QtIcoHandler from Qt4.4 to write .ico files
 - add directx headers for mingw

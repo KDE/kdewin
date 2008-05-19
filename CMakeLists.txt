@@ -1,5 +1,5 @@
 set (NAME kdewin32)
-set (KDEWIN32_VERSION 0x000306)
+set (KDEWIN32_VERSION 0x000307)
 
 project(${NAME})
 
