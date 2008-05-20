@@ -25,8 +25,6 @@
 
 #include <../include/time.h>
 
-#define timezone _timezone
-
 #ifdef __cplusplus
 extern "C" {
 #endif 
