@@ -92,7 +92,7 @@ KDEWIN32_EXPORT double asinh ( double x )
     return __QNAN.double_val;
   }
 
-  x = log ( x + sqrt ( x * x + 1.0f ) );
+  x = log ( x + sqrt ( x * x + 1.0 ) );
 
   return x;
 }
