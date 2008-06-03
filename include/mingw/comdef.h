@@ -59,7 +59,7 @@ public:
     {
         if (m_string == 0)
         {
-            FormatMessage(
+            FormatMessageW(
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM, 
                 0, 
                 m_hr,
