@@ -1,6 +1,7 @@
 /*
    This file is part of the KDE libraries
    Copyright (C) 2006 Christian Ehrlicher <ch.ehrlicher@gmx.de>
+   Copyright (C) 2008 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +27,22 @@
 /* regular header from msvc includes */
 # include <../include/stdio.h>
 
-#define snprintf _snprintf
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/** Replaces _snprintf() because we want to behave like on UNIX: 
+  * terminate with \0 if the buffer is too small, and return value that 
+  * is greater than or equal to the size argument if the string was 
+  * too short and some of the printed characters were discarded. */
+KDEWIN32_EXPORT int kdewin32_snprintf(char *buffer, size_t count, const char *fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif
+
+#define snprintf kdewin32_snprintf
 #define vsnprintf _vsnprintf
 #define popen _popen
 #define pclose _pclose

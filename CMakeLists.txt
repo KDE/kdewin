@@ -90,6 +90,7 @@ set(win_LIB_SRCS
    )
 if(MSVC)
   set(win_LIB_SRCS ${win_LIB_SRCS}
+      src/stdio.c
       src/math/tgamma.c
       src/math/tgammaf.c
       src/math/lgamma.c
