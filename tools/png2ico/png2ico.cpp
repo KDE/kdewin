@@ -21,6 +21,8 @@
 */
 
 #include "qicohandler.h"
+#include "qcurhandler.h"
+#include "qanihandler.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QFile>
@@ -28,13 +30,16 @@
 #include <QtCore/QList>
 #include <QtCore/QTextStream>
 #include <QtGui/QImage>
+#include <QtGui/QPainter>
 
 static void usage ( const QString &errMsg )
 {
   QString appname = QCoreApplication::instance()->arguments() [0];
   fprintf ( stderr, "%s\n", qPrintable ( errMsg ) );
   fprintf ( stdout, "%s version 0.1\n", qPrintable ( appname ) );
-  fprintf ( stdout, "USAGE: %s icofile [--rcfile rcfile] pngfile1 [pngfile2 ...]\n", qPrintable ( appname ) );
+  fprintf ( stdout, "USAGE: %s file.ico [--rcfile rcfile] pngfile1 [pngfile2 ...]\n", qPrintable ( appname ) );
+  fprintf ( stdout, "USAGE: %s file.cur [--hotspotx hotspotx] [--hotspoty hotspoty] pngfile1\n", qPrintable ( appname ) );
+  fprintf ( stdout, "USAGE: %s file.ani [--hotspotx hotspotx] [--hotspoty hotspoty] [--framerate framerate] pngfile1 [pngfile2 ...]\n", qPrintable ( appname ) );
   exit ( 1 );
 }
 
@@ -47,6 +52,25 @@ static void fatal ( const QString &errMsg )
 {
   fprintf ( stderr, "%s\n", qPrintable ( errMsg ) );
   exit ( 2 );
+}
+
+QImage scaleImage(const QImage &source)
+{
+    //make an empty image and fill with transparent color
+    QImage result(32, 32, QImage::Format_ARGB32);
+    result.fill(0);
+
+    QPainter paint(&result);
+    paint.translate(0, 0);
+    if( source.width() > 32 || source.height() > 32 )
+    {
+        QImage scaled = source.scaled( 32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        paint.drawImage(QPoint(0, 0), scaled);
+    } else {
+        paint.drawImage(QPoint(0, 0), source);
+    }
+
+    return result;
 }
 
 static bool sortQImageForSize ( const QImage &i1, const QImage &i2 )
@@ -70,6 +94,9 @@ int main ( int argc, char **argv )
 
   QString rcFileName;
   QString icoFileName;
+  int hotspotx = 0;
+  int hotspoty = 0;
+  int framerate = 3;
   for ( int i = 1; i < argc; i++ ) {
     const QString arg = app.arguments() [i];
     if ( arg == QLatin1String ( "--rcfile" ) ) {
@@ -80,7 +107,32 @@ int main ( int argc, char **argv )
       } else {
         usage ( "option '--rcfile' without filename" );
       }
+    } else if (arg == "--hotspotx") {
+       if ( i + 1 < argc ) {
+        hotspotx = app.arguments()[i+1].toInt();
+        i++;
+        continue;
+       } else {
+        usage ( "option '--hotspotx' without value" );
+       }
+    } else if (arg == "--hotspoty") {
+       if ( i + 1 < argc ) {
+        hotspoty = app.arguments()[i+1].toInt();
+        i++;
+        continue;
+    } else {
+        usage ( "option '--hotspoty' without value" );
+       }
+    } else if (arg == "--framerate") {
+       if ( i + 1 < argc ) {
+        framerate = app.arguments()[i+1].toInt();
+        i++;
+        continue;
+    } else {
+        usage ( "option '--framerate' without value" );
+       }
     }
+
     if ( icoFileName.isEmpty() ) {
       icoFileName = arg;
       continue;
@@ -91,100 +143,130 @@ int main ( int argc, char **argv )
       warning ( QString ( "Can not load image %1" ).arg ( arg ) );
       continue;
     }
-    images += img;
-    if ( img.size() == size16 ) {
-      if ( imagesToUse.contains ( 16 ) ) {
-        warning ( QString ( "Already have an Image with 16x16 - overwriting with %1" ).arg ( arg ) );
-      }
-      imagesToUse.insert ( 16, img );
-      continue;
-    }
-    if ( img.size() == size32 ) {
-      if ( imagesToUse.contains ( 32 ) ) {
-        warning ( QString ( "Already have an Image with 32x32 - overwriting with %1" ).arg ( arg ) );
-      }
-      imagesToUse.insert ( 32, img );
-      continue;
-    }
-    if ( img.size() == size48 ) {
-      if ( imagesToUse.contains ( 48 ) ) {
-        warning ( QString ( "Already have an Image with 48x48- overwriting with %1" ).arg ( arg ) );
-      }
-      imagesToUse.insert ( 48, img );
-      continue;
+
+    if (icoFileName.endsWith(".ico", Qt::CaseInsensitive)) {
+        images += img;
+        if ( img.size() == size16 ) {
+        if ( imagesToUse.contains ( 16 ) ) {
+            warning ( QString ( "Already have an Image with 16x16 - overwriting with %1" ).arg ( arg ) );
+        }
+        imagesToUse.insert ( 16, img );
+        continue;
+        }
+        if ( img.size() == size32 ) {
+        if ( imagesToUse.contains ( 32 ) ) {
+            warning ( QString ( "Already have an Image with 32x32 - overwriting with %1" ).arg ( arg ) );
+        }
+        imagesToUse.insert ( 32, img );
+        continue;
+        }
+        if ( img.size() == size48 ) {
+        if ( imagesToUse.contains ( 48 ) ) {
+            warning ( QString ( "Already have an Image with 48x48- overwriting with %1" ).arg ( arg ) );
+        }
+        imagesToUse.insert ( 48, img );
+        continue;
+        }
+    } else {
+        if (img.size() != QSize(32, 32)) {
+            img = scaleImage(img);
+        }
+
+        images += img;
     }
   }
   if ( images.count() == 0 )
     usage ( "No valid images found!" );
-
-  qSort ( images.begin(), images.end(), sortQImageForSize );
-  // 48x48 available -> if not create one
-  if ( !imagesToUse.contains ( 48 ) ) {
-    QImage img;
-    Q_FOREACH ( const QImage &i, images ) {
-      if ( img.width() >= 32 && img.height() >= 32 ) {
-        img = i;
-      }
+  if (icoFileName.endsWith(".ico", Qt::CaseInsensitive)) {
+    qSort ( images.begin(), images.end(), sortQImageForSize );
+    // 48x48 available -> if not create one
+    if ( !imagesToUse.contains ( 48 ) ) {
+        QImage img;
+        Q_FOREACH ( const QImage &i, images ) {
+        if ( img.width() >= 32 && img.height() >= 32 ) {
+            img = i;
+        }
+        }
+        if ( img.isNull() ) {
+        // none found -> use the last (==biggest) available
+        img = images.last();
+        }
+        imagesToUse.insert ( 48, img.scaled ( 48, 48, Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
     }
-    if ( img.isNull() ) {
-      // none found -> use the last (==biggest) available
-      img = images.last();
+    // 32x32 available -> if not create one
+    if ( !imagesToUse.contains ( 32 ) ) {
+        QImage img;
+        Q_FOREACH ( const QImage &i, images ) {
+        if ( img.width() >= 24 && img.height() >= 24 ) {
+            img = i;
+            // no need to scale from an higher size when we've 48x48
+            if ( img.width() >= 48 && img.height() >= 48 )
+            break;
+        }
+        }
+        if ( img.isNull() ) {
+        // none found -> use the last (==biggest) available
+        img = images.last();
+        }
+        imagesToUse.insert ( 32, img.scaled ( 32, 32, Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
     }
-    imagesToUse.insert ( 48, img.scaled ( 48, 48, Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
+    // 16x16 available -> if not create one
+    if ( !imagesToUse.contains ( 16 ) ) {
+        QImage img;
+        Q_FOREACH ( const QImage &i, images ) {
+        if ( img.width() >= 10 && img.height() >= 10 ) {
+            img = i;
+            // no need to scale from an higher size when we've 32x32
+            if ( img.width() >= 32 && img.height() >= 32 )
+            break;
+        }
+        }
+        if ( img.isNull() ) {
+        // none found -> use the last (==biggest) available
+        img = images.last();
+        }
+        imagesToUse.insert ( 16, img.scaled ( 16, 16, Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
+    }
+    images.clear();
+    images += imagesToUse[16].convertToFormat ( QImage::Format_ARGB32,   Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
+    images += imagesToUse[16].convertToFormat ( QImage::Format_Indexed8, Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
+    images += imagesToUse[32].convertToFormat ( QImage::Format_ARGB32,   Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
+    images += imagesToUse[32].convertToFormat ( QImage::Format_Indexed8, Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
+    images += imagesToUse[48].convertToFormat ( QImage::Format_ARGB32,   Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
+    images += imagesToUse[48].convertToFormat ( QImage::Format_Indexed8, Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
   }
-  // 32x32 available -> if not create one
-  if ( !imagesToUse.contains ( 32 ) ) {
-    QImage img;
-    Q_FOREACH ( const QImage &i, images ) {
-      if ( img.width() >= 24 && img.height() >= 24 ) {
-        img = i;
-        // no need to scale from an higher size when we've 48x48
-        if ( img.width() >= 48 && img.height() >= 48 )
-          break;
-      }
-    }
-    if ( img.isNull() ) {
-      // none found -> use the last (==biggest) available
-      img = images.last();
-    }
-    imagesToUse.insert ( 32, img.scaled ( 32, 32, Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
-  }
-  // 16x16 available -> if not create one
-  if ( !imagesToUse.contains ( 16 ) ) {
-    QImage img;
-    Q_FOREACH ( const QImage &i, images ) {
-      if ( img.width() >= 10 && img.height() >= 10 ) {
-        img = i;
-        // no need to scale from an higher size when we've 32x32
-        if ( img.width() >= 32 && img.height() >= 32 )
-          break;
-      }
-    }
-    if ( img.isNull() ) {
-      // none found -> use the last (==biggest) available
-      img = images.last();
-    }
-    imagesToUse.insert ( 16, img.scaled ( 16, 16, Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
-  }
-  images.clear();
-  images += imagesToUse[16].convertToFormat ( QImage::Format_ARGB32,   Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
-  images += imagesToUse[16].convertToFormat ( QImage::Format_Indexed8, Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
-  images += imagesToUse[32].convertToFormat ( QImage::Format_ARGB32,   Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
-  images += imagesToUse[32].convertToFormat ( QImage::Format_Indexed8, Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
-  images += imagesToUse[48].convertToFormat ( QImage::Format_ARGB32,   Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
-  images += imagesToUse[48].convertToFormat ( QImage::Format_Indexed8, Qt::ColorOnly|Qt::DiffuseAlphaDither|Qt::AvoidDither );
 
   QFile f ( icoFileName );
   if ( !f.open ( QIODevice::WriteOnly ) ) {
     fatal ( QString ( "Can not open %1 for writing" ).arg ( icoFileName ) );
     return 2;
   }
-  QtIcoHandler ico ( &f );
-  if ( !ico.write ( images ) ) {
-    fatal ( "Can not create ico data" );
-    return 2;
+
+  if (icoFileName.endsWith(".cur", Qt::CaseInsensitive)) {
+    QtCurHandler ico ( &f );
+    if ( !ico.write ( images, hotspotx, hotspoty ) ) {
+        fatal ( "Can not create cur data" );
+        return 2;
+    }
+    f.close();
+
+  } else if (icoFileName.endsWith(".ani", Qt::CaseInsensitive)) {
+    QtAniHandler ico ( &f );
+    if ( !ico.write ( images, hotspotx, hotspoty, framerate ) ) {
+        fatal ( "Can not create ani data" );
+        return 2;
+    }
+    f.close();
+  } else if(icoFileName.endsWith(".ico", Qt::CaseInsensitive)) {
+    QtIcoHandler ico ( &f );
+    if ( !ico.write ( images ) ) {
+        fatal ( "Can not create ico data" );
+        return 2;
+    }
+    f.close();
+  } else {
+    f.close();
   }
-  f.close();
 
   if ( !rcFileName.isEmpty() ) {
     QFile rcFile ( rcFileName );
@@ -194,7 +276,7 @@ int main ( int argc, char **argv )
     }
     QTextStream ts(&rcFile);
     ts << QString( "IDI_ICON1        ICON        DISCARDABLE    \"%1\"\n" ).arg ( icoFileName );
-    f.close();
+    rcFile.close();
   }
   return 0;
 }
