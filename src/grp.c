@@ -19,24 +19,24 @@
 
 #include <winposix_export.h>
 #include <grp.h>
-#include <windows.h>
 
 
 /* these functions always fail. for win32 */
+static struct group s_group = { "", "", -2, 0 };
 
 KDEWIN32_EXPORT struct group *getgrnam (const char *name)
 {
-	return 0;
+    return &s_group;
 }
 
 KDEWIN32_EXPORT struct group *getgrgid (gid_t gid)
 {
-	return 0;
+    return &s_group;
 }
 
 KDEWIN32_EXPORT struct group *getgrent(void)
 {
-	return 0;
+    return &s_group;
 }
 
 KDEWIN32_EXPORT void setgrent(void)
@@ -46,4 +46,3 @@ KDEWIN32_EXPORT void setgrent(void)
 KDEWIN32_EXPORT void endgrent(void)
 {
 }
-
