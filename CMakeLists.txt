@@ -8,6 +8,8 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 if (NOT WIN32)
    message(FATAL_ERROR "This directory can only be built under Windows")
 endif (NOT WIN32)
+OPTION(BUILD_TESTS "build test applications " OFF)
+OPTION(BUILD_EXAMPLES "build examples applications " OFF)
 
 find_package(WIN32LIBS)
 find_package(KDEWIN_Packager)
@@ -35,13 +37,16 @@ else (MINGW)
    set(_incDirPrefix msvc)
 endif(MINGW)
 
-if(NOT MSVC)
+if (BUILD_EXAMPLES AND NOT MSVC)
    add_subdirectory( examples)
-endif(NOT MSVC)
+endif(BUILD_EXAMPLES AND NOT MSVC)
 
 add_subdirectory(3rdparty)
 add_subdirectory(tools)
-add_subdirectory(tests)
+if (BUILD_TESTS)
+    add_subdirectory(tests)
+endif(BUILD_TESTS)
+
 configure_file(${CMAKE_SOURCE_DIR}/include/winposix_export.h.cmake ${CMAKE_BINARY_DIR}/include/winposix_export.h)
 
 # find the headers
