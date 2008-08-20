@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
 
     Declarations based on original syslog.h,
     Copyright 1982, 1986, 1988, 1993 The Regents of the University of California.    All rights reserved. 

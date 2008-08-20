@@ -1,6 +1,6 @@
 /*
    This file is part of the KDE libraries
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
 
    These sources are based on ftp://g.oswego.edu/pub/misc/malloc.c
    file by Doug Lea, released to the public domain.
