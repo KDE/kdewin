@@ -31,7 +31,12 @@
 /* ************************************************************************/
 
 #include <winposix_export.h>
-
+#include <math.h>
+WINPOSIX_EXPORT double remainder(double x, double y)
+{
+    return fmod(x, y);
+}
+#if 0
 /* these all assume little endian, which is safe for msvc */
 #  define HIGH_HALF 0
 #  define  LOW_HALF 1
@@ -142,3 +147,4 @@ WINPOSIX_EXPORT double remainder(double x, double y)
    }
   }
 }
+#endif
