@@ -2,6 +2,9 @@ kdewin32 is a supplementary library and supplementary tools
 
 history
 -------
+version 0.3.8
+- fix unsetenv() return value
+
 version 0.3.7
 - add log1p for msvc (needed for koffice)
 - some fixes
