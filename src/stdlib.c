@@ -104,15 +104,16 @@ KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
 
 
 // from kdecore/fakes.c
-KDEWIN32_EXPORT void unsetenv (const char *name)
+KDEWIN32_EXPORT int unsetenv (const char *name)
 {
-  if (name == NULL || *name == '\0' || strchr (name, '=') != NULL)
+    if (name == NULL || *name == '\0' || strchr (name, '=') != NULL)
     {
       errno = EINVAL;
-      return;
+      return -1;
     }
 
-  setenv(name, "", 1);
+    setenv(name, "", 1);
+    return 0;
 }
 
 KDEWIN32_EXPORT long int random()

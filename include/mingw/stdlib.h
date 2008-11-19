@@ -61,7 +61,7 @@ KDEWIN32_EXPORT char* realpath(const char *path,char *resolved_path);
 
 KDEWIN32_EXPORT int setenv(const char *__string, const char *__value, int __overwrite);
 
-KDEWIN32_EXPORT void unsetenv(const char *__string);
+KDEWIN32_EXPORT int unsetenv(const char *__string);
 
 
 #ifdef __cplusplus
