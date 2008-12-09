@@ -1,5 +1,7 @@
 set (NAME kdewin32)
 set (KDEWIN32_VERSION 0x000308)
+# stay in sync with kdelibs
+cmake_minimum_required(VERSION 2.6.2)
 
 project(${NAME})
 
@@ -19,18 +21,19 @@ find_package(WinSCP)
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
-include_directories(${CMAKE_SOURCE_DIR}
-                    ${CMAKE_BINARY_DIR}
-                    ${CMAKE_BINARY_DIR}/include
+include_directories(${kdewin32_SOURCE_DIR}
+                    ${kdewin32_SOURCE_DIR}/include
+                    ${kdewin32_BINARY_DIR}
+                    ${kdewin32_BINARY_DIR}/include
                     )
 
 if(MINGW)
    # we are using mingw, so do whatever required for mingw
-   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include/mingw )
+   include_directories(${kdewin32_SOURCE_DIR}/include/mingw )
    set(_incDirPrefix mingw)
 else (MINGW)
    # we are using msvc, so do whatever required for msvc
-   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include/msvc )
+   include_directories(${kdewin32_SOURCE_DIR}/include/msvc )
    # disable msvc callings to use the _s versions
    add_definitions( -D_CRT_SECURE_NO_DEPRECATE
                     -D_CRT_NONSTDC_NO_DEPRECATE
@@ -50,11 +53,12 @@ if (BUILD_TESTS)
     add_subdirectory(tests)
 endif(BUILD_TESTS)
 
-configure_file(${CMAKE_SOURCE_DIR}/include/winposix_export.h.cmake ${CMAKE_BINARY_DIR}/include/winposix_export.h)
+configure_file(${kdewin32_SOURCE_DIR}/include/winposix_export.h.cmake
+               ${kdewin32_BINARY_DIR}/include/winposix_export.h)
 
 # find the headers
 file(GLOB _source_headers  include/*.h)
-file(GLOB _bin_headers     ${CMAKE_BINARY_DIR}/include/*.h)
+file(GLOB _bin_headers     ${kdewin32_BINARY_DIR}/include/*.h)
 file(GLOB _arpa_headers    include/${_incDirPrefix}/arpa/*.h)
 file(GLOB _asm_headers     include/${_incDirPrefix}/asm/*.h)
 file(GLOB _gl_headers      include/${_incDirPrefix}/GL/*.h)
@@ -127,10 +131,8 @@ add_library(kdewin32 SHARED ${win_LIB_SRCS}
                             )
 target_link_libraries(kdewin32 advapi32 shell32 ws2_32 )
 set_target_properties(kdewin32 PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN32_LIB )
-# which version number should kdewin32 get ? Does version numbers for libs actually exist on windows ? Alex
 set_target_properties(kdewin32 PROPERTIES
-    VERSION 5.0.0
-    SOVERSION 5
+    VERSION 0.3.8
 )
 if(MSVC)
   # 4244: 'argument' : conversion from 'type1' to 'type2', possible loss of data

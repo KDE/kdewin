@@ -40,8 +40,8 @@ KDEWIN32_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf)
 		fixed_file_name[2]='\\';
 		fixed_file_name[3]=0;
 		result =  stat(fixed_file_name, buf);
-    buf->st_uid = -2;
-    buf->st_gid = -2;
+		buf->st_uid = -2;
+		buf->st_gid = -2;
 		return result;
 	}
 	if (len>1 && (file_name[len-1]=='\\' || file_name[len-1]=='/')) {
@@ -50,8 +50,8 @@ KDEWIN32_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf)
 		fixed_file_name2[len-1]=0;
 		result = stat(fixed_file_name2, buf);
 		free(fixed_file_name2);
-    buf->st_uid = -2;
-    buf->st_gid = -2;
+		buf->st_uid = -2;
+		buf->st_gid = -2;
 		return result;
 	}
 //TODO: is stat("/") ok?
