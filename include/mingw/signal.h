@@ -48,8 +48,9 @@ extern "C" {
 #define	SIGCONT	19	/* continue a stopped process */
 #define	SIGCHLD	20	/* to parent on child stop or exit */
 #define	SIGCLD	20	/* System V name for SIGCHLD */
-#define	SIGTTIN	21	/* to readers pgrp upon background tty read */
-#define	SIGTTOU	22	/* like TTIN for output if (tp->t_local&LTOSTOP) */
+//21 and 22 have different meanings on win32 - do not use those defines at all
+//#define	SIGTTIN	21	/* to readers pgrp upon background tty read */
+//#define	SIGTTOU	22	/* like TTIN for output if (tp->t_local&LTOSTOP) */
 #define	SIGIO	23	/* input/output possible signal */
 #define	SIGPOLL	SIGIO	/* System V name for SIGIO */
 #define	SIGXCPU	24	/* exceeded CPU time limit */
