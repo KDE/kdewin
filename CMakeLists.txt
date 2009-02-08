@@ -1,5 +1,6 @@
 set (NAME kdewin32)
 set (KDEWIN32_VERSION 0x000308)
+set (KDEWIN32_VERSION_STR 0.3.8)
 # stay in sync with kdelibs
 cmake_minimum_required(VERSION 2.6.2)
 
@@ -56,20 +57,6 @@ endif(BUILD_TESTS)
 configure_file(${kdewin32_SOURCE_DIR}/include/winposix_export.h.cmake
                ${kdewin32_BINARY_DIR}/include/winposix_export.h)
 
-# find the headers
-file(GLOB _source_headers  include/*.h)
-file(GLOB _bin_headers     ${kdewin32_BINARY_DIR}/include/*.h)
-file(GLOB _arpa_headers    include/${_incDirPrefix}/arpa/*.h)
-file(GLOB _asm_headers     include/${_incDirPrefix}/asm/*.h)
-file(GLOB _gl_headers      include/${_incDirPrefix}/GL/*.h)
-file(GLOB _machine_headers include/${_incDirPrefix}/machine/*.h)
-file(GLOB _net_headers     include/${_incDirPrefix}/net/*.h)
-file(GLOB _netinet_headers include/${_incDirPrefix}/netinet/*.h)
-file(GLOB _sys_headers     include/${_incDirPrefix}/sys/*.h)
-file(GLOB _headers         include/${_incDirPrefix}/*.h)
-file(GLOB _directx_headers include/directx/*.h)
-file(GLOB _directx_idls    include/directx/*.idl)
-
 add_definitions(-DUNICODE -DWIN32_LEAN_AND_MEAN )
 
 set(win_LIB_SRCS
@@ -117,23 +104,11 @@ if(MSVC)
 endif(MSVC)
 
 set(CMAKE_DEBUG_POSTFIX "d")
-add_library(kdewin32 SHARED ${win_LIB_SRCS}
-                            ${_arpa_headers}
-                            ${_asm_headers}
-                            ${_gl_headers}
-                            ${_machine_headers}
-                            ${_net_headers}
-                            ${_netinet_headers}
-                            ${_sys_headers}
-                            ${_headers}
-                            ${_bin_headers}
-                            ${_source_headers}
-                            )
+add_library(kdewin32 SHARED ${win_LIB_SRCS})
 target_link_libraries(kdewin32 advapi32 shell32 ws2_32 )
 set_target_properties(kdewin32 PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN32_LIB )
-set_target_properties(kdewin32 PROPERTIES
-    VERSION 0.3.8
-)
+set_target_properties(kdewin32 PROPERTIES VERSION ${KDEWIN32_VERSION_STR} )
+
 if(MSVC)
   # 4244: 'argument' : conversion from 'type1' to 'type2', possible loss of data
   # 4305: 'identifier' : truncation from 'type1' to 'type2'
@@ -142,30 +117,25 @@ if(MSVC)
   )
 endif(MSVC)
 
-install_targets(/lib kdewin32 )
+install(TARGETS kdewin32
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+  ARCHIVE DESTINATION lib
+)
 
-install_files(/include/${_incDirPrefix}/arpa    FILES ${_arpa_headers} )
-install_files(/include/${_incDirPrefix}/asm     FILES ${_asm_headers} )
-install_files(/include/${_incDirPrefix}/machine FILES ${_machine_headers} )
-install_files(/include/${_incDirPrefix}/netinet FILES ${_netinet_headers} )
-install_files(/include/${_incDirPrefix}/sys     FILES ${_sys_headers} )
-install_files(/include/${_incDirPrefix}         FILES ${_headers} )
-install_files(/include                          FILES ${_bin_headers} )
-install_files(/include                          FILES ${_source_headers} )
-install_files(/doc/${NAME}-${VERSION}           FILES readme.txt )
+install(DIRECTORY include/${_incDirPrefix}                  DESTINATION /include PATTERN ".svn" EXCLUDE)
+install(FILES include/fixwinh.h include/kde_file_win.h      DESTINATION /include)
+install(FILES ${CMAKE_BINARY_DIR}/include/winposix_export.h DESTINATION /include)
+install(FILES readme.txt                                    DESTINATION /doc/${NAME}-${KDEWIN32_VERSION_STR})
 if(MINGW)
-  install_files(/include/${_incDirPrefix}/directx FILES ${_directx_headers} ${_directx_idls} )
-  install_files(/include/${_incDirPrefix}/net     FILES ${_net_headers} )
+    install(DIRECTORY include/directx                       DESTINATION /include/${_incDirPrefix} PATTERN ".svn" EXCLUDE)
 endif(MINGW)
-if(MSVC)
-  install_files(/include/${_incDirPrefix}/GL      FILES ${_gl_headers} )
-endif(MSVC)
 
 include(Win32Macros)
 addExplorerWrapper(${NAME})
 
 # kdewin package support 
-install_files(/share/apps/cmake/modules FILES cmake/modules/FindKDEWIN_Packager.cmake)
+install(FILES cmake/modules/FindKDEWIN_Packager.cmake       DESTINATION /share/apps/cmake/modules)
 if (KDEWIN_PACKAGER_FOUND)
     KDEWIN_PACKAGER(${NAME} ${VERSION} "${NAME} supplementary library" "-srcexclude \"emerge unused\"")
 endif (KDEWIN_PACKAGER_FOUND)
