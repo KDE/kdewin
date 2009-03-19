@@ -15,7 +15,6 @@ find_package(ZLIB REQUIRED)
 if(NOT WIN32)
  find_library(M_LIBRARY
      NAMES m
-     PATHS /usr/lib /usr/local/lib
  )
  if(NOT M_LIBRARY)
    message(STATUS
@@ -46,9 +45,9 @@ option(PNGARG            "FIXME" YES)
 # maybe needs improving, but currently I don't know when we can enable what :)
 set(png_asm_tmp "OFF")
 if(NOT WIN32)
- find_program(uname_executable NAMES uname PATHS /bin /usr/bin /usr/local/bin)
+ find_program(uname_executable NAMES uname)
  if(uname_executable)
-   EXEC_PROGRAM(${uname_executable} ARGS --machine OUTPUT_VARIABLE uname_output)
+   exec_program(${uname_executable} ARGS --machine OUTPUT_VARIABLE uname_output)
    if("uname_output" MATCHES "^.*i[1-9]86.*$")
       set(png_asm_tmp "ON")
    else("uname_output" MATCHES "^.*i[1-9]86.*$")
