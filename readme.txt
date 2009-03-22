@@ -2,6 +2,9 @@ kdewin32 is a supplementary library and supplementary tools
 
 history
 -------
+version 0.3.9
+- fix realpath()
+
 version 0.3.8
 - fix unsetenv() return value
 

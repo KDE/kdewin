@@ -1,6 +1,6 @@
 set (NAME kdewin32)
-set (KDEWIN32_VERSION 0x000308)
-set (KDEWIN32_VERSION_STR 0.3.8)
+set (KDEWIN32_VERSION 0x000309)
+set (KDEWIN32_VERSION_STR 0.3.9)
 # stay in sync with kdelibs
 cmake_minimum_required(VERSION 2.6.2)
 
