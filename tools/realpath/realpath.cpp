@@ -11,7 +11,7 @@ char *realpath(const char *path,char *resolved_path)
     int i;
     // no error checking... :(
     resolved_path[0] = '\0';
-    GetFullPathNameA(path, MAXPATHLEN, resolved_path, NULL);
+    GetFullPathNameA(path, MAX_PATH, resolved_path, NULL);
     fprintf(stderr, "ret1: %s\n", resolved_path);
     for( i = 0; resolved_path[i] != '\0'; ++i ) {
         if(resolved_path[i] == '\\')
