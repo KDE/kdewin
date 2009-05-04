@@ -17,7 +17,6 @@ OPTION(BUILD_TOOLS "build tools" ON)
 
 find_package(WIN32LIBS)
 find_package(KDEWIN_Packager)
-find_package(WinSCP)
 
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
@@ -139,7 +138,3 @@ install(FILES cmake/modules/FindKDEWIN_Packager.cmake       DESTINATION /share/a
 if (KDEWIN_PACKAGER_FOUND)
     KDEWIN_PACKAGER(${NAME} ${VERSION} "${NAME} supplementary library" "-srcexclude \"emerge unused\"")
 endif (KDEWIN_PACKAGER_FOUND)
-
-if (WINSCP_FOUND)
-    KDEWIN_UPLOAD("${NAME}-*-${VERSION}*.zip" kde-windows download.cegit.de /home/kde-windows/kde-windows/kdesupport/single/)
-endif (WINSCP_FOUND)
