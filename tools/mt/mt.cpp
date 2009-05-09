@@ -20,7 +20,7 @@
    main part of manifest tool 
 */
 
-#include "manifest.h"
+#include "resourcefile.h"
 #include "xml.h"
 
 #include <iostream>
@@ -28,36 +28,94 @@
 
 using namespace std;
 
+void printhelp()
+{
+    cerr << "MinGW Manifest Tool version 1.0.0" << endl;
+    cerr << "copyright (c) Ralf Habacker ralf.habacker@freenet.de" << endl;
+    cerr << endl;
+    cerr << "Usage:" << endl;
+    cerr << "------" << endl;
+    cerr << "mt.exe [ -manifest <manifest name> ]" << endl;
+    cerr << "[ -out:<output manifest name> ]" << endl;
+    cerr << "[ -inputresource:<file> ] " << endl;
+    cerr << "[ -updateresource:<file> ]" << endl;
+    cerr << "[ -outputresource:<file> ]" << endl;    
+#ifdef RESOURCE_ID_SUPPORT
+    cerr << "[ -inputresource:<file>[;[#]<resource_id>] ]" << endl;
+    cerr << "[ -updateresource:<file>[;[#]<resource_id>] ]" << endl;
+    cerr << "[ -outputresource:<file>[;[#]<resource_id>] ]" << endl;    
+#endif    
+    cerr << endl;
+    cerr << "Examples:" << endl;
+    cerr << "---------" << endl;
+    cerr << "- display manifest from <executable>" << endl;
+    cerr << "    mt -inputresource:<exectuble>" << endl << endl;
+    cerr << "- copy manifest file from <manifest file> into <executable>" << endl;
+    cerr << "    mt -manifest <manifest file> -outputresource:<exectuble>" << endl << endl;
+    cerr << "- merge <manifest file> into <executable>" << endl;
+    cerr << "    mt -manifest <manifest file> -updateresource:<executable> " << endl;
+    cerr << "- merge and display manifest file from <manifest file> and manifest from <executable>" << endl;
+    cerr << "    mt -manifest <manifest file> -inputresource:<executable> " << endl << endl;
+    cerr << "- copy manifest from <executable> into file <manifest file>" << endl;
+    cerr << "    mt -inputresource:<executable> -out:<manifest file>" << endl;
+}
 
 int main(int argc, char **argv)
 {
+    bool nologo;
+    
     bool hasInputResource = false;
-    std::string inputResource;
+    string inputResource;
 
     bool hasOutputResource = false;
-    std::string outputResource;
+    string outputResource;
+
+    bool hasInputFile = false;
+    string inputFile;
     
-    bool hasUpdateResource = false;
-    std::string updateResource;
+    bool hasOutputFile = false;
+    string outputFile;
 
-    bool hasOut = false;
-    std::string out;
-
+    if (argc == 1) 
+    {
+        printhelp();
+        return -1;
+    }
+    
     for(int i = 1; i < argc; i++)
     {
         string arg = argv[i];
 
-        int pos = arg.find(':'); 
-        string fileName = pos != string::npos ? arg.substr(pos+1) : "";
-        string option = pos != string::npos ? arg.substr(0,pos) : "";
-        bool hasFileName = fileName.size() > 0;
+        int pos = arg.find(';'); 
 
-        if (option == "-out" && fileName.size())
+        string id;
+        if (pos != string::npos)
         {
-            out = fileName;
-            hasOut = true;
+            id = (arg[pos+1] == '#') ? arg.substr(pos+2) : arg.substr(pos+1);
+            arg = arg.substr(0,pos);
         }
-
+        pos = arg.find(':'); 
+        string fileName = pos != string::npos ? arg.substr(pos+1) : "";
+        string option = pos != string::npos ? arg.substr(0,pos) : arg;
+        bool hasFileName = fileName.size() > 0;
+        
+        if (option == "-nologo") {
+            nologo = true;
+        }
+        //[ -manifest]
+        else if (option == "-manifest")
+        {
+            hasInputFile = true;
+            // check if filename is present
+            inputFile = argv[++i];
+        }
+        
+        else if (option == "-out" && fileName.size())
+        {
+            outputFile = fileName;
+            hasOutputFile = true;
+        }
+        
         //[ -inputresource:<file>[;[#]<resource_id>] ]
         else if (option == "-inputresource" && hasFileName)
         {
@@ -75,23 +133,79 @@ int main(int argc, char **argv)
         //[ -updateresource:<file>[;[#]<resource_id>] ]
         else if (option == "-updateresource" && hasFileName)
         {
-            updateResource = fileName;
-            hasUpdateResource = true;
+            inputResource = fileName;
+            hasInputResource = true;
+            outputResource = fileName;
+            hasOutputResource = true;
         }
     }
 
-    if (hasInputResource && hasOut)
+    string inputResourceManifest;
+    string inputManifest;
+    string outputManifest;
+    
+    //--- process input ---
+    if (hasInputResource)
     {
-        Manifest manifest;
-        ofstream of(out.c_str());
-        of << manifest.readFromLibrary(inputResource);
+        ResourceFile ir(inputResource);
+        if (!ir.hasManifest())
+        {
+            cerr << "manifest not found" << endl;
+        }
+        else
+            inputResourceManifest = ir.getManifest();
+    }
+
+    if (hasInputFile)
+    {
+        ifstream is(inputFile.c_str(),ifstream::in);
+        if (!is.is_open())
+        {
+            cerr << "could not open " << inputFile;
+            return -1;
+        }
+
+        while(is.good())
+        {
+            char s[1024];
+            is.getline(s,1023);
+            if (inputManifest.size() > 0)
+                inputManifest += "\n";
+            inputManifest += s;
+        }
+    }
+
+    //--- merge xml files ---
+    if (hasInputResource && hasInputFile)
+    {
+        XML xml;
+        xml.parse(inputResourceManifest);
+        xml.parse(inputManifest);
+        // set parameter 
+        outputManifest = xml.get();
     }
     else if (hasInputResource)
+        outputManifest = inputResourceManifest;
+    else if (hasInputFile)
+        outputManifest = inputManifest;
+
+    //--- process output ---
+    if (hasOutputResource)
     {
-        Manifest manifest;
-        std::cout << manifest.readFromLibrary(inputResource);
+        ResourceFile or(outputResource);
+        return or.setManifest(outputManifest) ? 0 : -1;
+    }
+    else if (hasOutputFile)
+    {
+        ofstream of(outputFile.c_str());
+        of << outputManifest;
+        return 0;
+    }
+    else
+    {
+        cout << outputManifest;
+        return 0;
     }
 
     return 0;
 }
-

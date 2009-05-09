@@ -26,6 +26,8 @@
 #include <string>
 #include <iostream>
 
+using namespace std;
+
 namespace Base {
 
 class Attribute {
@@ -37,11 +39,20 @@ class Attribute {
         void setAttributes(std::string &a) { m_attribute = a; }
         std::string get()  
         { 
-            std::string b = getBodyTag();
+            static int intention = -1; 
+
+            string a,c;
+            for(int i = 0; i < intention; i++)
+                c += ' ';
+
+            intention++;
+            string b = getBodyTag();
             if (b.size())
-                return getOpenTag(b.size() > 0) + b + getCloseTag();
+                a += c + getOpenTag(b.size() > 0) + b + c + getCloseTag();
             else
-                return getOpenTag(false);
+                a += c + getOpenTag(false);
+            intention--;
+            return a;
         }
 
     protected:
@@ -53,7 +64,7 @@ class Attribute {
             return "<" + m_key + (params.size() ? " " + params : "") + (hasContent ? ">" : "/>") + eol; 
         }
         virtual std::string getCloseTag() { return "</" + m_key + ">" + eol; }
-
+        
         std::string m_key;      
         std::string m_attribute;      
         static std::string eol; 
@@ -94,13 +105,27 @@ class Parser {
             std::string key;
             std::string params;
             // extract xml key and optional attributes 
+            int keyPos = s.find('<');
+            int paramsPos = s.find(' ',keyPos);
+            int endPos = s.find('>',keyPos);
+            if (keyPos == string::npos || endPos == string::npos)
+                return false;
+                
+            if (paramsPos != string::npos && paramsPos > keyPos)
+            {
+                params = s.substr(paramsPos+1,endPos-paramsPos-1);
+                key = s.substr(keyPos+1,paramsPos-keyPos-1);
 
+            }
+            else
+            {
+                key = s.substr(keyPos+1,endPos-keyPos-1);
+            }  
+            
             // dependending of the given key set attributes of the related child 
-            applyItem(key,params);
-            return true;
+            return applyItem(key,params);
         }
 };
-
 
 class Assembly : public Base::Attribute {
     public: 
@@ -129,19 +154,22 @@ class XML : public Base::Attribute, public Parser {
 
 }
 
-/// Dependency Assemble
-namespace Dependency {
-
 class AssemblyIdentity : public Base::Attribute {
     public: 
-        AssemblyIdentity() : Base::Attribute("assemblyIdentity")
+        AssemblyIdentity() : Base::Attribute("assemblyIdentity"/*,"type=\"win32\" name=\"Microsoft.VC80.CRT\" version=\"8.0.50727.762\" processorArchitecture=\"x86\" publicKeyToken=\"1fc8b3b9a1e18e3b\""*/)
         {
         }    
         
-        virtual std::string getOpenTagParameter() 
+        virtual bool applyItem(std::string &key,std::string &params)
         {
-             return "type=\"win32\" name=\"Microsoft.VC80.CRT\" version=\"8.0.50727.762\" processorArchitecture=\"x86\" publicKeyToken=\"1fc8b3b9a1e18e3b\"";
+            if (key != "assemblyIdentity")
+                return false;
+            m_attribute = params;
+            return true;
         }
+        
+    private:
+        std::string m_value;
 };
 
 class DependentAssembly : public Base::Attribute {
@@ -155,6 +183,11 @@ class DependentAssembly : public Base::Attribute {
         virtual std::string getBodyTag() 
         {
             return assemblyIdentity.get();
+        }
+
+        virtual bool applyItem(std::string &key,std::string &params)
+        {
+            return assemblyIdentity.applyItem(key,params);
         }
 };
 
@@ -170,51 +203,14 @@ class Dependency : public Base::Attribute {
         {
             return dependentAssembly.get();
         }
-};
-
-class Assembly : public Base::Assembly {
-    public: 
-        Dependency dependency;
-
-        Assembly() : Base::Assembly()
-        {
-        }
-        
-        virtual std::string getBodyTag() 
-        {
-            return dependency.get();
-        }
-};
-
-class XML : public Base::XML {
-    public: 
-        Assembly assembly;
-
-        XML() : Base::XML()
-        {
-        }
-
-        virtual std::string getBodyTag() 
-        {
-            return assembly.get();
-        }
 
         virtual bool applyItem(std::string &key,std::string &params)
         {
-            if (key == "assembly")
-                assembly.setAttributes(params);
-            else if (key == "assemblyIdentity")
-                assembly.dependency.dependentAssembly.assemblyIdentity.setAttributes(params);
-            else 
-                return false;
-            return true;
+            return dependentAssembly.applyItem(key,params);
         }
 };
 
-}
-
-/// Dependency TrustInfo/Security
-namespace Security {
+// trustinfo
 
 class RequestedExecutionLevel : public Base::Attribute {
     public: 
@@ -239,6 +235,17 @@ class RequestedExecutionLevel : public Base::Attribute {
             a += "\"";
             return a;
         }
+
+        virtual bool applyItem(std::string &key,std::string &params)
+        {
+            if (key != "requestedExecutionLevel")
+                return false;
+            // split params
+            cerr << "implement split params for " << key << " " << params << endl;
+            m_executionLevel = highestAvailable;
+            m_uiAccess = false;
+            return true;
+        }
         
     private:
         ExecutionLevel m_executionLevel;
@@ -256,6 +263,11 @@ class RequestPriviliges : public Base::Attribute {    public:
         {
             return requestedExecutionLevel.get();
         }
+
+        virtual bool applyItem(std::string &key,std::string &params)
+        {
+            return requestedExecutionLevel.applyItem(key,params);
+        }
 };
 
 class Security : public Base::Attribute {
@@ -269,6 +281,11 @@ class Security : public Base::Attribute {
         virtual std::string getBodyTag() 
         {
             return requestPriviliges.get();
+        }
+
+        virtual bool applyItem(std::string &key,std::string &params)
+        {
+            return requestPriviliges.applyItem(key,params);
         }
 };
 
@@ -284,11 +301,17 @@ class TrustInfo : public Base::Attribute {
         {
             return security.get();
         }
+
+        virtual bool applyItem(std::string &key,std::string &params)
+        {
+            return security.applyItem(key,params);
+        }
 };
 
 class Assembly : public Base::Assembly {
     public: 
         TrustInfo trustInfo;
+        Dependency dependency;
 
         Assembly() : Base::Assembly()
         {
@@ -296,10 +319,16 @@ class Assembly : public Base::Assembly {
         
         virtual std::string getBodyTag() 
         {
-            return trustInfo.get();
+            return trustInfo.get() + dependency.get();
+        }
+
+        virtual bool applyItem(std::string &key,std::string &params)
+        {
+            if (trustInfo.applyItem(key,params))
+                return true;
+            return dependency.applyItem(key,params);
         }
 };
-
 
 class XML : public Base::XML {
     public: 
@@ -316,18 +345,9 @@ class XML : public Base::XML {
 
         virtual bool applyItem(std::string &key,std::string &params)
         {
-            if (key == "assembly")
-                assembly.setAttributes(params);
-            else if (key == "trustInfo")
-                assembly.trustInfo.setAttributes(params);
-            else if (key == "requestedExecutionLevel")
-                assembly.trustInfo.security.requestPriviliges.requestedExecutionLevel.setAttributes(params);
-            else
-                return false;
-            return true;
+            return assembly.applyItem(key,params);
         }
 };
 
-}
 
 #endif
