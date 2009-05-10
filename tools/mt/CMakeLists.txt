@@ -1,4 +1,4 @@
 
 add_executable(mt mt.cpp xml.cpp)
-target_link_libraries(mt)
-install(TARGETS mt DESTINATION bin)
+add_executable(setuac uac.cpp xml.cpp)
+install(TARGETS mt setuac DESTINATION bin)

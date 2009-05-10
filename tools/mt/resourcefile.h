@@ -26,8 +26,6 @@
 #include <iostream>
 #include <windows.h>
 
-using namespace std;
-
 /** 
  Important: this implementation does not work in cross plattform environments 
  because of the win32 api usage. 
@@ -37,9 +35,9 @@ using namespace std;
 
 class ResourceFile {
     public:     
-        ResourceFile(string &fileName) : m_fileName(fileName)
-        {
-        }
+        ResourceFile(const std::string &fileName)
+          : m_fileName(fileName)
+        {}
 
         bool hasManifest()
         {
@@ -66,13 +64,13 @@ class ResourceFile {
             return hRes != 0;
         }
 
-        string getManifest()
+        std::string getManifest()
         {
             HRSRC hResLoad;     // handle to loaded resource 
             HMODULE hExe;        // handle to existing .EXE file 
             HRSRC hRes;         // handle/ptr. to res. info. in hExe 
             VOID *lpResLock;    // pointer to resource data 
-            string a;
+            std::string a;
 
             // Load the .EXE file that contains the dialog box you want to copy. 
             hExe = LoadLibrary(m_fileName.c_str()); 
@@ -125,7 +123,7 @@ class ResourceFile {
             return a;
         }
 
-        bool setManifest(string &data)
+        bool setManifest(const std::string &data)
         {
             std::string a;
 
@@ -162,12 +160,12 @@ class ResourceFile {
         }
         
     protected:
-        void setError(string text, string opt=string())
+        void setError(const std::string &text, const std::string opt=std::string())
         {
-            cerr << text << opt << endl;
+            std::cerr << text << opt << std::endl;
         }
         
-        string m_fileName;
+        std::string m_fileName;
 };
 
 #endif

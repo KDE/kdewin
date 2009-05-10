@@ -26,27 +26,25 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
-
 namespace Base {
 
 class Attribute {
     public: 
-        Attribute(std::string a, std::string b=std::string()) : m_key(a), m_attribute(b)
-        {
-        }
+        Attribute(const std::string &a, const std::string &b=std::string())
+          : m_key(a), m_attribute(b)
+        {}
 
-        void setAttributes(std::string &a) { m_attribute = a; }
+        void setAttributes(const std::string &a) { m_attribute = a; }
         std::string get()  
         { 
             static int intention = -1; 
 
-            string a,c;
+            std::string a,c;
             for(int i = 0; i < intention; i++)
                 c += ' ';
 
             intention++;
-            string b = getBodyTag();
+            std::string b = getBodyTag();
             if (b.size())
                 a += c + getOpenTag(b.size() > 0) + b + c + getCloseTag();
             else
@@ -57,7 +55,7 @@ class Attribute {
 
     protected:
         virtual std::string getOpenTagParameter() { return m_attribute; }
-        virtual std::string getBodyTag() { return ""; }
+        virtual std::string getBodyTag() { return std::string(); }
         virtual std::string getOpenTag(bool hasContent=true)  
         {
             std::string params = getOpenTagParameter();
@@ -73,11 +71,11 @@ class Attribute {
 class Parser {
     public:
     
-        bool parse(std::string &s)
+        bool parse(const std::string &s)
         {
             std::string line;
-            std::string::iterator it;
-            for ( it=s.begin() ; it < s.end(); it++ )
+            std::string::const_iterator it;
+            for ( it=s.begin() ; it < s.end(); ++it )
             {
                 char c = *it;
                 if (c != 0x0d)
@@ -95,12 +93,12 @@ class Parser {
             return true;
         }
 
-        virtual bool applyItem(std::string &key,std::string &params)
+        virtual bool applyItem(const std::string &key, const std::string &params)
         {
             return false;
         }
 
-        bool parseLine(std::string &s)
+        bool parseLine(const std::string &s)
         {
             std::string key;
             std::string params;
@@ -108,10 +106,10 @@ class Parser {
             int keyPos = s.find('<');
             int paramsPos = s.find(' ',keyPos);
             int endPos = s.find('>',keyPos);
-            if (keyPos == string::npos || endPos == string::npos)
+            if (keyPos == std::string::npos || endPos == std::string::npos)
                 return false;
                 
-            if (paramsPos != string::npos && paramsPos > keyPos)
+            if (paramsPos != std::string::npos && paramsPos > keyPos)
             {
                 params = s.substr(paramsPos+1,endPos-paramsPos-1);
                 key = s.substr(keyPos+1,paramsPos-keyPos-1);
@@ -241,7 +239,7 @@ class RequestedExecutionLevel : public Base::Attribute {
             if (key != "requestedExecutionLevel")
                 return false;
             // split params
-            cerr << "implement split params for " << key << " " << params << endl;
+            std::cerr << "implement split params for " << key << " " << params << std::endl;
             m_executionLevel = highestAvailable;
             m_uiAccess = false;
             return true;
