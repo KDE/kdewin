@@ -49,9 +49,9 @@ void printhelp()
     cerr << "Examples:" << endl;
     cerr << "---------" << endl;
     cerr << "- display manifest from <executable>" << endl;
-    cerr << "    mt -inputresource:<exectuble>" << endl << endl;
+    cerr << "    mt -inputresource:<executable>" << endl << endl;
     cerr << "- copy manifest file from <manifest file> into <executable>" << endl;
-    cerr << "    mt -manifest <manifest file> -outputresource:<exectuble>" << endl << endl;
+    cerr << "    mt -manifest <manifest file> -outputresource:<executable>" << endl << endl;
     cerr << "- merge <manifest file> into <executable>" << endl;
     cerr << "    mt -manifest <manifest file> -updateresource:<executable> " << endl;
     cerr << "- merge and display manifest file from <manifest file> and manifest from <executable>" << endl;
