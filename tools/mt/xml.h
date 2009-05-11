@@ -30,11 +30,21 @@ namespace Base {
 
 class Attribute {
     public: 
-        Attribute(const std::string &a, const std::string &b=std::string())
-          : m_key(a), m_attribute(b)
-        {}
+        Attribute(const std::string a, std::string b=std::string()) 
+            : m_key(a), m_attribute(b)
+        {
+        }
 
-        void setAttributes(const std::string &a) { m_attribute = a; }
+        void setValues(const std::string &a) 
+        { 
+            m_attribute = a; 
+        }
+        
+        void clear() 
+        { 
+            m_attribute = ""; 
+        }
+
         std::string get()  
         { 
             static int intention = -1; 
@@ -160,8 +170,9 @@ class AssemblyIdentity : public Base::Attribute {
         
         virtual bool applyItem(std::string &key,std::string &params)
         {
-            if (key != "assemblyIdentity")
+            if (key != m_key) 
                 return false;
+
             m_attribute = params;
             return true;
         }
@@ -185,6 +196,8 @@ class DependentAssembly : public Base::Attribute {
 
         virtual bool applyItem(std::string &key,std::string &params)
         {
+            if (key == m_key) 
+                return true;
             return assemblyIdentity.applyItem(key,params);
         }
 };
@@ -204,6 +217,8 @@ class Dependency : public Base::Attribute {
 
         virtual bool applyItem(std::string &key,std::string &params)
         {
+            if (key == m_key) 
+                return true;
             return dependentAssembly.applyItem(key,params);
         }
 };
@@ -217,6 +232,9 @@ class RequestedExecutionLevel : public Base::Attribute {
             , m_executionLevel(asInvoker), m_uiAccess(true)
         {
         }
+
+		void setExecutionLevel(ExecutionLevel level) { m_executionLevel = level; }
+		void setUiAccess(bool state) { m_uiAccess = state; }
 
         virtual std::string getOpenTagParameter() 
         {
@@ -236,7 +254,7 @@ class RequestedExecutionLevel : public Base::Attribute {
 
         virtual bool applyItem(std::string &key,std::string &params)
         {
-            if (key != "requestedExecutionLevel")
+            if (key != m_key)
                 return false;
             // split params
             std::cerr << "implement split params for " << key << " " << params << std::endl;
