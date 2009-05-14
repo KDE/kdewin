@@ -72,15 +72,43 @@ class Attribute {
             return "<" + m_key + (params.size() ? " " + params : "") + (hasContent ? ">" : "/>") + eol; 
         }
         virtual std::string getCloseTag() { return "</" + m_key + ">" + eol; }
+
+        virtual bool applyItem(std::string &key,std::string &params)
+        {
+            if (key != m_key) 
+                return false;
+            m_attribute = params;
+            return true;
+        }
         
         std::string m_key;      
         std::string m_attribute;      
         static std::string eol; 
 };
 
-class Parser {
-    public:
-    
+class Assembly : public Base::Attribute {
+    public: 
+
+        Assembly() : Base::Attribute("assembly","xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\"")
+        {
+        }
+};
+
+class XML : public Base::Attribute {
+    public: 
+        XML() : Base::Attribute("?xml")
+        {
+        }
+
+        virtual std::string getOpenTag(bool hasContent=true) 
+        {
+            return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + eol;
+        }
+
+        virtual std::string getCloseTag() 
+        {
+            return eol;
+        }
         bool parse(const std::string &s)
         {
             std::string line;
@@ -88,24 +116,20 @@ class Parser {
             for ( it=s.begin() ; it < s.end(); ++it )
             {
                 char c = *it;
-                if (c != 0x0d)
+                if (c != 0x0d && c != 0x0a)
                 {
                     line += c;
                     continue;
                 }
-                // skip x0a
-                it++;
+                if (c == 0x0d)
+                    // skip x0a
+                    it++;
 
                 //std::cerr << "----" << line << std::endl << std::endl;
                 parseLine(line);
                 line = "";
             }
             return true;
-        }
-
-        virtual bool applyItem(const std::string &key, const std::string &params)
-        {
-            return false;
         }
 
         bool parseLine(const std::string &s)
@@ -132,31 +156,6 @@ class Parser {
             
             // dependending of the given key set attributes of the related child 
             return applyItem(key,params);
-        }
-};
-
-class Assembly : public Base::Attribute {
-    public: 
-
-        Assembly() : Base::Attribute("assembly","xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\"")
-        {
-        }
-};
-
-class XML : public Base::Attribute, public Parser {
-    public: 
-        XML() : Base::Attribute("")
-        {
-        }
-
-        virtual std::string getOpenTag(bool hasContent=true) 
-        {
-            return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + eol;
-        }
-
-        virtual std::string getCloseTag() 
-        {
-            return eol;
         }
 };
 
@@ -282,6 +281,8 @@ class RequestPriviliges : public Base::Attribute {    public:
 
         virtual bool applyItem(std::string &key,std::string &params)
         {
+            if (key == m_key)
+                return true;
             return requestedExecutionLevel.applyItem(key,params);
         }
 };
@@ -301,6 +302,8 @@ class Security : public Base::Attribute {
 
         virtual bool applyItem(std::string &key,std::string &params)
         {
+            if (key == m_key)
+                return true;
             return requestPriviliges.applyItem(key,params);
         }
 };
@@ -340,6 +343,8 @@ class Assembly : public Base::Assembly {
 
         virtual bool applyItem(std::string &key,std::string &params)
         {
+            if (key == m_key)
+                return true;
             if (trustInfo.applyItem(key,params))
                 return true;
             return dependency.applyItem(key,params);
@@ -361,6 +366,8 @@ class XML : public Base::XML {
 
         virtual bool applyItem(std::string &key,std::string &params)
         {
+            if (key == m_key)
+                return true;
             return assembly.applyItem(key,params);
         }
 };
