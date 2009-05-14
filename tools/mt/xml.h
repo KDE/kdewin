@@ -35,7 +35,7 @@ namespace Base {
 class Element {
     public: 
         Element(const std::string tagName, std::string attributes=std::string(), std::string content=std::string()) 
-            : m_key(tagName), m_attributes(attributes), m_content(content)
+            : m_tagName(tagName), m_attributes(attributes), m_content(content)
         {
         }
 
@@ -99,22 +99,23 @@ class Element {
         */
         virtual std::string startTag(bool hasContent=true)  
         {
-            std::string params = startTagAttributes();
-            return "<" + m_key + (params.size() ? " " + params : "") + (hasContent ? ">" : "/>") + eol; 
+            std::string attributes = startTagAttributes();
+            return "<" + m_tagName + (attributes.size() ? " " + attributes : "") + (hasContent ? ">" : "/>") + eol; 
         }
 
         /// return string with xml end tag
-        virtual std::string endTag() { return "</" + m_key + ">" + eol; }
+        virtual std::string endTag() { return "</" + m_tagName + ">" + eol; }
 
-        virtual bool applyItem(std::string &key,std::string &params)
+        /// import attributes
+        virtual bool importAttributes(std::string &tagName,std::string &attributes)
         {
-            if (key != m_key) 
+            if (tagName != m_tagName) 
                 return false;
-            m_attributes = params;
+            m_attributes = attributes;
             return true;
         }
         
-        std::string m_key;      
+        std::string m_tagName;      
         std::string m_attributes;      
         std::string m_content;      
         static std::string eol; 
@@ -128,6 +129,10 @@ class Assembly : public Base::Element {
         }
 };
 
+/**
+ a xml tree with a fixed structure. 
+ It allows to import strings containing xml data, to set specific xml element attributes and to output the complete tree
+*/
 class XML : public Base::Element {
     public: 
         XML() : Base::Element("?xml")
@@ -143,6 +148,8 @@ class XML : public Base::Element {
         {
             return eol;
         }
+        
+        /// parse xml string and import related data into the xml structure 
         bool parse(const std::string &s)
         {
             std::string line;
@@ -166,11 +173,14 @@ class XML : public Base::Element {
             return true;
         }
 
+    protected:
+
+        /// parse a single line
         bool parseLine(const std::string &s)
         {
-            std::string key;
-            std::string params;
-            // extract xml key and optional attributes 
+            std::string tagName;
+            std::string attributes;
+            // extract xml tagName and optional attributes 
             int keyPos = s.find('<');
             int paramsPos = s.find(' ',keyPos);
             int endPos = s.find('>',keyPos);
@@ -179,17 +189,17 @@ class XML : public Base::Element {
                 
             if (paramsPos != std::string::npos && paramsPos > keyPos)
             {
-                params = s.substr(paramsPos+1,endPos-paramsPos-1);
-                key = s.substr(keyPos+1,paramsPos-keyPos-1);
+                attributes = s.substr(paramsPos+1,endPos-paramsPos-1);
+                tagName = s.substr(keyPos+1,paramsPos-keyPos-1);
 
             }
             else
             {
-                key = s.substr(keyPos+1,endPos-keyPos-1);
+                tagName = s.substr(keyPos+1,endPos-keyPos-1);
             }  
             
-            // dependending of the given key set attributes of the related child 
-            return applyItem(key,params);
+            // dependending of the given tagName import attributes into the related elements
+            return importAttributes(tagName,attributes);
         }
 };
 
@@ -202,12 +212,12 @@ class AssemblyIdentity : public Base::Element {
         {
         }    
         
-        virtual bool applyItem(std::string &key,std::string &params)
+        virtual bool importAttributes(std::string &tagName,std::string &attributes)
         {
-            if (key != m_key) 
+            if (tagName != m_tagName) 
                 return false;
 
-            m_attributes = params;
+            m_attributes = attributes;
             return true;
         }
         
@@ -229,11 +239,11 @@ class DependentAssembly : public Base::Element {
             return assemblyIdentity.get();
         }
 
-        virtual bool applyItem(std::string &key,std::string &params)
+        virtual bool importAttributes(std::string &tagName,std::string &attributes)
         {
-            if (key == m_key) 
+            if (tagName == m_tagName) 
                 return true;
-            return assemblyIdentity.applyItem(key,params);
+            return assemblyIdentity.importAttributes(tagName,attributes);
         }
 };
 
@@ -250,11 +260,11 @@ class Dependency : public Base::Element {
             return dependentAssembly.get();
         }
 
-        virtual bool applyItem(std::string &key,std::string &params)
+        virtual bool importAttributes(std::string &tagName,std::string &attributes)
         {
-            if (key == m_key) 
+            if (tagName == m_tagName) 
                 return true;
-            return dependentAssembly.applyItem(key,params);
+            return dependentAssembly.importAttributes(tagName,attributes);
         }
 };
 
@@ -287,26 +297,26 @@ class RequestedExecutionLevel : public Base::Element {
             return a;
         }
 
-        virtual bool applyItem(std::string &key,std::string &params)
+        virtual bool importAttributes(std::string &tagName,std::string &attributes)
         {
-            if (key != m_key)
+            if (tagName != m_tagName)
                 return false;
             // extract parameters
-            if (params.find("asInvoker") != std::string::npos)
+            if (attributes.find("asInvoker") != std::string::npos)
                 m_executionLevel = asInvoker;
-            else if (params.find("highestAvailable") != std::string::npos)
+            else if (attributes.find("highestAvailable") != std::string::npos)
                 m_executionLevel = highestAvailable;
-            else if (params.find("requireAdministrator") != std::string::npos)
+            else if (attributes.find("requireAdministrator") != std::string::npos)
                 m_executionLevel = requireAdministrator;
             else 
-                std::cerr << "invalid value for executionLevel in string: " << params << std::endl;
+                std::cerr << "invalid value for executionLevel in string: " << attributes << std::endl;
 
-            if (params.find("true") != std::string::npos)
+            if (attributes.find("true") != std::string::npos)
                 m_uiAccess = true;
-            else if (params.find("false") != std::string::npos)
+            else if (attributes.find("false") != std::string::npos)
                 m_uiAccess = false;
             else
-                std::cerr << "invalid value for uiAccess in string: " << params << std::endl;
+                std::cerr << "invalid value for uiAccess in string: " << attributes << std::endl;
             return true;
         }
         
@@ -327,11 +337,11 @@ class RequestPriviliges : public Base::Element {    public:
             return requestedExecutionLevel.get();
         }
 
-        virtual bool applyItem(std::string &key,std::string &params)
+        virtual bool importAttributes(std::string &tagName,std::string &attributes)
         {
-            if (key == m_key)
+            if (tagName == m_tagName)
                 return true;
-            return requestedExecutionLevel.applyItem(key,params);
+            return requestedExecutionLevel.importAttributes(tagName,attributes);
         }
 };
 
@@ -348,11 +358,11 @@ class Security : public Base::Element {
             return requestPriviliges.get();
         }
 
-        virtual bool applyItem(std::string &key,std::string &params)
+        virtual bool importAttributes(std::string &tagName,std::string &attributes)
         {
-            if (key == m_key)
+            if (tagName == m_tagName)
                 return true;
-            return requestPriviliges.applyItem(key,params);
+            return requestPriviliges.importAttributes(tagName,attributes);
         }
 };
 
@@ -369,9 +379,9 @@ class TrustInfo : public Base::Element {
             return security.get();
         }
 
-        virtual bool applyItem(std::string &key,std::string &params)
+        virtual bool importAttributes(std::string &tagName,std::string &attributes)
         {
-            return security.applyItem(key,params);
+            return security.importAttributes(tagName,attributes);
         }
 };
 
@@ -389,13 +399,13 @@ class Assembly : public Base::Assembly {
             return trustInfo.get() + dependency.get();
         }
 
-        virtual bool applyItem(std::string &key,std::string &params)
+        virtual bool importAttributes(std::string &tagName,std::string &attributes)
         {
-            if (key == m_key)
+            if (tagName == m_tagName)
                 return true;
-            if (trustInfo.applyItem(key,params))
+            if (trustInfo.importAttributes(tagName,attributes))
                 return true;
-            return dependency.applyItem(key,params);
+            return dependency.importAttributes(tagName,attributes);
         }
 };
 
@@ -412,11 +422,11 @@ class XML : public Base::XML {
             return assembly.get();
         }
 
-        virtual bool applyItem(std::string &key,std::string &params)
+        virtual bool importAttributes(std::string &tagName,std::string &attributes)
         {
-            if (key == m_key)
+            if (tagName == m_tagName)
                 return true;
-            return assembly.applyItem(key,params);
+            return assembly.importAttributes(tagName,attributes);
         }
 };
 
