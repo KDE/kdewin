@@ -28,23 +28,48 @@
 
 namespace Base {
 
-class Attribute {
+/** 
+    holds a single xml element
+    A xml element is setup of a tag name, tag attributes and content 
+*/
+class Element {
     public: 
-        Attribute(const std::string a, std::string b=std::string()) 
-            : m_key(a), m_attribute(b)
+        Element(const std::string tagName, std::string attributes=std::string(), std::string content=std::string()) 
+            : m_key(tagName), m_attributes(attributes), m_content(content)
         {
         }
 
-        void setValues(const std::string &a) 
+        /// set attributes of xml tag
+        void setAttributes(const std::string &attributes) 
         { 
-            m_attribute = a; 
+            m_attributes = attributes; 
         }
         
-        void clear() 
+        /// return attributes of xml tag
+        std::string attributes() const
         { 
-            m_attribute = ""; 
+            return m_attributes;
         }
 
+        /// set content of xml element
+        void setContent(const std::string &content) 
+        { 
+            m_content = content; 
+        }
+        
+        /// return content of xml element
+        virtual std::string content() const
+        { 
+            return m_content;
+        }
+
+        /// clear attributes of xml tag
+        void clear() 
+        { 
+            m_attributes = ""; 
+        }
+
+        /// return string with complete xml tag         
         std::string get()  
         { 
             static int intention = -1; 
@@ -54,58 +79,67 @@ class Attribute {
                 c += ' ';
 
             intention++;
-            std::string b = getBodyTag();
+            std::string b = content();
             if (b.size())
-                a += c + getOpenTag(b.size() > 0) + b + c + getCloseTag();
+                a += c + startTag(b.size() > 0) + b + c + endTag();
             else
-                a += c + getOpenTag(false);
+                a += c + startTag(false);
             intention--;
             return a;
         }
 
     protected:
-        virtual std::string getOpenTagParameter() { return m_attribute; }
-        virtual std::string getBodyTag() { return std::string(); }
-        virtual std::string getOpenTag(bool hasContent=true)  
+        /// return attributes for xml tag string 
+        virtual std::string startTagAttributes() { return m_attributes; }
+
+        /**
+          return string with xml start tag including element attributes
+          if the element has no content (indicated by hasContent=false), 
+          the tag is setup as empty tag
+        */
+        virtual std::string startTag(bool hasContent=true)  
         {
-            std::string params = getOpenTagParameter();
+            std::string params = startTagAttributes();
             return "<" + m_key + (params.size() ? " " + params : "") + (hasContent ? ">" : "/>") + eol; 
         }
-        virtual std::string getCloseTag() { return "</" + m_key + ">" + eol; }
+
+        /// return string with xml end tag
+        virtual std::string endTag() { return "</" + m_key + ">" + eol; }
 
         virtual bool applyItem(std::string &key,std::string &params)
         {
             if (key != m_key) 
                 return false;
-            m_attribute = params;
+            m_attributes = params;
             return true;
         }
         
         std::string m_key;      
-        std::string m_attribute;      
+        std::string m_attributes;      
+        std::string m_content;      
         static std::string eol; 
 };
 
-class Assembly : public Base::Attribute {
+class Assembly : public Base::Element {
     public: 
 
-        Assembly() : Base::Attribute("assembly","xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\"")
+        Assembly() : Base::Element("assembly","xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\"")
         {
         }
 };
 
-class XML : public Base::Attribute {
+class XML : public Base::Element {
     public: 
-        XML() : Base::Attribute("?xml")
+        XML() : Base::Element("?xml")
         {
         }
 
-        virtual std::string getOpenTag(bool hasContent=true) 
+        virtual std::string startTag(bool hasContent=true) 
         {
             return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + eol;
         }
 
-        virtual std::string getCloseTag() 
+        virtual std::string endTag() 
         {
             return eol;
         }
@@ -161,9 +195,10 @@ class XML : public Base::Attribute {
 
 }
 
-class AssemblyIdentity : public Base::Attribute {
+// attributes ar something like ,"type=\"win32\" name=\"Microsoft.VC80.CRT\" version=\"8.0.50727.762\" processorArchitecture=\"x86\" publicKeyToken=\"1fc8b3b9a1e18e3b\"" 
+class AssemblyIdentity : public Base::Element {
     public: 
-        AssemblyIdentity() : Base::Attribute("assemblyIdentity"/*,"type=\"win32\" name=\"Microsoft.VC80.CRT\" version=\"8.0.50727.762\" processorArchitecture=\"x86\" publicKeyToken=\"1fc8b3b9a1e18e3b\""*/)
+        AssemblyIdentity() : Base::Element("assemblyIdentity")
         {
         }    
         
@@ -172,7 +207,7 @@ class AssemblyIdentity : public Base::Attribute {
             if (key != m_key) 
                 return false;
 
-            m_attribute = params;
+            m_attributes = params;
             return true;
         }
         
@@ -180,15 +215,16 @@ class AssemblyIdentity : public Base::Attribute {
         std::string m_value;
 };
 
-class DependentAssembly : public Base::Attribute {
+// TODO support more then one AssemblyIdentity 
+class DependentAssembly : public Base::Element {
     public: 
         AssemblyIdentity assemblyIdentity;
 
-        DependentAssembly() : Base::Attribute("dependentAssembly")
+        DependentAssembly() : Base::Element("dependentAssembly")
         {
         }    
         
-        virtual std::string getBodyTag() 
+        virtual std::string content() 
         {
             return assemblyIdentity.get();
         }
@@ -201,15 +237,15 @@ class DependentAssembly : public Base::Attribute {
         }
 };
 
-class Dependency : public Base::Attribute {
+class Dependency : public Base::Element {
     public: 
         DependentAssembly dependentAssembly;
 
-        Dependency() : Base::Attribute("dependency")
+        Dependency() : Base::Element("dependency")
         {
         }    
         
-        virtual std::string getBodyTag() 
+        virtual std::string content() 
         {
             return dependentAssembly.get();
         }
@@ -224,10 +260,10 @@ class Dependency : public Base::Attribute {
 
 // trustinfo
 
-class RequestedExecutionLevel : public Base::Attribute {
+class RequestedExecutionLevel : public Base::Element {
     public: 
         typedef enum { undefined, asInvoker, highestAvailable, requireAdministrator } ExecutionLevel;
-        RequestedExecutionLevel() : Base::Attribute("requestedExecutionLevel")
+        RequestedExecutionLevel() : Base::Element("requestedExecutionLevel")
             , m_executionLevel(asInvoker), m_uiAccess(true)
         {
         }
@@ -235,7 +271,7 @@ class RequestedExecutionLevel : public Base::Attribute {
 		void setExecutionLevel(ExecutionLevel level) { m_executionLevel = level; }
 		void setUiAccess(bool state) { m_uiAccess = state; }
 
-        virtual std::string getOpenTagParameter() 
+        virtual std::string startTagAttributes() 
         {
             std::string a; 
             a += "level=\"";
@@ -279,14 +315,14 @@ class RequestedExecutionLevel : public Base::Attribute {
         bool m_uiAccess;
 };
 
-class RequestPriviliges : public Base::Attribute {    public:
+class RequestPriviliges : public Base::Element {    public:
         RequestedExecutionLevel requestedExecutionLevel;
         
-        RequestPriviliges() : Base::Attribute("requestedPrivileges")
+        RequestPriviliges() : Base::Element("requestedPrivileges")
         {
         }                
 
-        virtual std::string getBodyTag() 
+        virtual std::string content() 
         {
             return requestedExecutionLevel.get();
         }
@@ -299,15 +335,15 @@ class RequestPriviliges : public Base::Attribute {    public:
         }
 };
 
-class Security : public Base::Attribute {
+class Security : public Base::Element {
     public: 
         RequestPriviliges requestPriviliges;
 
-        Security() : Base::Attribute("security")
+        Security() : Base::Element("security")
         {            
         }
 
-        virtual std::string getBodyTag() 
+        virtual std::string content() 
         {
             return requestPriviliges.get();
         }
@@ -320,15 +356,15 @@ class Security : public Base::Attribute {
         }
 };
 
-class TrustInfo : public Base::Attribute {
+class TrustInfo : public Base::Element {
     public: 
         Security security;
 
-        TrustInfo() : Base::Attribute("trustInfo","xmlns=\"urn:schemas-microsoft-com:asm.v3\"")
+        TrustInfo() : Base::Element("trustInfo","xmlns=\"urn:schemas-microsoft-com:asm.v3\"")
         {
         }    
         
-        virtual std::string getBodyTag() 
+        virtual std::string content() 
         {
             return security.get();
         }
@@ -348,7 +384,7 @@ class Assembly : public Base::Assembly {
         {
         }
         
-        virtual std::string getBodyTag() 
+        virtual std::string content() 
         {
             return trustInfo.get() + dependency.get();
         }
@@ -371,7 +407,7 @@ class XML : public Base::XML {
         {
         }
 
-        virtual std::string getBodyTag() 
+        virtual std::string content() 
         {
             return assembly.get();
         }

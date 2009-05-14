@@ -25,5 +25,5 @@
 #include <string>
 
 
-std::string Base::Attribute::eol = "\n";
+std::string Base::Element::eol = "\n";
 
