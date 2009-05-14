@@ -255,10 +255,22 @@ class RequestedExecutionLevel : public Base::Attribute {
         {
             if (key != m_key)
                 return false;
-            // split params
-            std::cerr << "implement split params for " << key << " " << params << std::endl;
-            m_executionLevel = highestAvailable;
-            m_uiAccess = false;
+            // extract parameters
+            if (params.find("asInvoker") != std::string::npos)
+                m_executionLevel = asInvoker;
+            else if (params.find("highestAvailable") != std::string::npos)
+                m_executionLevel = highestAvailable;
+            else if (params.find("requireAdministrator") != std::string::npos)
+                m_executionLevel = requireAdministrator;
+            else 
+                std::cerr << "invalid value for executionLevel in string: " << params << std::endl;
+
+            if (params.find("true") != std::string::npos)
+                m_uiAccess = true;
+            else if (params.find("false") != std::string::npos)
+                m_uiAccess = false;
+            else
+                std::cerr << "invalid value for uiAccess in string: " << params << std::endl;
             return true;
         }
         
