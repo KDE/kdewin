@@ -58,7 +58,7 @@ class Element {
         }
         
         /// return content of xml element
-        virtual std::string content() const
+        virtual std::string content()
         { 
             return m_content;
         }
