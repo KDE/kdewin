@@ -192,8 +192,8 @@ int main(int argc, char **argv)
     //--- process output ---
     if (hasOutputResource)
     {
-        ResourceFile or(outputResource);
-        return or.setManifest(outputManifest) ? 0 : -1;
+        ResourceFile orf(outputResource);
+        return orf.setManifest(outputManifest) ? 0 : -1;
     }
     else if (hasOutputFile)
     {
