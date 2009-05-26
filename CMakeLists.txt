@@ -15,7 +15,6 @@ OPTION(BUILD_TESTS "build test applications " OFF)
 OPTION(BUILD_EXAMPLES "build example applications " OFF)
 OPTION(BUILD_TOOLS "build tools" ON)
 
-find_package(WIN32LIBS)
 find_package(KDEWIN_Packager)
 
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
