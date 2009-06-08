@@ -1,6 +1,6 @@
 set (NAME kdewin)
 set (KDEWIN_VERSION 0x000400)
-set (KDEWIN_VERSION_STR 0.4.0)
+set (KDEWIN_VERSION_STR 0.4.1)
 # stay in sync with kdelibs
 cmake_minimum_required(VERSION 2.6.2)
 
@@ -27,6 +27,7 @@ include_directories(${kdewin_SOURCE_DIR}
                     ${kdewin_SOURCE_DIR}/include/kdewin
                     ${kdewin_BINARY_DIR}
                     ${kdewin_BINARY_DIR}/include
+                    ${QT_INCLUDES}
                     )
 
 if(MINGW)
@@ -104,6 +105,10 @@ if(MSVC)
   )
 endif(MSVC)
 
+set(kdewin_SRCS
+    src/linkfile.cpp
+)
+
 # for compatibility
 set(CMAKE_DEBUG_POSTFIX "d")
 add_library(kdewin32 SHARED ${win_LIB_SRCS})
@@ -126,8 +131,8 @@ install(TARGETS kdewin32
 )
 # end for compatibiliy
 
-add_library(kdewin SHARED ${win_LIB_SRCS})
-target_link_libraries(kdewin advapi32 shell32 ws2_32)
+add_library(kdewin SHARED ${win_LIB_SRCS} ${kdewin_SRCS})
+target_link_libraries(kdewin advapi32 shell32 ws2_32 ${QT_QTCORE_LIBRARIES})
 set_target_properties(kdewin PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN_LIB )
 set_target_properties(kdewin PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
 
@@ -147,7 +152,9 @@ install(TARGETS kdewin
 
 install(DIRECTORY include/${_incDirPrefix}                  DESTINATION include PATTERN ".svn" EXCLUDE)
 install(FILES include/fixwinh.h include/kde_file_win.h      DESTINATION include)
-install(FILES ${CMAKE_BINARY_DIR}/include/kdewin_export.h DESTINATION include)
+install(DIRECTORY include/kdewin                            DESTINATION include PATTERN ".svn" EXCLUDE)
+install(DIRECTORY include/KDE                               DESTINATION include PATTERN ".svn" EXCLUDE)
+install(FILES ${CMAKE_BINARY_DIR}/include/kdewin_export.h   DESTINATION include)
 install(FILES readme.txt                                    DESTINATION doc/${NAME}-${KDEWIN_VERSION_STR})
 if(MINGW)
     install(DIRECTORY include/directx                       DESTINATION include/${_incDirPrefix} PATTERN ".svn" EXCLUDE)

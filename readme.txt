@@ -2,6 +2,9 @@ kdewin is a supplementary library and supplementary tools
 
 history
 -------
+version 0.4.1
+- added class LinkFile from kdebase/runtime/platform/win/kwinstartmenu to be usable in more kde code 
+
 version 0.4.0
 - removed 32 from project name to have room for furture 64 bit versions too 
 - renamed WINPOSIX_EXPORT, winposix_export.h to KDEWIN_EXPORT, kdewin_export.h 
