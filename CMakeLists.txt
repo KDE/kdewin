@@ -16,6 +16,8 @@ OPTION(BUILD_EXAMPLES "build example applications " OFF)
 OPTION(BUILD_TOOLS "build tools" ON)
 
 find_package(KDEWIN_Packager)
+# used by tools 
+find_package(Qt4 REQUIRED)
 
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
@@ -29,11 +31,11 @@ include_directories(${kdewin_SOURCE_DIR}
 
 if(MINGW)
    # we are using mingw, so do whatever required for mingw
-   include_directories(${kdewin32_SOURCE_DIR}/include/mingw )
+   include_directories(${kdewin_SOURCE_DIR}/include/mingw )
    set(_incDirPrefix mingw)
 else (MINGW)
    # we are using msvc, so do whatever required for msvc
-   include_directories(${kdewin32_SOURCE_DIR}/include/msvc )
+   include_directories(${kdewin_SOURCE_DIR}/include/msvc )
    # disable msvc callings to use the _s versions
    add_definitions( -D_CRT_SECURE_NO_DEPRECATE
                     -D_CRT_NONSTDC_NO_DEPRECATE
@@ -122,6 +124,7 @@ install(TARGETS kdewin32
   RUNTIME DESTINATION bin
   ARCHIVE DESTINATION lib
 )
+# end for compatibiliy
 
 add_library(kdewin SHARED ${win_LIB_SRCS})
 target_link_libraries(kdewin advapi32 shell32 ws2_32)
