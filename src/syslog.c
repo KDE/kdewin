@@ -17,28 +17,28 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include "syslog.h"
 
-KDEWIN32_EXPORT void closelog (void)
+KDEWIN_EXPORT void closelog (void)
 {
 	/*! @todo */
 }
 
-KDEWIN32_EXPORT void openlog (const char *ident , int option , int facility)
+KDEWIN_EXPORT void openlog (const char *ident , int option , int facility)
 {
 	/*! @todo */
 }
 
-KDEWIN32_EXPORT int setlogmask (int priority)
+KDEWIN_EXPORT int setlogmask (int priority)
 {
 	/*! @todo */
 	return 0;
 }
 
-KDEWIN32_EXPORT void syslog (int priority, const char * format, ...)
+KDEWIN_EXPORT void syslog (int priority, const char * format, ...)
 {
 	/*! @todo */
 }

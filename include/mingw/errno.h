@@ -23,7 +23,7 @@
 #include <sys/types.h>
 #include <../include/errno.h>
 
-KDEWIN32_EXPORT int __cdecl _set_errno(int value);
+KDEWIN_EXPORT int __cdecl _set_errno(int value);
 
 #ifndef ENOFILE
 #define ENOFILE ENOENT

@@ -1,6 +1,6 @@
-set (NAME kdewin32)
-set (KDEWIN32_VERSION 0x000309)
-set (KDEWIN32_VERSION_STR 0.3.9)
+set (NAME kdewin)
+set (KDEWIN_VERSION 0x000400)
+set (KDEWIN_VERSION_STR 0.4.0)
 # stay in sync with kdelibs
 cmake_minimum_required(VERSION 2.6.2)
 
@@ -20,10 +20,11 @@ find_package(KDEWIN_Packager)
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
-include_directories(${kdewin32_SOURCE_DIR}
-                    ${kdewin32_SOURCE_DIR}/include
-                    ${kdewin32_BINARY_DIR}
-                    ${kdewin32_BINARY_DIR}/include
+include_directories(${kdewin_SOURCE_DIR}
+                    ${kdewin_SOURCE_DIR}/include
+                    ${kdewin_SOURCE_DIR}/include/kdewin
+                    ${kdewin_BINARY_DIR}
+                    ${kdewin_BINARY_DIR}/include
                     )
 
 if(MINGW)
@@ -52,8 +53,8 @@ if (BUILD_TESTS)
     add_subdirectory(tests)
 endif(BUILD_TESTS)
 
-configure_file(${kdewin32_SOURCE_DIR}/include/winposix_export.h.cmake
-               ${kdewin32_BINARY_DIR}/include/winposix_export.h)
+configure_file(${kdewin_SOURCE_DIR}/include/kdewin_export.h.cmake
+               ${kdewin_BINARY_DIR}/include/kdewin_export.h)
 
 add_definitions(-DUNICODE -DWIN32_LEAN_AND_MEAN )
 
@@ -101,11 +102,12 @@ if(MSVC)
   )
 endif(MSVC)
 
+# for compatibility
 set(CMAKE_DEBUG_POSTFIX "d")
 add_library(kdewin32 SHARED ${win_LIB_SRCS})
 target_link_libraries(kdewin32 advapi32 shell32 ws2_32 )
 set_target_properties(kdewin32 PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN32_LIB )
-set_target_properties(kdewin32 PROPERTIES VERSION ${KDEWIN32_VERSION_STR} )
+set_target_properties(kdewin32 PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
 
 if(MSVC)
   # 4244: 'argument' : conversion from 'type1' to 'type2', possible loss of data
@@ -121,19 +123,38 @@ install(TARGETS kdewin32
   ARCHIVE DESTINATION lib
 )
 
-install(DIRECTORY include/${_incDirPrefix}                  DESTINATION /include PATTERN ".svn" EXCLUDE)
-install(FILES include/fixwinh.h include/kde_file_win.h      DESTINATION /include)
-install(FILES ${CMAKE_BINARY_DIR}/include/winposix_export.h DESTINATION /include)
-install(FILES readme.txt                                    DESTINATION /doc/${NAME}-${KDEWIN32_VERSION_STR})
+add_library(kdewin SHARED ${win_LIB_SRCS})
+target_link_libraries(kdewin advapi32 shell32 ws2_32)
+set_target_properties(kdewin PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN_LIB )
+set_target_properties(kdewin PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
+
+if(MSVC)
+  # 4244: 'argument' : conversion from 'type1' to 'type2', possible loss of data
+  # 4305: 'identifier' : truncation from 'type1' to 'type2'
+  set_target_properties(kdewin PROPERTIES
+      COMPILE_FLAGS "-wd4244 -wd4305"
+  )
+endif(MSVC)
+
+install(TARGETS kdewin
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+  ARCHIVE DESTINATION lib
+)
+
+install(DIRECTORY include/${_incDirPrefix}                  DESTINATION include PATTERN ".svn" EXCLUDE)
+install(FILES include/fixwinh.h include/kde_file_win.h      DESTINATION include)
+install(FILES ${CMAKE_BINARY_DIR}/include/kdewin_export.h DESTINATION include)
+install(FILES readme.txt                                    DESTINATION doc/${NAME}-${KDEWIN_VERSION_STR})
 if(MINGW)
-    install(DIRECTORY include/directx                       DESTINATION /include/${_incDirPrefix} PATTERN ".svn" EXCLUDE)
+    install(DIRECTORY include/directx                       DESTINATION include/${_incDirPrefix} PATTERN ".svn" EXCLUDE)
 endif(MINGW)
 
 include(Win32Macros)
 addExplorerWrapper(${NAME})
 
 # kdewin package support 
-install(FILES cmake/modules/FindKDEWIN_Packager.cmake       DESTINATION /share/apps/cmake/modules)
+install(FILES cmake/modules/FindKDEWIN_Packager.cmake       DESTINATION share/apps/cmake/modules)
 if (KDEWIN_PACKAGER_FOUND)
     KDEWIN_PACKAGER(${NAME} ${VERSION} "${NAME} supplementary library" "-srcexclude \"emerge unused\"")
 endif (KDEWIN_PACKAGER_FOUND)

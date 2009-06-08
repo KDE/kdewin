@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 #include <tlhelp32.h>
 
@@ -38,7 +38,7 @@ int handle_kill_result(HANDLE h)
   return -1;
 }
 
-KDEWIN32_EXPORT int kill(pid_t pid, int sig)
+KDEWIN_EXPORT int kill(pid_t pid, int sig)
 {
   HANDLE h;
   HANDLE h_thread;
@@ -95,7 +95,7 @@ KDEWIN32_EXPORT int kill(pid_t pid, int sig)
   return 0;
 }
 
-KDEWIN32_EXPORT pid_t waitpid(pid_t p, int *a, int b)
+KDEWIN_EXPORT pid_t waitpid(pid_t p, int *a, int b)
 {
   HANDLE h = OpenProcess(PROCESS_TERMINATE, FALSE, (DWORD)p);
   if( h ) {
@@ -109,7 +109,7 @@ KDEWIN32_EXPORT pid_t waitpid(pid_t p, int *a, int b)
   return -1;
 }
 
-KDEWIN32_EXPORT sighandler_t kdewin32_signal(int signum, sighandler_t handler)
+KDEWIN_EXPORT sighandler_t kdewin32_signal(int signum, sighandler_t handler)
 {
   if (signum==SIGABRT
     || signum==SIGFPE

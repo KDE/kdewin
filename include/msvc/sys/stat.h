@@ -20,7 +20,7 @@
 #ifndef KDEWIN_SYS_STAT_H
 #define KDEWIN_SYS_STAT_H
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 
 /* regular header from msvc includes */
 #include <../include/sys/stat.h>
@@ -74,10 +74,10 @@ extern "C" {
 #define	S_ISLNK(m)	(((m)&_IFMT) == _IFLNK)
 #define	S_ISSOCK(m)	(((m)&_IFMT) == _IFSOCK)
 
-KDEWIN32_EXPORT int lstat( const char *__path, struct stat *__buf);
-KDEWIN32_EXPORT int fchmod(int __fd, mode_t __mode);
+KDEWIN_EXPORT int lstat( const char *__path, struct stat *__buf);
+KDEWIN_EXPORT int fchmod(int __fd, mode_t __mode);
 
-// KDEWIN32_EXPORT int mkdir( const char *_path, mode_t __mode );
+// KDEWIN_EXPORT int mkdir( const char *_path, mode_t __mode );
 
 #ifdef __cplusplus
 }
@@ -87,7 +87,7 @@ KDEWIN32_EXPORT int fchmod(int __fd, mode_t __mode);
 #ifdef __cplusplus
 //this is a C++ function!!!
 //TODO: make available C function too...
-KDEWIN32_EXPORT int	mkdir( const char *_path, mode_t __mode );
+KDEWIN_EXPORT int	mkdir( const char *_path, mode_t __mode );
 #endif
 */
 #endif /* KDEWIN_SYS_STAT_H */

@@ -27,7 +27,7 @@
 #include <fcntl.h>
 #include <ctype.h>
 
-#include <winposix_export.h> 
+#include <kdewin_export.h> 
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,21 +38,21 @@ extern "C" {
   1) if @path is like "C:", '\' is appended
   2) else, '/' or '\' trailing characters are removed from @file_name
  */
-KDEWIN32_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf);
+KDEWIN_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf);
 
 /**
  Identical to kdewin32_stat()
  */
-KDEWIN32_EXPORT int kdewin32_lstat(const char *file_name, struct stat *buf);
+KDEWIN_EXPORT int kdewin32_lstat(const char *file_name, struct stat *buf);
 
 /**
  Works like ::open() but also:
   - if @flags have not specified O_TEXT flag, O_BINARY flag is appended
     (because on win32 O_TEXT mode is the default, not O_BINARY like on unix)
  */
-KDEWIN32_EXPORT int kdewin32_open(const char *path, int flags, ... /*mode_t mode*/);
+KDEWIN_EXPORT int kdewin32_open(const char *path, int flags, ... /*mode_t mode*/);
 
-/*KDEWIN32_EXPORT int kdewin32_open(const char *path, int flags);*/
+/*KDEWIN_EXPORT int kdewin32_open(const char *path, int flags);*/
 
 /**
  Works like ::fopen() but also:
@@ -60,22 +60,22 @@ KDEWIN32_EXPORT int kdewin32_open(const char *path, int flags, ... /*mode_t mode
     "b" (binary) flag is appended (or inserted before '+' character)
     (because on win32 text mode is the default, not binary like on unix)
  */
-KDEWIN32_EXPORT FILE *kdewin32_fopen(const char *path, const char *mode);
+KDEWIN_EXPORT FILE *kdewin32_fopen(const char *path, const char *mode);
 
-KDEWIN32_EXPORT FILE *kdewin32_fdopen(int fd, const char *mode);
+KDEWIN_EXPORT FILE *kdewin32_fdopen(int fd, const char *mode);
 
-KDEWIN32_EXPORT FILE *kdewin32_freopen(const char *path, const char *mode, FILE *stream);
+KDEWIN_EXPORT FILE *kdewin32_freopen(const char *path, const char *mode, FILE *stream);
 
 /**
  Before calling ::rename(), tries to remove() it, is needed, 
  because win32 semantics doesn't allow files overwriting using ::rename().
 */
-KDEWIN32_EXPORT int kdewin32_rename(const char *src, const char *dest);
+KDEWIN_EXPORT int kdewin32_rename(const char *src, const char *dest);
 
 /**
  A wrapped for ::mkdir() used by KDE_mkdir().
 */
-KDEWIN32_EXPORT int kdewin32_mkdir(const char *path, mode_t mode);
+KDEWIN_EXPORT int kdewin32_mkdir(const char *path, mode_t mode);
 
 #ifdef __cplusplus
 }

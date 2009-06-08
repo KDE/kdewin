@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <sys/utsname.h>
@@ -46,7 +46,7 @@ int kde_gethostname(char *__name, size_t __len);
 
  Note that utsname.version is just a compile time of kdewin32 library (__DATE__).
 */
-KDEWIN32_EXPORT int uname(struct utsname *name)
+KDEWIN_EXPORT int uname(struct utsname *name)
 {
 	OSVERSIONINFOEX versioninfo;
 	SYSTEM_INFO sysinfo;

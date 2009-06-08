@@ -18,7 +18,7 @@
 */
 
 #define _WIN32_WINNT 0x0500
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <direct.h>
@@ -32,24 +32,24 @@
 #include <unistd.h>
 
 // BEGIN stat.c
-KDEWIN32_EXPORT int lstat(const char *path, struct stat *sb)
+KDEWIN_EXPORT int lstat(const char *path, struct stat *sb)
 {
   return _stat(path,(struct _stat*)sb);
 }
 
-KDEWIN32_EXPORT int fchmod(int __fd, mode_t __mode)
+KDEWIN_EXPORT int fchmod(int __fd, mode_t __mode)
 {
   return 0;
 }
 // END stat.c
 
-KDEWIN32_EXPORT int getgroups(int size, gid_t list[])
+KDEWIN_EXPORT int getgroups(int size, gid_t list[])
 {
 	/* TODO */
 	return 0;
 }
 
-KDEWIN32_EXPORT int readlink(const char *__path, char *__buf, int __buflen)
+KDEWIN_EXPORT int readlink(const char *__path, char *__buf, int __buflen)
 {
     if (!__path) {
       errno = EINVAL;
@@ -70,7 +70,7 @@ KDEWIN32_EXPORT int readlink(const char *__path, char *__buf, int __buflen)
     return -1;
 }
 
-KDEWIN32_EXPORT int symlink(const char *__name1, const char *__name2)
+KDEWIN_EXPORT int symlink(const char *__name1, const char *__name2)
 {
 	if(!CopyFileA(__name1, __name2, FALSE)) {
 	    switch(GetLastError()) {
@@ -89,64 +89,64 @@ KDEWIN32_EXPORT int symlink(const char *__name1, const char *__name2)
 	return 0;
 }
 
-KDEWIN32_EXPORT int link(const char *__name1, const char *__name2)
+KDEWIN_EXPORT int link(const char *__name1, const char *__name2)
 {
 	return symlink(__name1, __name2);
 }
 
-KDEWIN32_EXPORT int chown(const char *__path, uid_t __owner, gid_t __group)
+KDEWIN_EXPORT int chown(const char *__path, uid_t __owner, gid_t __group)
 { 
   return 0; 
 }
 
-KDEWIN32_EXPORT int fchown(int __fd, uid_t __owner, gid_t __group )
+KDEWIN_EXPORT int fchown(int __fd, uid_t __owner, gid_t __group )
 {
   return 0; 
 }
 
 /* Get the real user ID of the calling process.  */
-KDEWIN32_EXPORT uid_t getuid()
+KDEWIN_EXPORT uid_t getuid()
 {
   return -2;    // keep in sync with Qt!
 }
 
 /* Get the effective user ID of the calling process.  */
-KDEWIN32_EXPORT uid_t geteuid (void)
+KDEWIN_EXPORT uid_t geteuid (void)
 {
   return -2;    // keep in sync with Qt!
 }
 
 /* Get the real group ID of the calling process.  */
-KDEWIN32_EXPORT gid_t getgid (void)
+KDEWIN_EXPORT gid_t getgid (void)
 {
   return -2;    // keep in sync with Qt!
 }
 
 /* Get the effective group ID of the calling process.  */
-KDEWIN32_EXPORT gid_t getegid (void)
+KDEWIN_EXPORT gid_t getegid (void)
 {
   return -2;    // keep in sync with Qt!
 }
 
-KDEWIN32_EXPORT int pipe(int *fd)
+KDEWIN_EXPORT int pipe(int *fd)
 {
   /** @todo */
   return _pipe( fd, 256, O_BINARY ); /* OK? */
 }
 
-KDEWIN32_EXPORT pid_t fork(void)
+KDEWIN_EXPORT pid_t fork(void)
 {
   /** @todo */
   return -1;
 }
 
-KDEWIN32_EXPORT pid_t setsid(void)
+KDEWIN_EXPORT pid_t setsid(void)
 {
   /** @todo */
   return -1;
 }
 
-KDEWIN32_EXPORT unsigned alarm(unsigned __secs )
+KDEWIN_EXPORT unsigned alarm(unsigned __secs )
 {
   /** @todo */
   return 1;
@@ -161,7 +161,7 @@ typedef unsigned int size_t;
 // which will not be done in every case
 //http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winsock/winsock/gethostname_2.asp
 
-KDEWIN32_EXPORT int kde_gethostname(char *__name, size_t __len)
+KDEWIN_EXPORT int kde_gethostname(char *__name, size_t __len)
 {
   DWORD len = __len;
   if (0==GetComputerNameA(__name, &len))
@@ -172,7 +172,7 @@ KDEWIN32_EXPORT int kde_gethostname(char *__name, size_t __len)
 #define getlogin_buf_size 255
 char getlogin_buf[getlogin_buf_size+1];
 
-KDEWIN32_EXPORT char* getlogin()
+KDEWIN_EXPORT char* getlogin()
 {
 /*! @todo make this reentrant!*/
 	size_t size = sizeof(getlogin_buf);
@@ -182,18 +182,18 @@ KDEWIN32_EXPORT char* getlogin()
 	return getlogin_buf;
 }
 
-KDEWIN32_EXPORT void usleep(unsigned int usec)
+KDEWIN_EXPORT void usleep(unsigned int usec)
 {
 	Sleep(usec/1000);
 }
 
-KDEWIN32_EXPORT void sleep(unsigned int sec)
+KDEWIN_EXPORT void sleep(unsigned int sec)
 {
 	Sleep(sec*1000);
 }
 
 
-KDEWIN32_EXPORT int setreuid(uid_t ruid, uid_t euid)
+KDEWIN_EXPORT int setreuid(uid_t ruid, uid_t euid)
 {
 	/*! @todo */
 	return 0;
@@ -215,7 +215,7 @@ KDEWIN32_EXPORT int setreuid(uid_t ruid, uid_t euid)
 
    Returns a file descriptor open on the file for reading and writing.  */
 
-KDEWIN32_EXPORT int mkstemps (char* _template, int suffix_len)
+KDEWIN_EXPORT int mkstemps (char* _template, int suffix_len)
 {
   static const char letters[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   char *XXXXXX;
@@ -265,7 +265,7 @@ KDEWIN32_EXPORT int mkstemps (char* _template, int suffix_len)
 }
 
 // from kdecore/fakes.c
-KDEWIN32_EXPORT int mkstemp (char* _template)
+KDEWIN_EXPORT int mkstemp (char* _template)
 {
   return mkstemps( _template, 0 );
 }
@@ -289,7 +289,7 @@ int seteuid(uid_t euid)
 
    Returns a file descriptor open on the file for reading and writing.  */
 
-KDEWIN32_EXPORT char* mkdtemp (char* _template)
+KDEWIN_EXPORT char* mkdtemp (char* _template)
 {
   static const char letters[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   char *XXXXXX;
@@ -333,7 +333,7 @@ KDEWIN32_EXPORT char* mkdtemp (char* _template)
     return 0;
 }
 
-KDEWIN32_EXPORT int revoke(const char *tty)
+KDEWIN_EXPORT int revoke(const char *tty)
 {
         errno = ENOTSUP;
         return -1;
@@ -341,7 +341,7 @@ KDEWIN32_EXPORT int revoke(const char *tty)
 
 /* getpagesize for windows */
 //static 
-KDEWIN32_EXPORT long getpagesize (void)
+KDEWIN_EXPORT long getpagesize (void)
 {
     static long g_pagesize = 0;
     if (! g_pagesize) {
@@ -381,7 +381,7 @@ char *optarg = NULL;	// global argument pointer
 int   optind = 0; 	// global argv index
 int   opterr = 0; 	
 
-KDEWIN32_EXPORT int getopt(int argc, char **argv, const char *optstring)
+KDEWIN_EXPORT int getopt(int argc, char **argv, const char *optstring)
 {
 	static char *next = NULL;
 	char c = '?';

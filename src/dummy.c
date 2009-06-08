@@ -17,18 +17,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include "dirent.h"
 
 // TODO implement if possible in dirent.c
-KDEWIN32_EXPORT struct dirent* readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
+KDEWIN_EXPORT struct dirent* readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
 {
 	result = 0;
 	return 0;
 }
 
 // TODO implement if possible in fcntl.c
-KDEWIN32_EXPORT int fcntl(int fd, int cmd,...)
+KDEWIN_EXPORT int fcntl(int fd, int cmd,...)
 {
 	/*! @todo */
 	return -1;

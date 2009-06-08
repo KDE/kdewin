@@ -34,11 +34,11 @@ struct group {
 	char **gr_mem; /* group members */
 };
 
-KDEWIN32_EXPORT struct group *getgrnam (const char *name); 
-KDEWIN32_EXPORT struct group *getgrgid (gid_t gid);
-KDEWIN32_EXPORT struct group *getgrent(void);
-KDEWIN32_EXPORT void setgrent(void);
-KDEWIN32_EXPORT void endgrent(void);
+KDEWIN_EXPORT struct group *getgrnam (const char *name); 
+KDEWIN_EXPORT struct group *getgrgid (gid_t gid);
+KDEWIN_EXPORT struct group *getgrent(void);
+KDEWIN_EXPORT void setgrent(void);
+KDEWIN_EXPORT void endgrent(void);
 
 #ifdef __cplusplus
 }

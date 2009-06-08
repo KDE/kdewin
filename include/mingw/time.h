@@ -26,9 +26,9 @@
 extern "C" {
 #endif 
 
-KDEWIN32_EXPORT struct tm *localtime_r(const time_t *clock, struct tm *result);
-KDEWIN32_EXPORT struct tm *gmtime_r(const time_t *clock, struct tm *result);
-KDEWIN32_EXPORT char *strptime (const char *buf, const char *format, struct tm *tm);
+KDEWIN_EXPORT struct tm *localtime_r(const time_t *clock, struct tm *result);
+KDEWIN_EXPORT struct tm *gmtime_r(const time_t *clock, struct tm *result);
+KDEWIN_EXPORT char *strptime (const char *buf, const char *format, struct tm *tm);
 
 #ifdef __cplusplus
 }

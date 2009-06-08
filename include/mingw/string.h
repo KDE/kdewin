@@ -30,13 +30,13 @@
 extern "C" {
 #endif
 
-KDEWIN32_EXPORT char* strndup(const char *src, size_t n);
+KDEWIN_EXPORT char* strndup(const char *src, size_t n);
 
-KDEWIN32_EXPORT unsigned long strlcpy(char *dst, const char *src, unsigned long siz);
+KDEWIN_EXPORT unsigned long strlcpy(char *dst, const char *src, unsigned long siz);
 
-KDEWIN32_EXPORT unsigned long strlcat(char *dst, const char *src, unsigned long siz);
+KDEWIN_EXPORT unsigned long strlcat(char *dst, const char *src, unsigned long siz);
 
-KDEWIN32_EXPORT char *strcasestr(const char *big, const char *little);
+KDEWIN_EXPORT char *strcasestr(const char *big, const char *little);
 
 #ifdef __cplusplus
 }

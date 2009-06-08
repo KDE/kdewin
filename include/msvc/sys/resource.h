@@ -81,9 +81,9 @@ struct rusage {
 #define ru_last         ru_nivcsw
 };
 
-KDEWIN32_EXPORT int getrlimit (int __resource, struct rlimit *__rlp);
-KDEWIN32_EXPORT int setrlimit (int __resource, const struct rlimit *__rlp);
-KDEWIN32_EXPORT int getrusage (int __who, struct rusage *__rusage);
+KDEWIN_EXPORT int getrlimit (int __resource, struct rlimit *__rlp);
+KDEWIN_EXPORT int setrlimit (int __resource, const struct rlimit *__rlp);
+KDEWIN_EXPORT int getrusage (int __who, struct rusage *__rusage);
 
 #ifdef __cplusplus
 }

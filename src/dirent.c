@@ -56,7 +56,7 @@
  * University of Illinois, Urbana-Champaign.
  */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <malloc.h>
@@ -80,7 +80,7 @@
 
 #ifndef __MINGW32__
 
-KDEWIN32_EXPORT DIR * opendir(const char *dir)
+KDEWIN_EXPORT DIR * opendir(const char *dir)
 {
     DIR *dp;
     char *filespec;
@@ -112,7 +112,7 @@ KDEWIN32_EXPORT DIR * opendir(const char *dir)
     return dp;
 }
 
-KDEWIN32_EXPORT struct dirent * readdir(DIR *dp)
+KDEWIN_EXPORT struct dirent * readdir(DIR *dp)
 {
     if (!dp || dp->finished) return NULL;
 
@@ -127,7 +127,7 @@ KDEWIN32_EXPORT struct dirent * readdir(DIR *dp)
     dp->offset++;
 
     strncpy(dp->dent.d_name, dp->fileinfo.name, _MAX_FNAME);
-#ifdef KDEWIN32_HAVE_DIRENT_D_TYPE
+#ifdef KDEWIN_HAVE_DIRENT_D_TYPE
     dp->dent.d_type = DT_UNKNOWN;
 #endif    
     dp->dent.d_ino = 1;
@@ -137,7 +137,7 @@ KDEWIN32_EXPORT struct dirent * readdir(DIR *dp)
     return &(dp->dent);
 }
 
-KDEWIN32_EXPORT int closedir(DIR *dp)
+KDEWIN_EXPORT int closedir(DIR *dp)
 {
     if (!dp) return 0;
     if ((HANDLE)dp->handle != INVALID_HANDLE_VALUE) _findclose(dp->handle);

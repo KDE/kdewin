@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <time.h>
@@ -41,7 +41,7 @@ static void UnixTimevalToFileTime(struct timeval t, LPFILETIME pft)
 //
 // sys/time.h fnctions
 //
-KDEWIN32_EXPORT int gettimeofday(struct timeval *__p, void *__t)
+KDEWIN_EXPORT int gettimeofday(struct timeval *__p, void *__t)
 {
 	union {
 		unsigned long long ns100; /*time since 1 Jan 1601 in 100ns units */
@@ -56,7 +56,7 @@ KDEWIN32_EXPORT int gettimeofday(struct timeval *__p, void *__t)
 }
 
 //errno==EACCES on read-only devices
-KDEWIN32_EXPORT int utimes(const char *filename, const struct timeval times[2])
+KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2])
 {
 	FILETIME LastAccessTime;
 	FILETIME LastModificationTime;
@@ -105,7 +105,7 @@ KDEWIN32_EXPORT int utimes(const char *filename, const struct timeval times[2])
 
 // this is no posix function
 #if 0
-KDEWIN32_EXPORT int settimeofday(const struct timeval *__p, const struct timezone *__t)
+KDEWIN_EXPORT int settimeofday(const struct timeval *__p, const struct timezone *__t)
 {
 	union {
 		unsigned long long ns100; /*time since 1 Jan 1601 in 100ns units */
@@ -124,14 +124,14 @@ KDEWIN32_EXPORT int settimeofday(const struct timeval *__p, const struct timezon
 //
 // time.h functions
 //
-KDEWIN32_EXPORT struct tm* localtime_r(const time_t *t,struct tm *p)
+KDEWIN_EXPORT struct tm* localtime_r(const time_t *t,struct tm *p)
 {
 	// CE: thread safe on windows - returns a ptr inside TLS afaik
 	*p = *localtime( t );
 	return p; 
 }
 
-KDEWIN32_EXPORT struct tm* gmtime_r(const time_t *t, struct tm *p)
+KDEWIN_EXPORT struct tm* gmtime_r(const time_t *t, struct tm *p)
 {
 	// CE: thread safe on windows - returns a ptr inside TLS afaik
 	*p = *gmtime( t );

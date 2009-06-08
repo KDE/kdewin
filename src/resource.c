@@ -17,24 +17,24 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <sys/resource.h>
 
 /* these functions always fail. for win32 */
 
-KDEWIN32_EXPORT int getrlimit (int __resource, struct rlimit *__rlp)
+KDEWIN_EXPORT int getrlimit (int __resource, struct rlimit *__rlp)
 {
 	return -1;
 }
 
-KDEWIN32_EXPORT int setrlimit (int __resource, const struct rlimit *__rlp)
+KDEWIN_EXPORT int setrlimit (int __resource, const struct rlimit *__rlp)
 {
   return -1;
 }
 
-KDEWIN32_EXPORT int getrusage (int __who, struct rusage *__rusage)
+KDEWIN_EXPORT int getrusage (int __who, struct rusage *__rusage)
 {
   return -1;
 }

@@ -17,12 +17,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <stdlib.h>
 
-KDEWIN32_EXPORT char * kde_getenv(const char *name)
+KDEWIN_EXPORT char * kde_getenv(const char *name)
 {
   char dummy[1];
   int len;

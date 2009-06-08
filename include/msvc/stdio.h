@@ -36,7 +36,7 @@ extern "C" {
   * terminate with \0 if the buffer is too small, and return value that 
   * is greater than or equal to the size argument if the string was 
   * too short and some of the printed characters were discarded. */
-KDEWIN32_EXPORT int kdewin32_snprintf(char *buffer, size_t count, const char *fmt, ...);
+KDEWIN_EXPORT int kdewin32_snprintf(char *buffer, size_t count, const char *fmt, ...);
 
 #ifdef __cplusplus
 }

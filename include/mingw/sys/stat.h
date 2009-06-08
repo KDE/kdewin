@@ -40,8 +40,8 @@ extern "C" {
 
 #define S_IFSOCK _S_IFSOCK
 
-KDEWIN32_EXPORT int lstat( const char *__path, struct stat *__buf);
-KDEWIN32_EXPORT int fchmod(int __fd, mode_t __mode);
+KDEWIN_EXPORT int lstat( const char *__path, struct stat *__buf);
+KDEWIN_EXPORT int fchmod(int __fd, mode_t __mode);
 
 #ifdef __cplusplus
 }

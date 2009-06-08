@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN32_TIME_H
-#define KDEWIN32_TIME_H
+#ifndef KDEWIN_TIME_H
+#define KDEWIN_TIME_H
 
 // include everywhere
 #include <sys/types.h>
@@ -29,12 +29,12 @@
 extern "C" {
 #endif 
 
-KDEWIN32_EXPORT struct tm *localtime_r(const time_t *clock, struct tm *result);
-KDEWIN32_EXPORT struct tm *gmtime_r(const time_t *clock, struct tm *result);
-KDEWIN32_EXPORT char *strptime (const char *buf, const char *format, struct tm *tm);
+KDEWIN_EXPORT struct tm *localtime_r(const time_t *clock, struct tm *result);
+KDEWIN_EXPORT struct tm *gmtime_r(const time_t *clock, struct tm *result);
+KDEWIN_EXPORT char *strptime (const char *buf, const char *format, struct tm *tm);
 
 #ifdef __cplusplus
 }
 #endif 
 
-#endif  // KDEWIN32_TIME_H
+#endif  // KDEWIN_TIME_H

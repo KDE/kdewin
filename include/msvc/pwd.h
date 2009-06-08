@@ -54,13 +54,13 @@ struct passwd {
 	char	*pw_shell;		/* default shell */
 };
 
-KDEWIN32_EXPORT struct passwd	*getpwuid (uid_t);
-KDEWIN32_EXPORT struct passwd	*getpwnam (const char *);
-KDEWIN32_EXPORT int getpwnam_r (const char *, struct passwd *, char *, size_t , struct passwd **);
-KDEWIN32_EXPORT int	getpwuid_r (uid_t, struct passwd *, char *, size_t, struct passwd **);
-KDEWIN32_EXPORT struct passwd	*getpwent (void);
-KDEWIN32_EXPORT void		 setpwent (void);
-KDEWIN32_EXPORT void		 endpwent (void);
+KDEWIN_EXPORT struct passwd	*getpwuid (uid_t);
+KDEWIN_EXPORT struct passwd	*getpwnam (const char *);
+KDEWIN_EXPORT int getpwnam_r (const char *, struct passwd *, char *, size_t , struct passwd **);
+KDEWIN_EXPORT int	getpwuid_r (uid_t, struct passwd *, char *, size_t, struct passwd **);
+KDEWIN_EXPORT struct passwd	*getpwent (void);
+KDEWIN_EXPORT void		 setpwent (void);
+KDEWIN_EXPORT void		 endpwent (void);
 
 #ifdef __cplusplus
 }

@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <errno.h>
@@ -29,7 +29,7 @@
 #include <direct.h>
 
 /** @return the canonicalized absolute pathname */
-KDEWIN32_EXPORT char *realpath(const char *path,char *resolved_path)
+KDEWIN_EXPORT char *realpath(const char *path,char *resolved_path)
 {
     int i;
     // no error checking... :(

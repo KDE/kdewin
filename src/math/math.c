@@ -9,7 +9,7 @@
 #include <../include/math.h>
 #include <../include/float.h>
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <errno.h>
 
 #define __FLOAT_INF_REP { 0, 0x7f80 }
@@ -29,26 +29,26 @@ union _ieee_rep {
   long double ldouble_val;
 } ;
 
-KDEWIN32_EXPORT union _ieee_rep __QNANF = { __FLOAT_QNAN_REP };
-KDEWIN32_EXPORT union _ieee_rep __SNANF = { __FLOAT_SNAN_REP };
-KDEWIN32_EXPORT union _ieee_rep __INFF = { __FLOAT_INF_REP };
-KDEWIN32_EXPORT union _ieee_rep __DENORMF = { __FLOAT_DENORM_REP };
+KDEWIN_EXPORT union _ieee_rep __QNANF = { __FLOAT_QNAN_REP };
+KDEWIN_EXPORT union _ieee_rep __SNANF = { __FLOAT_SNAN_REP };
+KDEWIN_EXPORT union _ieee_rep __INFF = { __FLOAT_INF_REP };
+KDEWIN_EXPORT union _ieee_rep __DENORMF = { __FLOAT_DENORM_REP };
 
-KDEWIN32_EXPORT union _ieee_rep __QNAN = { __DOUBLE_QNAN_REP };
-KDEWIN32_EXPORT union _ieee_rep __SNAN  = { __DOUBLE_SNAN_REP };
-KDEWIN32_EXPORT union _ieee_rep __INF = { __DOUBLE_INF_REP };
-KDEWIN32_EXPORT union _ieee_rep __DENORM = { __DOUBLE_DENORM_REP };
+KDEWIN_EXPORT union _ieee_rep __QNAN = { __DOUBLE_QNAN_REP };
+KDEWIN_EXPORT union _ieee_rep __SNAN  = { __DOUBLE_SNAN_REP };
+KDEWIN_EXPORT union _ieee_rep __INF = { __DOUBLE_INF_REP };
+KDEWIN_EXPORT union _ieee_rep __DENORM = { __DOUBLE_DENORM_REP };
 // msdn:
 // The representation of long double and double is identical.
 // However, long double and double are separate types.
-KDEWIN32_EXPORT union _ieee_rep __QNANL = { __DOUBLE_QNAN_REP };
-KDEWIN32_EXPORT union _ieee_rep __SNANL  = { __DOUBLE_SNAN_REP };
-KDEWIN32_EXPORT union _ieee_rep __INFL = { __DOUBLE_INF_REP };
-KDEWIN32_EXPORT union _ieee_rep __DENORML = { __DOUBLE_DENORM_REP };
+KDEWIN_EXPORT union _ieee_rep __QNANL = { __DOUBLE_QNAN_REP };
+KDEWIN_EXPORT union _ieee_rep __SNANL  = { __DOUBLE_SNAN_REP };
+KDEWIN_EXPORT union _ieee_rep __INFL = { __DOUBLE_INF_REP };
+KDEWIN_EXPORT union _ieee_rep __DENORML = { __DOUBLE_DENORM_REP };
 
 /* 7.12.5.1 */
 // acosh(x) = log (x + sqrt(x * x - 1))
-KDEWIN32_EXPORT float acoshf ( float x )
+KDEWIN_EXPORT float acoshf ( float x )
 {
   if ( _isnan ( x ) || x < 1.0f ) {
     errno = EDOM;
@@ -57,7 +57,7 @@ KDEWIN32_EXPORT float acoshf ( float x )
   return ( log ( x + sqrt ( x * x - 1.0f ) ) );
 }
 
-KDEWIN32_EXPORT double acosh ( double x )
+KDEWIN_EXPORT double acosh ( double x )
 {
   if ( _isnan ( x ) || x < 1.0 ) {
     errno = EDOM;
@@ -66,14 +66,14 @@ KDEWIN32_EXPORT double acosh ( double x )
   return ( log ( x + sqrt ( x * x - 1.0 ) ) );
 }
 
-KDEWIN32_EXPORT long double acoshl ( long double x )
+KDEWIN_EXPORT long double acoshl ( long double x )
 {
   return acosh ( ( double ) x );
 }
 
 /* 7.12.5.2 */
 // asinh(x) = ln (x + sqrt(x * x + 1))
-KDEWIN32_EXPORT float asinhf ( float x )
+KDEWIN_EXPORT float asinhf ( float x )
 {
   if ( _isnan ( x ) ) {
     errno = EDOM;
@@ -85,7 +85,7 @@ KDEWIN32_EXPORT float asinhf ( float x )
   return x;
 }
 
-KDEWIN32_EXPORT double asinh ( double x )
+KDEWIN_EXPORT double asinh ( double x )
 {
   if ( _isnan ( x ) ) {
     errno = EDOM;
@@ -97,15 +97,15 @@ KDEWIN32_EXPORT double asinh ( double x )
   return x;
 }
 
-KDEWIN32_EXPORT long double asinhl ( long double x )
+KDEWIN_EXPORT long double asinhl ( long double x )
 {
   return asinh ( ( double ) x );
 }
 
 /* 7.12.5.3 */
 // atanh(x) = 0.5 * log( (1+x) / (1-x) )
-//WINPOSIX_EXPORT float asinhf (float)
-KDEWIN32_EXPORT double atanhf ( float x )
+//KDEWIN_EXPORT float asinhf (float)
+KDEWIN_EXPORT double atanhf ( float x )
 {
   if ( _isnan ( x ) || fabsf ( x ) >= 1.0f ) {
     errno = EDOM;
@@ -114,7 +114,7 @@ KDEWIN32_EXPORT double atanhf ( float x )
   return log ( ( 1.0f + x ) / ( 1.0f - x ) ) / 2.0f;
 }
 
-KDEWIN32_EXPORT double atanh ( double x )
+KDEWIN_EXPORT double atanh ( double x )
 {
   if ( _isnan ( x ) || fabsf ( x ) >= 1.0 ) {
     errno = EDOM;
@@ -123,13 +123,13 @@ KDEWIN32_EXPORT double atanh ( double x )
   return log ( ( 1.0 + x ) / ( 1.0 - x ) ) / 2.0;
 }
 
-KDEWIN32_EXPORT long double atanhl ( long double x )
+KDEWIN_EXPORT long double atanhl ( long double x )
 {
   return atanh ( ( double ) x );
 }
 
 /* Public domain, from mingwex library, adjusted to compile with msvc */
-KDEWIN32_EXPORT double log1p(double x)
+KDEWIN_EXPORT double log1p(double x)
 {
     static const double limit = 0.29;
     static const double one = 1.0;
@@ -173,7 +173,7 @@ ende:
     return;
 }
 
-KDEWIN32_EXPORT void log1pf(float x)
+KDEWIN_EXPORT void log1pf(float x)
 {
     static const float limit = 0.29;
     static const float one = 1.0;
@@ -217,7 +217,7 @@ ende:
     return;
 }
 
-KDEWIN32_EXPORT long double log1pl(long double x)
+KDEWIN_EXPORT long double log1pl(long double x)
 {
     return log1p((double)x);
 }

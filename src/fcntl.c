@@ -17,12 +17,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <fcntl.h>
 
-KDEWIN32_EXPORT int fcntl (int fd, int cmd,...)
+KDEWIN_EXPORT int fcntl (int fd, int cmd,...)
 {
 	/*! @todo */
 	return -1;

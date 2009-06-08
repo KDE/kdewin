@@ -46,8 +46,8 @@ extern "C" {
 
 #define MAP_FAILED ((void *)-1)
 
-KDEWIN32_EXPORT void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offset);
-KDEWIN32_EXPORT int munmap(void *start, size_t length);
+KDEWIN_EXPORT void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offset);
+KDEWIN_EXPORT int munmap(void *start, size_t length);
 
 
 #ifdef __cplusplus

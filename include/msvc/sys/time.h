@@ -35,13 +35,13 @@ struct itimerval {
 extern "C" {
 #endif
 
-KDEWIN32_EXPORT int gettimeofday(struct timeval *__p, void *__t);
+KDEWIN_EXPORT int gettimeofday(struct timeval *__p, void *__t);
 
 //errno==EACCES on read-only devices
-KDEWIN32_EXPORT int utimes(const char *filename, const struct timeval times[2]);
+KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2]);
 
 // this is no posix function
-//KDEWIN32_EXPORT int settimeofday(const struct timeval *, const struct timezone *); 
+//KDEWIN_EXPORT int settimeofday(const struct timeval *, const struct timezone *); 
 
 /* Convenience macros for operations on timevals.
    NOTE: `timercmp' does not work for >= or <=.

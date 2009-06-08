@@ -30,9 +30,9 @@
 /*                                                                        */
 /* ************************************************************************/
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <math.h>
-WINPOSIX_EXPORT double remainder(double x, double y)
+KDEWIN_EXPORT double remainder(double x, double y)
 {
     return fmod(x, y);
 }
@@ -59,7 +59,7 @@ static const mynumber big = {{0, 0x43380000}},  /* 6755399441055744 */
 /* An ultimate remainder routine. Given two IEEE double machine numbers x */
 /* ,y   it computes the correctly rounded (to nearest) value of remainder */
 /**************************************************************************/
-WINPOSIX_EXPORT double remainder(double x, double y)
+KDEWIN_EXPORT double remainder(double x, double y)
 {
   double z,d,xx;
 #if 0

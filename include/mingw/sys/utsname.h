@@ -35,7 +35,7 @@ struct utsname
   char machine[20];
 };
 
-KDEWIN32_EXPORT int uname (struct utsname *);
+KDEWIN_EXPORT int uname (struct utsname *);
 
 #ifdef __cplusplus
 }

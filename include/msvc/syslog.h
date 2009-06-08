@@ -87,10 +87,10 @@
 extern "C" {
 #endif
 
-KDEWIN32_EXPORT void closelog (void);
-KDEWIN32_EXPORT void openlog (const char *ident , int option , int facility);
-KDEWIN32_EXPORT int setlogmask (int priority);
-KDEWIN32_EXPORT void syslog (int priority, const char * format, ...);
+KDEWIN_EXPORT void closelog (void);
+KDEWIN_EXPORT void openlog (const char *ident , int option , int facility);
+KDEWIN_EXPORT int setlogmask (int priority);
+KDEWIN_EXPORT void syslog (int priority, const char * format, ...);
 
 #ifdef __cplusplus
 }

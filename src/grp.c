@@ -17,32 +17,32 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <grp.h>
 
 
 /* these functions always fail. for win32 */
 static struct group s_group = { "", "", -2, 0 };
 
-KDEWIN32_EXPORT struct group *getgrnam (const char *name)
+KDEWIN_EXPORT struct group *getgrnam (const char *name)
 {
     return &s_group;
 }
 
-KDEWIN32_EXPORT struct group *getgrgid (gid_t gid)
+KDEWIN_EXPORT struct group *getgrgid (gid_t gid)
 {
     return &s_group;
 }
 
-KDEWIN32_EXPORT struct group *getgrent(void)
+KDEWIN_EXPORT struct group *getgrent(void)
 {
     return &s_group;
 }
 
-KDEWIN32_EXPORT void setgrent(void)
+KDEWIN_EXPORT void setgrent(void)
 {
 }
 
-KDEWIN32_EXPORT void endgrent(void)
+KDEWIN_EXPORT void endgrent(void)
 {
 }

@@ -31,7 +31,7 @@ typedef unsigned int nlink_t;
 // uint32
 #include <stdint.h>
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 
 #endif  // KDEWIN_SYS_TYPES_H
 

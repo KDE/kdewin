@@ -20,7 +20,7 @@
 #ifndef KDEWIN_SYS_UTSNAME_H
 #define KDEWIN_SYS_UTSNAME_H
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,7 +35,7 @@ struct utsname
   char machine[20];
 };
 
-KDEWIN32_EXPORT int uname (struct utsname *);
+KDEWIN_EXPORT int uname (struct utsname *);
 
 #ifdef __cplusplus
 }

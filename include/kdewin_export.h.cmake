@@ -18,33 +18,33 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef WINPOSIX_EXPORT_H
-#define WINPOSIX_EXPORT_H
+#ifndef KDEWIN_EXPORT_H
+#define KDEWIN_EXPORT_H
 
-#define KDEWIN32_VERSION @KDEWIN32_VERSION@
+#define KDEWIN_VERSION @KDEWIN_VERSION@
 
 #ifdef __GNUC__
 # ifdef _HAVE_GCC_VISIBILITY
-#  define WINPOSIX_EXPORT __attribute__ ((visibility("default")))
-#  define WINPOSIX_IMPORT
+#  define KDEWIN_EXPORT __attribute__ ((visibility("default")))
+#  define KDEWIN_IMPORT
 # else
-#  define WINPOSIX_EXPORT
-#  define WINPOSIX_IMPORT
+#  define KDEWIN_EXPORT
+#  define KDEWIN_IMPORT
 # endif
 #else
-# ifndef WINPOSIX_EXPORT
-#  if defined(MAKE_WINPOSIX_LIB) || defined(MAKE_KDEWIN32_LIB)
-#   define WINPOSIX_EXPORT __declspec(dllexport)
+# ifndef KDEWIN_EXPORT
+#  if defined(MAKE_KDEWIN_LIB) || defined(MAKE_KDEWIN32_LIB)
+#   define KDEWIN_EXPORT __declspec(dllexport)
 #  else
-#   define WINPOSIX_EXPORT __declspec(dllimport)
+#   define KDEWIN_EXPORT __declspec(dllimport)
 #  endif
-#   define WINPOSIX_IMPORT __declspec(dllimport)
+#   define KDEWIN_IMPORT __declspec(dllimport)
 # endif
 #endif
 
 /* for compatibility */
-#define KDEWIN32_EXPORT WINPOSIX_EXPORT
-#define KDEWIN32_IMPORT WINPOSIX_IMPORT
+#define KDEWIN32_EXPORT KDEWIN_EXPORT
+#define KDEWIN32_IMPORT KDEWIN_IMPORT
 
 
 #ifndef _CRT_SECURE_NO_DEPRECATE
@@ -84,4 +84,4 @@
 #endif /*_MSC_VER*/
 #endif /*WARNING*/
 
-#endif	// WINPOSIX_EXPORT_H
+#endif	// KDEWIN_EXPORT_H

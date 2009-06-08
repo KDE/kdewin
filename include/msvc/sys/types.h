@@ -20,7 +20,7 @@
 #ifndef KDEWIN_SYS_TYPES_H
 #define KDEWIN_SYS_TYPES_H
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 
 /* regular header from msvc includes */
 #include <../include/sys/types.h>

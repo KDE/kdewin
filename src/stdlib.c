@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <errno.h>
@@ -27,7 +27,7 @@
 
 #if defined(_MSC_VER) && _MSC_VER >= 1400
 // use secure functions declared in msvc >= 2005
-#define KDEWIN32_USE_ENV_S
+#define KDEWIN_USE_ENV_S
 #endif
 
 static void putenvMsvcrt(const char *name, const char *value)
@@ -69,9 +69,9 @@ static void putenvMsvcrt(const char *name, const char *value)
 }
 
 // from kdecore/fakes.c
-KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
+KDEWIN_EXPORT int setenv(const char *name, const char *value, int overwrite)
 {
-#ifndef KDEWIN32_USE_ENV_S
+#ifndef KDEWIN_USE_ENV_S
     int i, iRet;
     char * a;
 #endif
@@ -82,7 +82,7 @@ KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
     putenvMsvcrt(name, value);
     //SetEnvironmentVariableA(name, value);     // unsure if we need it...
 
-#ifdef KDEWIN32_USE_ENV_S
+#ifdef KDEWIN_USE_ENV_S
     return _putenv_s(name, value ? value : "");
 #else 
     if (!name) return -1;
@@ -104,7 +104,7 @@ KDEWIN32_EXPORT int setenv(const char *name, const char *value, int overwrite)
 
 
 // from kdecore/fakes.c
-KDEWIN32_EXPORT int unsetenv (const char *name)
+KDEWIN_EXPORT int unsetenv (const char *name)
 {
     if (name == NULL || *name == '\0' || strchr (name, '=') != NULL)
     {
@@ -116,23 +116,23 @@ KDEWIN32_EXPORT int unsetenv (const char *name)
     return 0;
 }
 
-KDEWIN32_EXPORT long int random()
+KDEWIN_EXPORT long int random()
 {
 	return rand();
 }
 
-KDEWIN32_EXPORT void srandom(unsigned int seed)
+KDEWIN_EXPORT void srandom(unsigned int seed)
 {
 	srand(seed);
 }
 
 
-KDEWIN32_EXPORT double drand48(void)
+KDEWIN_EXPORT double drand48(void)
 {
 	return 1.0*rand()/(RAND_MAX+1.0);
 }
 
-KDEWIN32_EXPORT int rand_r(unsigned *seed)
+KDEWIN_EXPORT int rand_r(unsigned *seed)
 {
     srand(*seed);
     return rand();

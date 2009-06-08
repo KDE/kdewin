@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <direct.h>
@@ -26,7 +26,7 @@
 
 #include <kde_file_win.h>
 
-KDEWIN32_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf)
+KDEWIN_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf)
 {
 	char fixed_file_name[4];
 	char *fixed_file_name2;
@@ -62,7 +62,7 @@ KDEWIN32_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf)
   return result;
 }
 
-KDEWIN32_EXPORT int kdewin32_lstat(const char *file_name, struct stat *buf)
+KDEWIN_EXPORT int kdewin32_lstat(const char *file_name, struct stat *buf)
 {
 	return kdewin32_stat(file_name, buf);
 }
@@ -75,12 +75,12 @@ int kdewin32_fix_flags(int flags)
 	return flags;
 }
 
-/*KDEWIN32_EXPORT int kdewin32_open(const char *path, int flags)
+/*KDEWIN_EXPORT int kdewin32_open(const char *path, int flags)
 {
 	return open(path, kdewin32_fix_flags(flags));
 }*/
 
-KDEWIN32_EXPORT int kdewin32_open(const char *path, int flags, ... /*mode_t mode*/)
+KDEWIN_EXPORT int kdewin32_open(const char *path, int flags, ... /*mode_t mode*/)
 {
 	mode_t mode = 0;
 	if (flags & O_CREAT) {
@@ -114,7 +114,7 @@ int kdewin32_fix_mode_string(char *fixed_mode, const char *mode)
 	return 0;
 }
 
-KDEWIN32_EXPORT FILE *kdewin32_fopen(const char *path, const char *mode)
+KDEWIN_EXPORT FILE *kdewin32_fopen(const char *path, const char *mode)
 {
 	char fixed_mode[4];
 	if (0!=kdewin32_fix_mode_string(fixed_mode, mode))
@@ -122,7 +122,7 @@ KDEWIN32_EXPORT FILE *kdewin32_fopen(const char *path, const char *mode)
 	return fopen(path, fixed_mode);
 }
 
-KDEWIN32_EXPORT FILE *kdewin32_fdopen(int fd, const char *mode)
+KDEWIN_EXPORT FILE *kdewin32_fdopen(int fd, const char *mode)
 {
 	char fixed_mode[4];
 	if (0!=kdewin32_fix_mode_string(fixed_mode, mode))
@@ -130,7 +130,7 @@ KDEWIN32_EXPORT FILE *kdewin32_fdopen(int fd, const char *mode)
 	return fdopen(fd, fixed_mode);
 }
 
-KDEWIN32_EXPORT FILE *kdewin32_freopen(const char *path, const char *mode, FILE *stream)
+KDEWIN_EXPORT FILE *kdewin32_freopen(const char *path, const char *mode, FILE *stream)
 {
 	char fixed_mode[4];
 	if (0!=kdewin32_fix_mode_string(fixed_mode, mode))
@@ -138,7 +138,7 @@ KDEWIN32_EXPORT FILE *kdewin32_freopen(const char *path, const char *mode, FILE 
 	return freopen(path, fixed_mode, stream);
 }
 
-KDEWIN32_EXPORT int kdewin32_rename(const char *src, const char *dest)
+KDEWIN_EXPORT int kdewin32_rename(const char *src, const char *dest)
 {
 	if (0==access(dest, 0/*exists*/)
 		&& 0 != remove(dest))
@@ -146,7 +146,7 @@ KDEWIN32_EXPORT int kdewin32_rename(const char *src, const char *dest)
 	return rename(src, dest);
 }
 
-KDEWIN32_EXPORT int kdewin32_mkdir(const char *path, mode_t mode)
+KDEWIN_EXPORT int kdewin32_mkdir(const char *path, mode_t mode)
 {
 	return mkdir(path);
 }

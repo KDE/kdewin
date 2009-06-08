@@ -38,7 +38,7 @@ struct tms {
 	clock_t	tms_cstime;		/* system time, children */
 };
 
-KDEWIN32_EXPORT clock_t times(struct tms *);
+KDEWIN_EXPORT clock_t times(struct tms *);
 
 #ifdef __cplusplus
 }

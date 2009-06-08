@@ -17,32 +17,32 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <pwd.h>
 
 /* these functions always fail for win32 */
 static struct passwd s_passwd = { "", "", -2, -2, "", "", "", "" };
 
-KDEWIN32_EXPORT struct passwd * getpwnam (const char *name)
+KDEWIN_EXPORT struct passwd * getpwnam (const char *name)
 {
     return &s_passwd;
 }
 
-KDEWIN32_EXPORT struct passwd * getpwuid (uid_t uid)
+KDEWIN_EXPORT struct passwd * getpwuid (uid_t uid)
 {
     return &s_passwd;
 }
 
-KDEWIN32_EXPORT void setpwent (void)
+KDEWIN_EXPORT void setpwent (void)
 {
 }
 
-KDEWIN32_EXPORT struct passwd *getpwent()
+KDEWIN_EXPORT struct passwd *getpwent()
 {
     return &s_passwd;
 }
 
-KDEWIN32_EXPORT void endpwent()
+KDEWIN_EXPORT void endpwent()
 {
 }
 

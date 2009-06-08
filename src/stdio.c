@@ -17,13 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 #include <windows.h>
 
 #include <stdio.h>
 
 //! Replaces _snprintf() because we want to behave like on UNIX
-KDEWIN32_EXPORT int kdewin32_snprintf(char *buffer, size_t count, const char *fmt, ...)
+KDEWIN_EXPORT int kdewin32_snprintf(char *buffer, size_t count, const char *fmt, ...)
 {
 	va_list ap;
 	int ret;

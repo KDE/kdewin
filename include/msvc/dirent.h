@@ -42,7 +42,7 @@ extern "C" {
 
 #define __dirfd(dir) (dir)->dd_fd
 
-#define KDEWIN32_HAVE_DIRENT_D_TYPE
+#define KDEWIN_HAVE_DIRENT_D_TYPE
 enum
   {
     DT_UNKNOWN = 0,
@@ -89,19 +89,19 @@ void _seekdir(DIR *dir,off_t offset);
 //long telldir (DIR *);
 //void seekdir (DIR *, off_t loc);
 
-KDEWIN32_EXPORT int scandir (const char *__dir,
+KDEWIN_EXPORT int scandir (const char *__dir,
              struct dirent ***__namelist,
              int (*select) (const struct dirent *),
              int (*compar) (const struct dirent **, const struct dirent **));
 
-KDEWIN32_EXPORT DIR * opendir(const char *);
-KDEWIN32_EXPORT int closedir(DIR *);
-KDEWIN32_EXPORT struct dirent* readdir(DIR *);
+KDEWIN_EXPORT DIR * opendir(const char *);
+KDEWIN_EXPORT int closedir(DIR *);
+KDEWIN_EXPORT struct dirent* readdir(DIR *);
 
 // Implement readdir_r(). For now do not provide dummy function to avoid setting HAVE_READDIR_R.
 // Code like DirectoryListThread::run() in kio/kio/kurlcompletion.cpp uses readdir() when !HAVE_READDIR_R.
 
-// KDEWIN32_EXPORT struct dirent* readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result);
+// KDEWIN_EXPORT struct dirent* readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result);
 
 int alphasort (const struct dirent **__a, const struct dirent **__b);
 

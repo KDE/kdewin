@@ -25,7 +25,7 @@
 #ifndef KDEWIN_MATH_H
 #define KDEWIN_MATH_H
 
-#include <winposix_export.h>
+#include <kdewin_export.h>
 
 // include everywhere
 #include <sys/types.h>
@@ -45,20 +45,20 @@ extern "C" {
 #endif
 
 // some definitions
-KDEWIN32_EXPORT float __INFF;
+KDEWIN_EXPORT float __INFF;
 #define HUGE_VALF __INFF
-KDEWIN32_EXPORT long double  __INFL;
+KDEWIN_EXPORT long double  __INFL;
 #define HUGE_VALL __INFL
 #define INFINITY HUGE_VALF
-KDEWIN32_EXPORT double __QNAN;
+KDEWIN_EXPORT double __QNAN;
 #define NAN __QNAN
 
-KDEWIN32_EXPORT __inline int isnan(double num) { return _isnan(num); }
-KDEWIN32_EXPORT __inline int isinf(double num) { return !_finite(num) && !_isnan(num); }
-KDEWIN32_EXPORT __inline int finite(double num) { return _finite(num); }
-KDEWIN32_EXPORT __inline int signbit(double num) { return _copysign(1.0, num) < 0; }
+KDEWIN_EXPORT __inline int isnan(double num) { return _isnan(num); }
+KDEWIN_EXPORT __inline int isinf(double num) { return !_finite(num) && !_isnan(num); }
+KDEWIN_EXPORT __inline int finite(double num) { return _finite(num); }
+KDEWIN_EXPORT __inline int signbit(double num) { return _copysign(1.0, num) < 0; }
 
-WINPOSIX_EXPORT double remainder(double x, double y);
+KDEWIN_EXPORT double remainder(double x, double y);
 
 // some functions which aren't available with msvc
 
@@ -182,72 +182,72 @@ WINPOSIX_EXPORT double remainder(double x, double y);
 // long double fminl (long double, long double)
 
 /* 7.12.5.1 */
-WINPOSIX_EXPORT float acoshf (float);
-WINPOSIX_EXPORT double acosh (double);
-WINPOSIX_EXPORT long double acoshl (long double);
+KDEWIN_EXPORT float acoshf (float);
+KDEWIN_EXPORT double acosh (double);
+KDEWIN_EXPORT long double acoshl (long double);
 
 /* 7.12.5.2 */
-WINPOSIX_EXPORT float asinhf (float);
-WINPOSIX_EXPORT double asinh (double);
-WINPOSIX_EXPORT long double asinhl (long double);
+KDEWIN_EXPORT float asinhf (float);
+KDEWIN_EXPORT double asinh (double);
+KDEWIN_EXPORT long double asinhl (long double);
 
 /* 7.12.5.3 */
-WINPOSIX_EXPORT float atanhf (float);
-WINPOSIX_EXPORT double atanh (double);
-WINPOSIX_EXPORT long double atanhl (long double);
+KDEWIN_EXPORT float atanhf (float);
+KDEWIN_EXPORT double atanh (double);
+KDEWIN_EXPORT long double atanhl (long double);
 
 /* 7.12.6.3 The expm1 functions */
-WINPOSIX_EXPORT double expm1(double);
-WINPOSIX_EXPORT float expm1f(float);
-WINPOSIX_EXPORT long double expm1l(long double);
+KDEWIN_EXPORT double expm1(double);
+KDEWIN_EXPORT float expm1f(float);
+KDEWIN_EXPORT long double expm1l(long double);
 
 /* 7.12.6.9 */
-WINPOSIX_EXPORT double log1p(double);
-WINPOSIX_EXPORT float log1pf(float);
-WINPOSIX_EXPORT long double log1pl(long double);
+KDEWIN_EXPORT double log1p(double);
+KDEWIN_EXPORT float log1pf(float);
+KDEWIN_EXPORT long double log1pl(long double);
 
 /* 7.12.8.1 The erf functions  */
-WINPOSIX_EXPORT double erf (double);
-WINPOSIX_EXPORT float erff (float);
-WINPOSIX_EXPORT long double erfl (long double);
+KDEWIN_EXPORT double erf (double);
+KDEWIN_EXPORT float erff (float);
+KDEWIN_EXPORT long double erfl (long double);
 
 /* 7.12.8.2 The erfc functions  */
-WINPOSIX_EXPORT double erfc (double);
-WINPOSIX_EXPORT float erfcf (float);
-WINPOSIX_EXPORT long double erfcl (long double);
+KDEWIN_EXPORT double erfc (double);
+KDEWIN_EXPORT float erfcf (float);
+KDEWIN_EXPORT long double erfcl (long double);
 
 /* 7.12.8.3 The lgamma functions */
-WINPOSIX_EXPORT float lgammaf (float);
-WINPOSIX_EXPORT double lgamma (double);
-WINPOSIX_EXPORT long double lgammal (long double);
+KDEWIN_EXPORT float lgammaf (float);
+KDEWIN_EXPORT double lgamma (double);
+KDEWIN_EXPORT long double lgammal (long double);
 
 /* 7.12.8.4 The tgamma functions */
-WINPOSIX_EXPORT float tgammaf (float);
-WINPOSIX_EXPORT double tgamma (double);
-WINPOSIX_EXPORT long double tgammal (long double);
+KDEWIN_EXPORT float tgammaf (float);
+KDEWIN_EXPORT double tgamma (double);
+KDEWIN_EXPORT long double tgammal (long double);
 
 #if !defined __cplusplus && defined _MSC_VER && _MSC_VER < 1400
 /* 7.12.6.1 */
-KDEWIN32_EXPORT __inline float expf(float x) {return ((float)exp((double)x)); }
+KDEWIN_EXPORT __inline float expf(float x) {return ((float)exp((double)x)); }
 /* 7.12.9.1 */
-KDEWIN32_EXPORT __inline float floorf(float x) {return ((float)floor((double)x)); }
-WINPOSIX_EXPORT __inline float ceilf(float x) {return ((float)ceil((double)x)); }
-KDEWIN32_EXPORT __inline float sinf(float x) {return ((float)sin((double)x)); }
-WINPOSIX_EXPORT __inline float cosf (float x) {return ((float)cos((double)x));}
-WINPOSIX_EXPORT __inline float tanf (float x) {return ((float)tan((double)x));}
+KDEWIN_EXPORT __inline float floorf(float x) {return ((float)floor((double)x)); }
+KDEWIN_EXPORT __inline float ceilf(float x) {return ((float)ceil((double)x)); }
+KDEWIN_EXPORT __inline float sinf(float x) {return ((float)sin((double)x)); }
+KDEWIN_EXPORT __inline float cosf (float x) {return ((float)cos((double)x));}
+KDEWIN_EXPORT __inline float tanf (float x) {return ((float)tan((double)x));}
 /* 7.12.6.7 */
-KDEWIN32_EXPORT __inline float logf(float x) {return ((float)log((double)x)); }
-KDEWIN32_EXPORT __inline float powf(float x, float y) {return ((float)pow((double)x, (double)y)); }
+KDEWIN_EXPORT __inline float logf(float x) {return ((float)log((double)x)); }
+KDEWIN_EXPORT __inline float powf(float x, float y) {return ((float)pow((double)x, (double)y)); }
 /* 7.12.6.8 */
-WINPOSIX_EXPORT __inline float log10f (float x) {return ((float)log10((double)x));}
+KDEWIN_EXPORT __inline float log10f (float x) {return ((float)log10((double)x));}
 /* 7.12.7.2 */
-WINPOSIX_EXPORT __inline float fabsf (float x) {return ((float)fabs((double)x));}
+KDEWIN_EXPORT __inline float fabsf (float x) {return ((float)fabs((double)x));}
 #endif
 
 /* 7.12.9.3 */
 // this is a little bit more complicated - don't raise an exception
 // -> set fpu control word bit 5 so it won't generate one
-WINPOSIX_EXPORT __inline float nearbyintf(float x)
+KDEWIN_EXPORT __inline float nearbyintf(float x)
 {
     unsigned int tmpMSW1;
     unsigned int tmpMSW2;
@@ -270,7 +270,7 @@ WINPOSIX_EXPORT __inline float nearbyintf(float x)
     }
 }
 
-WINPOSIX_EXPORT __inline double nearbyint(double x)
+KDEWIN_EXPORT __inline double nearbyint(double x)
 {
     unsigned int tmpMSW1;
     unsigned int tmpMSW2;
@@ -293,7 +293,7 @@ WINPOSIX_EXPORT __inline double nearbyint(double x)
     }
 }
 
-WINPOSIX_EXPORT __inline long double nearbyintl(long double x)
+KDEWIN_EXPORT __inline long double nearbyintl(long double x)
 {
     unsigned int tmpMSW1;
     unsigned int tmpMSW2;
@@ -317,7 +317,7 @@ WINPOSIX_EXPORT __inline long double nearbyintl(long double x)
 }
 
 /* 7.12.9.4 */
-WINPOSIX_EXPORT __inline float rintf( float x )
+KDEWIN_EXPORT __inline float rintf( float x )
 {
     __asm {
         fld x
@@ -325,7 +325,7 @@ WINPOSIX_EXPORT __inline float rintf( float x )
     }
 }
 
-WINPOSIX_EXPORT __inline double rint( double x )
+KDEWIN_EXPORT __inline double rint( double x )
 {
     __asm {
         fld x
@@ -333,7 +333,7 @@ WINPOSIX_EXPORT __inline double rint( double x )
     }
 }
 
-WINPOSIX_EXPORT __inline long double rintl( long double x )
+KDEWIN_EXPORT __inline long double rintl( long double x )
 {
     __asm {
         fld x
@@ -341,7 +341,7 @@ WINPOSIX_EXPORT __inline long double rintl( long double x )
     }
 }
 
-WINPOSIX_EXPORT __inline long lroundf ( float x )
+KDEWIN_EXPORT __inline long lroundf ( float x )
 {
   /* Add +/- 0.5, then round towards zero.  */
   float tmp = floorf ( x );
@@ -357,7 +357,7 @@ WINPOSIX_EXPORT __inline long lroundf ( float x )
 }
 
 /* 7.12.9.7 (before 7.12.9.6!)*/
-WINPOSIX_EXPORT __inline long lround ( double x )
+KDEWIN_EXPORT __inline long lround ( double x )
 {
   /* Add +/- 0.5 then then round towards zero.  */
   double tmp = floor ( x );
@@ -372,7 +372,7 @@ WINPOSIX_EXPORT __inline long lround ( double x )
   return (long)tmp;
 }
 
-WINPOSIX_EXPORT __inline long lroundl ( long double x )
+KDEWIN_EXPORT __inline long lroundl ( long double x )
 {
   /* Add +/- 0.5, then round towards zero.  */
   long double tmp = floorl ( x );
@@ -388,24 +388,24 @@ WINPOSIX_EXPORT __inline long lroundl ( long double x )
 }
 
 /* 7.12.9.6 */
-WINPOSIX_EXPORT __inline float roundf ( float x )
+KDEWIN_EXPORT __inline float roundf ( float x )
 {
   return (float)lroundf( x );
 }
 
-WINPOSIX_EXPORT __inline double round ( double x )
+KDEWIN_EXPORT __inline double round ( double x )
 {
   return (double)lround( x );
 }
 
-WINPOSIX_EXPORT __inline long double roundl ( long double x )
+KDEWIN_EXPORT __inline long double roundl ( long double x )
 {
   return (long double)lroundl( x );
 }
 
 /* 7.12.9.8 */
 /* round towards zero, regardless of fpu control word settings */
-WINPOSIX_EXPORT __inline float truncf( float x )
+KDEWIN_EXPORT __inline float truncf( float x )
 {
     unsigned int tmpMSW1;
     unsigned int tmpMSW2;
@@ -429,7 +429,7 @@ WINPOSIX_EXPORT __inline float truncf( float x )
     }
 }
 
-WINPOSIX_EXPORT __inline double trunc( double x )
+KDEWIN_EXPORT __inline double trunc( double x )
 {
     unsigned int tmpMSW1;
     unsigned int tmpMSW2;
@@ -453,7 +453,7 @@ WINPOSIX_EXPORT __inline double trunc( double x )
     }
 }
 
-WINPOSIX_EXPORT __inline long double truncl( long double x )
+KDEWIN_EXPORT __inline long double truncl( long double x )
 {
     unsigned int tmpMSW1;
     unsigned int tmpMSW2;
@@ -478,7 +478,7 @@ WINPOSIX_EXPORT __inline long double truncl( long double x )
 }
 
 /* 7.12.12.2 */
-WINPOSIX_EXPORT __inline double fmax (double a, double b)
+KDEWIN_EXPORT __inline double fmax (double a, double b)
 {
     if(isnan(a))
         return b;
@@ -487,7 +487,7 @@ WINPOSIX_EXPORT __inline double fmax (double a, double b)
     return a > b ? a : b;
 }
 
-WINPOSIX_EXPORT __inline float fmaxf (float a, float b)
+KDEWIN_EXPORT __inline float fmaxf (float a, float b)
 {
     if(isnan(a))
         return b;
@@ -496,7 +496,7 @@ WINPOSIX_EXPORT __inline float fmaxf (float a, float b)
     return a > b ? a : b;
 }
 
-WINPOSIX_EXPORT __inline long double fmaxl (long double a, long double b)
+KDEWIN_EXPORT __inline long double fmaxl (long double a, long double b)
 {
     if(isnan(a))
         return b;
@@ -506,7 +506,7 @@ WINPOSIX_EXPORT __inline long double fmaxl (long double a, long double b)
 }
 
 /* 7.12.12.3 */
-WINPOSIX_EXPORT __inline double fmin (double a, double b)
+KDEWIN_EXPORT __inline double fmin (double a, double b)
 {
     if(isnan(a))
         return b;
@@ -515,7 +515,7 @@ WINPOSIX_EXPORT __inline double fmin (double a, double b)
     return a < b ? a : b;
 }
 
-WINPOSIX_EXPORT __inline float fminf (float a, float b)
+KDEWIN_EXPORT __inline float fminf (float a, float b)
 {
     if(isnan(a))
         return b;
@@ -524,7 +524,7 @@ WINPOSIX_EXPORT __inline float fminf (float a, float b)
     return a < b ? a : b;
 }
 
-WINPOSIX_EXPORT __inline long double fminl (long double a, long double b)
+KDEWIN_EXPORT __inline long double fminl (long double a, long double b)
 {
     if(isnan(a))
         return b;

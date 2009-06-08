@@ -65,7 +65,7 @@ extern "C" {
 /**
  Sends signal to a process. 
  */
-KDEWIN32_EXPORT int kill(pid_t pid, int sig);
+KDEWIN_EXPORT int kill(pid_t pid, int sig);
  
 /** A typedef for signal handler
  */
@@ -88,7 +88,7 @@ typedef void (*sighandler_t)(int);
  @return the previous handler associated with the given signal. 
  Returns SIG_ERR on error, in which case errno is set to EINVAL. 
 */
-KDEWIN32_EXPORT sighandler_t kdewin32_signal(int signum, sighandler_t handler);
+KDEWIN_EXPORT sighandler_t kdewin32_signal(int signum, sighandler_t handler);
 
 #ifdef  __cplusplus
 }
