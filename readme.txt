@@ -1,4 +1,4 @@
-kdewin is a supplementary library and supplementary tools 
+kdewin is a supplementary library and have supplementary tools which are required for compiling KDE applications on Windows
 
 history
 -------
