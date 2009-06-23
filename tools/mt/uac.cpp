@@ -20,6 +20,7 @@
 */
 
 #include <io.h>
+#include <stdio.h>
 
 #include "resourcefile.h"
 
