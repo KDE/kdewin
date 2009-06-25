@@ -99,8 +99,10 @@ int kdewin32_fix_mode_string(char *fixed_mode, const char *mode)
 		return 1;
 	
 	strncpy(fixed_mode, mode, 3);
-	if (fixed_mode[0]=='b' || fixed_mode[1]=='b' || fixed_mode[0]=='t' || fixed_mode[1]=='t')
+	if (fixed_mode[0]=='b' || fixed_mode[1]=='b' || fixed_mode[0]=='t' || fixed_mode[1]=='t') {
+		fixed_mode[strlen(mode)] = 0;
 		return 0;
+	}
 	/* no 't' or 'b': append 'b' */
 	if (fixed_mode[1]=='+') {
 		fixed_mode[1]='b';
