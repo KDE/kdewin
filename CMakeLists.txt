@@ -1,6 +1,6 @@
 set (NAME kdewin)
 set (KDEWIN_VERSION 0x000400)
-set (KDEWIN_VERSION_STR 0.4.1)
+set (KDEWIN_VERSION_STR 0.4.2)
 # stay in sync with kdelibs
 cmake_minimum_required(VERSION 2.6.2)
 

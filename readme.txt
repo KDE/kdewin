@@ -9,6 +9,9 @@ windows application icons and to add specific vista manifests to applications
 
 history
 -------
+version 0.4.2
+- fixed bug in kdewin32_fix_mode_string() not terminating string correclty
+
 version 0.4.1
 - added class LinkFile from kdebase/runtime/platform/win/kwinstartmenu to be usable in more kde code 
 
