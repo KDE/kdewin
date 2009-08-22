@@ -99,45 +99,45 @@ int main(int argc, char **argv)
         string option = pos != string::npos ? arg.substr(0,pos) : arg;
         bool hasFileName = fileName.size() > 0;
 
-        if (option[0] != '-' && options[0] != '/') 
+        if (option == "-nologo" || option == "/nologo") 
         {
-            cerr << "invalid option prefix" << endl;
-            continue;
-        }   
-        option = option.substr(1);
-        if (option == "nologo") {
             nologo = true;
         }
+        else if (option == "-h" || option == "/h" || option == "-?" || option == "/?") 
+        {
+            printhelp();
+            return 0;
+        }
         //[ -manifest]
-        else if (option == "manifest")
+        else if (option == "-manifest" || option == "/manifest")
         {
             hasInputFile = true;
             // check if filename is present
             inputFile = argv[++i];
         }
         
-        else if (option == "out" && fileName.size())
+        else if ((option == "-out" || option == "/out") && fileName.size())
         {
             outputFile = fileName;
             hasOutputFile = true;
         }
         
         //[ -inputresource:<file>[;[#]<resource_id>] ]
-        else if (option == "inputresource" && hasFileName)
+        else if ((option == "-inputresource" || option == "/inputresource") && hasFileName)
         {
             inputResource = fileName;
             hasInputResource = true;
         }
 
         //[ -outputresource:<file>[;[#]<resource_id>] ]
-        else if (option == "outputresource" && hasFileName)
+        else if ((option == "-outputresource" || option == "/outputresource") && hasFileName)
         {
             outputResource = fileName;
             hasOutputResource = true;
         }
         
         //[ -updateresource:<file>[;[#]<resource_id>] ]
-        else if (option == "updateresource" && hasFileName)
+        else if ((option == "-updateresource" || option == "/updateresource") && hasFileName)
         {
             inputResource = fileName;
             hasInputResource = true;
