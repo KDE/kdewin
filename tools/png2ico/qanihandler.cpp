@@ -768,7 +768,6 @@ bool ANIReader::write(QIODevice * device, const QList<QImage> & images, int hots
         strcpy(af.FileId, "RIFF");
         int sz = 0;
         for (int i = 0; i < id.idCount; i++) {
-            uchar tmp[8];
             sz += 8 + 6 + BMP_INFOHDR_SIZE + ICONDIRENTRY_SIZE + imageData[i].size();
             
         }
