@@ -76,7 +76,9 @@ struct msghdr
 # define AF_APPLETALK    16              /* AppleTalk */
 # define AF_NETBIOS      17              /* NetBios-style addresses */
 # define AF_INET6        23              /* IP version 6 */
-# define AF_MAX          32
+# ifndef AF_MAX
+#  define AF_MAX          32
+# endif
 #endif // NTDDI_VERSION < 0x06000000
 
 /*
