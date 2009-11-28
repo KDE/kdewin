@@ -583,4 +583,8 @@ __inline long double pow(int x, long double y)
 #endif // _MSC_VER >= 1400
 #endif // __cplusplus
 
+#ifndef hypotf
+# define hypotf _hypotf
+#endif
+
 #endif /* KDEWIN_MATH_H */
