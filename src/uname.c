@@ -1,6 +1,6 @@
 /*
    This file is part of the KDE libraries
-   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2009 Jaroslaw Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,15 @@
 
 typedef void (WINAPI *PGNSI)(LPSYSTEM_INFO);
 
+#ifndef SM_TABLETPC
+# define SM_TABLETPC 86
+#endif
+#ifndef SM_MEDIACENTER
+# define SM_MEDIACENTER 87
+#endif
+#ifndef SM_STARTER
+# define SM_STARTER 88
+#endif
 #ifndef SM_SERVERR2
 # define SM_SERVERR2 89
 #endif
@@ -105,6 +114,12 @@ KDEWIN_EXPORT int uname(struct utsname *name)
 		}
 		sprintf (name->machine, "i%d86", proctype);
 		break;
+	case PROCESSOR_ARCHITECTURE_IA64:
+		strcpy (name->machine, "itanium");
+		break;
+	case PROCESSOR_ARCHITECTURE_AMD64:
+		strcpy (name->machine, "x64");
+		break;
 	case PROCESSOR_ARCHITECTURE_ALPHA:
 		strcpy (name->machine, "alpha");
 		break;
@@ -118,7 +133,8 @@ KDEWIN_EXPORT int uname(struct utsname *name)
 
 	strncpy(name->sysname, "Microsoft Windows", 19);
 
-	/* OS Type */
+	/* OS Type;
+	 NT support based on information from http://msdn.microsoft.com/en-us/library/ms724833(VS.85).aspx */
 	switch (versioninfo.dwPlatformId) {
 	case VER_PLATFORM_WIN32_NT:
 		switch (versioninfo.dwMajorVersion) {
@@ -132,11 +148,18 @@ KDEWIN_EXPORT int uname(struct utsname *name)
 				ostype = "2000";
 				break;
 			case 1:
-				ostype = "XP";
+				if (GetSystemMetrics(SM_MEDIACENTER))
+					ostype = "XP Media Center Edition";
+				else if (GetSystemMetrics(SM_STARTER))
+					ostype = "XP Starter Edition";
+				else if (GetSystemMetrics(SM_TABLETPC))
+					ostype = "XP Tablet PC Edition";
+				else
+					ostype = "XP";
 				break;
 			case 2:
 				if( GetSystemMetrics(SM_SERVERR2) )
-					ostype = "Server 2003 \"R2\"";
+					ostype = "Server 2003 R2";
 				else if( versioninfo.wProductType == VER_NT_WORKSTATION
 				         && sysinfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
 					ostype = "XP Professional x64 Edition";
@@ -153,9 +176,20 @@ KDEWIN_EXPORT int uname(struct utsname *name)
 					ostype = "Vista";
 					break;
 				default:
-					ostype = "Server \"Longhorn\"";
+					ostype = "Server 2008";
 					break;
 				}
+				break;
+			case 1:
+				switch (versioninfo.wProductType) {
+				case VER_NT_WORKSTATION:
+					ostype = "7";
+					break;
+				default:
+					ostype = "Server 2008 R2";
+					break;
+				}
+				break;
 			default:
 				break;
 			}
@@ -222,6 +256,8 @@ KDEWIN_EXPORT int uname(struct utsname *name)
 						osproduct = "Enterprise Edition";
 					else if ( versioninfo.wSuiteMask & VER_SUITE_BLADE )
 						osproduct = "Web Edition";
+					else if ( versioninfo.wSuiteMask & VER_SUITE_WH_SERVER )
+						osproduct = "Home Server";
 					else
 						osproduct = "Standard Edition";
 				}
