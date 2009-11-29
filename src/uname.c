@@ -37,6 +37,9 @@ typedef void (WINAPI *PGNSI)(LPSYSTEM_INFO);
 #ifndef SM_SERVERR2
 # define SM_SERVERR2 89
 #endif
+#ifndef VER_SUITE_WH_SERVER
+# define VER_SUITE_WH_SERVER      0x00008000
+#endif
 
 int kde_gethostname(char *__name, size_t __len);
 
