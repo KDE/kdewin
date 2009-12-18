@@ -132,7 +132,7 @@ install(TARGETS kdewin32
 # end for compatibiliy
 
 add_library(kdewin SHARED ${win_LIB_SRCS} ${kdewin_SRCS})
-target_link_libraries(kdewin advapi32 shell32 ws2_32 ${QT_QTCORE_LIBRARIES})
+target_link_libraries(kdewin advapi32 shell32 ws2_32 uuid ole32 ${QT_QTCORE_LIBRARIES})
 set_target_properties(kdewin PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN_LIB )
 set_target_properties(kdewin PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
 
