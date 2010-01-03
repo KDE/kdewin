@@ -116,7 +116,9 @@ KDEWIN_EXPORT char* getlogin();
 
 KDEWIN_EXPORT int fsync (int fd);
 
+#if __MINGW32_MAJOR_VERSION <= 3 && __MINGW32_MINOR_VERSION <= 14
 KDEWIN_EXPORT void usleep(unsigned int usec);
+#endif
 
 KDEWIN_EXPORT void sleep(unsigned int sec);
 

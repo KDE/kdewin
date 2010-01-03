@@ -182,10 +182,12 @@ KDEWIN_EXPORT char* getlogin()
 	return getlogin_buf;
 }
 
+#if !defined(__MINGW32_VERSION) || (__MINGW32_MAJOR_VERSION <= 3 && __MINGW32_MINOR_VERSION <= 14)
 KDEWIN_EXPORT void usleep(unsigned int usec)
 {
 	Sleep(usec/1000);
 }
+#endif
 
 KDEWIN_EXPORT void sleep(unsigned int sec)
 {
