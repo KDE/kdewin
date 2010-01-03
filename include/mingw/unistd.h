@@ -24,6 +24,8 @@
 #include <../include/unistd.h>
 
 #include <winsock2.h>
+#include <process.h>
+#include <io.h>
 
 #define environ _environ
 

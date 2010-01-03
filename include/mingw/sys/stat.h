@@ -14,6 +14,8 @@
 #include <sys/types.h>
 #include <../include/sys/stat.h>
 
+#include <io.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
