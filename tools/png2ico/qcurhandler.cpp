@@ -54,7 +54,7 @@
 #include <QtGui/QImage>
 #include <QtCore/QFile>
 #include <QtCore/QBuffer>
-#include <QDebug>
+#include <QtCore/QDebug>
 // These next two structs represent how the icon information is stored
 // in an ICO file.
 typedef struct

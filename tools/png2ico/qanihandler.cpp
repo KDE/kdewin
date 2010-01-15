@@ -48,12 +48,12 @@
 */
 
 
-#include <QDebug>
 #include "qanihandler.h"
 #include <QtCore/qendian.h>
 #include <QtGui/QImage>
 #include <QtCore/QFile>
 #include <QtCore/QBuffer>
+#include <QtCore/QDebug>
 // These next two structs represent how the icon information is stored
 // in an ICO file.
 typedef struct
