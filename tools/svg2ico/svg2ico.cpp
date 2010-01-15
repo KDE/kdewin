@@ -20,7 +20,7 @@
    svg to ico format converter 
 */
 
-#include <QtDebug>
+#include <QtCore/QtDebug>
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>
