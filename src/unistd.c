@@ -151,9 +151,9 @@ KDEWIN_EXPORT unsigned alarm(unsigned __secs )
   /** @todo */
   return 1;
 }
-
-typedef unsigned int size_t;
-
+#ifndef _HAVE_SIZE_T
+  typedef unsigned int size_t;
+#endif //_HAVE_SIZE_T
 /*#define INCL_WINSOCK_API_PROTOTYPES 0
 #include <winsock2.h>*/
 
@@ -182,7 +182,7 @@ KDEWIN_EXPORT char* getlogin()
 	return getlogin_buf;
 }
 
-#if !defined(__MINGW32_VERSION) || (__MINGW32_MAJOR_VERSION <= 3 && __MINGW32_MINOR_VERSION <= 14)
+#if !defined(__MINGW64__) && (!defined(__MINGW32_VERSION) || (__MINGW32_MAJOR_VERSION <= 3 && __MINGW32_MINOR_VERSION <= 14))
 KDEWIN_EXPORT void usleep(unsigned int usec)
 {
 	Sleep(usec/1000);

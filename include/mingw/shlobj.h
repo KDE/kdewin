@@ -21,6 +21,7 @@
 #define KDEWIN_SHLOBJ_H
 
 #define w32api_interface struct
+#undef interface
 #define interface w32api_interface
 #include <../include/shlobj.h>
 #undef interface

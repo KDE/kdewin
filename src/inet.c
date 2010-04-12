@@ -20,9 +20,7 @@
 
 #include <kdewin_export.h>
 
-#ifdef _MSC_VER
 #include <winsock2.h>
-#endif
 #include <ws2tcpip.h>
 #include <arpa/inet.h>
 

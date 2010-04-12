@@ -44,6 +44,12 @@ else (MINGW)
    set(_incDirPrefix msvc)
 endif(MINGW)
 
+INCLUDE(CheckTypeSize)
+CHECK_TYPE_SIZE(size_t HAVE_SIZE_T)
+if(HAVE_SIZE_T)
+  add_definitions(-D_HAVE_SIZE_T)
+endif(HAVE_SIZE_T)
+
 if (BUILD_EXAMPLES AND NOT MSVC)
    add_subdirectory( examples)
 endif(BUILD_EXAMPLES AND NOT MSVC)
@@ -168,3 +174,5 @@ install(FILES cmake/modules/FindKDEWIN_Packager.cmake       DESTINATION share/ap
 if (KDEWIN_PACKAGER_FOUND)
     KDEWIN_PACKAGER(${NAME} ${VERSION} "${NAME} supplementary library" "-srcexclude \"emerge unused\"")
 endif (KDEWIN_PACKAGER_FOUND)
+
+
