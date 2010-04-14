@@ -29,9 +29,16 @@
 
 #define UNICODE  0
 #include <windows.h>
+#ifdef __MINGW64__
 #include <shlguid.h>
 #include <shobjidl.h>
-
+#else
+#include <windowsx.h>
+#include <objbase.h>
+#include <shlobj.h>
+#include <shlwapi.h>
+#include <initguid.h>
+#endif
 /*
     add correct prefix for win32 filesystem functions
     described in msdn, but taken from Qt's qfsfileeninge_win.cpp
