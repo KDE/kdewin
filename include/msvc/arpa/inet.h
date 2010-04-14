@@ -44,8 +44,10 @@ KDEWIN_EXPORT int kde_inet_pton(int af, const char * src, void * dst);
 KDEWIN_EXPORT int inet_aton(const char *src, struct in_addr *addr);
 
 // FIXME - move to sys/errno.h
+#if _MSC_VER < 1600
 #ifndef EAFNOSUPPORT
 #define EAFNOSUPPORT 106
+#endif
 #endif
 
 #ifdef __cplusplus

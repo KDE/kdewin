@@ -146,6 +146,7 @@ struct msghdr
 #define SOPRI_NORMAL		1
 #define SOPRI_BACKGROUND	2
 
+#if _MSC_VER < 1600
 #define EALREADY      WSAEALREADY    
 #define ECONNABORTED  WSAECONNABORTED
 #define ECONNREFUSED  WSAECONNREFUSED
@@ -166,6 +167,7 @@ struct msghdr
 #define EMSGSIZE      WSAEMSGSIZE
 #define EADDRNOTAVAIL WSAEADDRNOTAVAIL
 #define EPROTONOSUPPORT WSAEPROTONOSUPPORT
+#endif
 
 /* better do this at the app level
 #ifdef ioctl
