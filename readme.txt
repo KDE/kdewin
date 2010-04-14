@@ -9,6 +9,13 @@ windows application icons and to add specific vista manifests to applications
 
 history
 -------
+version 0.5.1
+- splitted into kdewin library without qt and kdewin-qt library 
+- fixed  x64 mingw compile problems 
+
+version 0.5.0
+- initial x64 support (thanks to Patrick von Reth)
+
 version 0.4.2
 - fixed bug in kdewin32_fix_mode_string() not terminating string correclty
 

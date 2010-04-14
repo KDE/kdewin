@@ -18,20 +18,19 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "linkfile.h"
 
-#include <windows.h>
-#include <windowsx.h>
-#include <objbase.h>
-#include <shlobj.h>
-#include <shlwapi.h>
-#include <initguid.h>
+#include "linkfile.h"
 
 #include <QDir>
 #include <QFile>
 
 #include <qDebug>
 #define kDebug qDebug
+
+#define UNICODE  0
+#include <windows.h>
+#include <shlguid.h>
+#include <shobjidl.h>
 
 /*
     add correct prefix for win32 filesystem functions

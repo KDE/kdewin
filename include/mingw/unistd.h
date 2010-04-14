@@ -101,7 +101,9 @@ KDEWIN_EXPORT int link(const char *__name1, const char *__name2);
 
 KDEWIN_EXPORT int pipe(int *fd);
 
+#if !defined(__MINGW64__)
 KDEWIN_EXPORT pid_t fork(void);
+#endif
 
 KDEWIN_EXPORT pid_t setsid(void);
 

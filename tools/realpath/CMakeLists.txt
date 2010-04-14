@@ -1,3 +1,6 @@
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${target_include_directories})
+
 add_executable(realpath realpath.cpp)
 target_link_libraries(realpath kdewin)
+
+install(TARGETS realpath DESTINATION bin)

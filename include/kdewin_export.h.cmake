@@ -42,6 +42,25 @@
 # endif
 #endif
 
+#ifdef __GNUC__
+# ifdef _HAVE_GCC_VISIBILITY
+#  define KDEWIN_QT_EXPORT __attribute__ ((visibility("default")))
+#  define KDEWIN_QT_IMPORT
+# else
+#  define KDEWIN_QT_EXPORT
+#  define KDEWIN_QT_IMPORT
+# endif
+#else
+# ifndef KDEWIN_QT_EXPORT
+#  if defined(MAKE_KDEWIN_QT_LIB)
+#   define KDEWIN_QT_EXPORT __declspec(dllexport)
+#  else
+#   define KDEWIN_QT_EXPORT __declspec(dllimport)
+#  endif
+#   define KDEWIN_QT_IMPORT __declspec(dllimport)
+# endif
+#endif
+
 /* for compatibility */
 #define KDEWIN32_EXPORT KDEWIN_EXPORT
 #define KDEWIN32_IMPORT KDEWIN_IMPORT
