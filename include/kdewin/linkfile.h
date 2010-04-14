@@ -29,7 +29,7 @@
 namespace KDE {
 namespace Windows {
 
-class KDEWIN_EXPORT LinkFile {
+class KDEWIN_QT_EXPORT LinkFile {
     public:
         /// create instance 
         LinkFile(const QString &execPath, const QString &linkPath, const QString &description, const QString &workingDir);
@@ -68,7 +68,7 @@ class KDEWIN_EXPORT LinkFile {
         QStringList m_arguments;    
 };
 
-class KDEWIN_EXPORT LinkFiles {
+class KDEWIN_QT_EXPORT LinkFiles {
     public:
         static bool scan(QList <LinkFile> &files, const QString &rootDir);
         static bool create(QList <LinkFile> &newFiles);
