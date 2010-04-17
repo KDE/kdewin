@@ -73,6 +73,10 @@ if (BUILD_TESTS)
     add_subdirectory(tests)
 endif(BUILD_TESTS)
 
+if (BUILD_BASE_LIB)
+    add_subdirectory(dbghelp)
+endif (BUILD_BASE_LIB)
+
 include(Win32Macros)
 addExplorerWrapper(${NAME})
 
