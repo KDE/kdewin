@@ -45,6 +45,11 @@ else (MINGW)
    set (target_include_directories ${kdewin_SOURCE_DIR}/include/msvc )
 endif(MINGW)
 
+if(MINGW)
+	# set MINGW32 or MINGW64
+	INCLUDE(CheckMingwVersion)
+endif(MINGW)
+
 INCLUDE(CheckTypeSize)
 CHECK_TYPE_SIZE(size_t HAVE_SIZE_T)
 if(HAVE_SIZE_T)
