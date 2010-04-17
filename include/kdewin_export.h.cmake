@@ -22,6 +22,7 @@
 #define KDEWIN_EXPORT_H
 
 #define KDEWIN_VERSION @KDEWIN_VERSION@
+#cmakedefine KDEWIN_HAVE_USLEEP 1
 
 #ifdef __GNUC__
 # ifdef _HAVE_GCC_VISIBILITY

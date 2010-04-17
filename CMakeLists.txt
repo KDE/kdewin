@@ -45,16 +45,7 @@ else (MINGW)
    set (target_include_directories ${kdewin_SOURCE_DIR}/include/msvc )
 endif(MINGW)
 
-if(MINGW)
-	# set MINGW32 or MINGW64
-	INCLUDE(CheckMingwVersion)
-endif(MINGW)
-
-INCLUDE(CheckTypeSize)
-CHECK_TYPE_SIZE(size_t HAVE_SIZE_T)
-if(HAVE_SIZE_T)
-  add_definitions(-D_HAVE_SIZE_T)
-endif(HAVE_SIZE_T)
+INCLUDE(ConfigureChecks.cmake)
 
 configure_file(${kdewin_SOURCE_DIR}/include/kdewin_export.h.cmake
                ${kdewin_BINARY_DIR}/include/kdewin_export.h)
