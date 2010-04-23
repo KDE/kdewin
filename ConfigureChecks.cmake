@@ -3,11 +3,12 @@
 # When a HAVE_... ist defined, KDEWIN_HAVE_... has to be set to zero. 
 # KDEWIN_HAVE_... definitions have to be added to include/kdewin_export.h.cmake.  
 
-if(MINGW)
-	# set MINGW32 or MINGW64
-	INCLUDE(CheckMingwVersion)
-endif(MINGW)
-
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set (MINGW64 1)
+else()
+    set (MINGW32 1)
+endif()
+    
 INCLUDE(CheckTypeSize)
 INCLUDE(CheckFunctionExists)
 CHECK_TYPE_SIZE(size_t HAVE_SIZE_T)
