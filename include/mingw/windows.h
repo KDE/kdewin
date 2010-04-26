@@ -21,7 +21,7 @@
 #ifndef KDEWIN_WINDOWS_H
 #define KDEWIN_WINDOWS_H
 
-#ifdef __MINGW64
+#ifdef __MINGW64__
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
