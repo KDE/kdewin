@@ -133,13 +133,12 @@ KDEWIN_EXPORT int pipe(int *fd)
   /** @todo */
   return _pipe( fd, 256, O_BINARY ); /* OK? */
 }
-#if !defined(__MINGW64__)
+
 KDEWIN_EXPORT pid_t fork(void)
 {
   /** @todo */
   return -1;
 }
-#endif
 
 KDEWIN_EXPORT pid_t setsid(void)
 {
