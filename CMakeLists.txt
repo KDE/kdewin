@@ -77,6 +77,10 @@ if (BUILD_BASE_LIB)
     add_subdirectory(dbghelp)
 endif (BUILD_BASE_LIB)
 
+if (MINGW64)
+    add_subdirectory(wbem)
+endif (MINGW64)
+
 include(Win32Macros)
 addExplorerWrapper(${NAME})
 
