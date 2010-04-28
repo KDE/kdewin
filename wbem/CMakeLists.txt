@@ -1,7 +1,7 @@
 set(CMAKE_DEBUG_POSTFIX "d")
 
 if(MINGW)
-    add_library(wbemuuid STATIC wbemuuid.c)
+    add_library(wbemuuid STATIC wbemuuid.cpp)
 
 install(TARGETS wbemuuid
   LIBRARY DESTINATION lib
