@@ -9,6 +9,16 @@ windows application icons and to add specific vista manifests to applications
 
 history
 -------
+version 0.5.3
+- added wbemuuid library
+
+version 0.5.2
+- added dbghelp library
+
+version 0.5.1
+- splitted into kdewin library without qt and kdewin-qt library 
+- fixed  x64 mingw compile problems 
+
 version 0.5.1
 - splitted into kdewin library without qt and kdewin-qt library 
 - fixed  x64 mingw compile problems 
