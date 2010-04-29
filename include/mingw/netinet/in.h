@@ -28,6 +28,8 @@
 #define INCL_WINSOCK_API_PROTOTYPES 1 //for ntohl(), etc.
 #include <winsock2.h>
 
+#ifndef __MINGW64__
 #include <asm/byteorder.h>  /* htons(), etc. */
+#endif
 
 #endif  // KDEWIN_NETINET_IN_H
