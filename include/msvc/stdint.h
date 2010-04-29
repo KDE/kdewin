@@ -34,7 +34,7 @@
 #endif
 #ifndef __int32_t_defined
 # define __int32_t_defined
-  typedef signed long int32_t;
+  typedef signed int int32_t;
 #endif
 #ifndef __int64_t_defined
 # define __int64_t_defined
@@ -51,7 +51,7 @@
 #endif
 #ifndef __uint32_t_defined
 # define __uint32_t_defined
-  typedef unsigned long uint32_t;
+  typedef unsigned int uint32_t;
 #endif
 #ifndef __uint64_t_defined
 # define __uint64_t_defined
