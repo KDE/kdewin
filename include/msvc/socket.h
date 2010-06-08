@@ -128,6 +128,8 @@ struct msghdr
 #define	SOL_NETROM	259
 #define SOL_TCP		6
 #define SOL_UDP		17
+#define SOL_IPV6	41
+
 
 /* IP options */
 #define	IPTOS_LOWDELAY		0x10
