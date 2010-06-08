@@ -44,6 +44,13 @@ typedef struct _VMR9ProcAmpControlRange {
     float DefaultValue;
     float StepSize;
 } VMR9ProcAmpControlRange;
+
+/*http://msdn.microsoft.com/en-us/library/dd407361%28VS.85%29.aspx*/
+typedef enum  {
+  VMR9ARMode_None,
+  VMR9ARMode_LetterBox 
+} VMR9AspectRatioMode;
+
 #ifndef __IVMRWindowlessControl9_FWD_DEFINED__
 #define __IVMRWindowlessControl9_FWD_DEFINED__
 typedef interface IVMRWindowlessControl9 IVMRWindowlessControl9;
