@@ -150,5 +150,9 @@ KDEWIN_EXPORT int kdewin32_rename(const char *src, const char *dest)
 
 KDEWIN_EXPORT int kdewin32_mkdir(const char *path, mode_t mode)
 {
-	return mkdir(path);
+#ifndef _WIN32_WCE
+ 	return mkdir(path);
+#else
+    return mkdir(path,0);
+#endif
 }

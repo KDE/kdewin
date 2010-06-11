@@ -23,7 +23,11 @@
 #include <kdewin_export.h>
 
 /* regular header from msvc includes */
+#ifndef _WIN32_WCE
 #include <../include/sys/types.h>
+#else
+#include <../wcecompat/sys/types.h>
+#endif
 
 #include <BaseTsd.h>
 

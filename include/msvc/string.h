@@ -24,7 +24,11 @@
 #include <sys/types.h>
 
 /* regular header from msvc includes */
+#ifndef _WIN32_WCE
 #include <../include/string.h>
+#else
+#include <../wcecompat/string.h>
+#endif
 
 #ifndef strncasecmp
 #define strncasecmp strnicmp

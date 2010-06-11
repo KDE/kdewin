@@ -27,6 +27,10 @@
 #endif
 
 /* regular header from msvc includes */
+#ifndef _WIN32_WCE
 #include <../include/windows.h>
+#else
+#include <../Armv4i/windows.h>
+#endif
 
 #endif /* KDEWIN_WINDOWS_H */

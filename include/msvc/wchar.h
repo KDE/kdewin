@@ -22,7 +22,11 @@
 #define KDEWIN_WCHAR_H
 
 /* regular header from msvc includes */
+#ifndef _WIN32_WCE
 #include <../include/wchar.h>
+#else
+#include <../Armv4i/wchar.h>
+#endif
 
 #ifndef wcscasecmp
 #define wcscasecmp _wcsicmp

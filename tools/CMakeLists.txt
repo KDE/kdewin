@@ -1,5 +1,7 @@
 
-add_subdirectory(create_hash_table)
+if(NOT WINCE)
+ add_subdirectory(create_hash_table)
+endif(NOT WINCE)
 
 # vc90 does not need this tool
 if (NOT MSVC_VERSION EQUAL 1500)

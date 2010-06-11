@@ -34,8 +34,13 @@
 #ifndef _USE_MATH_DEFINES
 # define _USE_MATH_DEFINES
 #endif
+#ifndef _WIN32_WCE
 #include <../include/math.h>
 #include <../include/float.h>
+#else
+#include <../wcecompat/math.h>
+#include <../wcecompat/float.h>
+#endif
 
 #include <errno.h>
 #include <limits.h>
@@ -244,6 +249,7 @@ KDEWIN_EXPORT __inline float log10f (float x) {return ((float)log10((double)x));
 KDEWIN_EXPORT __inline float fabsf (float x) {return ((float)fabs((double)x));}
 #endif
 
+#ifndef _WIN32_WCE
 /* 7.12.9.3 */
 // this is a little bit more complicated - don't raise an exception
 // -> set fpu control word bit 5 so it won't generate one
@@ -340,6 +346,7 @@ KDEWIN_EXPORT __inline long double rintl( long double x )
         frndint
     }
 }
+#endif
 
 KDEWIN_EXPORT __inline long lroundf ( float x )
 {
@@ -403,6 +410,7 @@ KDEWIN_EXPORT __inline long double roundl ( long double x )
   return (long double)lroundl( x );
 }
 
+#ifndef _WIN32_WCE
 /* 7.12.9.8 */
 /* round towards zero, regardless of fpu control word settings */
 KDEWIN_EXPORT __inline float truncf( float x )
@@ -476,6 +484,7 @@ KDEWIN_EXPORT __inline long double truncl( long double x )
         fldcw tmpMSW1
     }
 }
+#endif
 
 /* 7.12.12.2 */
 KDEWIN_EXPORT __inline double fmax (double a, double b)

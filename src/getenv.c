@@ -24,6 +24,8 @@
 
 KDEWIN_EXPORT char * kde_getenv(const char *name)
 {
+//FIXME: There is no env in wince
+#ifndef _WIN32_WCE
   char dummy[1];
   int len;
   char *p;
@@ -41,6 +43,7 @@ KDEWIN_EXPORT char * kde_getenv(const char *name)
     return p;
 
   free(p);
+#endif
   return 0;
 }
 

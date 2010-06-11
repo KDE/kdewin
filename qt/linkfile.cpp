@@ -27,7 +27,9 @@
 #include <qDebug>
 #define kDebug qDebug
 
+#ifndef _WIN32_WCE
 #define UNICODE  0
+#endif
 #include <windows.h>
 #ifdef __MINGW64__
 #include <shlguid.h>
@@ -134,6 +136,7 @@ void LinkFile::setArguments(const QStringList &a)
 
 bool LinkFile::read()
 {
+#ifndef _WIN32_WCE
     LPCWSTR szShortcutFile = (LPCWSTR)m_linkPath.utf16();
     WCHAR szTarget[MAX_PATH];
     WCHAR szWorkingDir[MAX_PATH];
@@ -177,10 +180,15 @@ cleanup:
     if (ppf) ppf->Release();
     if (psl) psl->Release();
     return bResult;
+    
+#else
+    return false;
+#endif
 }
 
 bool LinkFile::create()
 {
+#ifndef _WIN32_WCE
     HRESULT hres;
     IShellLinkW* psl;
 
@@ -243,6 +251,9 @@ bool LinkFile::create()
     }
     CoUninitialize(); // cleanup COM after you're done using its services
     return SUCCEEDED(hres) ? true : false;
+#else
+    return false;
+#endif
 }
 
 bool LinkFile::remove()

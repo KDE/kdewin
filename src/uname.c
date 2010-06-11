@@ -17,11 +17,21 @@
    Boston, MA 02110-1301, USA.
 */
 
+/*
+    The code of uname is taken from gnulib, which can be found at
+    www.gnu.org/software/gnulib.
+
+*/
+
 #include <kdewin_export.h>
 #include <windows.h>
 
 #include <sys/utsname.h>
 #include <stdio.h>
+
+#ifdef _WIN32_WCE
+#include <stdlib.h>
+#endif
 
 typedef void (WINAPI *PGNSI)(LPSYSTEM_INFO);
 
@@ -41,6 +51,28 @@ typedef void (WINAPI *PGNSI)(LPSYSTEM_INFO);
 # define VER_SUITE_WH_SERVER      0x00008000
 #endif
 
+/* Mingw headers don't have all the platform codes.  */
+#ifndef VER_PLATFORM_WIN32_CE
+# define VER_PLATFORM_WIN32_CE 3
+#endif
+
+/* Some headers don't have all the processor architecture codes.  */
+#ifndef PROCESSOR_ARCHITECTURE_AMD64
+# define PROCESSOR_ARCHITECTURE_AMD64 9
+#endif
+#ifndef PROCESSOR_ARCHITECTURE_IA32_ON_WIN64
+# define PROCESSOR_ARCHITECTURE_IA32_ON_WIN64 10
+#endif
+
+/* Mingw headers don't have the latest processor codes.  */
+#ifndef PROCESSOR_AMD_X8664
+# define PROCESSOR_AMD_X8664 8664
+#endif
+
+#ifndef PROCESSOR_INTEL_IA64
+# define PROCESSOR_INTEL_IA64 2200
+#endif
+
 int kde_gethostname(char *__name, size_t __len);
 
 /**
@@ -58,246 +90,218 @@ int kde_gethostname(char *__name, size_t __len);
 
  Note that utsname.version is just a compile time of kdewin32 library (__DATE__).
 */
-KDEWIN_EXPORT int uname(struct utsname *name)
+KDEWIN_EXPORT int uname (struct utsname *buf)
 {
-	OSVERSIONINFOEX versioninfo;
-	SYSTEM_INFO sysinfo;
-	PGNSI pGNSI;
-	unsigned int proctype;
-	char valid_processor_level;
-	char *ostype = 0;
-	char *osproduct = 0;
-	char tmpnodename[MAX_COMPUTERNAME_LENGTH+2];
-	size_t tmpnodenamelen = MAX_COMPUTERNAME_LENGTH+1;
-	BOOL osVersionInfoEx;
-
-	if (!name)
-		return -1;
-
-	ZeroMemory(&sysinfo, sizeof(SYSTEM_INFO));
-	ZeroMemory(&versioninfo, sizeof(OSVERSIONINFOEX));
-
-	/* Try calling GetVersionEx using the OSVERSIONINFOEX, 
-	 if that fails, try using the OSVERSIONINFO. */
-	versioninfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	if ( !(osVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &versioninfo)) ) {
-		versioninfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
-		if (! GetVersionEx ( (OSVERSIONINFO *) &versioninfo) ) 
-			return -1;
-	}
-
-	valid_processor_level = versioninfo.dwPlatformId == VER_PLATFORM_WIN32_NT 
-		|| (versioninfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS && versioninfo.dwMinorVersion >= 10 /*>= win98*/);
-
-	/* Use GetNativeSystemInfo if supported or GetSystemInfo otherwise */
-	pGNSI = (PGNSI) GetProcAddress(
-		GetModuleHandle(TEXT("kernel32.dll")), "GetNativeSystemInfo");
-	if (NULL != pGNSI)
-		pGNSI(&sysinfo);
-	else
-		GetSystemInfo(&sysinfo);
-
-	/* CPU type */
-	switch (sysinfo.wProcessorArchitecture) {
-	case PROCESSOR_ARCHITECTURE_INTEL:
-		if (valid_processor_level) {
-			if (sysinfo.wProcessorLevel<3)
-				proctype = 3;
-			else if (sysinfo.wProcessorLevel > 9) /*Pentium 4?*/
-				proctype = 6;
-			else /*typical*/
-				proctype = sysinfo.wProcessorLevel;
-		}
-		else {
-			if (sysinfo.dwProcessorType == PROCESSOR_INTEL_386
-				|| sysinfo.dwProcessorType == PROCESSOR_INTEL_486)
-				proctype = sysinfo.dwProcessorType / 100;
-			else
-				proctype = PROCESSOR_INTEL_PENTIUM / 100;
-		}
-		sprintf (name->machine, "i%d86", proctype);
-		break;
-	case PROCESSOR_ARCHITECTURE_IA64:
-		strcpy (name->machine, "itanium");
-		break;
-	case PROCESSOR_ARCHITECTURE_AMD64:
-		strcpy (name->machine, "x64");
-		break;
-	case PROCESSOR_ARCHITECTURE_ALPHA:
-		strcpy (name->machine, "alpha");
-		break;
-	case PROCESSOR_ARCHITECTURE_MIPS:
-		strcpy (name->machine, "mips");
-		break;
-	default:
-		strcpy (name->machine, "unknown");
-		break;
-	}
-
-	strncpy(name->sysname, "Microsoft Windows", 19);
-
-	/* OS Type;
-	 NT support based on information from http://msdn.microsoft.com/en-us/library/ms724833(VS.85).aspx */
-	switch (versioninfo.dwPlatformId) {
-	case VER_PLATFORM_WIN32_NT:
-		switch (versioninfo.dwMajorVersion) {
-		case 3:
-		case 4:
-			ostype = "NT";
-			break;
-		case 5:
-			switch (versioninfo.dwMinorVersion) {
-			case 0:
-				ostype = "2000";
-				break;
-			case 1:
-				if (GetSystemMetrics(SM_MEDIACENTER))
-					ostype = "XP Media Center Edition";
-				else if (GetSystemMetrics(SM_STARTER))
-					ostype = "XP Starter Edition";
-				else if (GetSystemMetrics(SM_TABLETPC))
-					ostype = "XP Tablet PC Edition";
-				else
-					ostype = "XP";
-				break;
-			case 2:
-				if( GetSystemMetrics(SM_SERVERR2) )
-					ostype = "Server 2003 R2";
-				else if( versioninfo.wProductType == VER_NT_WORKSTATION
-				         && sysinfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
-					ostype = "XP Professional x64 Edition";
-				else
-					ostype = "Server 2003";
-				break;
-			}
-			break;
-		case 6:
-			switch (versioninfo.dwMinorVersion) {
-			case 0:
-				switch (versioninfo.wProductType) {
-				case VER_NT_WORKSTATION:
-					ostype = "Vista";
-					break;
-				default:
-					ostype = "Server 2008";
-					break;
-				}
-				break;
-			case 1:
-				switch (versioninfo.wProductType) {
-				case VER_NT_WORKSTATION:
-					ostype = "7";
-					break;
-				default:
-					ostype = "Server 2008 R2";
-					break;
-				}
-				break;
-			default:
-				break;
-			}
-			break;
-		default:
-			break;
-		}
-		break;
-	case VER_PLATFORM_WIN32_WINDOWS:
-		switch (versioninfo.dwMinorVersion) {
-		case 0:
-			ostype = "95";
-			break;
-		case 10:
-			ostype = "98";
-			break;
-		case 90:
-			ostype = "Me";
-			break;
-		default:
-			break;
-		}
-		break;
-	default:
-		break;
-	}
-
-	/* Test for specific product on Windows NT 4.0 SP6 and later */
-	if (osVersionInfoEx) {
-		/* Workstation type */
-		if ( versioninfo.wProductType == VER_NT_WORKSTATION
-		     && sysinfo.wProcessorArchitecture!=PROCESSOR_ARCHITECTURE_AMD64)
-		{
-			if( versioninfo.dwMajorVersion == 4 )
-				osproduct = "Workstation 4.0";
-			else if( versioninfo.wSuiteMask & VER_SUITE_PERSONAL )
-				osproduct = "Home Edition";
-			else
-				osproduct = "Professional";
-		}
-		/* Server type */
-		else if ( versioninfo.wProductType == VER_NT_SERVER
-		          || versioninfo.wProductType == VER_NT_DOMAIN_CONTROLLER )
-		{
-			if (versioninfo.dwMajorVersion == 5 && versioninfo.dwMinorVersion == 2) {
-				if ( sysinfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64 ) {
-					if( versioninfo.wSuiteMask & VER_SUITE_DATACENTER )
-						osproduct = "Datacenter Edition for Itanium-based Systems";
-					else if( versioninfo.wSuiteMask & VER_SUITE_ENTERPRISE )
-						osproduct = "Enterprise Edition for Itanium-based Systems";
-				}
-				else if ( sysinfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64 ) {
-					if ( versioninfo.wSuiteMask & VER_SUITE_DATACENTER )
-						osproduct = "Datacenter x64 Edition";
-					else if ( versioninfo.wSuiteMask & VER_SUITE_ENTERPRISE )
-						osproduct = "Enterprise x64 Edition";
-					else
-						osproduct = "Standard x64 Edition";
-				}
-				else {
-					if ( versioninfo.wSuiteMask & VER_SUITE_DATACENTER )
-						osproduct = "Datacenter Edition";
-					else if ( versioninfo.wSuiteMask & VER_SUITE_ENTERPRISE )
-						osproduct = "Enterprise Edition";
-					else if ( versioninfo.wSuiteMask & VER_SUITE_BLADE )
-						osproduct = "Web Edition";
-					else if ( versioninfo.wSuiteMask & VER_SUITE_WH_SERVER )
-						osproduct = "Home Server";
-					else
-						osproduct = "Standard Edition";
-				}
-			}
-			else if ( versioninfo.dwMajorVersion == 5 && versioninfo.dwMinorVersion == 0) {
-				if ( versioninfo.wSuiteMask & VER_SUITE_DATACENTER )
-					osproduct = "Datacenter Server";
-				else if ( versioninfo.wSuiteMask & VER_SUITE_ENTERPRISE )
-					osproduct = "Advanced Server";
-				else
-					osproduct = "Server";
-			}
-			else { /* NT 4.0 */
-				if ( versioninfo.wSuiteMask & VER_SUITE_ENTERPRISE )
-					osproduct = "Server 4.0, Enterprise Edition";
-				else
-					osproduct = "Server 4.0";
-			}
-		} /* \server type */
-	} /* \product */
-
-	if (0==kde_gethostname(tmpnodename, tmpnodenamelen))
-		strncpy(name->nodename, tmpnodename, 19);
-	else
-		name->nodename[0]=0;
-
-	strncpy(name->version, __DATE__, 19); /** @todo ok? */
-
-	if (osproduct)
-		sprintf(name->release, "%d.%d (%s %s)", versioninfo.dwMajorVersion, 
-			versioninfo.dwMinorVersion, ostype, osproduct);
-	else if (ostype)
-		sprintf(name->release, "%d.%d (%s)", versioninfo.dwMajorVersion, 
-			versioninfo.dwMinorVersion, ostype);
-	else
-		sprintf(name->release, "%d.%d", versioninfo.dwMajorVersion, 
-			versioninfo.dwMinorVersion);
-
-	return 0;
+  OSVERSIONINFO version;
+  const char *super_version;
+  
+#ifndef _WIN32_WCE
+  OSVERSIONINFOEX versionex;
+  BOOL have_versionex; /* indicates whether versionex is filled */
+  /* Preparation: Fill version and, if possible, also versionex.
+     But try to call GetVersionEx only once in the common case.  */
+  versionex.dwOSVersionInfoSize = sizeof (OSVERSIONINFOEX);
+  have_versionex = GetVersionEx ((OSVERSIONINFO *) &versionex);
+  if (have_versionex)
+    {
+      /* We know that OSVERSIONINFO is a subset of OSVERSIONINFOEX.  */
+      memcpy (&version, &versionex, sizeof (OSVERSIONINFO));
+    }
+  else
+    {
+      version.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
+      if (!GetVersionEx (&version))
+        abort ();
+    }
+#else
+  version.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
+  if (!GetVersionEx (&version))
+    abort ();
+#endif
+  /* Fill in nodename.  */
+  if (kde_gethostname (buf->nodename, sizeof (buf->nodename)) < 0)
+    strcpy (buf->nodename, "localhost");
+  /* Determine major-major Windows version.  */
+  if (version.dwPlatformId == VER_PLATFORM_WIN32_NT)
+    {
+      /* Windows NT or newer.  */
+      super_version = "NT";
+    }
+  else if (version.dwPlatformId == VER_PLATFORM_WIN32_CE)
+    {
+      /* Windows CE or Embedded CE.  */
+      super_version = "CE";
+    }
+  else if (version.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
+    {
+      /* Windows 95/98/ME.  */
+      switch (version.dwMinorVersion)
+        {
+        case 0:
+          super_version = "95";
+          break;
+        case 10:
+          super_version = "98";
+          break;
+        case 90:
+          super_version = "ME";
+          break;
+        default:
+          super_version = "";
+          break;
+        }
+    }
+  else
+    super_version = "";
+  /* Fill in sysname.  */
+#ifdef __MINGW32__
+  /* Returns a string compatible with the MSYS uname.exe program,
+     so that no further changes are needed to GNU config.guess.
+     For example,
+       $ ./uname.exe -s      => MINGW32_NT-5.1
+   */
+  sprintf (buf->sysname, "MINGW32_%s-%u.%u", super_version,
+           (unsigned int) version.dwMajorVersion,
+           (unsigned int) version.dwMinorVersion);
+#else
+  sprintf (buf->sysname, "Windows%s", super_version);
+#endif
+  /* Fill in release, version.  */
+  /* The MSYS uname.exe programs uses strings from a modified Cygwin runtime:
+       $ ./uname.exe -r      => 1.0.11(0.46/3/2)
+       $ ./uname.exe -v      => 2008-08-25 23:40
+     There is no point in imitating this behaviour.  */
+  if (version.dwPlatformId == VER_PLATFORM_WIN32_NT)
+    {
+      /* Windows NT or newer.  */
+      struct windows_version
+        {
+          int major;
+          int minor;
+          unsigned int server_offset;
+          const char *name;
+        };
+      /* Storing the workstation and server version names in a single
+         stream does not waste memory when they are the same.  These
+         macros abstract the representation.  VERSION1 is used if
+         version.wProductType does not matter, VERSION2 if it does.  */
+      #define VERSION1(major, minor, name) \
+        { major, minor, 0, name }
+      #define VERSION2(major, minor, workstation, server) \
+        { major, minor, sizeof workstation, workstation "\0" server }
+      static const struct windows_version versions[] =
+        {
+          VERSION2 (3, -1, "Windows NT Workstation", "Windows NT Server"),
+          VERSION2 (4, -1, "Windows NT Workstation", "Windows NT Server"),
+          VERSION1 (5, 0, "Windows 2000"),
+          VERSION1 (5, 1, "Windows XP"),
+          VERSION1 (5, 2, "Windows Server 2003"),
+         VERSION2 (6, 0, "Windows Vista", "Windows Server 2008"),
+          VERSION2 (6, 1, "Windows 7", "Windows Server 2008 R2"),
+          VERSION2 (-1, -1, "Windows", "Windows Server")
+        };
+      const char *base;
+      const struct windows_version *v = versions;
+      /* Find a version that matches ours.  The last element is a
+         wildcard that always ends the loop.  */
+      while ((v->major != version.dwMajorVersion && v->major != -1)
+             || (v->minor != version.dwMinorVersion && v->minor != -1))
+        v++;
+#ifndef _WIN32_WCE
+      if (have_versionex && versionex.wProductType != VER_NT_WORKSTATION)
+        base = v->name + v->server_offset;
+      else
+#endif
+        base = v->name;
+      if (v->major == -1 || v->minor == -1)
+        sprintf (buf->release, "%s %u.%u",
+                 base,
+                 (unsigned int) version.dwMajorVersion,
+                 (unsigned int) version.dwMinorVersion);
+      else
+        strcpy (buf->release, base);
+    }
+  else if (version.dwPlatformId == VER_PLATFORM_WIN32_CE)
+    {
+      /* Windows CE or Embedded CE.  */
+      sprintf (buf->release, "Windows CE %u.%u",
+               (unsigned int) version.dwMajorVersion,
+               (unsigned int) version.dwMinorVersion);
+    }
+  else
+    {
+      /* Windows 95/98/ME.  */
+      sprintf (buf->release, "Windows %s", super_version);
+    }
+  strcpy (buf->version, version.szCSDVersion);
+  /* Fill in machine.  */
+  {
+    SYSTEM_INFO info;
+    GetSystemInfo (&info);
+    /* Check for Windows NT or CE, since the info.wProcessorLevel is
+       garbage on Windows 95. */
+    if (version.dwPlatformId == VER_PLATFORM_WIN32_NT
+        || version.dwPlatformId == VER_PLATFORM_WIN32_CE)
+      {
+        /* Windows NT or newer, or Windows CE or Embedded CE.  */
+        switch (info.wProcessorArchitecture)
+          {
+          case PROCESSOR_ARCHITECTURE_AMD64:
+            strcpy (buf->machine, "x86_64");
+            break;
+          case PROCESSOR_ARCHITECTURE_IA64:
+            strcpy (buf->machine, "ia64");
+            break;
+          case PROCESSOR_ARCHITECTURE_INTEL:
+            strcpy (buf->machine, "i386");
+            if (info.wProcessorLevel >= 3)
+              buf->machine[1] =
+                '0' + (info.wProcessorLevel <= 6 ? info.wProcessorLevel : 6);
+            break;
+          case PROCESSOR_ARCHITECTURE_IA32_ON_WIN64:
+            strcpy (buf->machine, "i686");
+            break;
+          case PROCESSOR_ARCHITECTURE_MIPS:
+            strcpy (buf->machine, "mips");
+            break;
+          case PROCESSOR_ARCHITECTURE_ALPHA:
+          case PROCESSOR_ARCHITECTURE_ALPHA64:
+            strcpy (buf->machine, "alpha");
+            break;
+          case PROCESSOR_ARCHITECTURE_PPC:
+            strcpy (buf->machine, "powerpc");
+            break;
+          case PROCESSOR_ARCHITECTURE_SHX:
+            strcpy (buf->machine, "sh");
+            break;
+          case PROCESSOR_ARCHITECTURE_ARM:
+            strcpy (buf->machine, "arm");
+            break;
+          default:
+            strcpy (buf->machine, "unknown");
+            break;
+          }
+      }
+    else
+      {
+        /* Windows 95/98/ME.  */
+        switch (info.dwProcessorType)
+          {
+          case PROCESSOR_AMD_X8664:
+            strcpy (buf->machine, "x86_64");
+            break;
+          case PROCESSOR_INTEL_IA64:
+            strcpy (buf->machine, "ia64");
+            break;
+          default:
+            if (info.dwProcessorType % 100 == 86)
+              sprintf (buf->machine, "i%u",
+                       (unsigned int) info.dwProcessorType);
+            else
+              strcpy (buf->machine, "unknown");
+            break;
+          }
+      }
+  }
+  return 0;
 }

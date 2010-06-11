@@ -69,6 +69,7 @@ KDEWIN_EXPORT int kill(pid_t pid, int sig)
     return -1;
   }
   switch (sig) {
+#ifndef _WIN32_WCE
   case SIGINT:
     if (!GenerateConsoleCtrlEvent(CTRL_C_EVENT, (DWORD)pid))
       return handle_kill_result(h);
@@ -77,10 +78,12 @@ KDEWIN_EXPORT int kill(pid_t pid, int sig)
     if (!GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, (DWORD)pid))
       return handle_kill_result(h);
     break;
+#endif
   case SIGKILL:
     if (!TerminateProcess(h, sig))
       return handle_kill_result(h);
     break;
+#ifndef _WIN32_WCE
   default:
     h_thread = CreateRemoteThread(
       h, NULL, 0,
@@ -90,8 +93,13 @@ KDEWIN_EXPORT int kill(pid_t pid, int sig)
       WaitForSingleObject(h_thread, 5);
     else
       return handle_kill_result(h);
-  }
-  CloseHandle(h);
+#endif
+   }
+#ifndef _WIN32_WCE
+   CloseHandle(h);
+#else
+  CloseToolhelp32Snapshot(h);
+#endif
   return 0;
 }
 
@@ -112,11 +120,17 @@ KDEWIN_EXPORT pid_t waitpid(pid_t p, int *a, int b)
 KDEWIN_EXPORT sighandler_t kdewin32_signal(int signum, sighandler_t handler)
 {
   if (signum==SIGABRT
+#ifndef _WIN32_WCE
     || signum==SIGFPE
     || signum==SIGILL
     || signum==SIGINT
+#endif
     || signum==SIGSEGV
+#ifndef _WIN32_WCE
     || signum==SIGTERM)
+#else
+    )
+#endif
     return signal(signum, handler);
   return SIG_ERR;
 }

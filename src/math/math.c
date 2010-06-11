@@ -6,8 +6,13 @@
 #ifndef _USE_MATH_DEFINES
 # define _USE_MATH_DEFINES
 #endif
+#ifndef _WIN32_WCE
 #include <../include/math.h>
 #include <../include/float.h>
+#else
+#include <../wcecompat/math.h>
+#include <../wcecompat/float.h>
+#endif
 
 #include <kdewin_export.h>
 #include <errno.h>
@@ -128,6 +133,7 @@ KDEWIN_EXPORT long double atanhl ( long double x )
   return atanh ( ( double ) x );
 }
 
+#ifndef _WIN32_WCE
 /* Public domain, from mingwex library, adjusted to compile with msvc */
 KDEWIN_EXPORT double log1p(double x)
 {
@@ -221,4 +227,5 @@ KDEWIN_EXPORT long double log1pl(long double x)
 {
     return log1p((double)x);
 }
+#endif
 

@@ -59,7 +59,11 @@ endif(MSVC)
 # for compatibility
 set(CMAKE_DEBUG_POSTFIX "d")
 add_library(kdewin32 SHARED ${win_LIB_SRCS})
-target_link_libraries(kdewin32 advapi32 shell32 ws2_32 )
+if(NOT WINCE)
+    target_link_libraries(kdewin32 advapi32 shell32 ws2_32 )
+else(NOT WINCE)
+    target_link_libraries(kdewin32 ${QT_QTCORE_LIBRARIES} ws2 ${WCECOMPAT_LIBRARIES} toolhelp)
+endif(NOT WINCE)
 set_target_properties(kdewin32 PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN32_LIB )
 set_target_properties(kdewin32 PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
 set_target_properties(kdewin32 PROPERTIES COMPILE_FLAGS "-I${target_include_directories}")
@@ -85,7 +89,11 @@ install(TARGETS kdewin32
 # end for compatibiliy
 
 add_library(kdewin SHARED ${win_LIB_SRCS} ${kdewin_SRCS})
-target_link_libraries(kdewin advapi32 shell32 ws2_32 uuid ole32 ${QT_QTCORE_LIBRARIES})
+if(NOT WINCE)
+    target_link_libraries(kdewin advapi32 shell32 ws2_32 uuid ole32 ${QT_QTCORE_LIBRARIES})
+else(NOT WINCE)
+    target_link_libraries(kdewin ws2 ${QT_QTCORE_LIBRARIES} ${WCECOMPAT_LIBRARIES} toolhelp )
+endif(NOT WINCE)
 set_target_properties(kdewin PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN_LIB )
 set_target_properties(kdewin PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
 

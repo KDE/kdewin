@@ -45,6 +45,13 @@ else (MINGW)
    set (target_include_directories ${kdewin_SOURCE_DIR}/include/msvc )
 endif(MINGW)
 
+if(WINCE)
+    find_package(Wcecompat REQUIRED)
+	set (target_include_directories ${target_include_directories} ${WCECOMPAT_INCLUDE_DIR})
+    set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${WCECOMPAT_INCLUDE_DIR})
+    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${WCECOMPAT_LIBRARIES})
+endif(WINCE)
+
 INCLUDE(ConfigureChecks.cmake)
 
 configure_file(${kdewin_SOURCE_DIR}/include/kdewin_export.h.cmake

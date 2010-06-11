@@ -41,6 +41,7 @@ static void UnixTimevalToFileTime(struct timeval t, LPFILETIME pft)
 //
 // sys/time.h fnctions
 //
+#ifndef _WIN32_WCE
 KDEWIN_EXPORT int gettimeofday(struct timeval *__p, void *__t)
 {
 	union {
@@ -54,6 +55,7 @@ KDEWIN_EXPORT int gettimeofday(struct timeval *__p, void *__t)
 	
 	return (0); 
 }
+#endif
 
 //errno==EACCES on read-only devices
 KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2])
@@ -61,6 +63,10 @@ KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2])
 	FILETIME LastAccessTime;
 	FILETIME LastModificationTime;
 	HANDLE hFile;
+    
+#ifdef _WIN32_WCE
+	const wchar_t *wfilename = wce_mbtowc(filename);
+#endif
 
 	if(times) {
 		UnixTimevalToFileTime(times[0], &LastAccessTime);
@@ -71,8 +77,14 @@ KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2])
 		GetSystemTimeAsFileTime(&LastModificationTime);
 	}
  
+#ifndef _WIN32_WCE
 	hFile=CreateFileA(filename, FILE_WRITE_ATTRIBUTES, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE,
 			NULL, OPEN_EXISTING, 0, NULL);
+#else
+	hFile=CreateFileW(wfilename, FILE_WRITE_ATTRIBUTES, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE,
+			NULL, OPEN_EXISTING, 0, NULL);
+	free(wfilename);
+#endif
 	if(hFile==INVALID_HANDLE_VALUE) {
 		switch(GetLastError()) {
 			case ERROR_FILE_NOT_FOUND:

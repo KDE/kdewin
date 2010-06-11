@@ -21,7 +21,11 @@
 #define _KDEWIN_ERRNO_H
 
 #include <sys/types.h>
+#ifndef _WIN32_WCE
 #include <../include/errno.h>
+#else
+#include <../wcecompat/errno.h>
+#endif
 
 #ifndef _CRT_ERRNO_DEFINED
 #define _CRT_ERRNO_DEFINED

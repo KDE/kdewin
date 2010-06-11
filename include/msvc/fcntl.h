@@ -24,7 +24,12 @@
 #include <sys/types.h>
 
 /* regular header from msvc includes */
+#ifndef _WIN32_WCE
 # include <../include/fcntl.h>
+#else
+#include <../wcecompat/fcntl.h>
+#endif
+
 
 #ifdef __cplusplus
 extern "C" {

@@ -6,6 +6,10 @@
 #include <stdio.h>
 #include <windows.h>
 
+#ifdef _WIN32_WCE
+#include <direct.h>
+#endif
+
 char *realpath(const char *path,char *resolved_path)
 {
     int i;
@@ -27,10 +31,10 @@ int main(int argc, char** argv)
     char *out;
     out = realpath("c:/blib/../windows/test.txt", buf);
     fprintf(stderr, "out: %s\n", buf);
-    GetFullPathName("c:\\blib/../windows/test.txt", 500, buf, NULL);
+    GetFullPathNameA("c:\\blib/../windows/test.txt", 500, buf, NULL);
     fprintf(stderr, "out: %s\n", buf);
-    int ret = GetFullPathName("../windows/test.txt", 0, buf, NULL);
+    int ret = GetFullPathNameA("../windows/test.txt", 0, buf, NULL);
     fprintf(stderr, "ret: %d\n", ret);
-    GetFullPathName("../windows/test.txt", 500, buf, NULL);
+    GetFullPathNameA("../windows/test.txt", 500, buf, NULL);
     fprintf(stderr, "out: %s\n", buf);
 }

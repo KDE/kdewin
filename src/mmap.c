@@ -116,6 +116,8 @@ void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offse
     }
 
     // fd can be a crt or a win32 handle -> convert to win32 handle
+	// there are only one type of handles in wince so no need to convert
+#ifndef _WIN32_WCE
     if(!GetHandleInformation( (HANDLE)fd, &dwFlags )) {
         if(GetLastError() == ERROR_INVALID_HANDLE) {
             hfd = (HANDLE)_get_osfhandle( fd );
@@ -127,6 +129,9 @@ void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offse
     } else {
         hfd = (HANDLE)fd;
     }
+#else
+	hfd = (HANDLE)fd;
+#endif
 
     if ( !DuplicateHandle( GetCurrentProcess(), hfd, GetCurrentProcess(),
                            &mmi.hFile, 0, FALSE, DUPLICATE_SAME_ACCESS ) ) {

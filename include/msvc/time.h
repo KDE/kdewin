@@ -23,7 +23,11 @@
 // include everywhere
 #include <sys/types.h>
 
+#ifndef _WIN32_WCE
 #include <../include/time.h>
+#else
+#include <../wcecompat/time.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {

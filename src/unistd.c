@@ -72,7 +72,13 @@ KDEWIN_EXPORT int readlink(const char *__path, char *__buf, int __buflen)
 
 KDEWIN_EXPORT int symlink(const char *__name1, const char *__name2)
 {
-	if(!CopyFileA(__name1, __name2, FALSE)) {
+#ifdef _WIN32_WCE
+	const wchar_t * w__name1 = wce_mbtowc(__name1);
+	const wchar_t * w__name2 = wce_mbtowc(__name2);
+	if(!CopyFileW(w__name1, w__name2, FALSE)) {
+#else
+  if(!CopyFileA(__name1, __name2, FALSE)) {
+#endif
 	    switch(GetLastError()) {
 	        case ERROR_FILE_EXISTS:
     	        errno = EEXIST;
@@ -86,6 +92,10 @@ KDEWIN_EXPORT int symlink(const char *__name1, const char *__name2)
         }
 	    return -1; 
 	}
+#ifdef _WIN32_WCE
+	free(w__name1);
+	free(__name2);
+#endif
 	return 0;
 }
 
@@ -131,7 +141,12 @@ KDEWIN_EXPORT gid_t getegid (void)
 KDEWIN_EXPORT int pipe(int *fd)
 {
   /** @todo */
+  //FIXME: wince does not have pipes
+#ifndef _WIN32_WCE
   return _pipe( fd, 256, O_BINARY ); /* OK? */
+#else
+  return -1;
+#endif
 }
 
 KDEWIN_EXPORT pid_t fork(void)
@@ -163,10 +178,46 @@ KDEWIN_EXPORT unsigned alarm(unsigned __secs )
 
 KDEWIN_EXPORT int kde_gethostname(char *__name, size_t __len)
 {
+#ifndef _WIN32_WCE
   DWORD len = __len;
   if (0==GetComputerNameA(__name, &len))
+    return -1; 
+#else
+  const wchar_t dir[] = L"Ident";
+  const wchar_t name[] = L"Name";
+  HKEY root_key;
+  HKEY key_handle;
+  DWORD nbytes;
+  DWORD n1;
+  DWORD type;
+  wchar_t *wres = NULL;
+  char *res = NULL;
+  
+  root_key = HKEY_LOCAL_MACHINE;
+  if (RegOpenKeyExW (root_key, dir, 0, KEY_READ, &key_handle))
     return -1;
-  return 0;
+	
+	n1 = ((nbytes + sizeof(wchar_t) - 1) / sizeof (wchar_t)) + 1;
+  wres = malloc (n1 * sizeof (wchar_t));
+  if (!wres)
+    {
+      RegCloseKey (key_handle);
+      return -1;
+    }
+  if (RegQueryValueExW (key_handle, name, 0, &type, wres, &nbytes))
+    {
+      RegCloseKey (key_handle);
+      free (wres);
+      return -1;
+    }
+  RegCloseKey (key_handle);
+  wres[n1 - 1] = 0;
+  
+  res = wce_wctomb(wres);
+  strncpy(__name,res,__len);
+  free(res);
+#endif
+    return 0;
 }
 
 #define getlogin_buf_size 255
@@ -175,10 +226,13 @@ char getlogin_buf[getlogin_buf_size+1];
 KDEWIN_EXPORT char* getlogin()
 {
 /*! @todo make this reentrant!*/
+//FIXME: wince does not have users
 	size_t size = sizeof(getlogin_buf);
 	*getlogin_buf = 0;
+#ifndef _WIN32_WCE
 	if (!GetUserNameA(getlogin_buf, (LPDWORD)&size))
 		return 0;
+#endif
 	return getlogin_buf;
 }
 
@@ -266,11 +320,13 @@ KDEWIN_EXPORT int mkstemps (char* _template, int suffix_len)
   return -1;
 }
 
+#ifndef _WIN32_WCE
 // from kdecore/fakes.c
 KDEWIN_EXPORT int mkstemp (char* _template)
 {
   return mkstemps( _template, 0 );
 }
+#endif
 
 // from kdecore/fakes.c
 int seteuid(uid_t euid)
@@ -452,8 +508,13 @@ KDEWIN_EXPORT int getopt(int argc, char **argv, const char *optstring)
 
 int truncate(const char *path, off_t length)
 {
+	
+#ifndef _WIN32_WCE
     HANDLE hFile;
     LARGE_INTEGER fileSize;
+#endif
+    OutputDebugString(TEXT("ERROR broken function truncate from kdewin!"));	
+#ifndef _WIN32_WCE
 
     if( length < 0 )
     {
@@ -496,14 +557,20 @@ int truncate(const char *path, off_t length)
     }
 
     CloseHandle( hFile );
+#endif
     return 0;
 }
 
 #ifndef __MINGW32__
 // TODO (js) consider using _chsize_s
 int ftruncate(int fd, off_t length)
-{
+{	
+#ifndef _WIN32_WCE
   return _chsize (fd, length);
+#else
+  OutputDebugString(TEXT("ERROR not implemented function ftruncate from kdewin!"));
+  return 0;
+#endif
 }
 #endif  // __MINGW32__
 

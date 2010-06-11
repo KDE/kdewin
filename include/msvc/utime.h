@@ -24,6 +24,10 @@
 #include <sys/types.h>
 
 /* regular header from msvc includes */
+#ifndef _WIN32_WCE
 #include <../include/sys/utime.h>
+#else
+#include <../wcecompat/sys/utime.h>
+#endif
 
 #endif  // KDEWIN_UTIME_H

@@ -71,6 +71,8 @@ static void putenvMsvcrt(const char *name, const char *value)
 // from kdecore/fakes.c
 KDEWIN_EXPORT int setenv(const char *name, const char *value, int overwrite)
 {
+//FIXME: There is no env in wince, so disable it
+#ifndef _WIN32_WCE
 #ifndef KDEWIN_USE_ENV_S
     int i, iRet;
     char * a;
@@ -99,6 +101,9 @@ KDEWIN_EXPORT int setenv(const char *name, const char *value, int overwrite)
     iRet = putenv(a);
     free(a);
     return iRet;
+#endif
+#else
+	return -1;
 #endif
 }
 

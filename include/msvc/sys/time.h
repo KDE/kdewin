@@ -35,7 +35,9 @@ struct itimerval {
 extern "C" {
 #endif
 
+#ifndef WIN32_WCE // function is contained in wcecompat
 KDEWIN_EXPORT int gettimeofday(struct timeval *__p, void *__t);
+#endif
 
 //errno==EACCES on read-only devices
 KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2]);

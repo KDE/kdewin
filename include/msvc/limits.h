@@ -24,7 +24,11 @@
 #include <sys/types.h>
 
 /* regular header from msvc includes */
+#ifndef _WIN32_WCE
 #include <../include/limits.h>
+#else
+#include <../wcecompat/limits.h>
+#endif
 
 // FIXME: really needed?
 #include "sys/param.h"

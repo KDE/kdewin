@@ -23,11 +23,15 @@
 #include <kdewin_export.h>
 
 /* regular header from msvc includes */
+#include <io.h>
+#ifndef _WIN32_WCE
 #include <../include/sys/stat.h>
+#else
+#include <../wcecompat/sys/stat.h>
+#endif
 
 #include <time.h>
 #include <sys/types.h>
-#include <io.h>
 
 #ifdef __cplusplus
 extern "C" {

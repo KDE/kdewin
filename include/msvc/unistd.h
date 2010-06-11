@@ -121,7 +121,9 @@ KDEWIN_EXPORT int initgroups(const char *name, int basegid);
 
 KDEWIN_EXPORT int seteuid(uid_t euid);
 
+#ifndef _WIN32_WCE
 KDEWIN_EXPORT int mkstemp (char* _template);
+#endif
 
 KDEWIN_EXPORT char* mkdtemp (char* _template);
 

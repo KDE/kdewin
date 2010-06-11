@@ -25,7 +25,11 @@
 #include <sys/types.h>
 
 /* regular header from msvc includes */
+#ifndef _WIN32_WCE
 # include <../include/stdio.h>
+#else
+#include <../wcecompat/stdio.h>
+#endif
 
 
 #ifdef __cplusplus

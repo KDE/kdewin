@@ -24,7 +24,11 @@
 #include <sys/types.h>
 
 /* regular header from msvc includes */
+#ifndef _WIN32_WCE
 #include <../include/signal.h>
+#else
+#include <../wcecompat/signal.h>
+#endif
 
 #ifdef  __cplusplus
 extern "C" {

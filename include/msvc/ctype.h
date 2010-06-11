@@ -23,7 +23,11 @@
 // include everywhere
 #include <sys/types.h>
 
+#ifndef _WIN32_WCE
 #include <../include/ctype.h>
+#else
+#include <../wcecompat/ctype.h>
+#endif
 
 #ifdef __cplusplus
 inline int KDE_isspace(int c) { return ((unsigned)(c + 1) <= 256) && isspace(c); }
