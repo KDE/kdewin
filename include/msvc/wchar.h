@@ -25,7 +25,7 @@
 #ifndef _WIN32_WCE
 #include <../include/wchar.h>
 #else
-#include <../Armv4i/wchar.h>
+#include <../wcecompat/wchar.h>
 #endif
 
 #ifndef wcscasecmp

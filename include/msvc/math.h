@@ -545,7 +545,7 @@ KDEWIN_EXPORT __inline long double fminl (long double a, long double b)
 #ifdef __cplusplus
 }
 
-#if _MSC_VER >= 1400
+#if _MSC_VER >= 1400 && !defined(_WIN32_WCE)
 // convenience function to avoid useless casts from int to whatever
 __inline long double sqrt(int x)
 {

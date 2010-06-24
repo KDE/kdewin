@@ -57,7 +57,13 @@ KDEWIN_EXPORT int kill(pid_t pid, int sig)
     pe32.dwSize = sizeof(PROCESSENTRY32);
     if (!Process32First( h, &pe32 ))
       return handle_kill_result(h);
+// One is not supposed to use CloseHandle on that handle, says:
+// http://msdn.microsoft.com/en-us/library/ms885189.aspx
+#ifndef _WIN32_WCE
     CloseHandle(h);
+#else
+    CloseToolhelp32Snapshot(h);
+#endif
     return 0;
   }
   h = OpenProcess(

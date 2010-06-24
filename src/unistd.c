@@ -237,15 +237,17 @@ KDEWIN_EXPORT char* getlogin()
 }
 
 #ifndef HAVE_USLEEP
-KDEWIN_EXPORT void usleep(unsigned int usec)
+KDEWIN_EXPORT int usleep(unsigned int usec)
 {
 	Sleep(usec/1000);
+    return 0;
 }
 #endif
 
-KDEWIN_EXPORT void sleep(unsigned int sec)
+KDEWIN_EXPORT int sleep(unsigned int sec)
 {
 	Sleep(sec*1000);
+    return 0;
 }
 
 
