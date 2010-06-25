@@ -119,10 +119,10 @@ KDEWIN_EXPORT char* getlogin();
 KDEWIN_EXPORT int fsync (int fd);
 
 #ifdef KDEWIN_HAVE_USLEEP
-KDEWIN_EXPORT void usleep(unsigned int usec);
+KDEWIN_EXPORT int usleep(useconds_t useconds);
 #endif
 
-KDEWIN_EXPORT void sleep(unsigned int sec);
+KDEWIN_EXPORT int sleep(unsigned int sec);
 
 KDEWIN_EXPORT int setreuid(uid_t ruid, uid_t euid);
 
