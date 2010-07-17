@@ -90,9 +90,9 @@ if (BUILD_TESTS)
     add_subdirectory(tests)
 endif(BUILD_TESTS)
 
-if (BUILD_BASE_LIB AND NOT MINGW_W32)
+if (BUILD_BASE_LIB AND MINGW32)
     add_subdirectory(dbghelp)
-endif (BUILD_BASE_LIB AND NOT MINGW_W32)
+endif (BUILD_BASE_LIB AND MINGW32)
 
 if (MINGW64 OR MINGW_W32)
     add_subdirectory(wbem)
