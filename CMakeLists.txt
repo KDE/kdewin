@@ -18,6 +18,16 @@ OPTION(BUILD_QT_LIB "build qt based libraries " ON)
 OPTION(BUILD_BASE_LIB "build base libraries " ON)
 OPTION(BUILD_BASE_LIB_WITH_QT "build base library with qt part included" ON)
 
+# there are three mingw compilers 
+# compiler     cmake variables 
+# mingw4      MINGW32
+# mingw-w32   MINGW32  MINGW_W32
+# mingw-w64   MINGW64  MINGW_W64
+# the last one could be detected automatically 
+# the second one is selected with the following option 
+# the first one is selected by cmake as default
+OPTION(MINGW_W32 "build for mingw-w32 " OFF)
+
 find_package(KDEWIN_Packager)
 if (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT OR BUILD_TOOLS)
     # used by tools 
@@ -80,13 +90,13 @@ if (BUILD_TESTS)
     add_subdirectory(tests)
 endif(BUILD_TESTS)
 
-if (BUILD_BASE_LIB)
+if (BUILD_BASE_LIB AND NOT MINGW_W32)
     add_subdirectory(dbghelp)
-endif (BUILD_BASE_LIB)
+endif (BUILD_BASE_LIB AND NOT MINGW_W32)
 
-if (MINGW64)
+if (MINGW64 OR MINGW_W32)
     add_subdirectory(wbem)
-endif (MINGW64)
+endif (MINGW64 OR MINGW_W32)
 
 include(Win32Macros)
 addExplorerWrapper(${NAME})

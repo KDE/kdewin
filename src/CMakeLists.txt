@@ -120,7 +120,7 @@ install(FILES ../include/fixwinh.h ../include/kde_file_win.h   DESTINATION inclu
 install(DIRECTORY ../include/KDE                               DESTINATION include PATTERN ".svn" EXCLUDE)
 install(FILES ${CMAKE_BINARY_DIR}/include/kdewin_export.h      DESTINATION include)
 
-if(MINGW32)
+if(MINGW32 AND NOT MINGW_W32)
     install(DIRECTORY ../include/directx                       DESTINATION include/${_incDirPrefix} PATTERN ".svn" EXCLUDE)
-endif(MINGW32)
+endif(MINGW32 AND NOT MINGW_W32)
 

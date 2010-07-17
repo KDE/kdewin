@@ -6,6 +6,7 @@
 if (MINGW)
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         set (MINGW64 1)
+        set (MINGW_W64 1)
     else()
         set (MINGW32 1)
     endif()
