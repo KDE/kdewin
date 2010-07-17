@@ -119,6 +119,8 @@ install(DIRECTORY ../include/${_incDirPrefix}                  DESTINATION inclu
 install(FILES ../include/fixwinh.h ../include/kde_file_win.h   DESTINATION include)
 install(DIRECTORY ../include/KDE                               DESTINATION include PATTERN ".svn" EXCLUDE)
 install(FILES ${CMAKE_BINARY_DIR}/include/kdewin_export.h      DESTINATION include)
+
+message(STATUS "---" ${MINGW32})
 if(MINGW32)
     install(DIRECTORY ../include/directx                       DESTINATION include/${_incDirPrefix} PATTERN ".svn" EXCLUDE)
 endif(MINGW32)
