@@ -69,7 +69,7 @@ configure_file(${kdewin_SOURCE_DIR}/include/kdewin_export.h.cmake
 
                
 if (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT)
-   add_subdirectory(qt)
+   add_subdirectory(kde)
 endif (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT)
 
 if (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
