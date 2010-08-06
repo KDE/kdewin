@@ -50,12 +50,12 @@ extern "C" {
 #endif
 
 // some definitions
-KDEWIN_EXPORT float __INFF;
+extern KDEWIN_EXPORT float __INFF;
 #define HUGE_VALF __INFF
-KDEWIN_EXPORT long double  __INFL;
+extern KDEWIN_EXPORT long double  __INFL;
 #define HUGE_VALL __INFL
 #define INFINITY HUGE_VALF
-KDEWIN_EXPORT double __QNAN;
+extern KDEWIN_EXPORT double __QNAN;
 #define NAN __QNAN
 
 KDEWIN_EXPORT __inline int isnan(double num) { return _isnan(num); }
