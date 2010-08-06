@@ -58,7 +58,7 @@ endif(MSVC)
 
 # for compatibility
 set(CMAKE_DEBUG_POSTFIX "d")
-add_library(kdewin32 SHARED ${win_LIB_SRCS})
+add_library(kdewin32 ${LIBRARY_TYPE} ${win_LIB_SRCS})
 if(NOT WINCE)
     target_link_libraries(kdewin32 advapi32 shell32 ws2_32 )
 else(NOT WINCE)
@@ -88,7 +88,7 @@ install(TARGETS kdewin32
 )
 # end for compatibiliy
 
-add_library(kdewin SHARED ${win_LIB_SRCS} ${kdewin_SRCS})
+add_library(kdewin ${LIBRARY_TYPE} ${win_LIB_SRCS} ${kdewin_SRCS})
 if(NOT WINCE)
     target_link_libraries(kdewin advapi32 shell32 ws2_32 uuid ole32 ${QT_QTCORE_LIBRARIES})
 else(NOT WINCE)

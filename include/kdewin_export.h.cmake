@@ -34,7 +34,10 @@
 # endif
 #else
 # ifndef KDEWIN_EXPORT
-#  if defined(MAKE_KDEWIN_LIB) || defined(MAKE_KDEWIN32_LIB)
+# if defined(KDEWIN_STATIC_LIBS)
+   /* No export/import for static libraries */
+#  define KDEWIN_EXPORT
+#  elif defined(MAKE_KDEWIN_LIB) || defined(MAKE_KDEWIN32_LIB)
 #   define KDEWIN_EXPORT __declspec(dllexport)
 #  else
 #   define KDEWIN_EXPORT __declspec(dllimport)
