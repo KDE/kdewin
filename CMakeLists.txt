@@ -17,6 +17,7 @@ OPTION(BUILD_TOOLS "build tools" OFF)
 OPTION(BUILD_QT_LIB "build qt based libraries " ON)
 OPTION(BUILD_BASE_LIB "build base libraries " ON)
 OPTION(BUILD_BASE_LIB_WITH_QT "build base library with qt part included" ON)
+OPTION(STATIC_LIBRARY "Build kdewin as a static library." OFF)
 
 # there are three mingw compilers 
 # compiler     cmake variables 
@@ -60,11 +61,16 @@ if(WINCE)
 	set (target_include_directories ${target_include_directories} ${WCECOMPAT_INCLUDE_DIR})
     set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${WCECOMPAT_INCLUDE_DIR})
     set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${WCECOMPAT_LIBRARIES})
-    set(LIBRARY_TYPE STATIC)
-    add_definitions(-DKDEWIN_STATIC_LIBS)
-else(WINCE)
-  set(LIBRARY_TYPE SHARED)
+    set(STATIC_LIBRARY ON)
 endif(WINCE)
+
+if(STATIC_LIBRARY)
+  set(LIBRARY_TYPE STATIC)
+  add_definitions(-DKDEWIN_STATIC_LIBS)
+  message(STATUS "Building kdewin as a static library")
+else(STATIC_LIBRARY)
+  set(LIBRARY_TYPE SHARED)
+endif(STATIC_LIBRARY)
 
 INCLUDE(ConfigureChecks.cmake)
 
