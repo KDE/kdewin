@@ -765,16 +765,16 @@ bool ANIReader::write(QIODevice * device, const QList<QImage> & images, int hots
 
 
         RIFFANIFILE af;
-        strcpy(af.FileId, "RIFF");
+        strncpy(af.FileId, "RIFF", 4);
         int sz = 0;
         for (int i = 0; i < id.idCount; i++) {
             sz += 8 + 6 + BMP_INFOHDR_SIZE + ICONDIRENTRY_SIZE + imageData[i].size();
             
         }
         af.Size = 4 + ANIHEADERSUBCHUNK_SIZE + LISTFRAMECHUNK_SIZE + sz;
-        strcpy(af.FormID, "ACON");
+        strncpy(af.FormID, "ACON", 4);
         
-        strcpy(af.AniHeader.ChunkId, "anih");
+        strncpy(af.AniHeader.ChunkId, "anih", 4);
         af.AniHeader.Size = 36;
         af.AniHeader.HeaderSize = 36;
         af.AniHeader.NumFrames = id.idCount;
@@ -786,9 +786,9 @@ bool ANIReader::write(QIODevice * device, const QList<QImage> & images, int hots
         af.AniHeader.DisplayRate = framerate;
         af.AniHeader.Flags = 0x00000001;
         
-        strcpy(af.ListFrame.ListId, "LIST");
+        strncpy(af.ListFrame.ListId, "LIST", 4);
         af.ListFrame.ListSize = sz+4;
-        strcpy(af.ListFrame.ListType, "fram");
+        strncpy(af.ListFrame.ListType, "fram", 4);
         
         bool bOk = (device->write((char*)&af,  sizeof(af)) == sizeof(af)) ? true : false;
         
