@@ -94,7 +94,7 @@ KDEWIN_EXPORT int symlink(const char *__name1, const char *__name2)
 	}
 #ifdef _WIN32_WCE
 	free(w__name1);
-	free(__name2);
+	free(w__name2);
 #endif
 	return 0;
 }
