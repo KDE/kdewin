@@ -181,7 +181,7 @@ KDEWIN_EXPORT int kde_gethostname(char *__name, size_t __len)
 #ifndef _WIN32_WCE
   DWORD len = __len;
   if (0==GetComputerNameA(__name, &len))
-    return -1; 
+    return -1;
 #else
   const wchar_t dir[] = L"Ident";
   const wchar_t name[] = L"Name";
@@ -192,13 +192,19 @@ KDEWIN_EXPORT int kde_gethostname(char *__name, size_t __len)
   DWORD type;
   wchar_t *wres = NULL;
   char *res = NULL;
-  
+
   root_key = HKEY_LOCAL_MACHINE;
   if (RegOpenKeyExW (root_key, dir, 0, KEY_READ, &key_handle))
     return -1;
-	
-	n1 = ((nbytes + sizeof(wchar_t) - 1) / sizeof (wchar_t)) + 1;
-  wres = malloc (n1 * sizeof (wchar_t));
+
+  if (RegQueryValueExW (key_handle, name, 0, &type, NULL, &nbytes))
+    {
+      RegCloseKey (key_handle);
+      return -1;
+    }
+  n1 = ((nbytes + sizeof(wchar_t) - 1) / sizeof (wchar_t)) + 1;
+  nbytes = n1 * sizeof (wchar_t);
+  wres = malloc (nbytes);
   if (!wres)
     {
       RegCloseKey (key_handle);
@@ -212,10 +218,11 @@ KDEWIN_EXPORT int kde_gethostname(char *__name, size_t __len)
     }
   RegCloseKey (key_handle);
   wres[n1 - 1] = 0;
-  
+
   res = wce_wctomb(wres);
   strncpy(__name,res,__len);
   free(res);
+  free (wres);
 #endif
     return 0;
 }
