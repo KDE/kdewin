@@ -31,6 +31,10 @@
 
 #include <sys/lock.h>
 
+#ifdef _WIN32_WCE
+#include <altcecrt.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -55,7 +55,9 @@ extern "C" {
 #define	S_IFBLK		_IFBLK
 #define	S_IFLNK		_IFLNK
 #define	S_IFSOCK	_IFSOCK
+#ifndef S_IFIFO
 #define	S_IFIFO		_IFIFO
+#endif
 
 #define	S_IRWXU 	(S_IRUSR | S_IWUSR | S_IXUSR)
 #define		S_IRUSR	0000400	/* read permission, owner */
@@ -72,9 +74,13 @@ extern "C" {
 
 #define	S_ISBLK(m)	(((m)&_IFMT) == _IFBLK)
 #define	S_ISCHR(m)	(((m)&_IFMT) == _IFCHR)
-#define	S_ISDIR(m)	(((m)&_IFMT) == _IFDIR)
+#ifndef S_ISDIR
+#define S_ISDIR(X) (((X) & S_IFMT) == S_IFDIR)
+#endif
 #define	S_ISFIFO(m)	(((m)&_IFMT) == _IFIFO)
-#define	S_ISREG(m)	(((m)&_IFMT) == _IFREG)
+#ifndef S_ISREG
+#define S_ISREG(X) (((X) & S_IFMT) == S_IFREG)
+#endif
 #define	S_ISLNK(m)	(((m)&_IFMT) == _IFLNK)
 #define	S_ISSOCK(m)	(((m)&_IFMT) == _IFSOCK)
 

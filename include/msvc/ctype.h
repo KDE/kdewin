@@ -36,6 +36,8 @@ inline int KDE_isspace(int c) { return ((unsigned)(c + 1) <= 256) && isspace(c);
 #define KDE_isspace(__c) (((unsigned)(__c + 1) <= 256) && _isctype(__c,_SPACE))
 #endif
 
+#ifndef isspace
 #define isspace KDE_isspace
+#endif
 
 #endif /* KDEWIN_CTYPE_H */
