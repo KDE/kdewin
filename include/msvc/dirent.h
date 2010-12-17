@@ -28,6 +28,7 @@
 #include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 
 #include <sys/lock.h>
 
@@ -71,13 +72,30 @@ struct dirent {
 
 /* typedef DIR - not the same as Unix */
 typedef struct {
-    long handle;                /* _findfirst/_findnext handle */
-    short offset;                /* offset into directory */
+    HANDLE handle;              /* FindFirst/FindNext handle */
+    short offset;               /* offset into directory */
     short finished;             /* 1 if there are not more files */
-    struct _finddata_t fileinfo;  /* from _findfirst/_findnext */
+    WIN32_FIND_DATAA fileinfo;  /* from FindFirst/FindNext */
     char *dir;                  /* the dir we are reading */
     struct dirent dent;         /* the dirent to return */
 } DIR;
+
+#ifdef _WIN32_WCE
+# define FindFirstFileA _kdewin_wince_FindFirstFileA
+HANDLE FindFirstFileA(LPCSTR,LPWIN32_FIND_DATAA);
+
+# define FindNextFileA _kdewin_wince_FindNextFileA
+BOOL FindNextFileA(HANDLE,LPWIN32_FIND_DATAA);
+
+static BOOL
+convert_find_data (LPWIN32_FIND_DATAW fdw, LPWIN32_FIND_DATAA fda);
+
+# define strAtoW _kdewin_wince_strAtoW
+static LPWSTR strAtoW( LPCSTR str );
+
+# define strWtoA _kdewin_wince_strWtoA
+static LPSTR strWtoA( LPCWSTR str );
+#endif
 
 /* --- redundant --- */
 
