@@ -1,6 +1,6 @@
 set (NAME kdewin)
-set (KDEWIN_VERSION 0x000504)
-set (KDEWIN_VERSION_STR 0.5.4)
+set (KDEWIN_VERSION 0x000505)
+set (KDEWIN_VERSION_STR 0.5.5)
 # stay in sync with kdelibs
 cmake_minimum_required(VERSION 2.6.2)
 
@@ -111,10 +111,20 @@ endif (MINGW64 OR MINGW_W32)
 include(Win32Macros)
 addExplorerWrapper(${NAME})
 
-install(FILES readme.txt  DESTINATION doc/${NAME}-${KDEWIN_VERSION_STR})
+
+if (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
+    install(FILES readme.txt  DESTINATION doc/kdewin-${KDEWIN_VERSION_STR})
+endif (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
+    
+if (BUILD_TOOLS)
+    install(FILES readme-tools.txt  DESTINATION doc/kdewin-tools-${KDEWIN_VERSION_STR})
+endif (BUILD_TOOLS)
 
 # kdewin package support 
-install(FILES cmake/modules/FindKDEWIN_Packager.cmake       DESTINATION share/apps/cmake/modules)
+if (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
+    install(FILES cmake/modules/FindKDEWIN_Packager.cmake       DESTINATION share/apps/cmake/modules)
+endif (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
+
 if (KDEWIN_PACKAGER_FOUND)
     KDEWIN_PACKAGER(${NAME} ${VERSION} "${NAME} supplementary library" "-srcexclude \"emerge unused\"")
 endif (KDEWIN_PACKAGER_FOUND)

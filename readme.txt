@@ -1,14 +1,41 @@
-KDEWin is a supplementary library and provides supplementary tools which are 
-required for compiling KDE applications on Windows. 
+KDEWin is a supplementary library which are required for compiling 
+KDE applications on Windows. 
 
 The library provides posix related definitions and functions which are not 
 available on supported windows compilers and SDK's.
-The tools (png2ico, svg2ico) are used by the cmake buildsystem to support 
-windows application icons and to add specific vista manifests to applications
-(mt for mingw and vs2005). 
 
 history
 -------
+version 0.5.5
+- removed obsolate kdewin32 library
+- splitted source to be able to build separate binary packages like 
+  kdewin (without qt), kdewin-tools and kdewin-qt/kde
+
+version 0.5.4
+- use the dirent implementation from dbus which is threadsave for wince and
+- uses more native functions on windows.
+- remove some warnings in the wince build
+- fix gethostname for wince
+- fame goes to Marcus Brinkmann, who found it and fixed it
+- fix symlink for wince
+- use strncpy instead
+- fix size_t for win64
+- Adding a STATIC_LIBRARY build option to kdewin, akonadi, kdelibs and kdepimlibs
+- do not build and install dbghelp for mingw_w32
+- fixed the static build
+- made it possible to link it staticly
+- set wince to standard link static
+- Update CMakeLists.txt to reflect the renaming of qt folder to kde.
+- tenamed qt to kde to reflect namespace
+- add subdirectory dbghelp only if on mingw32
+- added MINGW_W32 option for mingw-w32 compiler support
+- be more silent
+- bug fix: MINGW32/MINGW64 should only be set when using mingw compilers
+- fixed mingw header
+- fixed some stuff for wince
+- add SOL_IPV6 for programs which need it (like libktorrent)
+- wince support
+
 version 0.5.3
 - added wbemuuid library
 
