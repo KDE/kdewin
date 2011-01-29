@@ -18,31 +18,27 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_EXPORT_H
-#define KDEWIN_EXPORT_H
+#ifndef KDEWIN_QT_EXPORT_H
+#define KDEWIN_QT_EXPORT_H
 
-#define KDEWIN_VERSION @KDEWIN_VERSION@
-#cmakedefine KDEWIN_HAVE_USLEEP 1
+#define KDEWIN_QT_VERSION @KDEWIN_VERSION@
 
 #ifdef __GNUC__
 # ifdef _HAVE_GCC_VISIBILITY
-#  define KDEWIN_EXPORT __attribute__ ((visibility("default")))
-#  define KDEWIN_IMPORT
+#  define KDEWIN_QT_EXPORT __attribute__ ((visibility("default")))
+#  define KDEWIN_QT_IMPORT
 # else
-#  define KDEWIN_EXPORT
-#  define KDEWIN_IMPORT
+#  define KDEWIN_QT_EXPORT
+#  define KDEWIN_QT_IMPORT
 # endif
 #else
-# ifndef KDEWIN_EXPORT
-# if defined(KDEWIN_STATIC_LIBS)
-   /* No export/import for static libraries */
-#  define KDEWIN_EXPORT
-#  elif defined(MAKE_KDEWIN_LIB) || defined(MAKE_KDEWIN32_LIB)
-#   define KDEWIN_EXPORT __declspec(dllexport)
+# ifndef KDEWIN_QT_EXPORT
+#  if defined(MAKE_KDEWIN_QT_LIB)
+#   define KDEWIN_QT_EXPORT __declspec(dllexport)
 #  else
-#   define KDEWIN_EXPORT __declspec(dllimport)
+#   define KDEWIN_QT_EXPORT __declspec(dllimport)
 #  endif
-#   define KDEWIN_IMPORT __declspec(dllimport)
+#   define KDEWIN_QT_IMPORT __declspec(dllimport)
 # endif
 #endif
 
@@ -83,4 +79,4 @@
 #endif /*_MSC_VER*/
 #endif /*WARNING*/
 
-#endif	// KDEWIN_EXPORT_H
+#endif // KDEWIN_QT_EXPORT_H

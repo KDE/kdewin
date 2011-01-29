@@ -20,7 +20,7 @@
 #ifndef KDE_WINDOWS_LINKFILE_H
 #define KDE_WINDOWS_LINKFILE_H
 
-#include <kdewin_export.h>
+#include <kdewin_qt_export.h>
 
 #include <QList>
 #include <QString>

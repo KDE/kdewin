@@ -1,3 +1,6 @@
+configure_file(${kdewin_SOURCE_DIR}/include/kdewin_export.h.cmake
+               ${kdewin_BINARY_DIR}/include/kdewin_export.h)
+
 if(MINGW)
    set(_incDirPrefix mingw)
 else (MINGW)
@@ -87,7 +90,6 @@ install(TARGETS kdewin
 
 install(DIRECTORY ../include/${_incDirPrefix}                  DESTINATION include PATTERN ".svn" EXCLUDE)
 install(FILES ../include/fixwinh.h ../include/kde_file_win.h   DESTINATION include)
-install(DIRECTORY ../include/KDE                               DESTINATION include PATTERN ".svn" EXCLUDE)
 install(FILES ${CMAKE_BINARY_DIR}/include/kdewin_export.h      DESTINATION include)
 
 if(MINGW32 AND NOT MINGW_W32)

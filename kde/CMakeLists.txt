@@ -1,5 +1,8 @@
 project(kdewin-qt)
 
+configure_file(${kdewin_SOURCE_DIR}/include/kdewin_qt_export.h.cmake
+               ${kdewin_BINARY_DIR}/include/kdewin_qt_export.h)
+
 set(kdewin_qt_SRCS
     linkfile.cpp
 )
@@ -37,4 +40,6 @@ endif (BUILD_QT_LIB)
 
 if (BUILD_BASE_LIB_WITH_QT OR BUILD_QT_LIB)
     install(DIRECTORY ../include/kdewin   DESTINATION include PATTERN ".svn" EXCLUDE)
+    install(DIRECTORY ../include/KDE      DESTINATION include PATTERN ".svn" EXCLUDE)
+    install(FILES ${CMAKE_BINARY_DIR}/include/kdewin_qt_export.h      DESTINATION include)
 endif (BUILD_BASE_LIB_WITH_QT OR BUILD_QT_LIB)
