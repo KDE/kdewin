@@ -56,37 +56,7 @@ if(MSVC)
   )
 endif(MSVC)
 
-# for compatibility
 set(CMAKE_DEBUG_POSTFIX "d")
-add_library(kdewin32 ${LIBRARY_TYPE} ${win_LIB_SRCS})
-if(NOT WINCE)
-    target_link_libraries(kdewin32 advapi32 shell32 ws2_32 )
-else(NOT WINCE)
-    target_link_libraries(kdewin32 ${QT_QTCORE_LIBRARIES} ws2 ${WCECOMPAT_LIBRARIES} toolhelp)
-endif(NOT WINCE)
-set_target_properties(kdewin32 PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN32_LIB )
-set_target_properties(kdewin32 PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
-set_target_properties(kdewin32 PROPERTIES COMPILE_FLAGS "-I${target_include_directories}")
-
-if (BUILD_BASE_LIB_WITH_QT)
-    target_link_libraries(kdewin32 kdewin-qt-static)
-endif (BUILD_BASE_LIB_WITH_QT)
-
-
-if(MSVC)
-  # 4244: 'argument' : conversion from 'type1' to 'type2', possible loss of data
-  # 4305: 'identifier' : truncation from 'type1' to 'type2'
-  set_target_properties(kdewin32 PROPERTIES
-      COMPILE_FLAGS "-wd4244 -wd4305"
-  )
-endif(MSVC)
-
-install(TARGETS kdewin32
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
-  ARCHIVE DESTINATION lib
-)
-# end for compatibiliy
 
 add_library(kdewin ${LIBRARY_TYPE} ${win_LIB_SRCS} ${kdewin_SRCS})
 if(NOT WINCE)
