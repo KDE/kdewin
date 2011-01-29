@@ -117,7 +117,7 @@ if (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
 endif (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
     
 if (BUILD_TOOLS)
-    install(FILES readme-tools.txt  DESTINATION doc/kdewin-tools-${KDEWIN_VERSION_STR})
+    install(FILES readme-tools.txt  DESTINATION doc/kdewin-tools-${KDEWIN_VERSION_STR} RENAME readme.txt)
 endif (BUILD_TOOLS)
 
 # kdewin package support 
