@@ -1,6 +1,3 @@
-configure_file(${kdewin_SOURCE_DIR}/include/kdewin_export.h.cmake
-               ${kdewin_BINARY_DIR}/include/kdewin_export.h)
-
 if(MINGW)
    set(_incDirPrefix mingw)
 else (MINGW)

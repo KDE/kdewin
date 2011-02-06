@@ -74,6 +74,8 @@ endif(STATIC_LIBRARY)
 
 INCLUDE(ConfigureChecks.cmake)
 
+configure_file(${kdewin_SOURCE_DIR}/include/kdewin_export.h.cmake
+               ${kdewin_BINARY_DIR}/include/kdewin_export.h)
 
                
 if (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT)
