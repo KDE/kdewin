@@ -90,7 +90,9 @@ if (BUILD_EXAMPLES AND NOT MSVC)
    add_subdirectory( examples)
 endif(BUILD_EXAMPLES AND NOT MSVC)
 
-add_subdirectory(3rdparty)
+if (BUILD_TOOLS)
+    add_subdirectory(3rdparty)
+endif(BUILD_TOOLS)
 
 if (BUILD_TOOLS)
     add_subdirectory(tools)
