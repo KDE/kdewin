@@ -26,41 +26,57 @@
 
 #include <kde_file_win.h>
 
-KDEWIN_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf)
+//if retval != 0 it must be freed
+char *customize_file_name(const char *file_name)
 {
-	char fixed_file_name[4];
-	char *fixed_file_name2;
-	int len, result;
-	len = strlen(file_name);
+	char *fixed_file_name;
+	int len = strlen(file_name);
 	if ((len==2 || len==3) && file_name[1]==':' && isalpha(file_name[0])) {
 		/* 1) */
 		if (len==3)
-			return stat(file_name, buf);
-		strncpy(fixed_file_name, file_name, 2);
+			return 0;
+
+		fixed_file_name=malloc(4);
+		fixed_file_name[0]=file_name[0];
+		fixed_file_name[1]=':';
 		fixed_file_name[2]='\\';
 		fixed_file_name[3]=0;
-		result =  stat(fixed_file_name, buf);
-		buf->st_uid = -2;
-		buf->st_gid = -2;
-		return result;
+		return fixed_file_name;
 	}
 	if (len>1 && (file_name[len-1]=='\\' || file_name[len-1]=='/')) {
 		/* 2) */
-		fixed_file_name2 = strndup(file_name, len);
-		fixed_file_name2[len-1]=0;
-		result = stat(fixed_file_name2, buf);
-		free(fixed_file_name2);
-		buf->st_uid = -2;
-		buf->st_gid = -2;
-		return result;
+		fixed_file_name = strndup(file_name, len);
+		fixed_file_name[len-1]=0;
+		return fixed_file_name;
 	}
-//TODO: is stat("/") ok?
-	result = stat(file_name, buf);
-    // be in sync with Qt4
-  buf->st_uid = -2;
-  buf->st_gid = -2;
-  return result;
+	//TODO "/" case?
+	return 0;
 }
+
+
+KDEWIN_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf)
+{
+	char *fixed_file_name = customize_file_name(file_name);
+	int result = stat(fixed_file_name?fixed_file_name:file_name, buf);
+	free(fixed_file_name);
+	// be in sync with Qt4
+	buf->st_uid = -2;
+	buf->st_gid = -2;
+	return result;
+}
+
+#ifdef _MSC_VER
+KDEWIN_EXPORT int kdewin32_stat64(const char *file_name, struct _stat64 *buf)
+{
+	char *fixed_file_name = customize_file_name(file_name);
+	int result = _stat64(fixed_file_name?fixed_file_name:file_name, buf);
+	free(fixed_file_name);
+	// be in sync with Qt4
+	buf->st_uid = -2;
+	buf->st_gid = -2;
+	return result;
+}
+#endif
 
 KDEWIN_EXPORT int kdewin32_lstat(const char *file_name, struct stat *buf)
 {

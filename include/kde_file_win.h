@@ -40,6 +40,14 @@ extern "C" {
  */
 KDEWIN_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf);
 
+#ifdef _MSC_VER
+/**
+ Like kdewin32_stat() but fills a wider struct, useful for filesizes > 2 GB
+ use only when _MSC_VER is defined.
+ */
+KDEWIN_EXPORT int kdewin32_stat64(const char *file_name, struct _stat64 *buf);
+#endif
+
 /**
  Identical to kdewin32_stat()
  */
