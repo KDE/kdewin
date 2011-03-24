@@ -21,6 +21,21 @@
 #ifndef KDEWIN_WINDOWS_H
 #define KDEWIN_WINDOWS_H
 
+#if defined(_MSC_VER) && _MSC_VER >= 1600
+/* 1600 is Visual C++ 2010, untested with C++ 2008
+
+   if users include windows.h and winsock2.h in the wrong
+   order, things go wrong: windows.h includes winsock.h
+   with the old API, and winsock2.h will define the new API
+   even if the old API is already defined, resulting in tons
+   of redefinition errors.
+   Defining _WINSOCKAPI_ ensures that winsock.h does not do
+   anything.
+   Without this define, pykde would not compile
+*/
+# define _WINSOCKAPI_
+#endif
+
 /* avoid min/max conflicts (see http://support.microsoft.com/kb/143208) */
 #ifndef NOMINMAX
 # define NOMINMAX
