@@ -545,7 +545,7 @@ KDEWIN_EXPORT __inline long double fminl (long double a, long double b)
 #ifdef __cplusplus
 }
 
-#if _MSC_VER < 1600 && _MSC_VER >= 1400 && !defined(_WIN32_WCE)
+#if _MSC_VER >= 1400 && !defined(_WIN32_WCE)
 // convenience function to avoid useless casts from int to whatever
 __inline long double sqrt(int x)
 {
@@ -567,7 +567,7 @@ __inline long double floor(int x)
     return floor((long double)x);
 }
 
-#if __MSC_VER < 1600 && _MSC_VER >= 1400
+#if _MSC_VER >= 1400 
 /* msvc 7/7.1 has pow(int,int) */
 __inline long double pow(int x, int y)
 {
@@ -589,7 +589,7 @@ __inline long double pow(int x, long double y)
 {
     return pow((long double)x, y);
 }
-#endif // __MSC_VER < 1600 && _MSC_VER >= 1400
+#endif // _MSC_VER >= 1400
 #endif // __cplusplus
 
 #ifndef hypotf
