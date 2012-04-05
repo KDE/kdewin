@@ -20,6 +20,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_MMAN_H
 #define KDEWIN_SYS_MMAN_H
 
@@ -55,3 +56,4 @@ KDEWIN_EXPORT int munmap(void *start, size_t length);
 #endif
 
 #endif  // KDEWIN_SYS_MMAN_H
+#endif /* NO_KDEWIN */

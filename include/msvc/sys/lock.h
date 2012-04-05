@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_LOCK_H
 #define KDEWIN_SYS_LOCK_H
 
@@ -42,3 +43,4 @@ typedef int _LOCK_RECURSIVE_T;
 #define __lock_release_recursive(lock) {}
 
 #endif // KDEWIN_SYS_LOCK_H
+#endif /* NO_KDEWIN */

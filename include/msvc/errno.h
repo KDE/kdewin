@@ -17,15 +17,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KDEWIN_ERRNO_H
-#define _KDEWIN_ERRNO_H
-
+#ifndef NO_KDEWIN
 #include <sys/types.h>
+#endif
+
 #ifndef _WIN32_WCE
 #include <../include/errno.h>
 #else
 #include <../wcecompat/errno.h>
 #endif
+
+#ifndef NO_KDEWIN
+#ifndef KDEWIN_ERRNO_H
+#define KDEWIN_ERRNO_H
 
 #ifndef _CRT_ERRNO_DEFINED
 #define _CRT_ERRNO_DEFINED
@@ -43,3 +47,4 @@ KDEWIN_EXPORT int __cdecl _set_errno(int value);
 #endif
 
 #endif
+#endif /* NO_KDEWIN */

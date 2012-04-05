@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_STAT_H
 #define KDEWIN_SYS_STAT_H
 
@@ -24,12 +25,15 @@
 
 /* regular header from msvc includes */
 #include <io.h>
+#endif
+
 #ifndef _WIN32_WCE
 #include <../include/sys/stat.h>
 #else
 #include <../wcecompat/sys/stat.h>
 #endif
 
+#ifndef NO_KDEWIN
 #include <time.h>
 #include <sys/types.h>
 
@@ -101,3 +105,4 @@ KDEWIN_EXPORT int	mkdir( const char *_path, mode_t __mode );
 #endif
 */
 #endif /* KDEWIN_SYS_STAT_H */
+#endif /* NO_KDEWIN */

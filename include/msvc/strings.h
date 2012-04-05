@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_STRINGS_H
 #define KDEWIN_STRINGS_H
 
@@ -33,3 +34,4 @@ void bzero(void *s, size_t n)
 
 
 #endif KDEWIN_STRINGS_H
+#endif /* NO_KDEWIN */

@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_UTSNAME_H
 #define KDEWIN_SYS_UTSNAME_H
 
@@ -42,3 +43,4 @@ KDEWIN_EXPORT int uname (struct utsname *);
 #endif
 
 #endif  // KDEWIN_SYS_UTSNAME_H
+#endif /* NO_KDEWIN */

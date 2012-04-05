@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_MACHINE_TYPES_H
 #define KDEWIN_MACHINE_TYPES_H
 
@@ -65,3 +66,4 @@ typedef long int __loff_t;
 #endif
 
 #endif	// KDEWIN_MACHINE_TYPES_H
+#endif /* NO_KDEWIN */

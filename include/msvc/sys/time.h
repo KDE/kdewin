@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_TIME_H
 #define KDEWIN_SYS_TIME_H
 
@@ -93,3 +94,4 @@ KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2]);
 #endif
 
 #endif // KDEWIN_SYS_TIME_H
+#endif /* NO_KDEWIN */

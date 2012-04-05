@@ -17,17 +17,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_SYS_TYPES_H
-#define KDEWIN_SYS_TYPES_H
-
-#include <kdewin_export.h>
-
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
 #include <../include/sys/types.h>
 #else
 #include <../wcecompat/sys/types.h>
 #endif
+
+#ifndef NO_KDEWIN
+#ifndef KDEWIN_SYS_TYPES_H
+#define KDEWIN_SYS_TYPES_H
+
+#include <kdewin_export.h>
 
 #include <BaseTsd.h>
 
@@ -92,3 +93,4 @@ typedef unsigned int __u32;
 
 
 #endif  // KDEWIN_SYS_TYPES_H
+#endif /* NO_KDEWIN */

@@ -18,22 +18,20 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef _MSC_VER
 # error This header is for msvc only!
 #endif
 
-#ifndef KDEWIN_MATH_H
-#define KDEWIN_MATH_H
-
-#include <kdewin_export.h>
-
 // include everywhere
 #include <sys/types.h>
 
-/* regular header from msvc includes */
 #ifndef _USE_MATH_DEFINES
 # define _USE_MATH_DEFINES
 #endif
+#endif /* NO_KDEWIN */
+
+/* regular header from msvc includes */
 #ifndef _WIN32_WCE
 #include <../include/math.h>
 #include <../include/float.h>
@@ -41,6 +39,12 @@
 #include <../wcecompat/math.h>
 #include <../wcecompat/float.h>
 #endif
+
+#ifndef NO_KDEWIN
+#ifndef KDEWIN_MATH_H
+#define KDEWIN_MATH_H
+
+#include <kdewin_export.h>
 
 #include <errno.h>
 #include <limits.h>
@@ -597,3 +601,4 @@ __inline long double pow(int x, long double y)
 #endif
 
 #endif /* KDEWIN_MATH_H */
+#endif /* NO_KDEWIN */

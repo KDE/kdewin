@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_FILE_H
 #define KDEWIN_SYS_FILE_H
 
@@ -36,3 +37,4 @@
 #define	R_OK		4	/* is it readable by caller */
 
 #endif  // KDEWIN_SYS_FILE_H
+#endif /* NO_KDEWIN */

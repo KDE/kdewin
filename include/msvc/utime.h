@@ -17,11 +17,15 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_UTIME_H
 #define KDEWIN_UTIME_H
 
 // include everywhere
 #include <sys/types.h>
+
+#endif  // KDEWIN_UTIME_H
+#endif /* NO_KDEWIN */
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
@@ -29,5 +33,3 @@
 #else
 #include <../wcecompat/sys/utime.h>
 #endif
-
-#endif  // KDEWIN_UTIME_H

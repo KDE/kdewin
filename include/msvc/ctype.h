@@ -17,14 +17,19 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 // include everywhere
 #include <sys/types.h>
+#endif
 
 #ifndef _WIN32_WCE
 #include <../include/ctype.h>
 #else
 #include <../wcecompat/ctype.h>
 #endif
+
+
+#ifndef NO_KDEWIN
 
 #ifndef KDEWIN_CTYPE_H
 #define KDEWIN_CTYPE_H
@@ -41,3 +46,4 @@ inline int KDE_isspace(int c) { return ((unsigned)(c + 1) <= 256) && isspace(c);
 #endif
 
 #endif /* KDEWIN_CTYPE_H */
+#endif /* NO_KDEWIN */

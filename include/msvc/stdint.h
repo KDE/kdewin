@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_STDINT_H
 #define KDEWIN_STDINT_H
 
@@ -226,4 +227,5 @@ typedef unsigned long long uintmax_t;
 #define INTMAX_C(x) x ## L
 #define UINTMAX_C(x) x ## UL
 
-#endif /* _STDINT_H */
+#endif /* KDEWIN_STDINT_H */
+#endif /* NO_KDEWIN */

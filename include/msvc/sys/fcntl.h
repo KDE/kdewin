@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_FCNTL_H
 #define KDEWIN_SYS_FCNTL_H
 
@@ -24,3 +25,4 @@
 #include <msvc/fcntl.h>
 
 #endif  // KDEWIN_SYS_FCNTL_H
+#endif /* NO_KDEWIN */

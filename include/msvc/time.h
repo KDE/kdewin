@@ -17,17 +17,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_TIME_H
-#define KDEWIN_TIME_H
-
+#ifndef NO_KDEWIN
 // include everywhere
 #include <sys/types.h>
+
+#endif /* NO_KDEWIN */
 
 #ifndef _WIN32_WCE
 #include <../include/time.h>
 #else
 #include <../wcecompat/time.h>
 #endif
+
+#ifndef NO_KDEWIN
+
+#ifndef KDEWIN_TIME_H
+#define KDEWIN_TIME_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,3 +47,4 @@ KDEWIN_EXPORT char *strptime (const char *buf, const char *format, struct tm *tm
 #endif 
 
 #endif  // KDEWIN_TIME_H
+#endif /* NO_KDEWIN */

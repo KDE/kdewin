@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_UN_H
 #define KDEWIN_SYS_UN_H
 
@@ -33,3 +34,4 @@ struct sockaddr_un {
 		   + strlen ((p)->sun_path))
 
 #endif  // KDEWIN_SYS_UN_H
+#endif /* NO_KDEWIN */

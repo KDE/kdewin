@@ -17,6 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
+
 #ifndef KDEWIN_UNISTD_H
 #define KDEWIN_UNISTD_H
 
@@ -146,3 +148,4 @@ KDEWIN_EXPORT int ftruncate(int fd, off_t length);
 #endif
 
 #endif // KDEWIN_UNISTD_H
+#endif /* NO_KDEWIN */

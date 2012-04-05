@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_PARAM_H
 #define KDEWIN_SYS_PARAM_H
 
@@ -39,3 +40,4 @@
 #endif
 
 #endif  // KDEWIN_SYS_PARAM_H
+#endif /* NO_KDEWIN */

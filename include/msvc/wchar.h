@@ -18,9 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_WCHAR_H
-#define KDEWIN_WCHAR_H
-
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
 #include <../include/wchar.h>
@@ -28,8 +25,13 @@
 #include <../wcecompat/wchar.h>
 #endif
 
+#ifndef NO_KDEWIN
+#ifndef KDEWIN_WCHAR_H
+#define KDEWIN_WCHAR_H
+
 #ifndef wcscasecmp
 #define wcscasecmp _wcsicmp
 #endif
 
 #endif /* KDEWIN_WCHAR_H */
+#endif /* NO_KDEWIN */

@@ -17,6 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
+
 #ifndef KDEWIN_SYS_WAIT_H
 #define KDEWIN_SYS_WAIT_H
 
@@ -80,3 +82,4 @@ union wait
 #endif
 
 #endif  // KDEWIN_SYS_WAIT_H
+#endif /* NO_KDEWIN */

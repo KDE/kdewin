@@ -17,11 +17,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_LIMITS_H
-#define KDEWIN_LIMITS_H
-
+#ifndef NO_KDEWIN
 // include everywhere
 #include <sys/types.h>
+#endif
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
@@ -30,8 +29,12 @@
 #include <../wcecompat/limits.h>
 #endif
 
+#ifndef NO_KDEWIN
+#ifndef KDEWIN_LIMITS_H
+#define KDEWIN_LIMITS_H
+
 // FIXME: really needed?
 #include "sys/param.h"
 
 #endif /* _KDEWIN_LIMITS_H_ */
-
+#endif /* NO_KDEWIN */

@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_SOCKET_H
 #define KDEWIN_SYS_SOCKET_H
 
@@ -182,3 +183,4 @@ struct msghdr
 #endif
 
 #endif  // KDEWIN_SYS_SOCKET_H
+#endif /* NO_KDEWIN */

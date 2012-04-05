@@ -18,6 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_WINDOWS_H
 #define KDEWIN_WINDOWS_H
 
@@ -41,11 +42,11 @@
 # define NOMINMAX
 #endif
 
+#endif /* KDEWIN_WINDOWS_H */
+#endif /* NO_KDEWIN */
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
 #include <../include/windows.h>
 #else
 #include <../Armv4i/windows.h>
 #endif
-
-#endif /* KDEWIN_WINDOWS_H */

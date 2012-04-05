@@ -17,11 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_STRING_H
 #define KDEWIN_STRING_H
 
 // include everywhere
 #include <sys/types.h>
+#endif
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
@@ -30,6 +32,7 @@
 #include <../wcecompat/string.h>
 #endif
 
+#ifndef NO_KDEWIN
 #ifndef strncasecmp
 #define strncasecmp strnicmp
 #endif
@@ -54,3 +57,4 @@ KDEWIN_EXPORT char *strcasestr(const char *big, const char *little);
 #endif
 
 #endif /* KDEWIN_STRING_H */
+#endif /* NO_KDEWIN */

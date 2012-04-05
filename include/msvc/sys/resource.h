@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_RESOURCE_H
 #define KDEWIN_SYS_RESOURCE_H
 
@@ -90,4 +91,4 @@ KDEWIN_EXPORT int getrusage (int __who, struct rusage *__rusage);
 #endif
 
 #endif  // KDEWIN_SYS_RESOURCE_H
-
+#endif /* NO_KDEWIN */

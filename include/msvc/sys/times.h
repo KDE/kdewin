@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYS_TIMES_H
 #define KDEWIN_SYS_TIMES_H
 
@@ -48,3 +49,4 @@ KDEWIN_EXPORT clock_t times(struct tms *);
 #endif
 
 #endif	// KDEWIN_SYS_TIMES_H
+#endif /* NO_KDEWIN */

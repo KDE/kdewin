@@ -18,11 +18,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_STDIO_H
 #define KDEWIN_STDIO_H
 
 // include everywhere
 #include <sys/types.h>
+#endif /* NO_KDEWIN */
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
@@ -31,7 +33,7 @@
 #include <../wcecompat/stdio.h>
 #endif
 
-
+#ifndef NO_KDEWIN
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -52,3 +54,4 @@ KDEWIN_EXPORT int kdewin32_snprintf(char *buffer, size_t count, const char *fmt,
 #define pclose _pclose
 
 #endif	// KDEWIN_STDIO_H
+#endif /* NO_KDEWIN */

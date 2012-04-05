@@ -17,11 +17,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_FCNTL_H
-#define KDEWIN_FCNTL_H
-
+#ifndef NO_KDEWIN
 // include everywhere
 #include <sys/types.h>
+#endif
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
@@ -30,6 +29,9 @@
 #include <../wcecompat/fcntl.h>
 #endif
 
+#ifndef NO_KDEWIN
+#ifndef KDEWIN_FCNTL_H
+#define KDEWIN_FCNTL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -102,4 +104,4 @@ extern "C" {
 #endif
 
 #endif // KDEWIN_FCNTL_H
-
+#endif /* NO_KDEWIN */

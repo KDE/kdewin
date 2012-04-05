@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_STDLIB_H
 #define KDEWIN_STDLIB_H
 
@@ -67,3 +68,4 @@ KDEWIN_EXPORT int unsetenv(const char *name);
 #endif
 
 #endif // KDEWIN_STDLIB_H
+#endif /* NO_KDEWIN */

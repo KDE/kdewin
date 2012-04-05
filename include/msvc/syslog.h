@@ -20,6 +20,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef NO_KDEWIN
 #ifndef KDEWIN_SYSLOG_H
 #define KDEWIN_SYSLOG_H
 
@@ -97,3 +98,4 @@ KDEWIN_EXPORT void syslog (int priority, const char * format, ...);
 #endif
 
 #endif /* KDEWIN_SYSLOG_H */
+#endif /* NO_KDEWIN */

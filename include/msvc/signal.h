@@ -17,11 +17,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEWIN_SIGNAL_H
-#define KDEWIN_SIGNAL_H
-
+#ifndef NO_KDEWIN
 // include everywhere
 #include <sys/types.h>
+#endif
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
@@ -29,6 +28,10 @@
 #else
 #include <../wcecompat/signal.h>
 #endif
+
+#ifndef NO_KDEWIN
+#ifndef KDEWIN_SIGNAL_H
+#define KDEWIN_SIGNAL_H
 
 #ifdef  __cplusplus
 extern "C" {
@@ -103,3 +106,4 @@ KDEWIN_EXPORT sighandler_t kdewin32_signal(int signum, sighandler_t handler);
 #endif
 
 #endif  // KDEWIN_SIGNAL_H
+#endif /* NO_KDEWIN */
