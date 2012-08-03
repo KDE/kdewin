@@ -28,5 +28,6 @@
 #endif
 
 #include <../include/windows.h>
+#include <fixwin.h>
 
 #endif /* KDEWIN_WINDOWS_H */
