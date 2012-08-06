@@ -1,0 +1,31 @@
+# - Config file for the KDEWin package
+# It defines the following variables
+#  KDEWIN_DEFINITIONS  - contains the definitions needed to build against kdewin
+#  KDEWIN_INCLUDES     - the kdewin include directories
+#  KDEWIN_LIBRARIES    - the libraries to link against
+#  KDEWIN_VERSION      - the version of the kdewin library as a number
+#  KDEWIN_VERSION_STR  - the version of the kdewin library as a string
+#  KDEWIN_MINGW_W32    - if this library has been compiled with the 32bit compiler of mingw-w64 project
+
+get_filename_component(KDEWIN_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(KDEWIN_INCLUDE_DIR "${KDEWIN_CMAKE_DIR}/../../../include")
+set(KDEWIN_LIBRARY kdewin)
+@KDEWIN_QT_LIBRARY@
+@KDEWIN_QT_LIBRARY_STATIC@
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+include("${KDEWIN_CMAKE_DIR}/KDEWinTargets.cmake")
+
+set(KDEWIN_LIBRARIES ${KDEWIN_LIBRARY})
+set(KDEWIN_INCLUDES ${KDEWIN_INCLUDE_DIR} ${KDEWIN_INCLUDE_DIR}/mingw)
+@MSSDK_DIR_CMD@
+set(KDEWIN_INCLUDES @KDEWIN_INCLUDES@)
+
+set(KDEWIN_MINGW_W32 @MINGW_W32@)
+# required for configure
+set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${KDEWIN_INCLUDES})
+set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${KDEWIN_LIBRARIES})
+
+set(KDEWIN_DEFINITIONS @KDEWIN_DEFINITIONS@)
+set(KDEWIN_VERSION @KDEWIN_VERSION@)
+set(KDEWIN_VERSION_STR @KDEWIN_VERSION_STR@)

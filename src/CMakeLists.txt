@@ -64,6 +64,7 @@ if(NOT WINCE)
 else(NOT WINCE)
     target_link_libraries(kdewin ws2 ${QT_QTCORE_LIBRARIES} ${WCECOMPAT_LIBRARIES} toolhelp )
 endif(NOT WINCE)
+target_link_libraries(kdewin LINK_INTERFACE_LIBRARIES user32 netapi32 userenv)
 set_target_properties(kdewin PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN_LIB )
 set_target_properties(kdewin PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
 
@@ -80,6 +81,7 @@ if(MSVC)
 endif(MSVC)
 
 install(TARGETS kdewin
+  EXPORT KDEWin_targets
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
   ARCHIVE DESTINATION lib

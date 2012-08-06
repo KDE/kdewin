@@ -17,6 +17,8 @@ if (BUILD_BASE_LIB_WITH_QT)
     else(NOT WINCE)
     target_link_libraries(kdewin-qt-static ${QT_QTCORE_LIBRARIES} ws2 )
     endif(NOT WINCE)
+    install(TARGETS kdewin-qt-static EXPORT KDEWin_targets ARCHIVE DESTINATION lib)
+    set(KDEWIN_QT_STATIC_LIBRARY "set(KDEWIN_QT_STATIC_LIBRARY kdewin-qt-static)" PARENT_SCOPE)
     set_target_properties(kdewin-qt-static PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN_QT_LIB )
     set_target_properties(kdewin-qt-static PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
 endif (BUILD_BASE_LIB_WITH_QT)
@@ -30,8 +32,10 @@ if (BUILD_QT_LIB)
     endif(NOT WINCE)
     set_target_properties(kdewin-qt PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN_QT_LIB )
     set_target_properties(kdewin-qt PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
+    set(KDEWIN_QT_LIBRARY "set(KDEWIN_QT_LIBRARY kdewin-qt)" PARENT_SCOPE)
 
     install(TARGETS kdewin-qt
+        EXPORT KDEWin_targets
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin
         ARCHIVE DESTINATION lib

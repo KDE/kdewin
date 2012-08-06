@@ -1,6 +1,13 @@
 set (NAME kdewin)
-set (KDEWIN_VERSION 0x000506)
-set (KDEWIN_VERSION_STR 0.5.6)
+set(KDEWin_VERSION_MAJOR 0)
+set(KDEWin_VERSION_MINOR 5)
+set(KDEWin_VERSION_PATCH 6)
+
+# calculate the version in an ugly way
+math(EXPR KDEWIN_VERSION '1000000+${KDEWin_VERSION_MAJOR}*10000+${KDEWin_VERSION_MINOR}*100+${KDEWin_VERSION_PATCH}')
+string(SUBSTRING ${KDEWIN_VERSION} 1 6 KDEWIN_VERSION)
+set(KDEWIN_VERSION "0x${KDEWIN_VERSION}")
+set (KDEWIN_VERSION_STR ${KDEWin_VERSION_MAJOR}.${KDEWin_VERSION_MINOR}.${KDEWin_VERSION_PATCH})
 # stay in sync with kdelibs
 cmake_minimum_required(VERSION 2.6.2)
 
@@ -67,6 +74,7 @@ endif(WINCE)
 if(STATIC_LIBRARY)
   set(LIBRARY_TYPE STATIC)
   add_definitions(-DKDEWIN_STATIC_LIBS)
+  set(KDEWIN_DEFINITIONS -DKDEWIN_STATIC_LIBS)
   message(STATUS "Building kdewin as a static library")
 else(STATIC_LIBRARY)
   set(LIBRARY_TYPE SHARED)
@@ -112,6 +120,14 @@ endif (MINGW64 OR MINGW_W32)
 
 include(Win32Macros)
 addExplorerWrapper(${NAME})
+
+if(MSVC)
+    set(MSSDK_DIR_CMD "file(TO_CMAKE_PATH \"\$ENV{MSSDK}\" MSSDK_DIR)")
+endif(MSVC)
+configure_file(${CMAKE_SOURCE_DIR}/cmake/modules/KDEWinConfig.cmake.in ${CMAKE_BINARY_DIR}/KDEWinConfig.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/cmake/modules/KDEWinConfigVersion.cmake.in ${CMAKE_BINARY_DIR}/KDEWinConfigVersion.cmake @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/KDEWinConfig.cmake ${CMAKE_BINARY_DIR}/KDEWinConfigVersion.cmake DESTINATION lib/cmake/KDEWin)
+install(EXPORT KDEWin_targets FILE KDEWinTargets.cmake DESTINATION lib/cmake/KDEWin)
 
 
 if (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
