@@ -89,4 +89,4 @@ KDEWIN_EXPORT int kdewin32_mkdir(const char *path, mode_t mode);
 }
 #endif
 
-#endif //KDE_FILE_WIN_H
+#endif /*KDE_FILE_WIN_H */

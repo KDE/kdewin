@@ -49,4 +49,4 @@ KDEWIN_EXPORT int fchmod(int __fd, mode_t __mode);
 }
 #endif
 
-#endif  // KDEWIN_SYS_STAT_H
+#endif  /* KDEWIN_SYS_STAT_H */

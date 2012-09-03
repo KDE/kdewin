@@ -16,8 +16,8 @@
 #define IBMPC 1
 #define ANSIPROT 1
 #define MINUSZERO 1
-//#define INFINITIES 1
-//#define NANS 1
+/*#define INFINITIES 1 */
+/*#define NANS 1 */
 #define DENORMAL 1
 #define VOLATILE
 #define mtherr(fname, code) 
@@ -416,4 +416,4 @@ while( --i );
 return( ans );
 }
 
-#endif  // CEPHES_MCONF_H
+#endif  /* CEPHES_MCONF_H */

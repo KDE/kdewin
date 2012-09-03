@@ -41,4 +41,4 @@ KDEWIN_EXPORT int uname (struct utsname *);
 }
 #endif
 
-#endif  // KDEWIN_SYS_UTSNAME_H
+#endif  /* KDEWIN_SYS_UTSNAME_H */

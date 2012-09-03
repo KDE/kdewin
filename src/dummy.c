@@ -20,14 +20,14 @@
 #include <kdewin_export.h>
 #include "dirent.h"
 
-// TODO implement if possible in dirent.c
+/* TODO implement if possible in dirent.c */
 KDEWIN_EXPORT struct dirent* readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
 {
 	result = 0;
 	return 0;
 }
 
-// TODO implement if possible in fcntl.c
+/* TODO implement if possible in fcntl.c */
 KDEWIN_EXPORT int fcntl(int fd, int cmd,...)
 {
 	/*! @todo */

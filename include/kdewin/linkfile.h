@@ -31,19 +31,19 @@ namespace Windows {
 
 class KDEWIN_QT_EXPORT LinkFile {
     public:
-        /// create instance 
+        /*/ create instance  */
         LinkFile(const QString &execPath, const QString &linkPath, const QString &description, const QString &workingDir);
 
-        /// construct instance with arguments
+        /*/ construct instance with arguments */
         LinkFile(const QStringList &args, const QString &linkPath, const QString &description, const QString &workingDir);
         
-        /// check if link file exists
+        /*/ check if link file exists */
         bool exists() const;
-        /// create link file from instance data 
+        /*/ create link file from instance data  */
         bool create();
-        /// remove link file
+        /*/ remove link file */
         bool remove();
-        /// read link file content into instance 
+        /*/ read link file content into instance  */
         bool read();
 
         const QString &execPath() const;
@@ -78,4 +78,4 @@ class KDEWIN_QT_EXPORT LinkFiles {
 }
 }
 #endif
-// vim: ts=4 sw=4 et
+/* vim: ts=4 sw=4 et */

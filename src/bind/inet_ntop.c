@@ -16,7 +16,7 @@
  */
 /* modified to make it compile with kdewin32 */
 
-//#include "port_before.h"
+/*#include "port_before.h" */
 
 #include <sys/param.h>
 #include <sys/types.h>
@@ -24,13 +24,13 @@
 
 #include <netinet/in.h>
 #include <arpa/inet.h>
-//#include <arpa/nameser.h>
+/*#include <arpa/nameser.h> */
 
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
 
-//#include "port_after.h"
+/*#include "port_after.h" */
 #define __P(x) x
 #define NS_INADDRSZ	4	/*%< IPv4 T_A */
 #define NS_IN6ADDRSZ	16	/*%< IPv6 T_AAAA */

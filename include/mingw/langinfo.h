@@ -14,4 +14,4 @@ KDEWIN_EXPORT char *nl_langinfo(nl_item);
 }
 #endif
 
-#endif  // _LANGINFO_H
+#endif  /* _LANGINFO_H */

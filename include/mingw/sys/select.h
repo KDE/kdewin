@@ -22,4 +22,4 @@
 
 /* empty file */
 
-#endif  // KDEWIN_SYS_SELECT_H
+#endif  /* KDEWIN_SYS_SELECT_H */

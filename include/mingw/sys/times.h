@@ -44,4 +44,4 @@ KDEWIN_EXPORT clock_t times(struct tms *);
 }
 #endif
 
-#endif	// KDEWIN_SYS_TIMES_H
+#endif	/* KDEWIN_SYS_TIMES_H */

@@ -24,7 +24,7 @@
 
 KDEWIN_EXPORT char * kde_getenv(const char *name)
 {
-//FIXME: There is no env in wince
+/*FIXME: There is no env in wince */
 #ifndef _WIN32_WCE
   char dummy[1];
   int len;
@@ -36,8 +36,8 @@ KDEWIN_EXPORT char * kde_getenv(const char *name)
     return 0;
 
   len++;
-	// NOTE: This creates a memory whole, because it will never be free'd 
-	//       better use a static char vector 
+	/* NOTE: This creates a memory whole, because it will never be free'd  */
+	/*       better use a static char vector  */
   p = malloc(len);
   if (GetEnvironmentVariableA(name, p, len))
     return p;

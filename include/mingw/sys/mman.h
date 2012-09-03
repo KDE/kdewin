@@ -23,7 +23,7 @@
 #ifndef KDEWIN_SYS_MMAN_H
 #define KDEWIN_SYS_MMAN_H
 
-// include everywhere
+/* include everywhere */
 #include <sys/types.h>
 
 #ifdef __cplusplus
@@ -54,4 +54,4 @@ KDEWIN_EXPORT int munmap(void *start, size_t length);
 }
 #endif
 
-#endif  // KDEWIN_SYS_MMAN_H
+#endif  /* KDEWIN_SYS_MMAN_H */

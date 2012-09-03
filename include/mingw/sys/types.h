@@ -28,10 +28,10 @@ typedef char *caddr_t;
 
 typedef unsigned int nlink_t;
 
-// uint32
+/* uint32 */
 #include <stdint.h>
 
 #include <kdewin_export.h>
 
-#endif  // KDEWIN_SYS_TYPES_H
+#endif  /* KDEWIN_SYS_TYPES_H */
 

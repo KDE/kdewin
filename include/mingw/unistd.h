@@ -105,9 +105,9 @@ KDEWIN_EXPORT pid_t fork(void);
 
 KDEWIN_EXPORT pid_t setsid(void);
 
-// using winsock gethostname() requires WSAStartup called before :-( 
-// which will not be done in every case, so uses this one 
-//http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winsock/winsock/gethostname_2.asp
+/* using winsock gethostname() requires WSAStartup called before :-(  */
+/* which will not be done in every case, so uses this one  */
+/*http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winsock/winsock/gethostname_2.asp */
 #undef gethostname
 #define gethostname kde_gethostname
 KDEWIN_EXPORT int kde_gethostname(char *__name, size_t __len);
@@ -130,7 +130,7 @@ KDEWIN_EXPORT int mkstemps(char* _template, int suffix_len);
 
 KDEWIN_EXPORT int initgroups(const char *name, int basegid);
 
-// from kdecore/fakes.c
+/* from kdecore/fakes.c */
 
 KDEWIN_EXPORT int seteuid(uid_t euid);
 

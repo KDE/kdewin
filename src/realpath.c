@@ -32,11 +32,11 @@
 KDEWIN_EXPORT char *realpath(const char *path,char *resolved_path)
 {
     int i;
-    // no error checking... :(
+    /* no error checking... :( */
     resolved_path[0] = '\0';
     GetFullPathNameA(path, PATH_MAX, resolved_path, NULL);
-    // TODO: really needed? Would be better because some functions
-    //       assume '/' as separator
+    /* TODO: really needed? Would be better because some functions */
+    /*       assume '/' as separator */
     for( i = 0; resolved_path[i] != '\0'; ++i ) {
         if(resolved_path[i] == '\\')
             resolved_path[i] = '/';

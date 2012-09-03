@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-//additional defs (some are sommented out because winows defines these):
+/*additional defs (some are sommented out because winows defines these): */
 #define	SIGHUP	1	/* hangup */
 /* #define	SIGINT	2*/	/* interrupt */
 #define	SIGQUIT	3	/* quit */
@@ -48,9 +48,9 @@ extern "C" {
 #define	SIGCONT	19	/* continue a stopped process */
 #define	SIGCHLD	20	/* to parent on child stop or exit */
 #define	SIGCLD	20	/* System V name for SIGCHLD */
-//21 and 22 have different meanings on win32 - do not use those defines at all
-//#define	SIGTTIN	21	/* to readers pgrp upon background tty read */
-//#define	SIGTTOU	22	/* like TTIN for output if (tp->t_local&LTOSTOP) */
+/*21 and 22 have different meanings on win32 - do not use those defines at all */
+/*#define	SIGTTIN	21	to readers pgrp upon background tty read */
+/*#define	SIGTTOU	22	like TTIN for output if (tp->t_local&LTOSTOP) */
 #define	SIGIO	23	/* input/output possible signal */
 #define	SIGPOLL	SIGIO	/* System V name for SIGIO */
 #define	SIGXCPU	24	/* exceeded CPU time limit */
@@ -82,7 +82,7 @@ typedef void (*sighandler_t)(int);
 
  Most notable examples of unsupported signal types are SIGKILL, SIGHUP and SIGBUS.
 
- @see http://msdn2.microsoft.com/en-us/library/xdkz3x12(VS.80).aspx for list 
+ @see http://msdn2.microsoft.com/en-us/library/xdkz3x12(VS.80).aspx for list
  of supported signals.
  
  @return the previous handler associated with the given signal. 
@@ -96,4 +96,4 @@ KDEWIN_EXPORT sighandler_t kdewin32_signal(int signum, sighandler_t handler);
 
 #include <../include/signal.h>
 
-#endif // KDE_SIGNAL_H
+#endif /* KDE_SIGNAL_H */

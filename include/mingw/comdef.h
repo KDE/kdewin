@@ -23,8 +23,8 @@
 #include <windows.h>
 #include <stdio.h>
 
-// for compat with MSVC 
-// implementation incomplete, only enough to compile phonon ds9
+/* for compat with MSVC  */
+/* implementation incomplete, only enough to compile phonon ds9 */
 class _com_error
 {
 public:

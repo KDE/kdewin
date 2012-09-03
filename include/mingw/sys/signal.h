@@ -22,4 +22,4 @@
 
 #include "../signal.h"
 
-#endif  // KDEWIN_SYS_SIGNAL_H
+#endif  /* KDEWIN_SYS_SIGNAL_H */

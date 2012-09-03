@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 
-//! Replaces _snprintf() because we want to behave like on UNIX
+/*! Replaces _snprintf() because we want to behave like on UNIX */
 KDEWIN_EXPORT int kdewin32_snprintf(char *buffer, size_t count, const char *fmt, ...)
 {
 	va_list ap;

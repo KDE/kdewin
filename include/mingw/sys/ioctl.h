@@ -21,4 +21,4 @@
 
 /* empty file */
 
-#endif  // KDEWIN_SYS_IOCTL_H
+#endif  /* KDEWIN_SYS_IOCTL_H */

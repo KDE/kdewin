@@ -31,7 +31,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-// BEGIN stat.c
+/* BEGIN stat.c */
 KDEWIN_EXPORT int lstat(const char *path, struct stat *sb)
 {
   return _stat(path,(struct _stat*)sb);
@@ -41,7 +41,7 @@ KDEWIN_EXPORT int fchmod(int __fd, mode_t __mode)
 {
   return 0;
 }
-// END stat.c
+/* END stat.c */
 
 KDEWIN_EXPORT int getgroups(int size, gid_t list[])
 {
@@ -117,31 +117,31 @@ KDEWIN_EXPORT int fchown(int __fd, uid_t __owner, gid_t __group )
 /* Get the real user ID of the calling process.  */
 KDEWIN_EXPORT uid_t getuid()
 {
-  return -2;    // keep in sync with Qt!
+  return -2;    /* keep in sync with Qt! */
 }
 
 /* Get the effective user ID of the calling process.  */
 KDEWIN_EXPORT uid_t geteuid (void)
 {
-  return -2;    // keep in sync with Qt!
+  return -2;    /* keep in sync with Qt! */
 }
 
 /* Get the real group ID of the calling process.  */
 KDEWIN_EXPORT gid_t getgid (void)
 {
-  return -2;    // keep in sync with Qt!
+  return -2;    /* keep in sync with Qt! */
 }
 
 /* Get the effective group ID of the calling process.  */
 KDEWIN_EXPORT gid_t getegid (void)
 {
-  return -2;    // keep in sync with Qt!
+  return -2;    /* keep in sync with Qt! */
 }
 
 KDEWIN_EXPORT int pipe(int *fd)
 {
   /** @todo */
-  //FIXME: wince does not have pipes
+  /*FIXME: wince does not have pipes */
 #ifndef _WIN32_WCE
   return _pipe( fd, 256, O_BINARY ); /* OK? */
 #else
@@ -168,13 +168,13 @@ KDEWIN_EXPORT unsigned alarm(unsigned __secs )
 }
 #ifndef HAVE_SIZE_T
   typedef unsigned int size_t;
-#endif //HAVE_SIZE_T
+#endif /*HAVE_SIZE_T */
 /*#define INCL_WINSOCK_API_PROTOTYPES 0
 #include <winsock2.h>*/
 
-// using winsock gethostname(), which would be taken normally requires WSAStartup called before 
-// which will not be done in every case
-//http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winsock/winsock/gethostname_2.asp
+/* using winsock gethostname(), which would be taken normally requires WSAStartup called before  */
+/* which will not be done in every case */
+/*http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winsock/winsock/gethostname_2.asp */
 
 KDEWIN_EXPORT int kde_gethostname(char *__name, size_t __len)
 {
@@ -233,7 +233,7 @@ char getlogin_buf[getlogin_buf_size+1];
 KDEWIN_EXPORT char* getlogin()
 {
 /*! @todo make this reentrant!*/
-//FIXME: wince does not have users
+/*FIXME: wince does not have users */
 	size_t size = sizeof(getlogin_buf);
 	*getlogin_buf = 0;
 #ifndef _WIN32_WCE
@@ -330,20 +330,20 @@ KDEWIN_EXPORT int mkstemps (char* _template, int suffix_len)
 }
 
 #ifndef _WIN32_WCE
-// from kdecore/fakes.c
+/* from kdecore/fakes.c */
 KDEWIN_EXPORT int mkstemp (char* _template)
 {
   return mkstemps( _template, 0 );
 }
 #endif
 
-// from kdecore/fakes.c
+/* from kdecore/fakes.c */
 int seteuid(uid_t euid)
 {
     return setreuid(-1, euid); /* Well, if you have neither you are in trouble :) */
 }
 
-// from kdecore/fakes.c
+/* from kdecore/fakes.c */
 /* Generate a unique temporary directory name from TEMPLATE.
 
    TEMPLATE has the form:
@@ -407,7 +407,7 @@ KDEWIN_EXPORT int revoke(const char *tty)
 }
 
 /* getpagesize for windows */
-//static 
+/*static  */
 KDEWIN_EXPORT long getpagesize (void)
 {
     static long g_pagesize = 0;
@@ -420,32 +420,32 @@ KDEWIN_EXPORT long getpagesize (void)
 }
 
 #ifndef __MINGW32__
-// XGetopt.cpp  Version 1.2
-//
-// Author:  Hans Dietrich
-//          hdietrich2@hotmail.com
-//
-// Description:
-//     XGetopt.cpp implements getopt(), a function to parse command lines.
-//
-// History
-//     Version 1.2 - 2003 May 17
-//     - Added Unicode support
-//
-//     Version 1.1 - 2002 March 10
-//     - Added example to XGetopt.cpp module header 
-//
-// This software is released into the public domain.
-// You are free to use it in any way you like.
-//
-// This software is provided "as is" with no expressed
-// or implied warranty.  I accept no liability for any
-// damage or loss of business that this software may cause.
-//
-// CE: from http://www.codeproject.com/cpp/xgetopt.asp
-//     removed unicode support to compile with mingw
-char *optarg = NULL;	// global argument pointer
-int   optind = 0; 	// global argv index
+/* XGetopt.cpp  Version 1.2 */
+/* */
+/* Author:  Hans Dietrich */
+/*          hdietrich2@hotmail.com */
+/* */
+/* Description: */
+/*     XGetopt.cpp implements getopt(), a function to parse command lines. */
+/* */
+/* History */
+/*     Version 1.2 - 2003 May 17 */
+/*     - Added Unicode support */
+/* */
+/*     Version 1.1 - 2002 March 10 */
+/*     - Added example to XGetopt.cpp module header  */
+/* */
+/* This software is released into the public domain. */
+/* You are free to use it in any way you like. */
+/* */
+/* This software is provided "as is" with no expressed */
+/* or implied warranty.  I accept no liability for any */
+/* damage or loss of business that this software may cause. */
+/* */
+/* CE: from http://www.codeproject.com/cpp/xgetopt.asp */
+/*     removed unicode support to compile with mingw */
+char *optarg = NULL;	/* global argument pointer */
+int   optind = 0; 	/* global argv index */
 int   opterr = 0; 	
 
 KDEWIN_EXPORT int getopt(int argc, char **argv, const char *optstring)
@@ -481,7 +481,7 @@ KDEWIN_EXPORT int getopt(int argc, char **argv, const char *optstring)
 		}
 
 		next = argv[optind];
-		next++;		// skip past -
+		next++;		/* skip past - */
 		optind++;
 	}
 
@@ -512,7 +512,7 @@ KDEWIN_EXPORT int getopt(int argc, char **argv, const char *optstring)
 
 	return c;
 }
-#endif  // __MINGW32__
+#endif  /* __MINGW32__ */
 
 
 int truncate(const char *path, off_t length)
@@ -571,7 +571,7 @@ int truncate(const char *path, off_t length)
 }
 
 #ifndef __MINGW32__
-// TODO (js) consider using _chsize_s
+/* TODO (js) consider using _chsize_s */
 int ftruncate(int fd, off_t length)
 {	
 #ifndef _WIN32_WCE
@@ -581,5 +581,5 @@ int ftruncate(int fd, off_t length)
   return 0;
 #endif
 }
-#endif  // __MINGW32__
+#endif  /* __MINGW32__ */
 

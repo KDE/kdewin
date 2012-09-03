@@ -19,7 +19,7 @@
 #ifndef KDEWIN_STRINGS_H
 #define KDEWIN_STRINGS_H
 
-// include everywhere
+/* include everywhere */
 #include <sys/types.h>
 
 void bzero(void *s, size_t n)

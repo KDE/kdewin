@@ -26,7 +26,7 @@
 
 #include <kde_file_win.h>
 
-//if retval != 0 it must be freed
+/*if retval != 0 it must be freed */
 char *customize_file_name(const char *file_name)
 {
 	char *fixed_file_name;
@@ -49,7 +49,7 @@ char *customize_file_name(const char *file_name)
 		fixed_file_name[len-1]=0;
 		return fixed_file_name;
 	}
-	//TODO "/" case?
+	/*TODO "/" case? */
 	return 0;
 }
 
@@ -59,7 +59,7 @@ KDEWIN_EXPORT int kdewin32_stat(const char *file_name, struct stat *buf)
 	char *fixed_file_name = customize_file_name(file_name);
 	int result = stat(fixed_file_name?fixed_file_name:file_name, buf);
 	free(fixed_file_name);
-	// be in sync with Qt4
+	/* be in sync with Qt4 */
 	buf->st_uid = -2;
 	buf->st_gid = -2;
 	return result;
@@ -71,7 +71,7 @@ KDEWIN_EXPORT int kdewin32_stat64(const char *file_name, struct _stat64 *buf)
 	char *fixed_file_name = customize_file_name(file_name);
 	int result = _stat64(fixed_file_name?fixed_file_name:file_name, buf);
 	free(fixed_file_name);
-	// be in sync with Qt4
+	/* be in sync with Qt4 */
 	buf->st_uid = -2;
 	buf->st_gid = -2;
 	return result;

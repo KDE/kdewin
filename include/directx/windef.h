@@ -23,7 +23,7 @@
 
 #include <../include/windef.h>
 
-// from wine include/windef.h
+/* from wine include/windef.h */
 # ifdef UNICODE
 #  define WINELIB_NAME_AW(func) func##W
 # else

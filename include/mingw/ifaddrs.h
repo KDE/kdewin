@@ -18,5 +18,5 @@
 
 #ifndef KDEWIN_IFADDRS_H
 #define KDEWIN_IFADDRS_H
-// emtpy file
-#endif  // KDEWIN_IFADDRS_H
+/* emtpy file */
+#endif  /* KDEWIN_IFADDRS_H */

@@ -79,4 +79,4 @@ union wait
 };
 #endif
 
-#endif  // KDEWIN_SYS_WAIT_H
+#endif  /* KDEWIN_SYS_WAIT_H */

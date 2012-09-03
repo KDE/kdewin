@@ -31,12 +31,12 @@
 #include <sys/socket.h>
 
 #ifndef SECTION_MAP_EXECUTE_EXPLICIT
-//not defined in the February 2003 version of the Platform  SDK 
+/*not defined in the February 2003 version of the Platform  SDK  */
 #define SECTION_MAP_EXECUTE_EXPLICIT 0x0020
 #endif
 
 #ifndef FILE_MAP_EXECUTE
-//not defined in the February 2003 version of the Platform  SDK 
+/*not defined in the February 2003 version of the Platform  SDK  */
 #define FILE_MAP_EXECUTE SECTION_MAP_EXECUTE_EXPLICIT
 #endif
 
@@ -45,9 +45,9 @@
 #define USE_MALLOC_LOCK 1
 
 struct mmapInfos {
-    HANDLE hFile;   // the duplicated fd
-    HANDLE hMap;    // handle returned by CreateFileMapping
-    void* start;    // ptr returned by MapViewOfFile
+    HANDLE hFile;   /* the duplicated fd */
+    HANDLE hMap;    /* handle returned by CreateFileMapping */
+    void* start;    /* ptr returned by MapViewOfFile */
 };
 
 CRITICAL_SECTION cs;
@@ -104,7 +104,7 @@ void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offse
         _set_errno( EINVAL );
         return MAP_FAILED;
     }
-    // we don't support this atm
+    /* we don't support this atm */
     if ( flags == MAP_FIXED ) {
         _set_errno( ENOTSUP );
         return MAP_FAILED;
@@ -115,8 +115,8 @@ void *mmap(void *start, size_t length, int prot , int flags, int fd, off_t offse
         return MAP_FAILED;
     }
 
-    // fd can be a crt or a win32 handle -> convert to win32 handle
-	// there are only one type of handles in wince so no need to convert
+    /* fd can be a crt or a win32 handle -> convert to win32 handle */
+	/* there are only one type of handles in wince so no need to convert */
 #ifndef _WIN32_WCE
     if(!GetHandleInformation( (HANDLE)fd, &dwFlags )) {
         if(GetLastError() == ERROR_INVALID_HANDLE) {

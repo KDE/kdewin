@@ -22,4 +22,4 @@
 
 /* dummy */
 
-#endif  // KDEWIN_SYS_UIO_H
+#endif  /* KDEWIN_SYS_UIO_H */

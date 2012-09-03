@@ -32,4 +32,4 @@ struct sockaddr_un {
 #define SUN_LEN(p) ((size_t)(((struct sockaddr_un *) NULL)->sun_path) \
 		   + strlen ((p)->sun_path))
 
-#endif  // KDEWIN_SYS_UN_H
+#endif  /* KDEWIN_SYS_UN_H */

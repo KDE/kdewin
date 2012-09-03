@@ -59,7 +59,7 @@
  does not work yet, replaces to many close functions()
 #include <io.h>
 
-// replacement for unix close function 
+replacement for unix close function
 inline void kde_close(int fd, char *a, int b)
 {
 	u_long res; 
@@ -77,4 +77,4 @@ inline void kde_close(int fd, char *a, int b)
 */ 
 
 
-#endif  // KDEWIN_SYS_SOCKET_H
+#endif  /* KDEWIN_SYS_SOCKET_H */

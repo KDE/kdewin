@@ -81,7 +81,7 @@
 #ifndef __MINGW32__
 
 #ifdef _WIN32_WCE
-// Wrap ASCII functions to UNICODE
+/* Wrap ASCII functions to UNICODE */
 
 static BOOL
 convert_find_data (LPWIN32_FIND_DATAW fdw, LPWIN32_FIND_DATAA fda)
@@ -255,4 +255,4 @@ KDEWIN_EXPORT int closedir(DIR *dp)
     return 0;
 }
 
-#endif // #ifndef __MINGW32__
+#endif /* #ifndef __MINGW32__ */

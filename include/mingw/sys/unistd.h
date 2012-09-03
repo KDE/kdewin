@@ -20,7 +20,7 @@
 #ifndef KDEWIN_SYS_UNISTD_H
 #define KDEWIN_SYS_UNISTD_H
 
-// isatty
+/* isatty */
 #include <io.h>
 
-#endif  // KDEWIN_SYS_UNISTD_H
+#endif  /* KDEWIN_SYS_UNISTD_H */

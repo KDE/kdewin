@@ -21,7 +21,7 @@
 #ifndef _ARPA_INET_H
 #define _ARPA_INET_H
 
-// include everywhere
+/* include everywhere */
 #include <sys/types.h>
 
 #include <netinet/in.h>
@@ -41,7 +41,7 @@ KDEWIN_EXPORT const char *kde_inet_ntop(int af, const void * src, char * dst, si
 KDEWIN_EXPORT int kde_inet_pton(int af, const char * src, void * dst);
 KDEWIN_EXPORT int inet_aton(const char *src, struct in_addr *addr);
 
-// FIXME - move to sys/errno.h
+/* FIXME - move to sys/errno.h */
 #ifndef EAFNOSUPPORT
 #define EAFNOSUPPORT 106
 #endif

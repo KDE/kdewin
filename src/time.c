@@ -28,7 +28,7 @@
 #define KDE_SECONDS_SINCE_1601	11644473600LL
 #define KDE_USEC_IN_SEC			1000000LL
 
-//after Microsoft KB167296  
+/*after Microsoft KB167296   */
 static void UnixTimevalToFileTime(struct timeval t, LPFILETIME pft)
 {
 	LONGLONG ll;
@@ -38,9 +38,9 @@ static void UnixTimevalToFileTime(struct timeval t, LPFILETIME pft)
 	pft->dwHighDateTime = ll >> 32;
 }
 
-//
-// sys/time.h fnctions
-//
+/* */
+/* sys/time.h fnctions */
+/* */
 #ifndef _WIN32_WCE
 KDEWIN_EXPORT int gettimeofday(struct timeval *__p, void *__t)
 {
@@ -57,7 +57,7 @@ KDEWIN_EXPORT int gettimeofday(struct timeval *__p, void *__t)
 }
 #endif
 
-//errno==EACCES on read-only devices
+/*errno==EACCES on read-only devices */
 KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2])
 {
 	FILETIME LastAccessTime;
@@ -94,20 +94,20 @@ KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2])
 			case ERROR_INVALID_DRIVE:
 				errno=ENOTDIR;
 				break;
-/*			case ERROR_WRITE_PROTECT:	//CreateFile sets ERROR_ACCESS_DENIED on read-only devices
+/*			case ERROR_WRITE_PROTECT:	reateFile sets ERROR_ACCESS_DENIED on read-only devices
 				errno=EROFS;
 				break;*/
 			case ERROR_ACCESS_DENIED:
 				errno=EACCES;
 				break;
 			default:
-				errno=ENOENT;	//what other errors can occur?
+				errno=ENOENT;	/*what other errors can occur? */
 		}
 		return -1;
 	}
 
 	if(!SetFileTime(hFile, NULL, &LastAccessTime, &LastModificationTime)) {
-		//can this happen?
+		/*can this happen? */
 		errno=ENOENT;
 		return -1;
 	}
@@ -115,7 +115,7 @@ KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2])
 	return 0;
 }
 
-// this is no posix function
+/* this is no posix function */
 #if 0
 KDEWIN_EXPORT int settimeofday(const struct timeval *__p, const struct timezone *__t)
 {
@@ -133,19 +133,19 @@ KDEWIN_EXPORT int settimeofday(const struct timeval *__p, const struct timezone 
 }
 #endif 
 
-//
-// time.h functions
-//
+/* */
+/* time.h functions */
+/* */
 KDEWIN_EXPORT struct tm* localtime_r(const time_t *t,struct tm *p)
 {
-	// CE: thread safe on windows - returns a ptr inside TLS afaik
+	/* CE: thread safe on windows - returns a ptr inside TLS afaik */
 	*p = *localtime( t );
 	return p; 
 }
 
 KDEWIN_EXPORT struct tm* gmtime_r(const time_t *t, struct tm *p)
 {
-	// CE: thread safe on windows - returns a ptr inside TLS afaik
+	/* CE: thread safe on windows - returns a ptr inside TLS afaik */
 	*p = *gmtime( t );
 	return p;
 }

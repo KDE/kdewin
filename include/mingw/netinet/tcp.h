@@ -18,5 +18,5 @@
 
 #ifndef KDEWIN_NETINET_TCP_H
 #define KDEWIN_NETINET_TCP_H
-// emtpy file
-#endif  // KDEWIN_NETINET_TCP_H
+/* emtpy file */
+#endif  /* KDEWIN_NETINET_TCP_H */

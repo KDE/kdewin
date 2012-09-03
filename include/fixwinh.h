@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-//#ifdef    don't do this, this file is supposed to be included
-//#define   multiple times
+/*#ifdef    don't do this, this file is supposed to be included */
+/*#define   multiple times */
 
 /* Usage:
 
@@ -55,8 +55,8 @@
 namespace W
 {
 
-// template --->
-// Affects: Should be without side effects.
+/* template ---> */
+/* Affects: Should be without side effects. */
 #ifdef Unsorted
 #ifndef FIXX11H_Unsorted
 #define FIXX11H_Unsorted
@@ -66,10 +66,10 @@ const int Unsorted = XUnsorted;
 #endif
 #undef Unsorted
 #endif
-// template <---
+/* template <--- */
 
-// template --->
-// Affects: Should be without side effects.
+/* template ---> */
+/* Affects: Should be without side effects. */
 #ifdef Bool
 #ifndef FIXX11H_Bool
 #define FIXX11H_Bool
@@ -79,10 +79,10 @@ typedef XBool Bool;
 #endif
 #undef Bool
 #endif
-// template <---
+/* template <--- */
 
-// template --->
-// Affects: Should be without side effects.
+/* template ---> */
+/* Affects: Should be without side effects. */
 #ifdef index
 #ifndef FIXX11H_index
 #define FIXX11H_index
@@ -100,9 +100,9 @@ char* index( const char* s, int c )
 #endif
 #undef index
 #endif
-// template <---
+/* template <--- */
 
-// OPTIONAL is defined '#define OPTIONAL' - so what to do here?
+/* OPTIONAL is defined '#define OPTIONAL' - so what to do here? */
 #ifdef OPTIONAL
 #ifndef FIXWINH_OPTIONAL
 #define FIXWINH_OPTIONAL
@@ -154,9 +154,9 @@ const int RELATIVE = WRELATIVE;
    {
     return WCreateEvent( lpEventAttributes, bManualReset, bInitialState, lpName );
    }
-# endif	// FIXWINH_CreateEvent
+# endif	/* FIXWINH_CreateEvent */
 # undef CreateEvent
-#endif	// CreateEvent
+#endif	/* CreateEvent */
 
 #ifdef interface
 #define FIXWINH_interface __STRUCT__
@@ -166,5 +166,5 @@ const int RELATIVE = WRELATIVE;
 }
 using namespace W;
 
-#endif	// cplusplus
-#endif	// defined(_WIN32) || defined(_WIN64)
+#endif	/* cplusplus */
+#endif	/* defined(_WIN32) || defined(_WIN64) */

@@ -20,7 +20,7 @@
 #ifndef KDEWIN_DIRENT_H
 #define KDEWIN_DIRENT_H
 
-// include everywhere
+/* include everywhere */
 #include <sys/types.h>
 
 #include <../include/dirent.h>
@@ -29,13 +29,13 @@
 extern "C" {
 #endif
 
-// Implement readdir_r(). For now do not provide dummy function to avoid setting HAVE_READDIR_R.
-// Code like DirectoryListThread::run() in kio/kio/kurlcompletion.cpp uses readdir() when !HAVE_READDIR_R.
+/* Implement readdir_r(). For now do not provide dummy function to avoid setting HAVE_READDIR_R. */
+/* Code like DirectoryListThread::run() in kio/kio/kurlcompletion.cpp uses readdir() when !HAVE_READDIR_R. */
 
-// KDEWIN_EXPORT struct dirent* readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result);
+/* KDEWIN_EXPORT struct dirent* readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result); */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // KDEWIN_DIRENT_H
+#endif  /* KDEWIN_DIRENT_H */

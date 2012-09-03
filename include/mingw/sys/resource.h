@@ -86,5 +86,5 @@ KDEWIN_EXPORT int getrusage (int __who, struct rusage *__rusage);
 }
 #endif
 
-#endif  // KDEWIN_SYS_RESOURCE_H
+#endif  /* KDEWIN_SYS_RESOURCE_H */
 

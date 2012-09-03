@@ -26,7 +26,7 @@
 #include <string.h>
 
 #if defined(_MSC_VER) && _MSC_VER >= 1400
-// use secure functions declared in msvc >= 2005
+/* use secure functions declared in msvc >= 2005 */
 #define KDEWIN_USE_ENV_S
 #endif
 
@@ -42,10 +42,10 @@ static void putenvMsvcrt(const char *name, const char *value)
 #ifdef _MSC_VER
         HANDLE hModule = LoadLibraryA("msvcrt");
 #else
-        // it doesn't work when msvcr80 isn't loaded - we end up in an error
-        // message due to crappy manifest things :(
-        // maybe someone has an idea how to fix this.
-        //HANDLE hModule = LoadLibraryA("msvcr80");
+        /* it doesn't work when msvcr80 isn't loaded - we end up in an error */
+        /* message due to crappy manifest things :( */
+        /* maybe someone has an idea how to fix this. */
+        /*HANDLE hModule = LoadLibraryA("msvcr80"); */
         HANDLE hModule = NULL;
 #endif
         if( hModule )
@@ -68,10 +68,10 @@ static void putenvMsvcrt(const char *name, const char *value)
     free(a);
 }
 
-// from kdecore/fakes.c
+/* from kdecore/fakes.c */
 KDEWIN_EXPORT int setenv(const char *name, const char *value, int overwrite)
 {
-//FIXME: There is no env in wince, so disable it
+/*FIXME: There is no env in wince, so disable it */
 #ifndef _WIN32_WCE
 #ifndef KDEWIN_USE_ENV_S
     int i, iRet;
@@ -80,9 +80,9 @@ KDEWIN_EXPORT int setenv(const char *name, const char *value, int overwrite)
 
     if (!overwrite && getenv(name)) return 0;
 
-    // make sure to set the env var in all our possible runtime environments
+    /* make sure to set the env var in all our possible runtime environments */
     putenvMsvcrt(name, value);
-    //SetEnvironmentVariableA(name, value);     // unsure if we need it...
+    /*SetEnvironmentVariableA(name, value);     // unsure if we need it... */
 
 #ifdef KDEWIN_USE_ENV_S
     return _putenv_s(name, value ? value : "");
@@ -108,7 +108,7 @@ KDEWIN_EXPORT int setenv(const char *name, const char *value, int overwrite)
 }
 
 
-// from kdecore/fakes.c
+/* from kdecore/fakes.c */
 KDEWIN_EXPORT int unsetenv (const char *name)
 {
     if (name == NULL || *name == '\0' || strchr (name, '=') != NULL)

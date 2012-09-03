@@ -21,8 +21,8 @@
 #define KDEWIN_ASM_BYTEORDER_H
 
 #undef INCL_WINSOCK_API_PROTOTYPES
-#define INCL_WINSOCK_API_PROTOTYPES 1 //for ntohl(), etc.
-#include <winsock2.h> //struct timeval, ntohl(), etc
+#define INCL_WINSOCK_API_PROTOTYPES 1 /*for ntohl(), etc. */
+#include <winsock2.h> /*struct timeval, ntohl(), etc */
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,9 +46,9 @@ extern __inline__ unsigned short int	__constant_ntohs(unsigned short int);
 extern __inline__ unsigned long int
 __ntohl(unsigned long int x)
 {
-	__asm__("xchgb %b0,%h0\n\t"	// swap lower bytes	
-		"rorl $16,%0\n\t"	// swap words		
-		"xchgb %b0,%h0"		// swap higher bytes	
+	__asm__("xchgb %b0,%h0\n\t"	/* swap lower bytes	 */
+		"rorl $16,%0\n\t"	/* swap words		 */
+		"xchgb %b0,%h0"		/* swap higher bytes	 */
 		:"=q" (x)
 		: "0" (x));
 	return x;
@@ -63,7 +63,7 @@ __ntohl(unsigned long int x)
 extern __inline__ unsigned short int
 __ntohs(unsigned short int x)
 {
-	__asm__("xchgb %b0,%h0"		// swap bytes		
+	__asm__("xchgb %b0,%h0"		/* swap bytes		 */
 		: "=q" (x)
 		:  "0" (x));
 	return x;
@@ -101,4 +101,4 @@ __ntohs(unsigned short int x)
 }
 #endif
 
-#endif  // KDEWIN_ASM_BYTEORDER_H
+#endif  /* KDEWIN_ASM_BYTEORDER_H */

@@ -33,7 +33,7 @@ struct itimerval {
 };
 
 KDEWIN_EXPORT int gettimeofday(struct timeval *__p, void *__t);
-//errno==EACCES on read-only devices
+/*errno==EACCES on read-only devices */
 KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2]);
 
 /* this is no posix function
@@ -86,4 +86,4 @@ KDEWIN_EXPORT int settimeofday(const struct timeval *, const struct timezone *);
 }
 #endif
 
-#endif  // KDEWIN_SYS_TIME_H
+#endif  /* KDEWIN_SYS_TIME_H */

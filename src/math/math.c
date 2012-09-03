@@ -43,16 +43,16 @@ KDEWIN_EXPORT union _ieee_rep __QNAN = { __DOUBLE_QNAN_REP };
 KDEWIN_EXPORT union _ieee_rep __SNAN  = { __DOUBLE_SNAN_REP };
 KDEWIN_EXPORT union _ieee_rep __INF = { __DOUBLE_INF_REP };
 KDEWIN_EXPORT union _ieee_rep __DENORM = { __DOUBLE_DENORM_REP };
-// msdn:
-// The representation of long double and double is identical.
-// However, long double and double are separate types.
+/* msdn: */
+/* The representation of long double and double is identical. */
+/* However, long double and double are separate types. */
 KDEWIN_EXPORT union _ieee_rep __QNANL = { __DOUBLE_QNAN_REP };
 KDEWIN_EXPORT union _ieee_rep __SNANL  = { __DOUBLE_SNAN_REP };
 KDEWIN_EXPORT union _ieee_rep __INFL = { __DOUBLE_INF_REP };
 KDEWIN_EXPORT union _ieee_rep __DENORML = { __DOUBLE_DENORM_REP };
 
 /* 7.12.5.1 */
-// acosh(x) = log (x + sqrt(x * x - 1))
+/* acosh(x) = log (x + sqrt(x * x - 1)) */
 KDEWIN_EXPORT float acoshf ( float x )
 {
   if ( _isnan ( x ) || x < 1.0f ) {
@@ -77,7 +77,7 @@ KDEWIN_EXPORT long double acoshl ( long double x )
 }
 
 /* 7.12.5.2 */
-// asinh(x) = ln (x + sqrt(x * x + 1))
+/* asinh(x) = ln (x + sqrt(x * x + 1)) */
 KDEWIN_EXPORT float asinhf ( float x )
 {
   if ( _isnan ( x ) ) {
@@ -108,8 +108,8 @@ KDEWIN_EXPORT long double asinhl ( long double x )
 }
 
 /* 7.12.5.3 */
-// atanh(x) = 0.5 * log( (1+x) / (1-x) )
-//KDEWIN_EXPORT float asinhf (float)
+/* atanh(x) = 0.5 * log( (1+x) / (1-x) ) */
+/*KDEWIN_EXPORT float asinhf (float) */
 KDEWIN_EXPORT double atanhf ( float x )
 {
   if ( _isnan ( x ) || fabsf ( x ) >= 1.0f ) {

@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <math.h>   // just to create the stubs - moveme to math.c once it's available
+#include <math.h>   /* just to create the stubs - moveme to math.c once it's available */
 
 #ifndef MIN
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
