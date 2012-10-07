@@ -18,13 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef NO_KDEWIN
-#ifndef KDEWIN_STDIO_H
-#define KDEWIN_STDIO_H
-
 // include everywhere
 #include <sys/types.h>
-#endif /* NO_KDEWIN */
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
@@ -34,6 +29,9 @@
 #endif
 
 #ifndef NO_KDEWIN
+#ifndef KDEWIN_STDIO_H
+#define KDEWIN_STDIO_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
