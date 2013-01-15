@@ -22,8 +22,8 @@ OPTION(BUILD_TESTS "build test applications " OFF)
 OPTION(BUILD_EXAMPLES "build example applications " OFF)
 OPTION(BUILD_TOOLS "build tools" OFF)
 OPTION(BUILD_QT_LIB "build qt based libraries " ON)
-OPTION(BUILD_BASE_LIB "build base libraries " OFF)
-OPTION(BUILD_BASE_LIB_WITH_QT "build base library with qt part included" OFF)
+OPTION(BUILD_BASE_LIB "build base libraries " ON)
+OPTION(BUILD_BASE_LIB_WITH_QT "build base library with qt part included" ON)
 OPTION(STATIC_LIBRARY "Build kdewin as a static library." OFF)
 
 # there are three mingw compilers 
