@@ -47,7 +47,7 @@
 */
 static QString longFileName(const QString &path)
 {
-    QString absPath = QDir::convertSeparators(path);
+    QString absPath = QDir::toNativeSeparators(path);
     QString prefix = QLatin1String("\\\\?\\");
     if (path.startsWith(QLatin1String("//")) ||
         path.startsWith(QLatin1String("\\\\"))) {

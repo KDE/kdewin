@@ -22,8 +22,8 @@ OPTION(BUILD_TESTS "build test applications " OFF)
 OPTION(BUILD_EXAMPLES "build example applications " OFF)
 OPTION(BUILD_TOOLS "build tools" OFF)
 OPTION(BUILD_QT_LIB "build qt based libraries " ON)
-OPTION(BUILD_BASE_LIB "build base libraries " ON)
-OPTION(BUILD_BASE_LIB_WITH_QT "build base library with qt part included" ON)
+OPTION(BUILD_BASE_LIB "build base libraries " OFF)
+OPTION(BUILD_BASE_LIB_WITH_QT "build base library with qt part included" OFF)
 OPTION(STATIC_LIBRARY "Build kdewin as a static library." OFF)
 
 # there are three mingw compilers 
@@ -39,7 +39,7 @@ OPTION(MINGW_W32 "build for mingw-w32 " OFF)
 find_package(KDEWIN_Packager)
 if (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT OR BUILD_TOOLS)
     # used by tools 
-    find_package(Qt4 REQUIRED)
+    find_package(Qt5Transitional REQUIRED Gui)
 endif (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT OR BUILD_TOOLS)
 
 message(STATUS ${test_INCLUDE_DIRS} ${test_LIBRARY})
