@@ -132,7 +132,7 @@ install(EXPORT KDEWin_targets FILE KDEWinTargets.cmake DESTINATION lib/cmake/KDE
 
 if (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
     install(FILES readme.txt  DESTINATION doc/kdewin-${KDEWIN_VERSION_STR})
-    install(FILES cmake/modules/FindKDEWIN.cmake  DESTINATION share/apps/cmake/modules)
+    install(FILES cmake/modules/FindKDEWin.cmake  DESTINATION share/apps/cmake/modules)
     install(FILES cmake/modules/FindKDEWIN32.cmake  DESTINATION share/apps/cmake/modules)
 endif (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
     

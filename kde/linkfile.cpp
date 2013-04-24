@@ -24,7 +24,7 @@
 #include <QDir>
 #include <QFile>
 
-#include <qDebug>
+#include <QDebug>
 #define kDebug qDebug
 
 #ifndef _WIN32_WCE
