@@ -14,15 +14,16 @@ endif (MINGW)
     
 INCLUDE(CheckTypeSize)
 INCLUDE(CheckFunctionExists)
-CHECK_TYPE_SIZE(size_t HAVE_SIZE_T)
+INCLUDE(CheckSymbolExists)
 
-if(HAVE_SIZE_T)
-  add_definitions(-DHAVE_SIZE_T)
-endif(HAVE_SIZE_T)
+SET(CMAKE_EXTRA_INCLUDE_FILES unistd.h)
+CHECK_TYPE_SIZE(size_t KDEWIN_HAVE_SIZE_T)
 
-CHECK_FUNCTION_EXISTS(usleep      HAVE_USLEEP)
-set (KDEWIN_HAVE_USLEEP 1)
-if(HAVE_USLEEP)
-  set (KDEWIN_HAVE_USLEEP)
-  add_definitions(-DHAVE_USLEEP)
-endif(HAVE_USLEEP)
+CHECK_FUNCTION_EXISTS(usleep        KDEWIN_HAVE_USLEEP)
+CHECK_FUNCTION_EXISTS(sleep         KDEWIN_HAVE_SLEEP)
+CHECK_FUNCTION_EXISTS(fork          KDEWIN_HAVE_FORK)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdewin_config.h)
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/kdewin_config.h DESTINATION include)
+
+

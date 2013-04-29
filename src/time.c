@@ -136,16 +136,20 @@ KDEWIN_EXPORT int settimeofday(const struct timeval *__p, const struct timezone 
 /* */
 /* time.h functions */
 /* */
+#ifndef localtime_r
 KDEWIN_EXPORT struct tm* localtime_r(const time_t *t,struct tm *p)
 {
 	/* CE: thread safe on windows - returns a ptr inside TLS afaik */
 	*p = *localtime( t );
 	return p; 
 }
+#endif
 
+#ifndef gmtime_r
 KDEWIN_EXPORT struct tm* gmtime_r(const time_t *t, struct tm *p)
 {
 	/* CE: thread safe on windows - returns a ptr inside TLS afaik */
 	*p = *gmtime( t );
 	return p;
 }
+#endif

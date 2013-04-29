@@ -19,6 +19,8 @@
 #ifndef KDE_TIME_H
 #define KDE_TIME_H
 
+#include "kdewin_config.h"
+
 #include <sys/types.h>
 #include <../include/time.h>
 
@@ -26,8 +28,14 @@
 extern "C" {
 #endif 
 
+#ifndef localtime_r
 KDEWIN_EXPORT struct tm *localtime_r(const time_t *clock, struct tm *result);
+#endif
+
+#ifndef gmtime_r
 KDEWIN_EXPORT struct tm *gmtime_r(const time_t *clock, struct tm *result);
+#endif
+
 KDEWIN_EXPORT char *strptime (const char *buf, const char *format, struct tm *tm);
 
 #ifdef __cplusplus

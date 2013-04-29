@@ -29,6 +29,7 @@
 #define socklen_t int
 #endif
 
+#if __MINGW64_VERSION_MAJOR < 3
 #define EALREADY      WSAEALREADY    
 #define ECONNABORTED  WSAECONNABORTED
 #define ECONNREFUSED  WSAECONNREFUSED
@@ -49,6 +50,7 @@
 #define EMSGSIZE      WSAEMSGSIZE
 #define EADDRNOTAVAIL WSAEADDRNOTAVAIL
 #define EPROTONOSUPPORT WSAEPROTONOSUPPORT
+#endif
 
 /* better do this at the app level
 #include <sys/ioctl.h>

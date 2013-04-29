@@ -20,6 +20,8 @@
 #ifndef _KDEWIN_UNISTD_H
 #define _KDEWIN_UNISTD_H
 
+#include "kdewin_config.h"
+
 #include <sys/types.h>
 #include <../include/unistd.h>
 
@@ -101,7 +103,9 @@ KDEWIN_EXPORT int link(const char *__name1, const char *__name2);
 
 KDEWIN_EXPORT int pipe(int *fd);
 
+#ifndef KDEWIN_HAVE_FORK
 KDEWIN_EXPORT pid_t fork(void);
+#endif
 
 KDEWIN_EXPORT pid_t setsid(void);
 
@@ -118,11 +122,13 @@ KDEWIN_EXPORT char* getlogin();
 
 KDEWIN_EXPORT int fsync (int fd);
 
-#ifdef KDEWIN_HAVE_USLEEP
+#ifndef KDEWIN_HAVE_USLEEP
 KDEWIN_EXPORT int usleep(useconds_t useconds);
 #endif
 
+#ifndef KDEWIN_HAVE_USLEEP
 KDEWIN_EXPORT int sleep(unsigned int sec);
+#endif
 
 KDEWIN_EXPORT int setreuid(uid_t ruid, uid_t euid);
 
