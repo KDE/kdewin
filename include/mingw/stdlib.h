@@ -53,7 +53,9 @@ KDEWIN_EXPORT void srandom(unsigned int seed);
 
 KDEWIN_EXPORT double drand48(void);
 
+#ifndef rand_r
 KDEWIN_EXPORT int rand_r(unsigned *seed);
+#endif
 
 KDEWIN_EXPORT char* realpath(const char *path,char *resolved_path);
 
