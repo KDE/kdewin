@@ -4,6 +4,7 @@
 #cmakedefine KDEWIN_HAVE_USLEEP
 #cmakedefine KDEWIN_HAVE_SLEEP
 #cmakedefine KDEWIN_HAVE_FORK
+#cmakedefine KDEWIN_HAVE_TRUNCATE
 
 #cmakedefine KDEWIN_HAVE_SIZE_T
 

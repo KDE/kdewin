@@ -35,31 +35,6 @@
 extern "C" {
 #endif
 
-#if 0
-#define	F_OK	0
-#define	R_OK	4
-#define	W_OK	2
-#define	X_OK	1 
-
-/* + from <sys/stat.h>: */
-#define	_IFMT		0170000	/* type of file */
-#define		_IFDIR	0040000	/* directory */
-#define		_IFCHR	0020000	/* character special */
-#define		_IFBLK	0060000	/* block special */
-#define		_IFREG	0100000	/* regular */
-#define		_IFLNK	0120000	/* symbolic link */
-#define		_IFSOCK	0140000	/* socket */
-#define		_IFIFO	0010000	/* fifo */
-
-#define	S_ISBLK(m)	(((m)&_IFMT) == _IFBLK)
-#define	S_ISCHR(m)	(((m)&_IFMT) == _IFCHR)
-#define	S_ISDIR(m)	(((m)&_IFMT) == _IFDIR)
-#define	S_ISFIFO(m)	(((m)&_IFMT) == _IFIFO)
-#define	S_ISREG(m)	(((m)&_IFMT) == _IFREG)
-#define	S_ISLNK(m)	(((m)&_IFMT) == _IFLNK)
-#define	S_ISSOCK(m)	(((m)&_IFMT) == _IFSOCK)
-#endif 
-
 #ifndef STDIN_FILENO
 #define STDIN_FILENO 0
 #endif
@@ -148,16 +123,9 @@ KDEWIN_EXPORT int revoke(const char *tty);
 
 KDEWIN_EXPORT long getpagesize (void);
 
-/* already defined in mingw
-KDEWIN_EXPORT int getopt(int argc, char **argv, const char *optstring);
-extern KDEWIN_EXPORT char *optarg;
-extern KDEWIN_EXPORT int optind; /*, opterr, optopt */
-
+#ifndef KDEWIN_HAVE_TRUNCATE
 KDEWIN_EXPORT int truncate(const char *path, off_t length);
-
-/* already defined in mingw
-KDEWIN_EXPORT int ftruncate(int fd, off_t length);
-*/
+#endif
 
 #ifdef __cplusplus
 }

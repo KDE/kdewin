@@ -515,7 +515,7 @@ KDEWIN_EXPORT int getopt(int argc, char **argv, const char *optstring)
 }
 #endif  /* __MINGW32__ */
 
-
+#ifndef KDEWIN_HAVE_TRUNCATE
 int truncate(const char *path, off_t length)
 {
     
@@ -570,6 +570,7 @@ int truncate(const char *path, off_t length)
 #endif
     return 0;
 }
+#endif
 
 #ifndef __MINGW32__
 /* TODO (js) consider using _chsize_s */
