@@ -29,26 +29,86 @@
 #define socklen_t int
 #endif
 
+#ifndef EALREADY
 #define EALREADY      WSAEALREADY    
+#endif
+
+#ifndef ECONNABORTED
 #define ECONNABORTED  WSAECONNABORTED
+#endif
+
+#ifndef ECONNREFUSED  
 #define ECONNREFUSED  WSAECONNREFUSED
+#endif
+
+#ifndef ECONNRESET
 #define ECONNRESET    WSAECONNRESET  
+#endif
+
+#ifndef EHOSTDOWN
 #define EHOSTDOWN     WSAEHOSTDOWN   
+#endif
+
+#ifndef EHOSTUNREACH
 #define EHOSTUNREACH  WSAEHOSTUNREACH
+#endif
+
+#ifndef EINPROGRESS
 #define EINPROGRESS   WSAEINPROGRESS 
-#define EISCONN       WSAEISCONN     
+#endif
+
+#ifndef EISCONN
+#define EISCONN       WSAEISCONN 
+#endif
+
+#ifndef ENETDOWN
 #define ENETDOWN      WSAENETDOWN    
-#define ENETRESET     WSAENETRESET   
+#endif
+
+
+#ifndef ENETRESET
+#define ENETRESET     WSAENETRESET  
+#endif
+
+#ifndef ENETUNREACH
 #define ENETUNREACH   WSAENETUNREACH 
+#endif
+
+#ifndef EWOULDBLOCK
 #define EWOULDBLOCK   WSAEWOULDBLOCK 
+#endif
+
+#ifndef EADDRINUSE
 #define EADDRINUSE    WSAEADDRINUSE
+#endif
+
+#ifndef ENOTSUP
 #define ENOTSUP       ENOSYS
+#endif
+
+#ifndef ETIMEDOUT
 #define ETIMEDOUT     WSAETIMEDOUT
+#endif
+
+#ifndef ENOTSOCK
 #define ENOTSOCK      WSAENOTSOCK
+#endif
+
+#ifndef ENOBUFS
 #define ENOBUFS       WSAENOBUFS
+#endif
+
+#ifndef EMSGSIZE
 #define EMSGSIZE      WSAEMSGSIZE
+#endif
+
+#ifndef EADDRNOTAVAIL
 #define EADDRNOTAVAIL WSAEADDRNOTAVAIL
+#endif
+
+#ifndef EPROTONOSUPPORT
 #define EPROTONOSUPPORT WSAEPROTONOSUPPORT
+#endif
 
 /* better do this at the app level
 #include <sys/ioctl.h>
