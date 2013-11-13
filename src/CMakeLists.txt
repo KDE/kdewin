@@ -87,9 +87,35 @@ install(TARGETS kdewin
   ARCHIVE DESTINATION lib
 )
 
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/required_ioctls_test.cpp
+"#include <windows.h>
+#include <winioctl.h>
+#if !defined(IOCTL_STORAGE_QUERY_PROPERTY)
+#error 1
+#endif
+
+int main() { return 0; }
+")
+try_compile(HAVE_REQUIRED_IOCTLS ${CMAKE_CURRENT_BINARY_DIR}
+                                 ${CMAKE_CURRENT_BINARY_DIR}/required_ioctls_test.cpp)
+
+set(ddk_HDRS
+  ../include/ntddcdrm.h
+  ../include/ntddcdvd.h
+  ../include/ntddmmc.h
+  ../include/ntddstor.h
+)
+
 install(DIRECTORY ../include/${_incDirPrefix}                  DESTINATION include PATTERN ".svn" EXCLUDE)
 install(FILES ../include/fixwinh.h ../include/kde_file_win.h   DESTINATION include)
 install(FILES ${CMAKE_BINARY_DIR}/include/kdewin_export.h      DESTINATION include)
+
+install(FILES ${ddk_HDRS}                                      DESTINATION include/${_incDirPrefix})
+
+if(MINGW AND NOT HAVE_REQUIRED_IOCTLS)
+    message(STATUS "you miss the required ioctl definitions. Installing winioctl_backport.h")
+    install(FILES ../include/winioctl_backport.h               DESTINATION include/${_incDirPrefix})
+endif(MINGW AND NOT HAVE_REQUIRED_IOCTLS)
 
 if(MINGW32 AND NOT MINGW_W32)
     install(DIRECTORY ../include/directx                       DESTINATION include/${_incDirPrefix} PATTERN ".svn" EXCLUDE)
