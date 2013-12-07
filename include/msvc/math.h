@@ -18,6 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
+#if defined(_WIN32_WCE) || defined(_WIN64)
+#define DONT_USE_ASM
+#endif
+
 #ifndef NO_KDEWIN
 #ifndef _MSC_VER
 # error This header is for msvc only!
@@ -55,17 +59,27 @@ extern "C" {
 
 // some definitions
 extern KDEWIN_EXPORT float __INFF;
+#ifndef HUGE_VALF
 #define HUGE_VALF __INFF
+#endif
 extern KDEWIN_EXPORT long double  __INFL;
+#ifndef HUGE_VALL
 #define HUGE_VALL __INFL
+#endif
+#ifndef INFINITY
 #define INFINITY HUGE_VALF
+#endif
 extern KDEWIN_EXPORT double __QNAN;
+#ifndef NAN
 #define NAN __QNAN
+#endif
 
+#if _MSC_VER < 1700
 KDEWIN_EXPORT __inline int isnan(double num) { return _isnan(num); }
 KDEWIN_EXPORT __inline int isinf(double num) { return !_finite(num) && !_isnan(num); }
 KDEWIN_EXPORT __inline int finite(double num) { return _finite(num); }
 KDEWIN_EXPORT __inline int signbit(double num) { return _copysign(1.0, num) < 0; }
+#endif
 
 KDEWIN_EXPORT double remainder(double x, double y);
 
@@ -201,9 +215,11 @@ KDEWIN_EXPORT double asinh (double);
 KDEWIN_EXPORT long double asinhl (long double);
 
 /* 7.12.5.3 */
+#if _MSC_VER < 1800
 KDEWIN_EXPORT float atanhf (float);
 KDEWIN_EXPORT double atanh (double);
 KDEWIN_EXPORT long double atanhl (long double);
+#endif
 
 /* 7.12.6.3 The expm1 functions */
 KDEWIN_EXPORT double expm1(double);
@@ -253,7 +269,7 @@ KDEWIN_EXPORT __inline float log10f (float x) {return ((float)log10((double)x));
 KDEWIN_EXPORT __inline float fabsf (float x) {return ((float)fabs((double)x));}
 #endif
 
-#ifndef _WIN32_WCE
+#ifndef DONT_USE_ASM
 /* 7.12.9.3 */
 // this is a little bit more complicated - don't raise an exception
 // -> set fpu control word bit 5 so it won't generate one
@@ -414,7 +430,7 @@ KDEWIN_EXPORT __inline long double roundl ( long double x )
   return (long double)lroundl( x );
 }
 
-#ifndef _WIN32_WCE
+#ifndef DONT_USE_ASM
 /* 7.12.9.8 */
 /* round towards zero, regardless of fpu control word settings */
 KDEWIN_EXPORT __inline float truncf( float x )
@@ -549,7 +565,7 @@ KDEWIN_EXPORT __inline long double fminl (long double a, long double b)
 #ifdef __cplusplus
 }
 
-#if _MSC_VER >= 1400 && !defined(_WIN32_WCE)
+#if _MSC_VER >= 1400 && !defined(DONT_USE_ASM)
 // convenience function to avoid useless casts from int to whatever
 __inline long double sqrt(int x)
 {

@@ -45,7 +45,9 @@
 #endif /* KDEWIN_WINDOWS_H */
 #endif /* NO_KDEWIN */
 /* regular header from msvc includes */
-#ifndef _WIN32_WCE
+#if _MSC_VER >= 1700
+#include <../um/windows.h>
+#elif !define(_WIN32_WCE)
 #include <../include/windows.h>
 #else
 #include <../Armv4i/windows.h>

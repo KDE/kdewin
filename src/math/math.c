@@ -3,6 +3,10 @@
   public domain
 */
 
+#if defined(_WIN32_WCE) || defined(_WIN64)
+#define DONT_USE_ASM
+#endif
+
 #ifndef _USE_MATH_DEFINES
 # define _USE_MATH_DEFINES
 #endif
@@ -110,6 +114,7 @@ KDEWIN_EXPORT long double asinhl ( long double x )
 /* 7.12.5.3 */
 /* atanh(x) = 0.5 * log( (1+x) / (1-x) ) */
 /*KDEWIN_EXPORT float asinhf (float) */
+#if _MSC_VER < 1800
 KDEWIN_EXPORT double atanhf ( float x )
 {
   if ( _isnan ( x ) || fabsf ( x ) >= 1.0f ) {
@@ -132,8 +137,9 @@ KDEWIN_EXPORT long double atanhl ( long double x )
 {
   return atanh ( ( double ) x );
 }
+#endif
 
-#ifndef _WIN32_WCE
+#ifndef DONT_USE_ASM
 /* Public domain, from mingwex library, adjusted to compile with msvc */
 KDEWIN_EXPORT double log1p(double x)
 {

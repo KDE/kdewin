@@ -21,7 +21,7 @@
 static const double dbLOGE2L = 6.9314718055994530941723E-1L;
 static const float fLOGE2L = 6.9314718055994530941723E-1L;
 
-#ifndef _WIN32_WCE
+#ifndef DONT_USE_ASM
 
 double expm1 (double x)
 {
