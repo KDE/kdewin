@@ -74,7 +74,7 @@ extern KDEWIN_EXPORT double __QNAN;
 #define NAN __QNAN
 #endif
 
-#if _MSC_VER < 1700
+#if _MSC_VER < 1800
 KDEWIN_EXPORT __inline int isnan(double num) { return _isnan(num); }
 KDEWIN_EXPORT __inline int isinf(double num) { return !_finite(num) && !_isnan(num); }
 KDEWIN_EXPORT __inline int finite(double num) { return _finite(num); }
