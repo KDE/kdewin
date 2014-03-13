@@ -47,7 +47,7 @@
 /* regular header from msvc includes */
 #if _MSC_VER >= 1700
 #include <../um/windows.h>
-#elif !define(_WIN32_WCE)
+#elif !defined(_WIN32_WCE)
 #include <../include/windows.h>
 #else
 #include <../Armv4i/windows.h>
