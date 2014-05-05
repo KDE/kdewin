@@ -227,9 +227,11 @@ KDEWIN_EXPORT float expm1f(float);
 KDEWIN_EXPORT long double expm1l(long double);
 
 /* 7.12.6.9 */
+#if _MSC_VER < 1800
 KDEWIN_EXPORT double log1p(double);
 KDEWIN_EXPORT float log1pf(float);
 KDEWIN_EXPORT long double log1pl(long double);
+#endif
 
 /* 7.12.8.1 The erf functions  */
 KDEWIN_EXPORT double erf (double);

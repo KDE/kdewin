@@ -140,6 +140,7 @@ KDEWIN_EXPORT long double atanhl ( long double x )
 #endif
 
 #ifndef DONT_USE_ASM
+#if _MSC_VER < 1800
 /* Public domain, from mingwex library, adjusted to compile with msvc */
 KDEWIN_EXPORT double log1p(double x)
 {
@@ -234,4 +235,4 @@ KDEWIN_EXPORT long double log1pl(long double x)
     return log1p((double)x);
 }
 #endif
-
+#endif
