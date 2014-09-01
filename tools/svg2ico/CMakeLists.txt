@@ -18,4 +18,4 @@ endif(MINGW)
 add_executable(svg2ico svg2ico.cpp )
 target_link_libraries(svg2ico ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTSVG_LIBRARY} ${ZLIB_LIBRARY})
 
-install(TARGETS svg2ico DESTINATION bin)
+install(TARGETS svg2ico EXPORT KDEWin_tools_targets DESTINATION bin)
