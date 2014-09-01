@@ -10,6 +10,7 @@ set(KDEWIN_VERSION "0x${KDEWIN_VERSION}")
 set (KDEWIN_VERSION_STR ${KDEWin_VERSION_MAJOR}.${KDEWin_VERSION_MINOR}.${KDEWin_VERSION_PATCH})
 # stay in sync with kdelibs
 cmake_minimum_required(VERSION 2.6.2)
+cmake_policy(SET CMP0020 NEW)
 
 project(${NAME})
 
