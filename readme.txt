@@ -6,6 +6,20 @@ available on supported windows compilers and SDK's.
 
 history
 -------
+version 0.5.8
+- update readme
+- install readme's in share/doc/kdewin...-<version>, which is the correct location
+
+version 0.5.7
+- Add a cmake config file for kdewin-tools.
+- fix bug related to urlmon include
+- additional compiler support: intel compiler, MSVC x64, 2012 and 2013
+- dont build mt on msvc
+- add Windows Driver Kit headers
+
+version 0.5.6
+- fixes (see git log)
+
 version 0.5.5
 - removed obsolate kdewin32 library
 - splitted source to be able to build separate binary packages like 
