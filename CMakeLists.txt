@@ -1,7 +1,7 @@
 set (NAME kdewin)
 set(KDEWin_VERSION_MAJOR 0)
 set(KDEWin_VERSION_MINOR 5)
-set(KDEWin_VERSION_PATCH 7)
+set(KDEWin_VERSION_PATCH 8)
 
 # calculate the version in an ugly way
 math(EXPR KDEWIN_VERSION '1000000+${KDEWin_VERSION_MAJOR}*10000+${KDEWin_VERSION_MINOR}*100+${KDEWin_VERSION_PATCH}')
