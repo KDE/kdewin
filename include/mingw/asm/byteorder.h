@@ -36,8 +36,8 @@ extern "C" {
 #define __LITTLE_ENDIAN_BITFIELD
 #endif
 
-extern __inline__ unsigned long int	__ntohl(unsigned long int);
-extern __inline__ unsigned short int	__ntohs(unsigned short int);
+static __inline__ unsigned long int	__ntohl(unsigned long int);
+static __inline__ unsigned short int	__ntohs(unsigned short int);
 extern __inline__ unsigned long int	__constant_ntohl(unsigned long int);
 extern __inline__ unsigned short int	__constant_ntohs(unsigned short int);
 
