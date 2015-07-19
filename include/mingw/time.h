@@ -28,11 +28,11 @@
 extern "C" {
 #endif 
 
-#ifndef localtime_r
+#if !defined(localtime_r) && !defined(KDEWIN_NO_LOCALTIME_R)
 KDEWIN_EXPORT struct tm *localtime_r(const time_t *clock, struct tm *result);
 #endif
 
-#ifndef gmtime_r
+#if !defined(gmtime_r) && !defined(KDEWIN_NO_GMTIME_R)
 KDEWIN_EXPORT struct tm *gmtime_r(const time_t *clock, struct tm *result);
 #endif
 

@@ -6,6 +6,11 @@ available on supported windows compilers and SDK's.
 
 history
 -------
+unreleased
+- Only add S_I... constants if not present because mingw header 4.0 defines them
+- mingw/include/time.h: Add KDEWIN_NO_LOCALTIME_R and KDEWIN_NO_GMTIME_R constants
+  to exclude related methods which are already defined in newer mingw versions
+
 version 0.5.8
 - update readme
 - install readme's in share/doc/kdewin...-<version>, which is the correct location
