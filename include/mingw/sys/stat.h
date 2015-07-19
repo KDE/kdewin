@@ -27,6 +27,7 @@ extern "C" {
 #define S_ISLNK(m)  (((m) & _S_IFMT) == _S_IFLNK) /* Should always be zero.*/
 #define S_ISSOCK(m) (((m)&_S_IFMT) == _S_IFSOCK)
 
+#ifndef S_IRWXG
 #define S_IRWXG (S_IRGRP | S_IWGRP | S_IXGRP)
 #define S_IRGRP 0000040  /* read permission, group */
 #define S_IWGRP 0000020  /* write permission, grougroup */
@@ -35,6 +36,7 @@ extern "C" {
 #define S_IROTH 0000004  /* read permission, other */
 #define S_IWOTH 0000002  /* write permission, other */
 #define S_IXOTH 0000001  /* execute/search permission, other */
+#endif
 
 #define S_ISUID 0004000  /* set user id on execution */
 #define S_ISGID 0002000  /* set group id on execution */
