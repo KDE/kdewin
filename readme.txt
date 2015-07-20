@@ -6,6 +6,10 @@ available on supported windows compilers and SDK's.
 
 history
 -------
+version 0.5.10
+- Add macro FIXWINH_NO_UNDEF_INTERFACE to let macro 'interface' be defined
+  (see include/fixwinh.h for details)
+
 version 0.5.9
 - Only add S_I... constants if not present because mingw header 4.0 defines them
 - mingw/include/time.h: Add KDEWIN_NO_LOCALTIME_R and KDEWIN_NO_GMTIME_R constants
