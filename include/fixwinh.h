@@ -160,7 +160,9 @@ const int RELATIVE = WRELATIVE;
 
 #ifdef interface
 #define FIXWINH_interface __STRUCT__
+#ifndef FIXWINH_NO_UNDEF_INTERFACE
 #undef interface 
+#endif
 #endif
 
 }
