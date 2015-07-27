@@ -1,3 +1,5 @@
+# stay in sync with kdelibs
+cmake_minimum_required(VERSION 2.8.9)
 set (NAME kdewin)
 set(KDEWin_VERSION_MAJOR 0)
 set(KDEWin_VERSION_MINOR 5)
@@ -8,9 +10,9 @@ math(EXPR KDEWIN_VERSION '1000000+${KDEWin_VERSION_MAJOR}*10000+${KDEWin_VERSION
 string(SUBSTRING ${KDEWIN_VERSION} 1 6 KDEWIN_VERSION)
 set(KDEWIN_VERSION "0x${KDEWIN_VERSION}")
 set (KDEWIN_VERSION_STR ${KDEWin_VERSION_MAJOR}.${KDEWin_VERSION_MINOR}.${KDEWin_VERSION_PATCH})
-# stay in sync with kdelibs
-cmake_minimum_required(VERSION 2.6.2)
-cmake_policy(SET CMP0020 NEW)
+if (POLICY CMP0020)
+   cmake_policy(SET CMP0020 NEW)
+endif()
 
 project(${NAME})
 
