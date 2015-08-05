@@ -79,9 +79,9 @@ KDEWIN_EXPORT __inline int isnan(double num) { return _isnan(num); }
 KDEWIN_EXPORT __inline int isinf(double num) { return !_finite(num) && !_isnan(num); }
 KDEWIN_EXPORT __inline int finite(double num) { return _finite(num); }
 KDEWIN_EXPORT __inline int signbit(double num) { return _copysign(1.0, num) < 0; }
-#endif
 
 KDEWIN_EXPORT double remainder(double x, double y);
+#endif
 
 // some functions which aren't available with msvc
 
@@ -204,6 +204,7 @@ KDEWIN_EXPORT double remainder(double x, double y);
 // float fminf (float, float)
 // long double fminl (long double, long double)
 
+#if _MSC_VER < 1800
 /* 7.12.5.1 */
 KDEWIN_EXPORT float acoshf (float);
 KDEWIN_EXPORT double acosh (double);
@@ -215,11 +216,9 @@ KDEWIN_EXPORT double asinh (double);
 KDEWIN_EXPORT long double asinhl (long double);
 
 /* 7.12.5.3 */
-#if _MSC_VER < 1800
 KDEWIN_EXPORT float atanhf (float);
 KDEWIN_EXPORT double atanh (double);
 KDEWIN_EXPORT long double atanhl (long double);
-#endif
 
 /* 7.12.6.3 The expm1 functions */
 KDEWIN_EXPORT double expm1(double);
@@ -227,11 +226,9 @@ KDEWIN_EXPORT float expm1f(float);
 KDEWIN_EXPORT long double expm1l(long double);
 
 /* 7.12.6.9 */
-#if _MSC_VER < 1800
 KDEWIN_EXPORT double log1p(double);
 KDEWIN_EXPORT float log1pf(float);
 KDEWIN_EXPORT long double log1pl(long double);
-#endif
 
 /* 7.12.8.1 The erf functions  */
 KDEWIN_EXPORT double erf (double);
@@ -252,6 +249,7 @@ KDEWIN_EXPORT long double lgammal (long double);
 KDEWIN_EXPORT float tgammaf (float);
 KDEWIN_EXPORT double tgamma (double);
 KDEWIN_EXPORT long double tgammal (long double);
+#endif
 
 #if !defined __cplusplus && defined _MSC_VER && _MSC_VER < 1400
 /* 7.12.6.1 */
@@ -370,6 +368,8 @@ KDEWIN_EXPORT __inline long double rintl( long double x )
 }
 #endif
 
+
+#if _MSC_VER < 1800
 KDEWIN_EXPORT __inline long lroundf ( float x )
 {
   /* Add +/- 0.5, then round towards zero.  */
@@ -431,6 +431,7 @@ KDEWIN_EXPORT __inline long double roundl ( long double x )
 {
   return (long double)lroundl( x );
 }
+#endif
 
 #ifndef DONT_USE_ASM
 /* 7.12.9.8 */
@@ -509,6 +510,7 @@ KDEWIN_EXPORT __inline long double truncl( long double x )
 #endif
 
 /* 7.12.12.2 */
+#if _MSC_VER < 1800
 KDEWIN_EXPORT __inline double fmax (double a, double b)
 {
     if(isnan(a))
@@ -563,6 +565,7 @@ KDEWIN_EXPORT __inline long double fminl (long double a, long double b)
         return a;
     return a < b ? a : b;
 }
+#endif
 
 #ifdef __cplusplus
 }
