@@ -6,6 +6,10 @@ available on supported windows compilers and SDK's.
 
 history
 -------
+version 0.5.11
+- Excludes some double definitions in MSVC 2013+.  Header used to successfully compile Krita.
+- Set cmake_min_req to match kdelibs, as the comment says; fix build with cmake 2.8.9
+
 version 0.5.10
 - Add macro FIXWINH_NO_UNDEF_INTERFACE to let macro 'interface' be defined
   (see include/fixwinh.h for details)
