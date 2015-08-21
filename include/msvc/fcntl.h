@@ -24,7 +24,11 @@
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
-# include <../include/fcntl.h>
+#if _MSC_VER >= 1900
+#include <../ucrt/fcntl.h>
+#else
+#include <../include/fcntl.h>
+#endif
 #else
 #include <../wcecompat/fcntl.h>
 #endif

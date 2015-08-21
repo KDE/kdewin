@@ -19,7 +19,11 @@
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
+#if _MSC_VER >= 1900
+#include <../ucrt/sys/types.h>
+#else
 #include <../include/sys/types.h>
+#endif
 #else
 #include <../wcecompat/sys/types.h>
 #endif

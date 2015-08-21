@@ -22,7 +22,11 @@
 #endif
 
 #ifndef _WIN32_WCE
+#if _MSC_VER >= 1900
+#include <../ucrt/errno.h>
+#else
 #include <../include/errno.h>
+#endif
 #else
 #include <../wcecompat/errno.h>
 #endif

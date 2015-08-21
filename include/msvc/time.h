@@ -24,7 +24,11 @@
 #endif /* NO_KDEWIN */
 
 #ifndef _WIN32_WCE
+#if _MSC_VER >= 1900
+#include <../ucrt/time.h>
+#else
 #include <../include/time.h>
+#endif
 #else
 #include <../wcecompat/time.h>
 #endif

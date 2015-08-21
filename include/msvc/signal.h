@@ -24,7 +24,11 @@
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
+#if _MSC_VER >= 1900
+#include <../ucrt/signal.h>
+#else
 #include <../include/signal.h>
+#endif
 #else
 #include <../wcecompat/signal.h>
 #endif

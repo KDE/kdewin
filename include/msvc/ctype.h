@@ -23,7 +23,11 @@
 #endif
 
 #ifndef _WIN32_WCE
+#if _MSC_VER >= 1900
+#include <../ucrt/ctype.h>
+#else
 #include <../include/ctype.h>
+#endif
 #else
 #include <../wcecompat/ctype.h>
 #endif

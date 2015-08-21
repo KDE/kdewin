@@ -28,7 +28,11 @@
 #endif
 
 #ifndef _WIN32_WCE
+#if _MSC_VER >= 1900
+#include <../ucrt/sys/stat.h>
+#else
 #include <../include/sys/stat.h>
+#endif
 #else
 #include <../wcecompat/sys/stat.h>
 #endif

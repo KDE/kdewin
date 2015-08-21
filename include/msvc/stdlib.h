@@ -26,7 +26,11 @@
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
+#if _MSC_VER >= 1900
+#include <../ucrt/stdlib.h>
+#else
 #include <../include/stdlib.h>
+#endif
 #else
 #include <../wcecompat/stdlib.h>
 #endif

@@ -20,7 +20,11 @@
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
+#if _MSC_VER >= 1900
+#include <../ucrt/wchar.h>
+#else
 #include <../include/wchar.h>
+#endif
 #else
 #include <../wcecompat/wchar.h>
 #endif

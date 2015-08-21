@@ -37,8 +37,13 @@
 
 /* regular header from msvc includes */
 #ifndef _WIN32_WCE
+#if _MSC_VER >= 1900
+#include <../ucrt/math.h>
+#include <../ucrt/float.h>
+#else
 #include <../include/math.h>
 #include <../include/float.h>
+#endif
 #else
 #include <../wcecompat/math.h>
 #include <../wcecompat/float.h>
