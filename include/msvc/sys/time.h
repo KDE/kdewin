@@ -46,6 +46,11 @@ KDEWIN_EXPORT int utimes(const char *filename, const struct timeval times[2]);
 // this is no posix function
 //KDEWIN_EXPORT int settimeofday(const struct timeval *, const struct timezone *); 
 
+#if _MSC_VER >= 1900
+#define tzname _tzname
+#define tzset _tzset
+#endif
+
 /* Convenience macros for operations on timevals.
    NOTE: `timercmp' does not work for >= or <=.
 */
