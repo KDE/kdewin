@@ -22,6 +22,9 @@
 #include "kdewin_config.h"
 
 #include <sys/types.h>
+#if !defined(_POSIX_C_SOURCE) && defined(KDEWIN_NO_LOCALTIME_R) || defined(KDEWIN_NO_GMTIME_R)
+#define _POSIX_C_SOURCE 200809L
+#endif
 #include <../include/time.h>
 
 #ifdef __cplusplus
