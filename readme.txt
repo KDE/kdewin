@@ -6,6 +6,12 @@ available on supported windows compilers and SDK's.
 
 history
 -------
+version 0.6
+- Moved out tool into kdewin-tools git repo
+- Fix localtime_r and gmtime_r compile issue in client packages
+- Fix build with MSVC 2015
+- Include right header for utime.h
+
 version 0.5.11
 - Excludes some double definitions in MSVC 2013+.  Header used to successfully compile Krita.
 - Set cmake_min_req to match kdelibs, as the comment says; fix build with cmake 2.8.9

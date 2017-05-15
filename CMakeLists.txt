@@ -2,8 +2,8 @@
 cmake_minimum_required(VERSION 2.8.9)
 set (NAME kdewin)
 set(KDEWin_VERSION_MAJOR 0)
-set(KDEWin_VERSION_MINOR 5)
-set(KDEWin_VERSION_PATCH 11)
+set(KDEWin_VERSION_MINOR 6)
+set(KDEWin_VERSION_PATCH 0)
 
 # calculate the version in an ugly way
 math(EXPR KDEWIN_VERSION '1000000+${KDEWin_VERSION_MAJOR}*10000+${KDEWin_VERSION_MINOR}*100+${KDEWin_VERSION_PATCH}')
@@ -23,9 +23,7 @@ if (NOT WIN32)
 endif (NOT WIN32)
 OPTION(BUILD_TESTS "build test applications " OFF)
 OPTION(BUILD_EXAMPLES "build example applications " OFF)
-OPTION(BUILD_TOOLS "build tools" OFF)
 OPTION(BUILD_QT_LIB "build qt based libraries " ON)
-OPTION(BUILD_PNG2ICO "build png2ico tool" ON)
 OPTION(BUILD_BASE_LIB "build base libraries " ON)
 OPTION(BUILD_BASE_LIB_WITH_QT "build base library with qt part included" ON)
 OPTION(STATIC_LIBRARY "Build kdewin as a static library." OFF)
@@ -41,12 +39,10 @@ OPTION(STATIC_LIBRARY "Build kdewin as a static library." OFF)
 OPTION(MINGW_W32 "build for mingw-w32 " OFF)
 
 find_package(KDEWIN_Packager)
-if (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT OR BUILD_TOOLS)
+if (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT)
     # used by tools 
     find_package(Qt5Transitional REQUIRED Gui)
-endif (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT OR BUILD_TOOLS)
-
-message(STATUS ${test_INCLUDE_DIRS} ${test_LIBRARY})
+endif (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT)
 
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
@@ -102,14 +98,6 @@ if (BUILD_EXAMPLES AND NOT MSVC)
    add_subdirectory(examples)
 endif(BUILD_EXAMPLES AND NOT MSVC)
 
-if (BUILD_TOOLS)
-    add_subdirectory(3rdparty)
-endif(BUILD_TOOLS)
-
-if (BUILD_TOOLS)
-    add_subdirectory(tools)
-endif(BUILD_TOOLS)
-
 if (BUILD_TESTS)
     add_subdirectory(tests)
 endif(BUILD_TESTS)
@@ -142,21 +130,13 @@ if (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
     install(FILES cmake/modules/FindKDEWIN32.cmake  DESTINATION share/apps/cmake/modules)
 endif()
 
-if (BUILD_TOOLS)
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/modules/KDEWinToolsConfig.cmake.in ${CMAKE_BINARY_DIR}/KDEWinToolsConfig.cmake @ONLY)
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/modules/KDEWinToolsConfigVersion.cmake.in ${CMAKE_BINARY_DIR}/KDEWinToolsConfigVersion.cmake @ONLY)
-    install(FILES ${CMAKE_BINARY_DIR}/KDEWinToolsConfig.cmake ${CMAKE_BINARY_DIR}/KDEWinToolsConfigVersion.cmake DESTINATION lib/cmake/KDEWin)
-    install(EXPORT KDEWin_tools_targets FILE KDEWinToolsTargets.cmake DESTINATION lib/cmake/KDEWin)
-    install(FILES readme-tools.txt  DESTINATION share/doc/kdewin-tools-${KDEWIN_VERSION_STR} RENAME readme.txt)
-endif (BUILD_TOOLS)
-
 # kdewin package support 
 if (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
     install(FILES cmake/modules/FindKDEWIN_Packager.cmake       DESTINATION share/apps/cmake/modules)
 endif (BUILD_BASE_LIB OR BUILD_BASE_LIB_WITH_QT)
 
 if (KDEWIN_PACKAGER_FOUND)
-    KDEWIN_PACKAGER(${NAME} ${VERSION} "${NAME} supplementary library" "-srcexclude \"emerge unused\"")
+    KDEWIN_PACKAGER(${NAME} ${KDEWIN_VERSION} "${NAME} supplementary library" "-srcexclude \"emerge unused\"")
 endif (KDEWIN_PACKAGER_FOUND)
 
 
