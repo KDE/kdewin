@@ -575,7 +575,7 @@ KDEWIN_EXPORT __inline long double fminl (long double a, long double b)
 #ifdef __cplusplus
 }
 
-#if _MSC_VER >= 1400 && !defined(DONT_USE_ASM)
+#if _MSC_VER >= 1400 && _MSC_VER < 1700 && !defined(DONT_USE_ASM)
 // convenience function to avoid useless casts from int to whatever
 __inline long double sqrt(int x)
 {
@@ -597,13 +597,11 @@ __inline long double floor(int x)
     return floor((long double)x);
 }
 
-#if _MSC_VER >= 1400 
 /* msvc 7/7.1 has pow(int,int) */
 __inline long double pow(int x, int y)
 {
     return pow((long double)x, y);
 }
-#endif
 
 __inline long double pow(int x, unsigned int y)
 {
