@@ -47,7 +47,7 @@ endif (BUILD_QT_LIB OR BUILD_BASE_LIB_WITH_QT)
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
-include_directories(
+set( kdewin_INCLUDES
     ${kdewin_SOURCE_DIR}
     ${kdewin_SOURCE_DIR}/include
     ${kdewin_SOURCE_DIR}/include/kdewin
@@ -57,15 +57,15 @@ include_directories(
 
 if(MINGW)
    # we are using mingw, so do whatever required for mingw
-   set (target_include_directories ${kdewin_SOURCE_DIR}/include/mingw )
+   set( kdewin_INCLUDES ${kdewin_INCLUDES} ${kdewin_SOURCE_DIR}/include/mingw )
 else (MINGW)
    # we are using msvc, so do whatever required for msvc
-   set (target_include_directories ${kdewin_SOURCE_DIR}/include/msvc )
+   set( kdewin_INCLUDES ${kdewin_INCLUDES} ${kdewin_SOURCE_DIR}/include/msvc )
 endif(MINGW)
 
 if(WINCE)
     find_package(Wcecompat REQUIRED)
-	set (target_include_directories ${target_include_directories} ${WCECOMPAT_INCLUDE_DIR})
+	set( kdewin_INCLUDES ${kdewin_INCLUDES} ${WCECOMPAT_INCLUDE_DIR})
     set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${WCECOMPAT_INCLUDE_DIR})
     set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${WCECOMPAT_LIBRARIES})
     set(STATIC_LIBRARY ON)

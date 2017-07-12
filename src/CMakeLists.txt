@@ -8,8 +8,6 @@ else (MINGW)
    set(_incDirPrefix msvc)
 endif(MINGW)
 
-include_directories(${target_include_directories})
-
 add_definitions(-DUNICODE -DWIN32_LEAN_AND_MEAN )
 
 set(win_LIB_SRCS
@@ -64,7 +62,20 @@ if(NOT WINCE)
 else(NOT WINCE)
     target_link_libraries(kdewin ws2 ${QT_QTCORE_LIBRARIES} ${WCECOMPAT_LIBRARIES} toolhelp )
 endif(NOT WINCE)
+
 target_link_libraries(kdewin LINK_INTERFACE_LIBRARIES user32 shell32 ws2_32 netapi32 userenv)
+
+target_include_directories(kdewin PUBLIC "$<BUILD_INTERFACE:${kdewin_INCLUDES}>")
+target_include_directories(kdewin INTERFACE "$<INSTALL_INTERFACE:include>")
+
+if(MINGW)
+   # we are using mingw, so do whatever required for mingw
+   target_include_directories(kdewin INTERFACE "$<INSTALL_INTERFACE:include/mingw>")
+else (MINGW)
+   # we are using msvc, so do whatever required for msvc
+   target_include_directories(kdewin INTERFACE "$<INSTALL_INTERFACE:include/msvc>")
+endif(MINGW)
+
 set_target_properties(kdewin PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN_LIB )
 set_target_properties(kdewin PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
 

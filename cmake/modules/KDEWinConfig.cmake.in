@@ -8,16 +8,10 @@
 #  KDEWIN_MINGW_W32    - if this library has been compiled with the 32bit compiler of mingw-w64 project
 
 get_filename_component(KDEWIN_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-set(KDEWIN_INCLUDE_DIR "${KDEWIN_CMAKE_DIR}/../../../include")
-set(KDEWIN_LIBRARY kdewin)
-@KDEWIN_QT_LIBRARY@
-@KDEWIN_QT_LIBRARY_STATIC@
 
 # Our library dependencies (contains definitions for IMPORTED targets)
 include("${KDEWIN_CMAKE_DIR}/KDEWinTargets.cmake")
 
-set(KDEWIN_LIBRARIES ${KDEWIN_LIBRARY})
-set(KDEWIN_INCLUDES ${KDEWIN_INCLUDE_DIR} @KDEWIN_PLATFORM_INCLUDES@)
 @MSSDK_DIR_CMD@
 
 set(KDEWIN_MINGW_W32 @MINGW_W32@)
