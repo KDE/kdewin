@@ -66,7 +66,6 @@ endif(NOT WINCE)
 target_link_libraries(kdewin user32 shell32 ws2_32 netapi32 userenv)
 
 target_include_directories(kdewin PUBLIC "$<BUILD_INTERFACE:${kdewin_INCLUDES}>")
-target_include_directories(kdewin INTERFACE "$<INSTALL_INTERFACE:include>")
 
 if(MINGW)
    # we are using mingw, so do whatever required for mingw
@@ -75,6 +74,8 @@ else (MINGW)
    # we are using msvc, so do whatever required for msvc
    target_include_directories(kdewin INTERFACE "$<INSTALL_INTERFACE:include/msvc>")
 endif(MINGW)
+
+target_include_directories(kdewin INTERFACE "$<INSTALL_INTERFACE:include>")
 
 set_target_properties(kdewin PROPERTIES DEFINE_SYMBOL MAKE_KDEWIN_LIB )
 set_target_properties(kdewin PROPERTIES VERSION ${KDEWIN_VERSION_STR} )

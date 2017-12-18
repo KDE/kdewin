@@ -22,7 +22,6 @@ if (BUILD_BASE_LIB_WITH_QT)
     set_target_properties(kdewin-qt-static PROPERTIES VERSION ${KDEWIN_VERSION_STR} )
 
     target_include_directories(kdewin-qt-static PUBLIC "$<BUILD_INTERFACE:${kdewin_INCLUDES}>")
-    target_include_directories(kdewin-qt-static INTERFACE "$<INSTALL_INTERFACE:include>")
     if(MINGW)
          # we are using mingw, so do whatever required for mingw
         target_include_directories(kdewin-qt-static INTERFACE "$<INSTALL_INTERFACE:include/mingw>")
@@ -30,6 +29,7 @@ if (BUILD_BASE_LIB_WITH_QT)
         # we are using msvc, so do whatever required for msvc
         target_include_directories(kdewin-qt-static INTERFACE "$<INSTALL_INTERFACE:include/msvc>")
     endif(MINGW)
+    target_include_directories(kdewin-qt-static INTERFACE "$<INSTALL_INTERFACE:include>")
 endif (BUILD_BASE_LIB_WITH_QT)
 
 if (BUILD_QT_LIB)
@@ -51,7 +51,6 @@ if (BUILD_QT_LIB)
     )
 
     target_include_directories(kdewin-qt PUBLIC "$<BUILD_INTERFACE:${kdewin_INCLUDES}>")
-    target_include_directories(kdewin-qt INTERFACE "$<INSTALL_INTERFACE:include>")
     if(MINGW)
          # we are using mingw, so do whatever required for mingw
         target_include_directories(kdewin-qt INTERFACE "$<INSTALL_INTERFACE:include/mingw>")
@@ -59,6 +58,7 @@ if (BUILD_QT_LIB)
         # we are using msvc, so do whatever required for msvc
         target_include_directories(kdewin-qt INTERFACE "$<INSTALL_INTERFACE:include/msvc>")
     endif(MINGW)
+    target_include_directories(kdewin-qt INTERFACE "$<INSTALL_INTERFACE:include>")
 endif (BUILD_QT_LIB)
 
 if (BUILD_BASE_LIB_WITH_QT OR BUILD_QT_LIB)
