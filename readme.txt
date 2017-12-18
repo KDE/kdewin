@@ -6,6 +6,11 @@ available on supported windows compilers and SDK's.
 
 history
 -------
+version 0.6.1
+- Don't set msvc overoads for math functions with msvc2015+
+- Port kdewin to using targets, which should hopefully allow us to avoid hardcoding paths
+- Fix cross compiling kdelibs4support not finding kdewin provided kill function
+
 version 0.6
 - Moved out tool into kdewin-tools git repo
 - Fix localtime_r and gmtime_r compile issue in client packages
