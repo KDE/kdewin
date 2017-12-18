@@ -63,7 +63,7 @@ else(NOT WINCE)
     target_link_libraries(kdewin ws2 ${QT_QTCORE_LIBRARIES} ${WCECOMPAT_LIBRARIES} toolhelp )
 endif(NOT WINCE)
 
-target_link_libraries(kdewin LINK_INTERFACE_LIBRARIES user32 shell32 ws2_32 netapi32 userenv)
+target_link_libraries(kdewin user32 shell32 ws2_32 netapi32 userenv)
 
 target_include_directories(kdewin PUBLIC "$<BUILD_INTERFACE:${kdewin_INCLUDES}>")
 target_include_directories(kdewin INTERFACE "$<INSTALL_INTERFACE:include>")
