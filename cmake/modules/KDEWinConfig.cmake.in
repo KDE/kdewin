@@ -1,8 +1,6 @@
 # - Config file for the KDEWin package
 # It defines the following variables
 #  KDEWIN_DEFINITIONS  - contains the definitions needed to build against kdewin
-#  KDEWIN_INCLUDES     - the kdewin include directories
-#  KDEWIN_LIBRARIES    - the libraries to link against
 #  KDEWIN_VERSION      - the version of the kdewin library as a number
 #  KDEWIN_VERSION_STR  - the version of the kdewin library as a string
 #  KDEWIN_MINGW_W32    - if this library has been compiled with the 32bit compiler of mingw-w64 project
@@ -19,7 +17,3 @@ set(KDEWIN_MINGW_W32 @MINGW_W32@)
 set(KDEWIN_DEFINITIONS @KDEWIN_DEFINITIONS@)
 set(KDEWIN_VERSION @KDEWIN_VERSION@)
 set(KDEWIN_VERSION_STR @KDEWIN_VERSION_STR@)
-set_property(TARGET kdewin PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${KDEWIN_INCLUDES})
-set_property(TARGET kdewin PROPERTY INTERFACE_COMPILE_DEFINITIONS ${KDEWIN_DEFINITIONS})
-set_property(TARGET kdewin-qt PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${KDEWIN_INCLUDES})
-set_property(TARGET kdewin-qt PROPERTY INTERFACE_COMPILE_DEFINITIONS ${KDEWIN_DEFINITIONS})
