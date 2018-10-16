@@ -6,6 +6,10 @@ available on supported windows compilers and SDK's.
 
 history
 -------
+version 0.6.2
+- Fix bug not been able to compile KDELibs4Support
+- Fix cmake 3.5 warning related to target 'kdewin'
+
 version 0.6.1
 - Don't set msvc overoads for math functions with msvc2015+
 - Port kdewin to using targets, which should hopefully allow us to avoid hardcoding paths
