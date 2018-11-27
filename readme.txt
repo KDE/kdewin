@@ -6,6 +6,9 @@ available on supported windows compilers and SDK's.
 
 history
 -------
+version 0.6.3
+- Add std::isnan() and std::isinf() for msvc < 2017
+
 version 0.6.2
 - Fix bug not been able to compile KDELibs4Support
 - Fix cmake 3.5 warning related to target 'kdewin'
