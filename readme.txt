@@ -6,6 +6,10 @@ available on supported windows compilers and SDK's.
 
 history
 -------
+version 0.6.4
+- Add KDEWIN_INCLUDES again, which may be used by client package configure checks
+- Add KDEWIN_LIBRARIES again to have a common variable for the library target
+
 version 0.6.3
 - Add std::isnan() and std::isinf() for msvc < 2017
 
