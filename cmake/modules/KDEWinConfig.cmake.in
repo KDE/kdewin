@@ -4,8 +4,13 @@
 #  KDEWIN_VERSION      - the version of the kdewin library as a number
 #  KDEWIN_VERSION_STR  - the version of the kdewin library as a string
 #  KDEWIN_MINGW_W32    - if this library has been compiled with the 32bit compiler of mingw-w64 project
+# for usage by configure checks
+#  KDEWIN_INCLUDES     - the kdewin include directories
 
 get_filename_component(KDEWIN_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+set(KDEWIN_INCLUDE_DIR "${KDEWIN_CMAKE_DIR}/../../../include")
+set(KDEWIN_INCLUDES ${KDEWIN_INCLUDE_DIR} @KDEWIN_PLATFORM_INCLUDES@)
 
 # Our library dependencies (contains definitions for IMPORTED targets)
 include("${KDEWIN_CMAKE_DIR}/KDEWinTargets.cmake")
