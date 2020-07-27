@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+sharedlibdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: kdewin
+Description: KDE Windows support
+Version: @KDEWIN_VERSION_STR@
+Libs: -L${libdir} -lkdewin
+Cflags: -I${includedir}/mingw  @KDEWIN_DEFINITIONS@

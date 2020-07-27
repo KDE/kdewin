@@ -6,6 +6,17 @@ available on supported windows compilers and SDK's.
 
 history
 -------
+version ... (unreleased)
+- Add pkgconfig support
+     qmake projects can use the following code fragment in a .pro file
+        QT_CONFIG -= no-pkg-config
+        CONFIG += link_pkgconfig
+        PKGCONFIG += kdewin
+
+     or in a less portable way
+        INCLUDEPATH += `pkg-config --cflags kdewin`
+        LIBS += `pkg-config --libs kdewin`
+
 version 0.6.4
 - Add KDEWIN_INCLUDES again, which may be used by client package configure checks
 - Add KDEWIN_LIBRARIES again to have a common variable for the library target
