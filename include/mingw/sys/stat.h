@@ -44,6 +44,10 @@ extern "C" {
 
 #define S_IFSOCK _S_IFSOCK
 
+#ifndef ALLPERMS
+#define ALLPERMS (S_ISUID|S_ISGID|S_ISVTX|S_IRWXU|S_IRWXG|S_IRWXO)/* 07777 */
+#endif
+
 KDEWIN_EXPORT int lstat( const char *__path, struct stat *__buf);
 KDEWIN_EXPORT int fchmod(int __fd, mode_t __mode);
 
