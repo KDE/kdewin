@@ -11,15 +11,12 @@ endif(MINGW)
 add_definitions(-DUNICODE -DWIN32_LEAN_AND_MEAN )
 
 set(win_LIB_SRCS
-   bind/inet_ntop.c
-   bind/inet_pton.c
    dirent.c
    errno.c
 #not implemented: fcntl.c
    fsync.c
    getenv.c
    grp.c
-   inet.c
    kde_file_win.c
    mmap.c
    nl_langinfo.c
@@ -38,6 +35,15 @@ set(win_LIB_SRCS
 #   io.c
    dummy.c
    )
+
+if(NOT KDEWIN_HAVE_INET_NTOP)
+    list(APPEND
+        inet.c
+        bind/inet_ntop.c
+        bind/inet_pton.c
+    )
+endif()
+
 if(MSVC)
   set(win_LIB_SRCS ${win_LIB_SRCS}
       stdio.c
@@ -118,7 +124,11 @@ set(ddk_HDRS
   ../include/ntddstor.h
 )
 
-install(DIRECTORY ../include/${_incDirPrefix}                  DESTINATION include PATTERN ".svn" EXCLUDE)
+if(KDEWIN_HAVE_INET_NTOP)
+    set(HEADER_EXCLUDES arpa/inet.h)
+endif()
+
+install(DIRECTORY ../include/${_incDirPrefix}                  DESTINATION include PATTERN "${HEADER_EXCLUDES}" EXCLUDE)
 install(FILES ../include/fixwinh.h ../include/kde_file_win.h   DESTINATION include)
 install(FILES ${CMAKE_BINARY_DIR}/include/kdewin_export.h      DESTINATION include)
 

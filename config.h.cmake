@@ -5,6 +5,7 @@
 #cmakedefine KDEWIN_HAVE_SLEEP
 #cmakedefine KDEWIN_HAVE_FORK
 #cmakedefine KDEWIN_HAVE_TRUNCATE
+#cmakedefine KDEWIN_HAVE_INET_NTOP
 
 #cmakedefine KDEWIN_HAVE_SIZE_T
 
