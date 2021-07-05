@@ -6,7 +6,10 @@ available on supported windows compilers and SDK's.
 
 history
 -------
-version ... (unreleased)
+
+version 0.6.5
+- make installing replacement functions for inet_pton and inet_ntop optional as
+  they are provided in mingw32 headers version 9.0
 - Add pkgconfig support
      qmake projects can use the following code fragment in a .pro file
         QT_CONFIG -= no-pkg-config
