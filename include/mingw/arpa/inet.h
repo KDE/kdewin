@@ -34,12 +34,20 @@ extern "C"
 
 typedef unsigned int in_addr_t;
 
+#ifndef KDEWIN_NO_INET_NTOP
 #define inet_ntop kde_inet_ntop
-#define inet_pton kde_inet_pton
-
 KDEWIN_EXPORT const char *kde_inet_ntop(int af, const void * src, char * dst, size_t size);
+#endif
+
+#ifndef KDEWIN_NO_INET_PTON
+#define inet_pton kde_inet_pton
 KDEWIN_EXPORT int kde_inet_pton(int af, const char * src, void * dst);
-KDEWIN_EXPORT int inet_aton(const char *src, struct in_addr *addr);
+#endif
+
+#ifndef KDEWIN_NO_INET_ATON
+#define inet_aton kde_inet_aton
+KDEWIN_EXPORT int kde_inet_aton(const char *src, struct in_addr *addr);
+#endif
 
 /* FIXME - move to sys/errno.h */
 #ifndef EAFNOSUPPORT

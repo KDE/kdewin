@@ -124,11 +124,7 @@ set(ddk_HDRS
   ../include/ntddstor.h
 )
 
-if(KDEWIN_HAVE_INET_NTOP)
-    set(HEADER_EXCLUDES arpa/inet.h)
-endif()
-
-install(DIRECTORY ../include/${_incDirPrefix}                  DESTINATION include PATTERN "${HEADER_EXCLUDES}" EXCLUDE)
+install(DIRECTORY ../include/${_incDirPrefix}                  DESTINATION include)
 install(FILES ../include/fixwinh.h ../include/kde_file_win.h   DESTINATION include)
 install(FILES ${CMAKE_BINARY_DIR}/include/kdewin_export.h      DESTINATION include)
 

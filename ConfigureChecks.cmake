@@ -27,6 +27,8 @@ CHECK_FUNCTION_EXISTS(truncate      KDEWIN_HAVE_TRUNCATE)
 
 set(CMAKE_REQUIRED_LIBRARIES ws2_32)
 CHECK_C_SOURCE_COMPILES("#include <ws2tcpip.h>\n int main() { inet_ntop(0,0,0,0); }" KDEWIN_HAVE_INET_NTOP)
+CHECK_C_SOURCE_COMPILES("#include <ws2tcpip.h>\n int main() { inet_pton(0,0,0); }" KDEWIN_HAVE_INET_PTON)
+CHECK_C_SOURCE_COMPILES("#include <ws2tcpip.h>\n int main() { inet_aton(0,0); }" KDEWIN_HAVE_INET_ATON)
 CHECK_C_SOURCE_COMPILES("#include <time.h>\nint main(int argc, char** argv) { localtime_r(0,0); }" KDEWIN_HAVE_LOCALTIME_R)
 CHECK_C_SOURCE_COMPILES("#include <time.h>\nint main(int argc, char** argv) { gmtime_r(0,0); }" KDEWIN_HAVE_GMTIME_R)
 
@@ -37,6 +39,18 @@ endif()
 
 if(KDEWIN_HAVE_GMTIME_R)
     set(KDEWIN_DEFINITIONS "${KDEWIN_DEFINITIONS} -DKDEWIN_NO_GMTIME_R")
+endif()
+
+if(KDEWIN_HAVE_INET_NTOP)
+    set(KDEWIN_DEFINITIONS "${KDEWIN_DEFINITIONS} -DKDEWIN_NO_INET_NTOP")
+endif()
+
+if(KDEWIN_HAVE_INET_PTON)
+    set(KDEWIN_DEFINITIONS "${KDEWIN_DEFINITIONS} -DKDEWIN_NO_INET_PTON")
+endif()
+
+if(KDEWIN_HAVE_INET_ATON)
+    set(KDEWIN_DEFINITIONS "${KDEWIN_DEFINITIONS} -DKDEWIN_NO_INET_ATON")
 endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdewin_config.h)

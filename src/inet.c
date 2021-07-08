@@ -24,7 +24,7 @@
 #include <ws2tcpip.h>
 #include <arpa/inet.h>
 
-int inet_aton(const char *src, struct in_addr *addr)
+int kde_inet_aton(const char *src, struct in_addr *addr)
 {
 	unsigned long ret = inet_addr( src );
 	if ( ret == INADDR_NONE ) {
@@ -51,5 +51,12 @@ KDEWIN_EXPORT int inet_pton(int af, const char * src, void * dst)
 KDEWIN_EXPORT const char *inet_ntop(int af, const void *src, char *dst, size_t cnt)
 {
     return kde_inet_ntop(af, src, dst, cnt);
+}
+
+#undef kde_inet_aton
+#undef inet_aton
+KDEWIN_EXPORT int int inet_aton(const char *src, struct in_addr *addr)
+{
+    return kde_inet_pton(src, addr);
 }
 #endif
