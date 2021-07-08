@@ -18,6 +18,7 @@ set(win_LIB_SRCS
    getenv.c
    grp.c
    kde_file_win.c
+   inet.c
    mmap.c
    nl_langinfo.c
    net.c
@@ -37,11 +38,10 @@ set(win_LIB_SRCS
    )
 
 if(NOT KDEWIN_HAVE_INET_NTOP)
-    list(APPEND
-        inet.c
-        bind/inet_ntop.c
-        bind/inet_pton.c
-    )
+    list(APPEND win_LIB_SRCS bind/inet_ntop.c)
+endif()
+if(NOT KDEWIN_HAVE_INET_PTON)
+    list(APPEND win_LIB_SRCS bind/inet_pton.c)
 endif()
 
 if(MSVC)
