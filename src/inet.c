@@ -24,8 +24,7 @@
 #include <ws2tcpip.h>
 #include <arpa/inet.h>
 
-#ifndef KDEWIN_HAVE_INET_ATON
-int kde_inet_aton(const char *src, struct in_addr *addr)
+int inet_aton(const char *src, struct in_addr *addr)
 {
 	unsigned long ret = inet_addr( src );
 	if ( ret == INADDR_NONE ) {
@@ -37,34 +36,20 @@ int kde_inet_aton(const char *src, struct in_addr *addr)
 	addr->s_addr = ret;
 	return 1;
 }
-#endif
 
 #if __MINGW32__ || !defined(NTDDI_VERSION) || (NTDDI_VERSION < NTDDI_LONGHORN)
 /* backward compatibility functions to prevent symbol not found runtime errors with older kde releases */
-#ifndef KDEWIN_HAVE_INET_PTON
 #undef kde_inet_pton
 #undef inet_pton
 KDEWIN_EXPORT int inet_pton(int af, const char * src, void * dst)
 {
     return kde_inet_pton(af,src,dst);
 }
-#endif
 
-#ifndef KDEWIN_HAVE_INET_NTOP
 #undef kde_inet_ntop
 #undef inet_ntop
 KDEWIN_EXPORT const char *inet_ntop(int af, const void *src, char *dst, size_t cnt)
 {
     return kde_inet_ntop(af, src, dst, cnt);
 }
-#endif
-
-#ifndef KDEWIN_HAVE_INET_ATON
-#undef kde_inet_aton
-#undef inet_aton
-KDEWIN_EXPORT int inet_aton(const char *src, struct in_addr *addr)
-{
-    return kde_inet_aton(src, addr);
-}
-#endif
 #endif

@@ -24,11 +24,6 @@ CHECK_FUNCTION_EXISTS(usleep        KDEWIN_HAVE_USLEEP)
 CHECK_FUNCTION_EXISTS(sleep         KDEWIN_HAVE_SLEEP)
 CHECK_FUNCTION_EXISTS(fork          KDEWIN_HAVE_FORK)
 CHECK_FUNCTION_EXISTS(truncate      KDEWIN_HAVE_TRUNCATE)
-
-set(CMAKE_REQUIRED_LIBRARIES ws2_32)
-CHECK_C_SOURCE_COMPILES("#include <ws2tcpip.h>\n int main() { inet_ntop(0,0,0,0); }" KDEWIN_HAVE_INET_NTOP)
-CHECK_C_SOURCE_COMPILES("#include <ws2tcpip.h>\n int main() { inet_pton(0,0,0); }" KDEWIN_HAVE_INET_PTON)
-CHECK_C_SOURCE_COMPILES("#include <ws2tcpip.h>\n int main() { inet_aton(0,0); }" KDEWIN_HAVE_INET_ATON)
 CHECK_C_SOURCE_COMPILES("#include <time.h>\nint main(int argc, char** argv) { localtime_r(0,0); }" KDEWIN_HAVE_LOCALTIME_R)
 CHECK_C_SOURCE_COMPILES("#include <time.h>\nint main(int argc, char** argv) { gmtime_r(0,0); }" KDEWIN_HAVE_GMTIME_R)
 
@@ -43,4 +38,5 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdewin_config.h)
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/kdewin_config.h DESTINATION include)
+
 

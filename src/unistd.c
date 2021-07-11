@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#define _WIN32_WINNT 0x0500
 #include <kdewin_export.h>
 #include <windows.h>
 
