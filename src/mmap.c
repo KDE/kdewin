@@ -52,8 +52,8 @@ struct mmapInfos {
 
 CRITICAL_SECTION cs;
 
-static g_curMMapInfos = 0;
-static g_maxMMapInfos = -1;
+static int g_curMMapInfos = 0;
+static int g_maxMMapInfos = -1;
 static struct mmapInfos *g_mmapInfos = NULL;
 #define NEW_MMAP_STRUCT_CNT 10
 
